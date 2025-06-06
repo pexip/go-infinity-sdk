@@ -3,7 +3,6 @@ package infinity_go
 import (
 	"crypto/tls"
 	"crypto/x509"
-	"encoding/base64"
 	"fmt"
 	"log/slog"
 	"net/http"
@@ -17,6 +16,12 @@ type Manager struct {
 	Username string `yaml:"username"`
 	Password string `yaml:"password"`
 	Scheme   string `yaml:"scheme"`
+}
+
+type API struct {
+	Log           slog.Logger
+	Manager       *Manager
+	ManagerClient http.Client
 }
 
 func CreateTLSClient(log slog.Logger) *http.Client {
@@ -41,32 +46,32 @@ func CreateTLSClient(log slog.Logger) *http.Client {
 	return client
 }
 
-func basicAuth(username string, password string) string {
-	auth := username + ":" + password
-	return base64.StdEncoding.EncodeToString([]byte(auth))
-}
-
-func NewPexipClient(client *http.Client, log slog.Logger, m *Manager, apiPath string) (*http.Response, error) {
+func GetManagerResponse(api API, apiPath string) (*http.Response, error) {
 	// Create a new HTTP request
 	// Use the scheme, host, port, and path from the Manager struct
-	req, err := http.NewRequest("GET", fmt.Sprintf("%s://%s:%s%s", m.Scheme, m.Host, m.Port, apiPath), nil)
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s://%s:%s%s",
+		api.Manager.Scheme,
+		api.Manager.Host,
+		api.Manager.Port,
+		apiPath),
+		nil)
 	if err != nil {
-		log.Error("Error creating request: ", "error", err)
+		api.Log.Error("Error creating request: ", "error", err)
 		return nil, err
 	}
 
-	if m.Username != "" && m.Password != "" {
+	if api.Manager.Username != "" && api.Manager.Password != "" {
 		// Add the Authorization header
-		req.Header.Add("Authorization", "Basic "+basicAuth(m.Username, m.Password))
+		req.SetBasicAuth(api.Manager.Username, api.Manager.Password)
 	}
 
-	req.Header.Add("User-Agent", "Pexip Metric Exporter")
+	req.Header.Add("User-Agent", "Infinitygo/1.0")
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("Content-Type", "application/json")
 
-	resp, err := client.Do(req)
+	resp, err := api.ManagerClient.Do(req)
 	if err != nil {
-		log.Error("Error making request: ", "error", err)
+		api.Log.Error("Error making request: ", "error", err)
 		return nil, err
 	}
 	return resp, nil

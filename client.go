@@ -353,8 +353,6 @@ func unmarshalResponseBody(body []byte, result interface{}) error {
 	return nil
 }
 
-// sleepWithContext sleeps for the given duration, respecting context cancellation.
-// Returns false if context is cancelled during sleep, true otherwise.
 func (c *Client) sleepWithContext(ctx context.Context, duration time.Duration) bool {
 	if duration <= 0 {
 		return true

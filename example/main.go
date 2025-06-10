@@ -7,6 +7,7 @@ import (
 
 	infinity "github.com/pexip/go-infinity-sdk"
 	"github.com/pexip/go-infinity-sdk/config"
+	"github.com/pexip/go-infinity-sdk/options"
 )
 
 func main() {
@@ -33,7 +34,9 @@ func main() {
 
 	// Example 2: List conferences
 	fmt.Println("\n=== Configuration: Conferences ===")
-	conferences, err := client.Config.ListConferences(ctx, &config.ListOptions{Limit: 5})
+	conferences, err := client.Config.ListConferences(ctx, &config.ListOptions{
+		BaseListOptions: options.BaseListOptions{Limit: 5},
+	})
 	if err != nil {
 		log.Printf("Failed to list conferences: %v", err)
 	} else {

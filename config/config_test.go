@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	mockClient "github.com/pexip/go-infinity-sdk/internal/mock"
+	"github.com/pexip/go-infinity-sdk/options"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
@@ -36,8 +37,10 @@ func TestService_ListConferences(t *testing.T) {
 		{
 			name: "successful list with options",
 			opts: &ListOptions{
-				Limit:  10,
-				Offset: 5,
+				BaseListOptions: options.BaseListOptions{
+					Limit:  10,
+					Offset: 5,
+				},
 				Search: "test",
 			},
 			setup: func(m *mockClient.Client) {

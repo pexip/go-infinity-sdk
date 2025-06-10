@@ -5,6 +5,7 @@ import (
 	"time"
 
 	mockClient "github.com/pexip/go-infinity-sdk/internal/mock"
+	"github.com/pexip/go-infinity-sdk/options"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
@@ -37,11 +38,15 @@ func TestService_ListConferences(t *testing.T) {
 		{
 			name: "successful list with time range and search",
 			opts: &ListOptions{
-				Limit:     10,
-				Offset:    5,
+				SearchableListOptions: options.SearchableListOptions{
+					BaseListOptions: options.BaseListOptions{
+						Limit:  10,
+						Offset: 5,
+					},
+					Search: "test",
+				},
 				StartTime: &time.Time{},
 				EndTime:   &time.Time{},
-				Search:    "test",
 			},
 			setup: func(m *mockClient.Client) {
 				expectedResponse := &ConferenceListResponse{

@@ -3,9 +3,9 @@ package status
 import (
 	"context"
 	"fmt"
-	"net/url"
-	"strconv"
 	"time"
+
+	"github.com/pexip/go-infinity-sdk/options"
 )
 
 // ClientInterface defines the interface for the HTTP client
@@ -160,10 +160,7 @@ type AlarmListResponse struct {
 }
 
 // ListOptions contains options for listing resources
-type ListOptions struct {
-	Limit  int
-	Offset int
-}
+type ListOptions = options.BaseListOptions
 
 // GetSystemStatus retrieves the overall system status
 func (s *Service) GetSystemStatus(ctx context.Context) (*SystemStatus, error) {
@@ -179,13 +176,7 @@ func (s *Service) ListConferences(ctx context.Context, opts *ListOptions) (*Conf
 	endpoint := "status/v1/conference/"
 	
 	if opts != nil {
-		params := url.Values{}
-		if opts.Limit > 0 {
-			params.Set("limit", strconv.Itoa(opts.Limit))
-		}
-		if opts.Offset > 0 {
-			params.Set("offset", strconv.Itoa(opts.Offset))
-		}
+		params := opts.ToURLValues()
 		if len(params) > 0 {
 			endpoint += "?" + params.Encode()
 		}
@@ -210,13 +201,7 @@ func (s *Service) ListParticipants(ctx context.Context, opts *ListOptions) (*Par
 	endpoint := "status/v1/participant/"
 	
 	if opts != nil {
-		params := url.Values{}
-		if opts.Limit > 0 {
-			params.Set("limit", strconv.Itoa(opts.Limit))
-		}
-		if opts.Offset > 0 {
-			params.Set("offset", strconv.Itoa(opts.Offset))
-		}
+		params := opts.ToURLValues()
 		if len(params) > 0 {
 			endpoint += "?" + params.Encode()
 		}
@@ -241,13 +226,7 @@ func (s *Service) ListWorkers(ctx context.Context, opts *ListOptions) (*WorkerLi
 	endpoint := "status/v1/worker/"
 	
 	if opts != nil {
-		params := url.Values{}
-		if opts.Limit > 0 {
-			params.Set("limit", strconv.Itoa(opts.Limit))
-		}
-		if opts.Offset > 0 {
-			params.Set("offset", strconv.Itoa(opts.Offset))
-		}
+		params := opts.ToURLValues()
 		if len(params) > 0 {
 			endpoint += "?" + params.Encode()
 		}
@@ -272,13 +251,7 @@ func (s *Service) ListAlarms(ctx context.Context, opts *ListOptions) (*AlarmList
 	endpoint := "status/v1/alarm/"
 	
 	if opts != nil {
-		params := url.Values{}
-		if opts.Limit > 0 {
-			params.Set("limit", strconv.Itoa(opts.Limit))
-		}
-		if opts.Offset > 0 {
-			params.Set("offset", strconv.Itoa(opts.Offset))
-		}
+		params := opts.ToURLValues()
 		if len(params) > 0 {
 			endpoint += "?" + params.Encode()
 		}

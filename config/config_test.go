@@ -57,10 +57,10 @@ func TestService_ListConferences(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			mockClient := &mockClient.Client{}
-			tt.setup(mockClient)
+			client := &mockClient.Client{}
+			tt.setup(client)
 
-			service := New(mockClient)
+			service := New(client)
 			result, err := service.ListConferences(t.Context(), tt.opts)
 
 			if tt.wantErr {
@@ -71,33 +71,33 @@ func TestService_ListConferences(t *testing.T) {
 				assert.NotNil(t, result)
 			}
 
-			mockClient.AssertExpectations(t)
+			client.AssertExpectations(t)
 		})
 	}
 }
 
 func TestService_GetConference(t *testing.T) {
-	mockClient := &mockClient.Client{}
+	client := &mockClient.Client{}
 	expectedConference := &Conference{
 		ID:   1,
 		Name: "Test Conference",
 	}
 
-	mockClient.On("GetJSON", t.Context(), "configuration/v1/conference/1/", mock.AnythingOfType("*config.Conference")).Return(nil).Run(func(args mock.Arguments) {
+	client.On("GetJSON", t.Context(), "configuration/v1/conference/1/", mock.AnythingOfType("*config.Conference")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(2).(*Conference)
 		*result = *expectedConference
 	})
 
-	service := New(mockClient)
+	service := New(client)
 	result, err := service.GetConference(t.Context(), 1)
 
 	assert.NoError(t, err)
 	assert.Equal(t, expectedConference, result)
-	mockClient.AssertExpectations(t)
+	client.AssertExpectations(t)
 }
 
 func TestService_CreateConference(t *testing.T) {
-	mockClient := &mockClient.Client{}
+	client := &mockClient.Client{}
 
 	createRequest := &ConferenceCreateRequest{
 		Name:        "New Conference",
@@ -112,21 +112,21 @@ func TestService_CreateConference(t *testing.T) {
 		AllowGuests: true,
 	}
 
-	mockClient.On("PostJSON", t.Context(), "configuration/v1/conference/", createRequest, mock.AnythingOfType("*config.Conference")).Return(nil).Run(func(args mock.Arguments) {
+	client.On("PostJSON", t.Context(), "configuration/v1/conference/", createRequest, mock.AnythingOfType("*config.Conference")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(3).(*Conference)
 		*result = *expectedConference
 	})
 
-	service := New(mockClient)
+	service := New(client)
 	result, err := service.CreateConference(t.Context(), createRequest)
 
 	assert.NoError(t, err)
 	assert.Equal(t, expectedConference, result)
-	mockClient.AssertExpectations(t)
+	client.AssertExpectations(t)
 }
 
 func TestService_UpdateConference(t *testing.T) {
-	mockClient := &mockClient.Client{}
+	client := &mockClient.Client{}
 
 	updateRequest := &ConferenceUpdateRequest{
 		Name: "Updated Conference",
@@ -137,33 +137,33 @@ func TestService_UpdateConference(t *testing.T) {
 		Name: "Updated Conference",
 	}
 
-	mockClient.On("PutJSON", t.Context(), "configuration/v1/conference/1/", updateRequest, mock.AnythingOfType("*config.Conference")).Return(nil).Run(func(args mock.Arguments) {
+	client.On("PutJSON", t.Context(), "configuration/v1/conference/1/", updateRequest, mock.AnythingOfType("*config.Conference")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(3).(*Conference)
 		*result = *expectedConference
 	})
 
-	service := New(mockClient)
+	service := New(client)
 	result, err := service.UpdateConference(t.Context(), 1, updateRequest)
 
 	assert.NoError(t, err)
 	assert.Equal(t, expectedConference, result)
-	mockClient.AssertExpectations(t)
+	client.AssertExpectations(t)
 }
 
 func TestService_DeleteConference(t *testing.T) {
-	mockClient := &mockClient.Client{}
+	client := &mockClient.Client{}
 
-	mockClient.On("DeleteJSON", t.Context(), "configuration/v1/conference/1/", mock.Anything).Return(nil)
+	client.On("DeleteJSON", t.Context(), "configuration/v1/conference/1/", mock.Anything).Return(nil)
 
-	service := New(mockClient)
+	service := New(client)
 	err := service.DeleteConference(t.Context(), 1)
 
 	assert.NoError(t, err)
-	mockClient.AssertExpectations(t)
+	client.AssertExpectations(t)
 }
 
 func TestService_ListLocations(t *testing.T) {
-	mockClient := &mockClient.Client{}
+	client := &mockClient.Client{}
 
 	expectedResponse := &LocationListResponse{
 		Objects: []Location{
@@ -172,41 +172,41 @@ func TestService_ListLocations(t *testing.T) {
 		},
 	}
 
-	mockClient.On("GetJSON", t.Context(), "configuration/v1/location/", mock.AnythingOfType("*config.LocationListResponse")).Return(nil).Run(func(args mock.Arguments) {
+	client.On("GetJSON", t.Context(), "configuration/v1/location/", mock.AnythingOfType("*config.LocationListResponse")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(2).(*LocationListResponse)
 		*result = *expectedResponse
 	})
 
-	service := New(mockClient)
+	service := New(client)
 	result, err := service.ListLocations(t.Context(), nil)
 
 	assert.NoError(t, err)
 	assert.Equal(t, 2, len(result.Objects))
-	mockClient.AssertExpectations(t)
+	client.AssertExpectations(t)
 }
 
 func TestService_GetLocation(t *testing.T) {
-	mockClient := &mockClient.Client{}
+	client := &mockClient.Client{}
 	expectedLocation := &Location{
 		ID:   1,
 		Name: "Test Location",
 	}
 
-	mockClient.On("GetJSON", t.Context(), "configuration/v1/location/1/", mock.AnythingOfType("*config.Location")).Return(nil).Run(func(args mock.Arguments) {
+	client.On("GetJSON", t.Context(), "configuration/v1/location/1/", mock.AnythingOfType("*config.Location")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(2).(*Location)
 		*result = *expectedLocation
 	})
 
-	service := New(mockClient)
+	service := New(client)
 	result, err := service.GetLocation(t.Context(), 1)
 
 	assert.NoError(t, err)
 	assert.Equal(t, expectedLocation, result)
-	mockClient.AssertExpectations(t)
+	client.AssertExpectations(t)
 }
 
 func TestService_CreateLocation(t *testing.T) {
-	mockClient := &mockClient.Client{}
+	client := &mockClient.Client{}
 
 	createRequest := &LocationCreateRequest{
 		Name:        "New Location",
@@ -219,21 +219,21 @@ func TestService_CreateLocation(t *testing.T) {
 		Description: "Test location",
 	}
 
-	mockClient.On("PostJSON", t.Context(), "configuration/v1/location/", createRequest, mock.AnythingOfType("*config.Location")).Return(nil).Run(func(args mock.Arguments) {
+	client.On("PostJSON", t.Context(), "configuration/v1/location/", createRequest, mock.AnythingOfType("*config.Location")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(3).(*Location)
 		*result = *expectedLocation
 	})
 
-	service := New(mockClient)
+	service := New(client)
 	result, err := service.CreateLocation(t.Context(), createRequest)
 
 	assert.NoError(t, err)
 	assert.Equal(t, expectedLocation, result)
-	mockClient.AssertExpectations(t)
+	client.AssertExpectations(t)
 }
 
 func TestService_UpdateLocation(t *testing.T) {
-	mockClient := &mockClient.Client{}
+	client := &mockClient.Client{}
 
 	updateRequest := &LocationUpdateRequest{
 		Name: "Updated Location",
@@ -244,35 +244,35 @@ func TestService_UpdateLocation(t *testing.T) {
 		Name: "Updated Location",
 	}
 
-	mockClient.On("PutJSON", t.Context(), "configuration/v1/location/1/", updateRequest, mock.AnythingOfType("*config.Location")).Return(nil).Run(func(args mock.Arguments) {
+	client.On("PutJSON", t.Context(), "configuration/v1/location/1/", updateRequest, mock.AnythingOfType("*config.Location")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(3).(*Location)
 		*result = *expectedLocation
 	})
 
-	service := New(mockClient)
+	service := New(client)
 	result, err := service.UpdateLocation(t.Context(), 1, updateRequest)
 
 	assert.NoError(t, err)
 	assert.Equal(t, expectedLocation, result)
-	mockClient.AssertExpectations(t)
+	client.AssertExpectations(t)
 }
 
 func TestService_DeleteLocation(t *testing.T) {
-	mockClient := &mockClient.Client{}
+	client := &mockClient.Client{}
 
-	mockClient.On("DeleteJSON", t.Context(), "configuration/v1/location/1/", mock.Anything).Return(nil)
+	client.On("DeleteJSON", t.Context(), "configuration/v1/location/1/", mock.Anything).Return(nil)
 
-	service := New(mockClient)
+	service := New(client)
 	err := service.DeleteLocation(t.Context(), 1)
 
 	assert.NoError(t, err)
-	mockClient.AssertExpectations(t)
+	client.AssertExpectations(t)
 }
 
 func TestNew(t *testing.T) {
-	mockClient := &mockClient.Client{}
-	service := New(mockClient)
+	client := &mockClient.Client{}
+	service := New(client)
 
 	require.NotNil(t, service)
-	assert.Equal(t, mockClient, service.client)
+	assert.Equal(t, client, service.client)
 }

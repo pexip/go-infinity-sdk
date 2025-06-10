@@ -1,3 +1,5 @@
+// Package mock provides mock implementations for testing the Pexip Infinity SDK.
+// It includes mock clients and interfaces for unit testing without making actual API calls.
 package mock
 
 import (

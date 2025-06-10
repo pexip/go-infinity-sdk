@@ -1,3 +1,6 @@
+// Package config provides access to the Pexip Infinity Configuration API.
+// It allows management of conferences, locations, and other configuration resources
+// with full CRUD operations and search capabilities.
 package config
 
 import (

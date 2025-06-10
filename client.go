@@ -1,3 +1,6 @@
+// Package infinity provides a comprehensive Go client library for the Pexip Infinity Management API.
+// It offers complete support for all four API categories: Configuration, Status, History, and Command APIs
+// with features including type-safe operations, automatic retry with exponential backoff, and flexible authentication.
 package infinity
 
 import (

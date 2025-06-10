@@ -1,3 +1,6 @@
+// Package command provides access to the Pexip Infinity Command API.
+// It allows real-time control of conferences and participants including operations like
+// muting, spotlighting, transferring, and sending messages.
 package command
 
 import (
@@ -38,7 +41,7 @@ type ParticipantSpotlightRequest struct {
 	Setting         string `json:"setting"` // "on", "off", or "toggle"
 }
 
-// ParticipantLockRequest represents a request to lock/unlock a conference
+// ConferenceLockRequest represents a request to lock/unlock a conference
 type ConferenceLockRequest struct {
 	ConferenceID int    `json:"conference_id"`
 	Setting      string `json:"setting"` // "lock", "unlock", or "toggle"

@@ -1,3 +1,6 @@
+// Package status provides access to the Pexip Infinity Status API.
+// It allows monitoring of system status, active conferences, participants, worker nodes, and alarms
+// with real-time status information and health monitoring capabilities.
 package status
 
 import (
@@ -37,7 +40,7 @@ type SystemStatus struct {
 	CPULoad     float64   `json:"cpu_load"`
 }
 
-// Conference represents a conference status
+// ConferenceStatus represents a conference status
 type ConferenceStatus struct {
 	ID                 int       `json:"id"`
 	Name               string    `json:"name"`

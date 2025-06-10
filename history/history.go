@@ -1,3 +1,6 @@
+// Package history provides access to the Pexip Infinity History API.
+// It allows retrieval of historical data for conferences, participants, and media streams
+// with support for time-based filtering and search capabilities.
 package history
 
 import (

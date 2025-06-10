@@ -7,7 +7,6 @@ import (
 
 	infinity "github.com/pexip/go-infinity-sdk"
 	"github.com/pexip/go-infinity-sdk/config"
-	"github.com/pexip/go-infinity-sdk/options"
 )
 
 func main() {
@@ -32,11 +31,12 @@ func main() {
 			status.Status, status.Version, status.Uptime)
 	}
 
-	// Example 2: List conferences
+	// Example 2: List conferences with search and pagination
 	fmt.Println("\n=== Configuration: Conferences ===")
-	conferences, err := client.Config.ListConferences(ctx, &config.ListOptions{
-		BaseListOptions: options.BaseListOptions{Limit: 5},
-	})
+	listOpts := &config.ListOptions{}
+	listOpts.Limit = 5
+	listOpts.Search = "example" // Optional: search for conferences containing "example"
+	conferences, err := client.Config.ListConferences(ctx, listOpts)
 	if err != nil {
 		log.Printf("Failed to list conferences: %v", err)
 	} else {

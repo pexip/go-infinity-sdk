@@ -7,6 +7,7 @@ A comprehensive Go client library for the Pexip Infinity Management API, providi
 - **Full API Coverage**: Complete support for all Pexip Infinity Management API endpoints
 - **Type-Safe**: Strongly typed Go structs for all API requests and responses
 - **Authentication**: Support for Basic Auth, Token Auth, Bearer Auth, and custom authentication
+- **Retry Mechanism**: Built-in exponential backoff with jitter for reliable API calls
 - **Context Support**: All operations support Go context for cancellation and timeouts
 - **Comprehensive Testing**: Extensive test coverage with mocks using testify/mock
 - **Flexible Configuration**: Configurable base URLs, HTTP clients, and authentication methods
@@ -33,10 +34,12 @@ import (
 )
 
 func main() {
-    // Create a new client with basic authentication
+    // Create a new client with basic authentication and retry configuration
     client, err := infinity.New(
         infinity.WithBaseURL("https://your-pexip-server.com"),
         infinity.WithBasicAuth("admin", "your-password"),
+        // Optional: customize retry behavior (default is 3 retries with exponential backoff)
+        infinity.WithMaxRetries(2),
     )
     if err != nil {
         log.Fatal(err)
@@ -91,6 +94,66 @@ client, err := infinity.New(
 )
 ```
 
+### Retry Configuration
+
+The SDK includes a robust retry mechanism with exponential backoff to handle transient failures:
+
+#### Default Retry Behavior
+```go
+// Default configuration is applied automatically
+client, err := infinity.New(
+    infinity.WithBaseURL("https://your-pexip-server.com"),
+    infinity.WithBasicAuth("admin", "password"),
+    // Retries up to 3 times with exponential backoff
+)
+```
+
+#### Custom Retry Configuration
+```go
+import "time"
+
+retryConfig := &infinity.RetryConfig{
+    MaxRetries:   5,                      // Maximum number of retries
+    BackoffMin:   500 * time.Millisecond, // Minimum backoff duration
+    BackoffMax:   30 * time.Second,       // Maximum backoff duration
+    Multiplier:   2.0,                    // Backoff multiplier
+    JitterFactor: 0.1,                    // Jitter factor (0.0-1.0)
+}
+
+client, err := infinity.New(
+    infinity.WithBaseURL("https://your-pexip-server.com"),
+    infinity.WithBasicAuth("admin", "password"),
+    infinity.WithRetryConfig(retryConfig),
+)
+```
+
+#### Convenience Options
+```go
+// Disable retries completely
+client, err := infinity.New(
+    infinity.WithBaseURL("https://your-pexip-server.com"),
+    infinity.WithBasicAuth("admin", "password"),
+    infinity.WithNoRetries(),
+)
+
+// Set only max retries (uses default for other settings)
+client, err := infinity.New(
+    infinity.WithBaseURL("https://your-pexip-server.com"),
+    infinity.WithBasicAuth("admin", "password"),
+    infinity.WithMaxRetries(1),
+)
+```
+
+The retry mechanism automatically retries on:
+- **HTTP Status Codes**: 429, 500, 502, 503, 504
+- **Network Errors**: Connection refused, timeouts, DNS failures
+
+It will **NOT** retry on:
+- **Client Errors**: 4xx status codes (400, 401, 403, 404, etc.)
+- **Context Cancellation**: Respects context timeouts and cancellation
+
+For detailed documentation, see [RETRY.md](RETRY.md).
+
 ## API Examples
 
 ### Configuration API
@@ -135,12 +198,11 @@ func main() {
     }
     fmt.Printf("Created conference: %s (ID: %d)\n", conference.Name, conference.ID)
 
-    // List conferences with pagination
-    listOpts := &config.ListOptions{
-        Limit:  10,
-        Offset: 0,
-        Search: "test",
-    }
+    // List conferences with pagination and search
+    listOpts := &config.ListOptions{}
+    listOpts.Limit = 10
+    listOpts.Offset = 0
+    listOpts.Search = "test"
 
     conferences, err := client.Config.ListConferences(ctx, listOpts)
     if err != nil {
@@ -251,8 +313,10 @@ func main() {
             conf.Name, conf.ParticipantCount, conf.Started)
     }
 
-    // List participants
-    participants, err := client.Status.ListParticipants(ctx, &status.ListOptions{Limit: 20})
+    // List participants with pagination
+    participantOpts := &status.ListOptions{}
+    participantOpts.Limit = 20
+    participants, err := client.Status.ListParticipants(ctx, participantOpts)
     if err != nil {
         log.Fatal(err)
     }
@@ -333,11 +397,10 @@ func main() {
 
     // Get conference history for the last 24 hours
     yesterday := time.Now().Add(-24 * time.Hour)
-    listOpts := &history.ListOptions{
-        Limit:     50,
-        StartTime: &yesterday,
-        Search:    "weekly",
-    }
+    listOpts := &history.ListOptions{}
+    listOpts.Limit = 50
+    listOpts.StartTime = &yesterday
+    listOpts.Search = "weekly"
 
     conferences, err := client.History.ListConferences(ctx, listOpts)
     if err != nil {

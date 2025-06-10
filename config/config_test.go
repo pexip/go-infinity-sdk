@@ -1,7 +1,6 @@
 package config
 
 import (
-	"context"
 	"testing"
 
 	mockClient "github.com/pexip/go-infinity-sdk/internal/mock"

@@ -58,10 +58,10 @@ type ConferenceMessageRequest struct {
 
 // ParticipantTransferRequest represents a request to transfer a participant
 type ParticipantTransferRequest struct {
-	ParticipantUUID   string `json:"participant_uuid"`
-	ConferenceAlias   string `json:"conference_alias"`
-	Role              string `json:"role,omitempty"` // "chair" or "guest"
-	PIN               string `json:"pin,omitempty"`
+	ParticipantUUID string `json:"participant_uuid"`
+	ConferenceAlias string `json:"conference_alias"`
+	Role            string `json:"role,omitempty"` // "chair" or "guest"
+	PIN             string `json:"pin,omitempty"`
 }
 
 // ConferenceStartRequest represents a request to start a conference
@@ -90,7 +90,7 @@ type CommandResponse struct {
 // DisconnectParticipant disconnects a participant from a conference
 func (s *Service) DisconnectParticipant(ctx context.Context, participantUUID string) (*CommandResponse, error) {
 	endpoint := "command/v1/participant/disconnect/"
-	
+
 	req := &ParticipantDisconnectRequest{
 		ParticipantUUID: participantUUID,
 	}
@@ -103,7 +103,7 @@ func (s *Service) DisconnectParticipant(ctx context.Context, participantUUID str
 // MuteParticipant mutes a participant
 func (s *Service) MuteParticipant(ctx context.Context, participantUUID string) (*CommandResponse, error) {
 	endpoint := "command/v1/participant/mute/"
-	
+
 	req := &ParticipantMuteRequest{
 		ParticipantUUID: participantUUID,
 		Setting:         "mute",
@@ -117,7 +117,7 @@ func (s *Service) MuteParticipant(ctx context.Context, participantUUID string) (
 // UnmuteParticipant unmutes a participant
 func (s *Service) UnmuteParticipant(ctx context.Context, participantUUID string) (*CommandResponse, error) {
 	endpoint := "command/v1/participant/mute/"
-	
+
 	req := &ParticipantMuteRequest{
 		ParticipantUUID: participantUUID,
 		Setting:         "unmute",
@@ -131,7 +131,7 @@ func (s *Service) UnmuteParticipant(ctx context.Context, participantUUID string)
 // ToggleMuteParticipant toggles the mute status of a participant
 func (s *Service) ToggleMuteParticipant(ctx context.Context, participantUUID string) (*CommandResponse, error) {
 	endpoint := "command/v1/participant/mute/"
-	
+
 	req := &ParticipantMuteRequest{
 		ParticipantUUID: participantUUID,
 		Setting:         "toggle",
@@ -145,7 +145,7 @@ func (s *Service) ToggleMuteParticipant(ctx context.Context, participantUUID str
 // SpotlightParticipant enables spotlight for a participant
 func (s *Service) SpotlightParticipant(ctx context.Context, participantUUID string) (*CommandResponse, error) {
 	endpoint := "command/v1/participant/spotlight/"
-	
+
 	req := &ParticipantSpotlightRequest{
 		ParticipantUUID: participantUUID,
 		Setting:         "on",
@@ -159,7 +159,7 @@ func (s *Service) SpotlightParticipant(ctx context.Context, participantUUID stri
 // UnspotlightParticipant disables spotlight for a participant
 func (s *Service) UnspotlightParticipant(ctx context.Context, participantUUID string) (*CommandResponse, error) {
 	endpoint := "command/v1/participant/spotlight/"
-	
+
 	req := &ParticipantSpotlightRequest{
 		ParticipantUUID: participantUUID,
 		Setting:         "off",
@@ -173,7 +173,7 @@ func (s *Service) UnspotlightParticipant(ctx context.Context, participantUUID st
 // ToggleSpotlightParticipant toggles the spotlight status of a participant
 func (s *Service) ToggleSpotlightParticipant(ctx context.Context, participantUUID string) (*CommandResponse, error) {
 	endpoint := "command/v1/participant/spotlight/"
-	
+
 	req := &ParticipantSpotlightRequest{
 		ParticipantUUID: participantUUID,
 		Setting:         "toggle",
@@ -187,7 +187,7 @@ func (s *Service) ToggleSpotlightParticipant(ctx context.Context, participantUUI
 // LockConference locks a conference
 func (s *Service) LockConference(ctx context.Context, conferenceID int) (*CommandResponse, error) {
 	endpoint := "command/v1/conference/lock/"
-	
+
 	req := &ConferenceLockRequest{
 		ConferenceID: conferenceID,
 		Setting:      "lock",
@@ -201,7 +201,7 @@ func (s *Service) LockConference(ctx context.Context, conferenceID int) (*Comman
 // UnlockConference unlocks a conference
 func (s *Service) UnlockConference(ctx context.Context, conferenceID int) (*CommandResponse, error) {
 	endpoint := "command/v1/conference/lock/"
-	
+
 	req := &ConferenceLockRequest{
 		ConferenceID: conferenceID,
 		Setting:      "unlock",
@@ -215,7 +215,7 @@ func (s *Service) UnlockConference(ctx context.Context, conferenceID int) (*Comm
 // ToggleLockConference toggles the lock status of a conference
 func (s *Service) ToggleLockConference(ctx context.Context, conferenceID int) (*CommandResponse, error) {
 	endpoint := "command/v1/conference/lock/"
-	
+
 	req := &ConferenceLockRequest{
 		ConferenceID: conferenceID,
 		Setting:      "toggle",
@@ -229,7 +229,7 @@ func (s *Service) ToggleLockConference(ctx context.Context, conferenceID int) (*
 // SendMessageToParticipant sends a message to a specific participant
 func (s *Service) SendMessageToParticipant(ctx context.Context, participantUUID, message string) (*CommandResponse, error) {
 	endpoint := "command/v1/participant/message/"
-	
+
 	req := &ParticipantMessageRequest{
 		ParticipantUUID: participantUUID,
 		Message:         message,
@@ -243,7 +243,7 @@ func (s *Service) SendMessageToParticipant(ctx context.Context, participantUUID,
 // SendMessageToConference sends a message to all participants in a conference
 func (s *Service) SendMessageToConference(ctx context.Context, conferenceID int, message string) (*CommandResponse, error) {
 	endpoint := "command/v1/conference/message/"
-	
+
 	req := &ConferenceMessageRequest{
 		ConferenceID: conferenceID,
 		Message:      message,
@@ -257,7 +257,7 @@ func (s *Service) SendMessageToConference(ctx context.Context, conferenceID int,
 // TransferParticipant transfers a participant to another conference
 func (s *Service) TransferParticipant(ctx context.Context, participantUUID, conferenceAlias string, opts *TransferOptions) (*CommandResponse, error) {
 	endpoint := "command/v1/participant/transfer/"
-	
+
 	req := &ParticipantTransferRequest{
 		ParticipantUUID: participantUUID,
 		ConferenceAlias: conferenceAlias,
@@ -282,7 +282,7 @@ type TransferOptions struct {
 // StartConference starts a conference
 func (s *Service) StartConference(ctx context.Context, conferenceAlias string) (*CommandResponse, error) {
 	endpoint := "command/v1/conference/start/"
-	
+
 	req := &ConferenceStartRequest{
 		ConferenceAlias: conferenceAlias,
 	}
@@ -295,7 +295,7 @@ func (s *Service) StartConference(ctx context.Context, conferenceAlias string) (
 // StopConference stops a conference
 func (s *Service) StopConference(ctx context.Context, conferenceID int) (*CommandResponse, error) {
 	endpoint := "command/v1/conference/stop/"
-	
+
 	req := &ConferenceStopRequest{
 		ConferenceID: conferenceID,
 	}
@@ -308,7 +308,7 @@ func (s *Service) StopConference(ctx context.Context, conferenceID int) (*Comman
 // ChangeParticipantRole changes a participant's role
 func (s *Service) ChangeParticipantRole(ctx context.Context, participantUUID, role string) (*CommandResponse, error) {
 	endpoint := "command/v1/participant/role/"
-	
+
 	req := &ParticipantRoleRequest{
 		ParticipantUUID: participantUUID,
 		Role:            role,

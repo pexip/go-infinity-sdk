@@ -1,0 +1,55 @@
+package infinity
+
+import (
+	"fmt"
+	"github.com/pexip/go-infinity-sdk/auth"
+	"net/http"
+	"net/url"
+)
+
+// ClientOption is a function that configures a Client
+type ClientOption func(*Client) error
+
+// WithBaseURL sets the base URL for the client
+func WithBaseURL(baseURL string) ClientOption {
+	return func(c *Client) error {
+		u, err := url.Parse(baseURL)
+		if err != nil {
+			return fmt.Errorf("failed to parse base URL: %w", err)
+		}
+		c.baseURL = u
+		return nil
+	}
+}
+
+// WithHTTPClient sets a custom HTTP client
+func WithHTTPClient(httpClient *http.Client) ClientOption {
+	return func(c *Client) error {
+		c.httpClient = httpClient
+		return nil
+	}
+}
+
+// WithAuth sets the authentication method
+func WithAuth(authenticator auth.Authenticator) ClientOption {
+	return func(c *Client) error {
+		c.auth = authenticator
+		return nil
+	}
+}
+
+// WithBasicAuth sets basic authentication credentials
+func WithBasicAuth(username, password string) ClientOption {
+	return func(c *Client) error {
+		c.auth = auth.NewBasicAuth(username, password)
+		return nil
+	}
+}
+
+// WithTokenAuth sets token-based authentication
+func WithTokenAuth(token string) ClientOption {
+	return func(c *Client) error {
+		c.auth = auth.NewTokenAuth(token)
+		return nil
+	}
+}

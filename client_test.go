@@ -152,7 +152,7 @@ func TestDoRequest(t *testing.T) {
 					assert.Equal(t, "/api/admin/test", r.URL.Path)
 					w.Header().Set("Content-Type", "application/json")
 					w.WriteHeader(http.StatusOK)
-					json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
+					_ = json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
 				}))
 			},
 			request: &Request{
@@ -170,11 +170,11 @@ func TestDoRequest(t *testing.T) {
 					assert.Equal(t, "application/json", r.Header.Get("Content-Type"))
 
 					var body map[string]string
-					json.NewDecoder(r.Body).Decode(&body)
+					_ = json.NewDecoder(r.Body).Decode(&body)
 					assert.Equal(t, "test", body["name"])
 
 					w.WriteHeader(http.StatusCreated)
-					json.NewEncoder(w).Encode(map[string]interface{}{"id": 1, "name": "test"})
+					_ = json.NewEncoder(w).Encode(map[string]interface{}{"id": 1, "name": "test"})
 				}))
 			},
 			request: &Request{
@@ -190,7 +190,7 @@ func TestDoRequest(t *testing.T) {
 			setupServer: func() *httptest.Server {
 				return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 					w.WriteHeader(http.StatusBadRequest)
-					json.NewEncoder(w).Encode(map[string]interface{}{
+					_ = json.NewEncoder(w).Encode(map[string]interface{}{
 						"error":   "Bad Request",
 						"details": "Invalid parameter",
 					})
@@ -211,7 +211,7 @@ func TestDoRequest(t *testing.T) {
 					assert.Equal(t, "10", r.URL.Query().Get("limit"))
 					assert.Equal(t, "5", r.URL.Query().Get("offset"))
 					w.WriteHeader(http.StatusOK)
-					json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
+					_ = json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
 				}))
 			},
 			request: &Request{
@@ -253,10 +253,10 @@ func TestDoRequest(t *testing.T) {
 
 func TestClientWithAuthentication(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		auth := r.Header.Get("Authorization")
-		assert.Contains(t, auth, "Basic")
+		authHeaderString := r.Header.Get("Authorization")
+		assert.Contains(t, authHeaderString, "Basic")
 		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode(map[string]string{"status": "authenticated"})
+		_ = json.NewEncoder(w).Encode(map[string]string{"status": "authenticated"})
 	}))
 	defer server.Close()
 
@@ -281,7 +281,7 @@ func TestGetJSON(t *testing.T) {
 		assert.Equal(t, http.MethodGet, r.Method)
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode(map[string]interface{}{
+		_ = json.NewEncoder(w).Encode(map[string]interface{}{
 			"id":   1,
 			"name": "test",
 		})
@@ -304,12 +304,12 @@ func TestPostJSON(t *testing.T) {
 		assert.Equal(t, http.MethodPost, r.Method)
 
 		var body map[string]string
-		json.NewDecoder(r.Body).Decode(&body)
+		_ = json.NewDecoder(r.Body).Decode(&body)
 		assert.Equal(t, "test", body["name"])
 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusCreated)
-		json.NewEncoder(w).Encode(map[string]interface{}{
+		_ = json.NewEncoder(w).Encode(map[string]interface{}{
 			"id":   1,
 			"name": body["name"],
 		})
@@ -345,4 +345,140 @@ func TestAPIError(t *testing.T) {
 
 	expected = "API error 404: Not Found"
 	assert.Equal(t, expected, errWithoutDetails.Error())
+}
+
+func TestAPIError_UnmarshalJSON(t *testing.T) {
+	tests := []struct {
+		name          string
+		jsonData      string
+		expectedError APIError
+	}{
+		{
+			name:     "error field format",
+			jsonData: `{"error": "Authentication failed", "details": "Invalid credentials"}`,
+			expectedError: APIError{
+				Message: "Authentication failed",
+				Details: "Invalid credentials",
+			},
+		},
+		{
+			name:     "message field format",
+			jsonData: `{"message": "Resource not found", "detail": "Conference with ID 123 does not exist"}`,
+			expectedError: APIError{
+				Message: "Resource not found",
+				Details: "Conference with ID 123 does not exist",
+			},
+		},
+		{
+			name:     "error field takes priority over message",
+			jsonData: `{"error": "Primary error", "message": "Secondary message", "details": "Error details"}`,
+			expectedError: APIError{
+				Message: "Primary error",
+				Details: "Error details",
+			},
+		},
+		{
+			name:     "details field takes priority over detail",
+			jsonData: `{"error": "Error message", "details": "Primary details", "detail": "Secondary detail"}`,
+			expectedError: APIError{
+				Message: "Error message",
+				Details: "Primary details",
+			},
+		},
+		{
+			name:     "empty json object",
+			jsonData: `{}`,
+			expectedError: APIError{
+				Message: "",
+				Details: "",
+			},
+		},
+		{
+			name:     "only error field",
+			jsonData: `{"error": "Simple error"}`,
+			expectedError: APIError{
+				Message: "Simple error",
+				Details: "",
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var apiErr APIError
+			err := json.Unmarshal([]byte(tt.jsonData), &apiErr)
+
+			assert.NoError(t, err)
+			assert.Equal(t, tt.expectedError.Message, apiErr.Message)
+			assert.Equal(t, tt.expectedError.Details, apiErr.Details)
+		})
+	}
+}
+
+func TestAPIError_UnmarshalJSON_InvalidJSON(t *testing.T) {
+	var apiErr APIError
+	err := json.Unmarshal([]byte(`{invalid json`), &apiErr)
+
+	assert.Error(t, err)
+}
+
+func TestClient_handleAPIError(t *testing.T) {
+	client, err := New()
+	require.NoError(t, err)
+
+	tests := []struct {
+		name         string
+		statusCode   int
+		responseBody string
+		expectedMsg  string
+		expectedDet  string
+	}{
+		{
+			name:         "error with structured JSON response",
+			statusCode:   400,
+			responseBody: `{"error": "Invalid request", "details": "Missing required field"}`,
+			expectedMsg:  "Invalid request",
+			expectedDet:  "Missing required field",
+		},
+		{
+			name:         "error with message JSON response",
+			statusCode:   404,
+			responseBody: `{"message": "Not found", "detail": "Resource does not exist"}`,
+			expectedMsg:  "Not found",
+			expectedDet:  "Resource does not exist",
+		},
+		{
+			name:         "error with invalid JSON response",
+			statusCode:   500,
+			responseBody: `{invalid json}`,
+			expectedMsg:  "Internal Server Error", // Falls back to HTTP status text
+			expectedDet:  "",
+		},
+		{
+			name:         "error with empty response body",
+			statusCode:   403,
+			responseBody: "",
+			expectedMsg:  "Forbidden", // Falls back to HTTP status text
+			expectedDet:  "",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			resp := &Response{
+				StatusCode: tt.statusCode,
+				Body:       []byte(tt.responseBody),
+			}
+
+			err := client.handleAPIError(resp)
+			require.Error(t, err)
+
+			apiErr, ok := err.(*APIError)
+			require.True(t, ok, "Error should be of type *APIError")
+
+			assert.Equal(t, tt.statusCode, apiErr.StatusCode)
+			assert.Equal(t, tt.expectedMsg, apiErr.Message)
+			assert.Equal(t, tt.expectedDet, apiErr.Details)
+		})
+	}
 }

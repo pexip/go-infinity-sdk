@@ -8,7 +8,6 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"path"
 	"strings"
 	"time"
 
@@ -37,9 +36,6 @@ type Client struct {
 	History *history.Service
 	Command *command.Service
 }
-
-// ClientOption is a function that configures a Client
-type ClientOption func(*Client) error
 
 // New creates a new Infinity API client with the given options
 func New(options ...ClientOption) (*Client, error) {
@@ -70,50 +66,6 @@ func New(options ...ClientOption) (*Client, error) {
 	return c, nil
 }
 
-// WithBaseURL sets the base URL for the client
-func WithBaseURL(baseURL string) ClientOption {
-	return func(c *Client) error {
-		u, err := url.Parse(baseURL)
-		if err != nil {
-			return fmt.Errorf("failed to parse base URL: %w", err)
-		}
-		c.baseURL = u
-		return nil
-	}
-}
-
-// WithHTTPClient sets a custom HTTP client
-func WithHTTPClient(httpClient *http.Client) ClientOption {
-	return func(c *Client) error {
-		c.httpClient = httpClient
-		return nil
-	}
-}
-
-// WithAuth sets the authentication method
-func WithAuth(authenticator auth.Authenticator) ClientOption {
-	return func(c *Client) error {
-		c.auth = authenticator
-		return nil
-	}
-}
-
-// WithBasicAuth sets basic authentication credentials
-func WithBasicAuth(username, password string) ClientOption {
-	return func(c *Client) error {
-		c.auth = auth.NewBasicAuth(username, password)
-		return nil
-	}
-}
-
-// WithTokenAuth sets token-based authentication
-func WithTokenAuth(token string) ClientOption {
-	return func(c *Client) error {
-		c.auth = auth.NewTokenAuth(token)
-		return nil
-	}
-}
-
 // Request represents an API request
 type Request struct {
 	Method      string
@@ -133,10 +85,9 @@ type Response struct {
 // DoRequest performs an HTTP request to the Infinity API
 func (c *Client) DoRequest(ctx context.Context, req *Request) (*Response, error) {
 	// Build the full URL
-	u := *c.baseURL
-	u.Path = path.Join(u.Path, APIPrefix, strings.TrimPrefix(req.Endpoint, "/"))
+	fullURL := c.baseURL.JoinPath(APIPrefix, strings.TrimPrefix(req.Endpoint, "/"))
 	if req.QueryParams != nil {
-		u.RawQuery = req.QueryParams.Encode()
+		fullURL.RawQuery = req.QueryParams.Encode()
 	}
 
 	// Prepare request body
@@ -150,7 +101,7 @@ func (c *Client) DoRequest(ctx context.Context, req *Request) (*Response, error)
 	}
 
 	// Create HTTP request
-	httpReq, err := http.NewRequestWithContext(ctx, req.Method, u.String(), body)
+	httpReq, err := http.NewRequestWithContext(ctx, req.Method, fullURL.String(), body)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create HTTP request: %w", err)
 	}
@@ -198,20 +149,6 @@ func (c *Client) DoRequest(ctx context.Context, req *Request) (*Response, error)
 	return response, nil
 }
 
-// APIError represents an error returned by the Infinity API
-type APIError struct {
-	StatusCode int    `json:"status_code"`
-	Message    string `json:"message"`
-	Details    string `json:"details,omitempty"`
-}
-
-func (e *APIError) Error() string {
-	if e.Details != "" {
-		return fmt.Sprintf("API error %d: %s (%s)", e.StatusCode, e.Message, e.Details)
-	}
-	return fmt.Sprintf("API error %d: %s", e.StatusCode, e.Message)
-}
-
 // handleAPIError processes API error responses
 func (c *Client) handleAPIError(resp *Response) error {
 	apiErr := &APIError{
@@ -219,92 +156,38 @@ func (c *Client) handleAPIError(resp *Response) error {
 		Message:    http.StatusText(resp.StatusCode),
 	}
 
-	// Try to parse error details from response body
+	// Try to parse error details from response body using the APIError's UnmarshalJSON method
 	if len(resp.Body) > 0 {
-		var errorResp map[string]interface{}
-		if err := json.Unmarshal(resp.Body, &errorResp); err == nil {
-			if msg, ok := errorResp["error"].(string); ok {
-				apiErr.Message = msg
-			}
-			if details, ok := errorResp["details"].(string); ok {
-				apiErr.Details = details
-			}
-		}
+		_ = json.Unmarshal(resp.Body, apiErr)
 	}
-
 	return apiErr
 }
 
-// GetJSON performs a GET request and unmarshals the JSON response
+// GetJSON performs a GET request and unmarshal the JSON response
 func (c *Client) GetJSON(ctx context.Context, endpoint string, result interface{}) error {
-	req := &Request{
-		Method:   http.MethodGet,
-		Endpoint: endpoint,
-	}
-
-	resp, err := c.DoRequest(ctx, req)
-	if err != nil {
-		return err
-	}
-
-	if result != nil && len(resp.Body) > 0 {
-		if err := json.Unmarshal(resp.Body, result); err != nil {
-			return fmt.Errorf("failed to unmarshal JSON response: %w", err)
-		}
-	}
-
-	return nil
+	return c.performJSONRequest(ctx, http.MethodGet, endpoint, nil, result)
 }
 
-// PostJSON performs a POST request with JSON body and unmarshals the JSON response
+// PostJSON performs a POST request with JSON body and unmarshal the JSON response
 func (c *Client) PostJSON(ctx context.Context, endpoint string, body interface{}, result interface{}) error {
-	req := &Request{
-		Method:   http.MethodPost,
-		Endpoint: endpoint,
-		Body:     body,
-	}
-
-	resp, err := c.DoRequest(ctx, req)
-	if err != nil {
-		return err
-	}
-
-	if result != nil && len(resp.Body) > 0 {
-		if err := json.Unmarshal(resp.Body, result); err != nil {
-			return fmt.Errorf("failed to unmarshal JSON response: %w", err)
-		}
-	}
-
-	return nil
+	return c.performJSONRequest(ctx, http.MethodPost, endpoint, body, result)
 }
 
-// PutJSON performs a PUT request with JSON body and unmarshals the JSON response
+// PutJSON performs a PUT request with JSON body and unmarshal the JSON response
 func (c *Client) PutJSON(ctx context.Context, endpoint string, body interface{}, result interface{}) error {
-	req := &Request{
-		Method:   http.MethodPut,
-		Endpoint: endpoint,
-		Body:     body,
-	}
-
-	resp, err := c.DoRequest(ctx, req)
-	if err != nil {
-		return err
-	}
-
-	if result != nil && len(resp.Body) > 0 {
-		if err := json.Unmarshal(resp.Body, result); err != nil {
-			return fmt.Errorf("failed to unmarshal JSON response: %w", err)
-		}
-	}
-
-	return nil
+	return c.performJSONRequest(ctx, http.MethodPut, endpoint, body, result)
 }
 
-// DeleteJSON performs a DELETE request and unmarshals the JSON response
+// DeleteJSON performs a DELETE request and unmarshal the JSON response
 func (c *Client) DeleteJSON(ctx context.Context, endpoint string, result interface{}) error {
+	return c.performJSONRequest(ctx, http.MethodDelete, endpoint, nil, result)
+}
+
+func (c *Client) performJSONRequest(ctx context.Context, method string, endpoint string, requestBody interface{}, result interface{}) error {
 	req := &Request{
-		Method:   http.MethodDelete,
+		Method:   method,
 		Endpoint: endpoint,
+		Body:     requestBody,
 	}
 
 	resp, err := c.DoRequest(ctx, req)
@@ -312,11 +195,14 @@ func (c *Client) DeleteJSON(ctx context.Context, endpoint string, result interfa
 		return err
 	}
 
-	if result != nil && len(resp.Body) > 0 {
-		if err := json.Unmarshal(resp.Body, result); err != nil {
+	return unmarshalResponseBody(resp.Body, result)
+}
+
+func unmarshalResponseBody(body []byte, result interface{}) error {
+	if result != nil && len(body) > 0 {
+		if err := json.Unmarshal(body, result); err != nil {
 			return fmt.Errorf("failed to unmarshal JSON response: %w", err)
 		}
 	}
-
 	return nil
 }

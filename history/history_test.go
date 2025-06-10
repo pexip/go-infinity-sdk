@@ -63,10 +63,10 @@ func TestService_ListConferences(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			mockClient := &mockClient.Client{}
-			tt.setup(mockClient)
+			client := &mockClient.Client{}
+			tt.setup(client)
 
-			service := New(mockClient)
+			service := New(client)
 			result, err := service.ListConferences(t.Context(), tt.opts)
 
 			if tt.wantErr {
@@ -77,13 +77,13 @@ func TestService_ListConferences(t *testing.T) {
 				assert.NotNil(t, result)
 			}
 
-			mockClient.AssertExpectations(t)
+			client.AssertExpectations(t)
 		})
 	}
 }
 
 func TestService_GetConference(t *testing.T) {
-	mockClient := &mockClient.Client{}
+	client := &mockClient.Client{}
 	expectedConference := &Conference{
 		ID:                1,
 		Name:              "Test Conference",
@@ -92,21 +92,21 @@ func TestService_GetConference(t *testing.T) {
 		TotalParticipants: 5,
 	}
 
-	mockClient.On("GetJSON", t.Context(), "history/v1/conference/1/", mock.AnythingOfType("*history.Conference")).Return(nil).Run(func(args mock.Arguments) {
+	client.On("GetJSON", t.Context(), "history/v1/conference/1/", mock.AnythingOfType("*history.Conference")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(2).(*Conference)
 		*result = *expectedConference
 	})
 
-	service := New(mockClient)
+	service := New(client)
 	result, err := service.GetConference(t.Context(), 1)
 
 	assert.NoError(t, err)
 	assert.Equal(t, expectedConference, result)
-	mockClient.AssertExpectations(t)
+	client.AssertExpectations(t)
 }
 
 func TestService_ListParticipants(t *testing.T) {
-	mockClient := &mockClient.Client{}
+	client := &mockClient.Client{}
 
 	expectedResponse := &ParticipantListResponse{
 		Objects: []Participant{
@@ -122,22 +122,22 @@ func TestService_ListParticipants(t *testing.T) {
 		},
 	}
 
-	mockClient.On("GetJSON", t.Context(), "history/v1/participant/", mock.AnythingOfType("*history.ParticipantListResponse")).Return(nil).Run(func(args mock.Arguments) {
+	client.On("GetJSON", t.Context(), "history/v1/participant/", mock.AnythingOfType("*history.ParticipantListResponse")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(2).(*ParticipantListResponse)
 		*result = *expectedResponse
 	})
 
-	service := New(mockClient)
+	service := New(client)
 	result, err := service.ListParticipants(t.Context(), nil)
 
 	assert.NoError(t, err)
 	assert.Equal(t, 1, len(result.Objects))
 	assert.Equal(t, "John Doe", result.Objects[0].DisplayName)
-	mockClient.AssertExpectations(t)
+	client.AssertExpectations(t)
 }
 
 func TestService_GetParticipant(t *testing.T) {
-	mockClient := &mockClient.Client{}
+	client := &mockClient.Client{}
 	expectedParticipant := &Participant{
 		ID:               1,
 		ConferenceID:     1,
@@ -148,21 +148,21 @@ func TestService_GetParticipant(t *testing.T) {
 		DisconnectReason: "normal",
 	}
 
-	mockClient.On("GetJSON", t.Context(), "history/v1/participant/1/", mock.AnythingOfType("*history.Participant")).Return(nil).Run(func(args mock.Arguments) {
+	client.On("GetJSON", t.Context(), "history/v1/participant/1/", mock.AnythingOfType("*history.Participant")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(2).(*Participant)
 		*result = *expectedParticipant
 	})
 
-	service := New(mockClient)
+	service := New(client)
 	result, err := service.GetParticipant(t.Context(), 1)
 
 	assert.NoError(t, err)
 	assert.Equal(t, expectedParticipant, result)
-	mockClient.AssertExpectations(t)
+	client.AssertExpectations(t)
 }
 
 func TestService_ListParticipantsByConference(t *testing.T) {
-	mockClient := &mockClient.Client{}
+	client := &mockClient.Client{}
 
 	expectedResponse := &ParticipantListResponse{
 		Objects: []Participant{
@@ -183,25 +183,25 @@ func TestService_ListParticipantsByConference(t *testing.T) {
 		},
 	}
 
-	mockClient.On("GetJSON", t.Context(), mock.MatchedBy(func(endpoint string) bool {
+	client.On("GetJSON", t.Context(), mock.MatchedBy(func(endpoint string) bool {
 		return endpoint != "" && endpoint != "history/v1/participant/"
 	}), mock.AnythingOfType("*history.ParticipantListResponse")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(2).(*ParticipantListResponse)
 		*result = *expectedResponse
 	})
 
-	service := New(mockClient)
+	service := New(client)
 	result, err := service.ListParticipantsByConference(t.Context(), 123, nil)
 
 	assert.NoError(t, err)
 	assert.Equal(t, 2, len(result.Objects))
 	assert.Equal(t, "Alice", result.Objects[0].DisplayName)
 	assert.Equal(t, "Bob", result.Objects[1].DisplayName)
-	mockClient.AssertExpectations(t)
+	client.AssertExpectations(t)
 }
 
 func TestService_ListMediaStreams(t *testing.T) {
-	mockClient := &mockClient.Client{}
+	client := &mockClient.Client{}
 
 	expectedResponse := &MediaStreamListResponse{
 		Objects: []MediaStream{
@@ -218,23 +218,23 @@ func TestService_ListMediaStreams(t *testing.T) {
 		},
 	}
 
-	mockClient.On("GetJSON", t.Context(), "history/v1/media_stream/", mock.AnythingOfType("*history.MediaStreamListResponse")).Return(nil).Run(func(args mock.Arguments) {
+	client.On("GetJSON", t.Context(), "history/v1/media_stream/", mock.AnythingOfType("*history.MediaStreamListResponse")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(2).(*MediaStreamListResponse)
 		*result = *expectedResponse
 	})
 
-	service := New(mockClient)
+	service := New(client)
 	result, err := service.ListMediaStreams(t.Context(), nil)
 
 	assert.NoError(t, err)
 	assert.Equal(t, 1, len(result.Objects))
 	assert.Equal(t, "video", result.Objects[0].StreamType)
 	assert.Equal(t, "H.264", result.Objects[0].Codec)
-	mockClient.AssertExpectations(t)
+	client.AssertExpectations(t)
 }
 
 func TestService_GetMediaStream(t *testing.T) {
-	mockClient := &mockClient.Client{}
+	client := &mockClient.Client{}
 	expectedStream := &MediaStream{
 		ID:              1,
 		ParticipantID:   1,
@@ -245,21 +245,21 @@ func TestService_GetMediaStream(t *testing.T) {
 		DurationSeconds: 1800,
 	}
 
-	mockClient.On("GetJSON", t.Context(), "history/v1/media_stream/1/", mock.AnythingOfType("*history.MediaStream")).Return(nil).Run(func(args mock.Arguments) {
+	client.On("GetJSON", t.Context(), "history/v1/media_stream/1/", mock.AnythingOfType("*history.MediaStream")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(2).(*MediaStream)
 		*result = *expectedStream
 	})
 
-	service := New(mockClient)
+	service := New(client)
 	result, err := service.GetMediaStream(t.Context(), 1)
 
 	assert.NoError(t, err)
 	assert.Equal(t, expectedStream, result)
-	mockClient.AssertExpectations(t)
+	client.AssertExpectations(t)
 }
 
 func TestService_ListMediaStreamsByParticipant(t *testing.T) {
-	mockClient := &mockClient.Client{}
+	client := &mockClient.Client{}
 
 	expectedResponse := &MediaStreamListResponse{
 		Objects: []MediaStream{
@@ -280,27 +280,27 @@ func TestService_ListMediaStreamsByParticipant(t *testing.T) {
 		},
 	}
 
-	mockClient.On("GetJSON", t.Context(), mock.MatchedBy(func(endpoint string) bool {
+	client.On("GetJSON", t.Context(), mock.MatchedBy(func(endpoint string) bool {
 		return endpoint != "" && endpoint != "history/v1/media_stream/"
 	}), mock.AnythingOfType("*history.MediaStreamListResponse")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(2).(*MediaStreamListResponse)
 		*result = *expectedResponse
 	})
 
-	service := New(mockClient)
+	service := New(client)
 	result, err := service.ListMediaStreamsByParticipant(t.Context(), 456, nil)
 
 	assert.NoError(t, err)
 	assert.Equal(t, 2, len(result.Objects))
 	assert.Equal(t, "video", result.Objects[0].StreamType)
 	assert.Equal(t, "audio", result.Objects[1].StreamType)
-	mockClient.AssertExpectations(t)
+	client.AssertExpectations(t)
 }
 
 func TestNew(t *testing.T) {
-	mockClient := &mockClient.Client{}
-	service := New(mockClient)
+	client := &mockClient.Client{}
+	service := New(client)
 
 	require.NotNil(t, service)
-	assert.Equal(t, mockClient, service.client)
+	assert.Equal(t, client, service.client)
 }

@@ -10,7 +10,7 @@ import (
 )
 
 func TestService_DisconnectParticipant(t *testing.T) {
-	mockClient := &mockClient.Client{}
+	client := &mockClient.Client{}
 
 	expectedRequest := &ParticipantDisconnectRequest{
 		ParticipantUUID: "test-uuid",
@@ -21,21 +21,21 @@ func TestService_DisconnectParticipant(t *testing.T) {
 		Message: "Participant disconnected",
 	}
 
-	mockClient.On("PostJSON", t.Context(), "command/v1/participant/disconnect/", expectedRequest, mock.AnythingOfType("*command.CommandResponse")).Return(nil).Run(func(args mock.Arguments) {
+	client.On("PostJSON", t.Context(), "command/v1/participant/disconnect/", expectedRequest, mock.AnythingOfType("*command.CommandResponse")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(3).(*CommandResponse)
 		*result = *expectedResponse
 	})
 
-	service := New(mockClient)
+	service := New(client)
 	result, err := service.DisconnectParticipant(t.Context(), "test-uuid")
 
 	assert.NoError(t, err)
 	assert.Equal(t, expectedResponse, result)
-	mockClient.AssertExpectations(t)
+	client.AssertExpectations(t)
 }
 
 func TestService_MuteParticipant(t *testing.T) {
-	mockClient := &mockClient.Client{}
+	client := &mockClient.Client{}
 
 	expectedRequest := &ParticipantMuteRequest{
 		ParticipantUUID: "test-uuid",
@@ -47,21 +47,21 @@ func TestService_MuteParticipant(t *testing.T) {
 		Message: "Participant muted",
 	}
 
-	mockClient.On("PostJSON", t.Context(), "command/v1/participant/mute/", expectedRequest, mock.AnythingOfType("*command.CommandResponse")).Return(nil).Run(func(args mock.Arguments) {
+	client.On("PostJSON", t.Context(), "command/v1/participant/mute/", expectedRequest, mock.AnythingOfType("*command.CommandResponse")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(3).(*CommandResponse)
 		*result = *expectedResponse
 	})
 
-	service := New(mockClient)
+	service := New(client)
 	result, err := service.MuteParticipant(t.Context(), "test-uuid")
 
 	assert.NoError(t, err)
 	assert.Equal(t, expectedResponse, result)
-	mockClient.AssertExpectations(t)
+	client.AssertExpectations(t)
 }
 
 func TestService_UnmuteParticipant(t *testing.T) {
-	mockClient := &mockClient.Client{}
+	client := &mockClient.Client{}
 
 	expectedRequest := &ParticipantMuteRequest{
 		ParticipantUUID: "test-uuid",
@@ -73,21 +73,21 @@ func TestService_UnmuteParticipant(t *testing.T) {
 		Message: "Participant unmuted",
 	}
 
-	mockClient.On("PostJSON", t.Context(), "command/v1/participant/mute/", expectedRequest, mock.AnythingOfType("*command.CommandResponse")).Return(nil).Run(func(args mock.Arguments) {
+	client.On("PostJSON", t.Context(), "command/v1/participant/mute/", expectedRequest, mock.AnythingOfType("*command.CommandResponse")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(3).(*CommandResponse)
 		*result = *expectedResponse
 	})
 
-	service := New(mockClient)
+	service := New(client)
 	result, err := service.UnmuteParticipant(t.Context(), "test-uuid")
 
 	assert.NoError(t, err)
 	assert.Equal(t, expectedResponse, result)
-	mockClient.AssertExpectations(t)
+	client.AssertExpectations(t)
 }
 
 func TestService_ToggleMuteParticipant(t *testing.T) {
-	mockClient := &mockClient.Client{}
+	client := &mockClient.Client{}
 
 	expectedRequest := &ParticipantMuteRequest{
 		ParticipantUUID: "test-uuid",
@@ -99,21 +99,21 @@ func TestService_ToggleMuteParticipant(t *testing.T) {
 		Result: "muted",
 	}
 
-	mockClient.On("PostJSON", t.Context(), "command/v1/participant/mute/", expectedRequest, mock.AnythingOfType("*command.CommandResponse")).Return(nil).Run(func(args mock.Arguments) {
+	client.On("PostJSON", t.Context(), "command/v1/participant/mute/", expectedRequest, mock.AnythingOfType("*command.CommandResponse")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(3).(*CommandResponse)
 		*result = *expectedResponse
 	})
 
-	service := New(mockClient)
+	service := New(client)
 	result, err := service.ToggleMuteParticipant(t.Context(), "test-uuid")
 
 	assert.NoError(t, err)
 	assert.Equal(t, expectedResponse, result)
-	mockClient.AssertExpectations(t)
+	client.AssertExpectations(t)
 }
 
 func TestService_SpotlightParticipant(t *testing.T) {
-	mockClient := &mockClient.Client{}
+	client := &mockClient.Client{}
 
 	expectedRequest := &ParticipantSpotlightRequest{
 		ParticipantUUID: "test-uuid",
@@ -125,21 +125,21 @@ func TestService_SpotlightParticipant(t *testing.T) {
 		Message: "Participant spotlighted",
 	}
 
-	mockClient.On("PostJSON", t.Context(), "command/v1/participant/spotlight/", expectedRequest, mock.AnythingOfType("*command.CommandResponse")).Return(nil).Run(func(args mock.Arguments) {
+	client.On("PostJSON", t.Context(), "command/v1/participant/spotlight/", expectedRequest, mock.AnythingOfType("*command.CommandResponse")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(3).(*CommandResponse)
 		*result = *expectedResponse
 	})
 
-	service := New(mockClient)
+	service := New(client)
 	result, err := service.SpotlightParticipant(t.Context(), "test-uuid")
 
 	assert.NoError(t, err)
 	assert.Equal(t, expectedResponse, result)
-	mockClient.AssertExpectations(t)
+	client.AssertExpectations(t)
 }
 
 func TestService_LockConference(t *testing.T) {
-	mockClient := &mockClient.Client{}
+	client := &mockClient.Client{}
 
 	expectedRequest := &ConferenceLockRequest{
 		ConferenceID: 1,
@@ -151,21 +151,21 @@ func TestService_LockConference(t *testing.T) {
 		Message: "Conference locked",
 	}
 
-	mockClient.On("PostJSON", t.Context(), "command/v1/conference/lock/", expectedRequest, mock.AnythingOfType("*command.CommandResponse")).Return(nil).Run(func(args mock.Arguments) {
+	client.On("PostJSON", t.Context(), "command/v1/conference/lock/", expectedRequest, mock.AnythingOfType("*command.CommandResponse")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(3).(*CommandResponse)
 		*result = *expectedResponse
 	})
 
-	service := New(mockClient)
+	service := New(client)
 	result, err := service.LockConference(t.Context(), 1)
 
 	assert.NoError(t, err)
 	assert.Equal(t, expectedResponse, result)
-	mockClient.AssertExpectations(t)
+	client.AssertExpectations(t)
 }
 
 func TestService_UnlockConference(t *testing.T) {
-	mockClient := &mockClient.Client{}
+	client := &mockClient.Client{}
 
 	expectedRequest := &ConferenceLockRequest{
 		ConferenceID: 1,
@@ -177,21 +177,21 @@ func TestService_UnlockConference(t *testing.T) {
 		Message: "Conference unlocked",
 	}
 
-	mockClient.On("PostJSON", t.Context(), "command/v1/conference/lock/", expectedRequest, mock.AnythingOfType("*command.CommandResponse")).Return(nil).Run(func(args mock.Arguments) {
+	client.On("PostJSON", t.Context(), "command/v1/conference/lock/", expectedRequest, mock.AnythingOfType("*command.CommandResponse")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(3).(*CommandResponse)
 		*result = *expectedResponse
 	})
 
-	service := New(mockClient)
+	service := New(client)
 	result, err := service.UnlockConference(t.Context(), 1)
 
 	assert.NoError(t, err)
 	assert.Equal(t, expectedResponse, result)
-	mockClient.AssertExpectations(t)
+	client.AssertExpectations(t)
 }
 
 func TestService_SendMessageToParticipant(t *testing.T) {
-	mockClient := &mockClient.Client{}
+	client := &mockClient.Client{}
 
 	expectedRequest := &ParticipantMessageRequest{
 		ParticipantUUID: "test-uuid",
@@ -203,21 +203,21 @@ func TestService_SendMessageToParticipant(t *testing.T) {
 		Message: "Message sent",
 	}
 
-	mockClient.On("PostJSON", t.Context(), "command/v1/participant/message/", expectedRequest, mock.AnythingOfType("*command.CommandResponse")).Return(nil).Run(func(args mock.Arguments) {
+	client.On("PostJSON", t.Context(), "command/v1/participant/message/", expectedRequest, mock.AnythingOfType("*command.CommandResponse")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(3).(*CommandResponse)
 		*result = *expectedResponse
 	})
 
-	service := New(mockClient)
+	service := New(client)
 	result, err := service.SendMessageToParticipant(t.Context(), "test-uuid", "Hello, participant!")
 
 	assert.NoError(t, err)
 	assert.Equal(t, expectedResponse, result)
-	mockClient.AssertExpectations(t)
+	client.AssertExpectations(t)
 }
 
 func TestService_SendMessageToConference(t *testing.T) {
-	mockClient := &mockClient.Client{}
+	client := &mockClient.Client{}
 
 	expectedRequest := &ConferenceMessageRequest{
 		ConferenceID: 1,
@@ -229,17 +229,17 @@ func TestService_SendMessageToConference(t *testing.T) {
 		Message: "Message sent to conference",
 	}
 
-	mockClient.On("PostJSON", t.Context(), "command/v1/conference/message/", expectedRequest, mock.AnythingOfType("*command.CommandResponse")).Return(nil).Run(func(args mock.Arguments) {
+	client.On("PostJSON", t.Context(), "command/v1/conference/message/", expectedRequest, mock.AnythingOfType("*command.CommandResponse")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(3).(*CommandResponse)
 		*result = *expectedResponse
 	})
 
-	service := New(mockClient)
+	service := New(client)
 	result, err := service.SendMessageToConference(t.Context(), 1, "Hello, everyone!")
 
 	assert.NoError(t, err)
 	assert.Equal(t, expectedResponse, result)
-	mockClient.AssertExpectations(t)
+	client.AssertExpectations(t)
 }
 
 func TestService_TransferParticipant(t *testing.T) {
@@ -282,14 +282,14 @@ func TestService_TransferParticipant(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			mockClient := &mockClient.Client{}
+			client := &mockClient.Client{}
 
 			expectedResponse := &CommandResponse{
 				Status:  "success",
 				Message: "Participant transferred",
 			}
 
-			mockClient.On("PostJSON", t.Context(), "command/v1/participant/transfer/", mock.MatchedBy(func(req *ParticipantTransferRequest) bool {
+			client.On("PostJSON", t.Context(), "command/v1/participant/transfer/", mock.MatchedBy(func(req *ParticipantTransferRequest) bool {
 				return req.ParticipantUUID == tt.expectedRequest.ParticipantUUID &&
 					req.ConferenceAlias == tt.expectedRequest.ConferenceAlias
 			}), mock.AnythingOfType("*command.CommandResponse")).Return(nil).Run(func(args mock.Arguments) {
@@ -297,7 +297,7 @@ func TestService_TransferParticipant(t *testing.T) {
 				*result = *expectedResponse
 			})
 
-			service := New(mockClient)
+			service := New(client)
 			result, err := service.TransferParticipant(t.Context(), tt.participantUUID, tt.conferenceAlias, tt.opts)
 
 			if tt.wantErr {
@@ -307,13 +307,13 @@ func TestService_TransferParticipant(t *testing.T) {
 				assert.Equal(t, expectedResponse, result)
 			}
 
-			mockClient.AssertExpectations(t)
+			client.AssertExpectations(t)
 		})
 	}
 }
 
 func TestService_StartConference(t *testing.T) {
-	mockClient := &mockClient.Client{}
+	client := &mockClient.Client{}
 
 	expectedRequest := &ConferenceStartRequest{
 		ConferenceAlias: "test-conference",
@@ -324,21 +324,21 @@ func TestService_StartConference(t *testing.T) {
 		Message: "Conference started",
 	}
 
-	mockClient.On("PostJSON", t.Context(), "command/v1/conference/start/", expectedRequest, mock.AnythingOfType("*command.CommandResponse")).Return(nil).Run(func(args mock.Arguments) {
+	client.On("PostJSON", t.Context(), "command/v1/conference/start/", expectedRequest, mock.AnythingOfType("*command.CommandResponse")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(3).(*CommandResponse)
 		*result = *expectedResponse
 	})
 
-	service := New(mockClient)
+	service := New(client)
 	result, err := service.StartConference(t.Context(), "test-conference")
 
 	assert.NoError(t, err)
 	assert.Equal(t, expectedResponse, result)
-	mockClient.AssertExpectations(t)
+	client.AssertExpectations(t)
 }
 
 func TestService_StopConference(t *testing.T) {
-	mockClient := &mockClient.Client{}
+	client := &mockClient.Client{}
 
 	expectedRequest := &ConferenceStopRequest{
 		ConferenceID: 1,
@@ -349,21 +349,21 @@ func TestService_StopConference(t *testing.T) {
 		Message: "Conference stopped",
 	}
 
-	mockClient.On("PostJSON", t.Context(), "command/v1/conference/stop/", expectedRequest, mock.AnythingOfType("*command.CommandResponse")).Return(nil).Run(func(args mock.Arguments) {
+	client.On("PostJSON", t.Context(), "command/v1/conference/stop/", expectedRequest, mock.AnythingOfType("*command.CommandResponse")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(3).(*CommandResponse)
 		*result = *expectedResponse
 	})
 
-	service := New(mockClient)
+	service := New(client)
 	result, err := service.StopConference(t.Context(), 1)
 
 	assert.NoError(t, err)
 	assert.Equal(t, expectedResponse, result)
-	mockClient.AssertExpectations(t)
+	client.AssertExpectations(t)
 }
 
 func TestService_PromoteParticipant(t *testing.T) {
-	mockClient := &mockClient.Client{}
+	client := &mockClient.Client{}
 
 	expectedRequest := &ParticipantRoleRequest{
 		ParticipantUUID: "test-uuid",
@@ -375,21 +375,21 @@ func TestService_PromoteParticipant(t *testing.T) {
 		Message: "Participant promoted to chair",
 	}
 
-	mockClient.On("PostJSON", t.Context(), "command/v1/participant/role/", expectedRequest, mock.AnythingOfType("*command.CommandResponse")).Return(nil).Run(func(args mock.Arguments) {
+	client.On("PostJSON", t.Context(), "command/v1/participant/role/", expectedRequest, mock.AnythingOfType("*command.CommandResponse")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(3).(*CommandResponse)
 		*result = *expectedResponse
 	})
 
-	service := New(mockClient)
+	service := New(client)
 	result, err := service.PromoteParticipant(t.Context(), "test-uuid")
 
 	assert.NoError(t, err)
 	assert.Equal(t, expectedResponse, result)
-	mockClient.AssertExpectations(t)
+	client.AssertExpectations(t)
 }
 
 func TestService_DemoteParticipant(t *testing.T) {
-	mockClient := &mockClient.Client{}
+	client := &mockClient.Client{}
 
 	expectedRequest := &ParticipantRoleRequest{
 		ParticipantUUID: "test-uuid",
@@ -401,23 +401,23 @@ func TestService_DemoteParticipant(t *testing.T) {
 		Message: "Participant demoted to guest",
 	}
 
-	mockClient.On("PostJSON", t.Context(), "command/v1/participant/role/", expectedRequest, mock.AnythingOfType("*command.CommandResponse")).Return(nil).Run(func(args mock.Arguments) {
+	client.On("PostJSON", t.Context(), "command/v1/participant/role/", expectedRequest, mock.AnythingOfType("*command.CommandResponse")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(3).(*CommandResponse)
 		*result = *expectedResponse
 	})
 
-	service := New(mockClient)
+	service := New(client)
 	result, err := service.DemoteParticipant(t.Context(), "test-uuid")
 
 	assert.NoError(t, err)
 	assert.Equal(t, expectedResponse, result)
-	mockClient.AssertExpectations(t)
+	client.AssertExpectations(t)
 }
 
 func TestNew(t *testing.T) {
-	mockClient := &mockClient.Client{}
-	service := New(mockClient)
+	client := &mockClient.Client{}
+	service := New(client)
 
 	require.NotNil(t, service)
-	assert.Equal(t, mockClient, service.client)
+	assert.Equal(t, client, service.client)
 }

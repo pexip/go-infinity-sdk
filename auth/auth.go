@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"encoding/base64"
 	"fmt"
 	"net/http"
 )
@@ -27,9 +26,7 @@ func NewBasicAuth(username, password string) *BasicAuth {
 
 // Authenticate adds basic authentication to the HTTP request
 func (b *BasicAuth) Authenticate(req *http.Request) error {
-	auth := b.username + ":" + b.password
-	encoded := base64.StdEncoding.EncodeToString([]byte(auth))
-	req.Header.Set("Authorization", "Basic "+encoded)
+	req.SetBasicAuth(b.username, b.password)
 	return nil
 }
 

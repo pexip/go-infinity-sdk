@@ -44,6 +44,131 @@ func TestBearerAuth_Authenticate(t *testing.T) {
 }
 
 func TestCustomAuth_Authenticate(t *testing.T) {
+	auth := NewCustomAuth("X-API-Key", "my-api-key")
+	req, err := http.NewRequest("GET", "https://example.com", nil)
+	require.NoError(t, err)
+
+	err = auth.Authenticate(req)
+	assert.NoError(t, err)
+	assert.Equal(t, "my-api-key", req.Header.Get("X-API-Key"))
+}
+
+func TestAuthenticators_HandleSpecialCharacters(t *testing.T) {
+	tests := []struct {
+		name     string
+		setup    func() (Authenticator, *http.Request)
+		validate func(t *testing.T, req *http.Request)
+	}{
+		{
+			name: "basic auth with special characters",
+			setup: func() (Authenticator, *http.Request) {
+				auth := NewBasicAuth("user@domain.com", "p@ssw0rd!#$%")
+				req, _ := http.NewRequest("GET", "https://example.com", nil)
+				return auth, req
+			},
+			validate: func(t *testing.T, req *http.Request) {
+				expected := "Basic " + base64.StdEncoding.EncodeToString([]byte("user@domain.com:p@ssw0rd!#$%"))
+				assert.Equal(t, expected, req.Header.Get("Authorization"))
+			},
+		},
+		{
+			name: "token auth with unicode characters",
+			setup: func() (Authenticator, *http.Request) {
+				auth := NewTokenAuth("tôken-with-ünïcödé")
+				req, _ := http.NewRequest("GET", "https://example.com", nil)
+				return auth, req
+			},
+			validate: func(t *testing.T, req *http.Request) {
+				assert.Equal(t, "Token tôken-with-ünïcödé", req.Header.Get("Authorization"))
+			},
+		},
+		{
+			name: "custom auth with multiple header overwrites",
+			setup: func() (Authenticator, *http.Request) {
+				auth := NewCustomAuth("X-API-Key", "new-value")
+				req, _ := http.NewRequest("GET", "https://example.com", nil)
+				req.Header.Set("X-API-Key", "old-value")
+				return auth, req
+			},
+			validate: func(t *testing.T, req *http.Request) {
+				assert.Equal(t, "new-value", req.Header.Get("X-API-Key"))
+				// Should only have one value, not both
+				assert.Len(t, req.Header.Values("X-API-Key"), 1)
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			auth, req := tt.setup()
+			err := auth.Authenticate(req)
+			assert.NoError(t, err)
+			tt.validate(t, req)
+		})
+	}
+}
+
+func TestBasicAuth_EmptyCredentials(t *testing.T) {
+	tests := []struct {
+		name     string
+		username string
+		password string
+		expected string
+	}{
+		{
+			name:     "empty username",
+			username: "",
+			password: "password",
+			expected: "Basic " + base64.StdEncoding.EncodeToString([]byte(":password")),
+		},
+		{
+			name:     "empty password",
+			username: "username",
+			password: "",
+			expected: "Basic " + base64.StdEncoding.EncodeToString([]byte("username:")),
+		},
+		{
+			name:     "both empty",
+			username: "",
+			password: "",
+			expected: "Basic " + base64.StdEncoding.EncodeToString([]byte(":")),
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			auth := NewBasicAuth(tt.username, tt.password)
+			req, err := http.NewRequest("GET", "https://example.com", nil)
+			require.NoError(t, err)
+
+			err = auth.Authenticate(req)
+			assert.NoError(t, err)
+			assert.Equal(t, tt.expected, req.Header.Get("Authorization"))
+		})
+	}
+}
+
+func TestTokenAuth_EmptyToken(t *testing.T) {
+	auth := NewTokenAuth("")
+	req, err := http.NewRequest("GET", "https://example.com", nil)
+	require.NoError(t, err)
+
+	err = auth.Authenticate(req)
+	assert.NoError(t, err)
+	assert.Equal(t, "Token ", req.Header.Get("Authorization"))
+}
+
+func TestBearerAuth_EmptyToken(t *testing.T) {
+	auth := NewBearerAuth("")
+	req, err := http.NewRequest("GET", "https://example.com", nil)
+	require.NoError(t, err)
+
+	err = auth.Authenticate(req)
+	assert.NoError(t, err)
+	assert.Equal(t, "Bearer ", req.Header.Get("Authorization"))
+}
+
+func TestCustomAuth_EdgeCases(t *testing.T) {
 	tests := []struct {
 		name        string
 		headerName  string
@@ -52,17 +177,35 @@ func TestCustomAuth_Authenticate(t *testing.T) {
 		expectedErr string
 	}{
 		{
-			name:        "valid custom auth",
-			headerName:  "X-API-Key",
-			headerValue: "my-api-key",
-			wantErr:     false,
-		},
-		{
 			name:        "empty header name",
 			headerName:  "",
 			headerValue: "value",
 			wantErr:     true,
 			expectedErr: "header name cannot be empty",
+		},
+		{
+			name:        "whitespace-only header name",
+			headerName:  "   ",
+			headerValue: "value",
+			wantErr:     false, // HTTP allows this, though it's unusual
+		},
+		{
+			name:        "empty header value",
+			headerName:  "X-API-Key",
+			headerValue: "",
+			wantErr:     false,
+		},
+		{
+			name:        "header name with special characters",
+			headerName:  "X-My-Custom-Header",
+			headerValue: "value",
+			wantErr:     false,
+		},
+		{
+			name:        "header value with newlines",
+			headerName:  "X-API-Key",
+			headerValue: "value\nwith\nnewlines",
+			wantErr:     false, // HTTP will handle this
 		},
 	}
 
@@ -79,30 +222,10 @@ func TestCustomAuth_Authenticate(t *testing.T) {
 				assert.Contains(t, err.Error(), tt.expectedErr)
 			} else {
 				assert.NoError(t, err)
-				assert.Equal(t, tt.headerValue, req.Header.Get(tt.headerName))
+				if tt.headerName != "" {
+					assert.Equal(t, tt.headerValue, req.Header.Get(tt.headerName))
+				}
 			}
 		})
 	}
-}
-
-func TestNewBasicAuth(t *testing.T) {
-	auth := NewBasicAuth("user", "pass")
-	assert.Equal(t, "user", auth.username)
-	assert.Equal(t, "pass", auth.password)
-}
-
-func TestNewTokenAuth(t *testing.T) {
-	auth := NewTokenAuth("token123")
-	assert.Equal(t, "token123", auth.token)
-}
-
-func TestNewBearerAuth(t *testing.T) {
-	auth := NewBearerAuth("bearer123")
-	assert.Equal(t, "bearer123", auth.token)
-}
-
-func TestNewCustomAuth(t *testing.T) {
-	auth := NewCustomAuth("X-Header", "value")
-	assert.Equal(t, "X-Header", auth.headerName)
-	assert.Equal(t, "value", auth.headerValue)
 }

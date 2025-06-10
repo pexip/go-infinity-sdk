@@ -1,6 +1,7 @@
 package config
 
 import (
+	"errors"
 	"testing"
 
 	mockClient "github.com/pexip/go-infinity-sdk/internal/mock"
@@ -278,4 +279,131 @@ func TestNew(t *testing.T) {
 
 	require.NotNil(t, service)
 	assert.Equal(t, client, service.client)
+}
+
+func TestService_ErrorHandling(t *testing.T) {
+	tests := []struct {
+		name      string
+		setup     func(m *mockClient.Client)
+		operation func(service *Service) error
+	}{
+		{
+			name: "ListConferences client error",
+			setup: func(m *mockClient.Client) {
+				m.On("GetJSON", t.Context(), "configuration/v1/conference/", mock.AnythingOfType("*config.ConferenceListResponse")).Return(errors.New("network error"))
+			},
+			operation: func(service *Service) error {
+				_, err := service.ListConferences(t.Context(), nil)
+				return err
+			},
+		},
+		{
+			name: "GetConference client error",
+			setup: func(m *mockClient.Client) {
+				m.On("GetJSON", t.Context(), "configuration/v1/conference/1/", mock.AnythingOfType("*config.Conference")).Return(errors.New("not found"))
+			},
+			operation: func(service *Service) error {
+				_, err := service.GetConference(t.Context(), 1)
+				return err
+			},
+		},
+		{
+			name: "CreateConference client error",
+			setup: func(m *mockClient.Client) {
+				m.On("PostJSON", t.Context(), "configuration/v1/conference/", mock.Anything, mock.AnythingOfType("*config.Conference")).Return(errors.New("validation error"))
+			},
+			operation: func(service *Service) error {
+				_, err := service.CreateConference(t.Context(), &ConferenceCreateRequest{Name: "Test"})
+				return err
+			},
+		},
+		{
+			name: "UpdateConference client error",
+			setup: func(m *mockClient.Client) {
+				m.On("PutJSON", t.Context(), "configuration/v1/conference/1/", mock.Anything, mock.AnythingOfType("*config.Conference")).Return(errors.New("update failed"))
+			},
+			operation: func(service *Service) error {
+				_, err := service.UpdateConference(t.Context(), 1, &ConferenceUpdateRequest{Name: "Updated"})
+				return err
+			},
+		},
+		{
+			name: "DeleteConference client error",
+			setup: func(m *mockClient.Client) {
+				m.On("DeleteJSON", t.Context(), "configuration/v1/conference/1/", mock.Anything).Return(errors.New("delete failed"))
+			},
+			operation: func(service *Service) error {
+				return service.DeleteConference(t.Context(), 1)
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			client := &mockClient.Client{}
+			tt.setup(client)
+
+			service := New(client)
+			err := tt.operation(service)
+
+			assert.Error(t, err)
+			client.AssertExpectations(t)
+		})
+	}
+}
+
+func TestService_ListConferences_QueryParameterValidation(t *testing.T) {
+	tests := []struct {
+		name          string
+		opts          *ListOptions
+		expectedQuery string
+	}{
+		{
+			name:          "nil options",
+			opts:          nil,
+			expectedQuery: "configuration/v1/conference/",
+		},
+		{
+			name: "empty search string",
+			opts: &ListOptions{
+				BaseListOptions: options.BaseListOptions{Limit: 10},
+				Search:          "",
+			},
+			expectedQuery: "configuration/v1/conference/?limit=10",
+		},
+		{
+			name: "search with special characters",
+			opts: &ListOptions{
+				BaseListOptions: options.BaseListOptions{Limit: 5},
+				Search:          "test@domain.com",
+			},
+			expectedQuery: "configuration/v1/conference/?limit=5&name__icontains=test%40domain.com",
+		},
+		{
+			name: "unicode search",
+			opts: &ListOptions{
+				BaseListOptions: options.BaseListOptions{Limit: 5},
+				Search:          "cönférence",
+			},
+			expectedQuery: "configuration/v1/conference/?limit=5&name__icontains=c%C3%B6nf%C3%A9rence",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			client := &mockClient.Client{}
+			expectedResponse := &ConferenceListResponse{Objects: []Conference{}}
+
+			client.On("GetJSON", t.Context(), tt.expectedQuery, mock.AnythingOfType("*config.ConferenceListResponse")).Return(nil).Run(func(args mock.Arguments) {
+				result := args.Get(2).(*ConferenceListResponse)
+				*result = *expectedResponse
+			})
+
+			service := New(client)
+			_, err := service.ListConferences(t.Context(), tt.opts)
+
+			assert.NoError(t, err)
+			client.AssertExpectations(t)
+		})
+	}
 }

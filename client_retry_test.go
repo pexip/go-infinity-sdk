@@ -2,8 +2,10 @@ package infinity
 
 import (
 	"context"
+	"errors"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"testing"
 	"time"
 
@@ -378,4 +380,173 @@ func TestWithMaxRetries_NegativeValue(t *testing.T) {
 	_, err := New(WithMaxRetries(-1))
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "max retries cannot be negative")
+}
+
+func TestRetryConfig_IsRetriable_URLErrors(t *testing.T) {
+	config := DefaultRetryConfig()
+
+	tests := []struct {
+		name string
+		err  error
+		want bool
+	}{
+		{
+			name: "connection refused",
+			err:  &url.Error{Op: "dial", URL: "http://example.com", Err: errors.New("connection refused")},
+			want: true,
+		},
+		{
+			name: "connection reset",
+			err:  &url.Error{Op: "read", URL: "http://example.com", Err: errors.New("connection reset by peer")},
+			want: true,
+		},
+		{
+			name: "no such host",
+			err:  &url.Error{Op: "dial", URL: "http://nonexistent.com", Err: errors.New("no such host")},
+			want: true,
+		},
+		{
+			name: "timeout",
+			err:  &url.Error{Op: "dial", URL: "http://example.com", Err: errors.New("i/o timeout")},
+			want: true,
+		},
+		{
+			name: "temporary failure",
+			err:  &url.Error{Op: "dial", URL: "http://example.com", Err: errors.New("temporary failure in name resolution")},
+			want: true,
+		},
+		{
+			name: "context canceled in url error",
+			err:  &url.Error{Op: "dial", URL: "http://example.com", Err: context.Canceled},
+			want: false,
+		},
+		{
+			name: "context deadline exceeded in url error",
+			err:  &url.Error{Op: "dial", URL: "http://example.com", Err: context.DeadlineExceeded},
+			want: false,
+		},
+		{
+			name: "other url error",
+			err:  &url.Error{Op: "parse", URL: "invalid", Err: errors.New("invalid URL")},
+			want: true,
+		},
+		{
+			name: "non-url error",
+			err:  errors.New("some other error"),
+			want: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := config.IsRetriable(0, tt.err)
+			assert.Equal(t, tt.want, got)
+		})
+	}
+}
+
+func TestRetryConfig_CalculateBackoff_EdgeCases(t *testing.T) {
+	tests := []struct {
+		name    string
+		config  *RetryConfig
+		attempt int
+		check   func(t *testing.T, duration time.Duration)
+	}{
+		{
+			name: "zero jitter factor",
+			config: &RetryConfig{
+				BackoffMin:   100 * time.Millisecond,
+				BackoffMax:   1000 * time.Millisecond,
+				Multiplier:   2.0,
+				JitterFactor: 0,
+			},
+			attempt: 2,
+			check: func(t *testing.T, duration time.Duration) {
+				assert.Equal(t, 200*time.Millisecond, duration)
+			},
+		},
+		{
+			name: "large jitter creates variance",
+			config: &RetryConfig{
+				BackoffMin:   100 * time.Millisecond,
+				BackoffMax:   1000 * time.Millisecond,
+				Multiplier:   2.0,
+				JitterFactor: 1.0, // 100% jitter
+			},
+			attempt: 2,
+			check: func(t *testing.T, duration time.Duration) {
+				// With 100% jitter, result can range from 0 to 400ms
+				assert.GreaterOrEqual(t, duration, time.Duration(0))
+				assert.LessOrEqual(t, duration, 400*time.Millisecond)
+			},
+		},
+		{
+			name: "jitter can create negative value",
+			config: &RetryConfig{
+				BackoffMin:   1 * time.Millisecond,
+				BackoffMax:   1000 * time.Millisecond,
+				Multiplier:   2.0,
+				JitterFactor: 2.0, // Very large jitter
+			},
+			attempt: 1,
+			check: func(t *testing.T, duration time.Duration) {
+				// Should not be negative, should fall back to BackoffMin
+				assert.GreaterOrEqual(t, duration, 1*time.Millisecond)
+			},
+		},
+		{
+			name: "very small multiplier",
+			config: &RetryConfig{
+				BackoffMin:   100 * time.Millisecond,
+				BackoffMax:   1000 * time.Millisecond,
+				Multiplier:   0.5, // Decreasing backoff
+				JitterFactor: 0,
+			},
+			attempt: 3,
+			check: func(t *testing.T, duration time.Duration) {
+				// 100 * 0.5^2 = 25ms
+				assert.Equal(t, 25*time.Millisecond, duration)
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			duration := tt.config.CalculateBackoff(tt.attempt)
+			tt.check(t, duration)
+		})
+	}
+}
+
+func TestClient_RetryWithContextCancellationDuringBackoff(t *testing.T) {
+	attemptCount := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		attemptCount++
+		w.WriteHeader(http.StatusInternalServerError) // Always fail
+	}))
+	defer server.Close()
+
+	client, err := New(
+		WithBaseURL(server.URL),
+		WithRetryConfig(&RetryConfig{
+			MaxRetries:   3,
+			BackoffMin:   100 * time.Millisecond, // Long enough for cancellation
+			BackoffMax:   1000 * time.Millisecond,
+			Multiplier:   2.0,
+			JitterFactor: 0,
+		}),
+	)
+	require.NoError(t, err)
+
+	// Cancel context after first failure but before retry backoff completes
+	ctx, cancel := context.WithTimeout(context.Background(), 50*time.Millisecond)
+	defer cancel()
+
+	var result map[string]interface{}
+	err = client.GetJSON(ctx, "test", &result)
+
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "context deadline exceeded")
+	// Should only have made one attempt because context was canceled during backoff
+	assert.Equal(t, 1, attemptCount)
 }

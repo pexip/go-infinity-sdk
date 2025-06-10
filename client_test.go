@@ -1,6 +1,7 @@
 package infinity
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -483,4 +484,147 @@ func TestClient_handleAPIError(t *testing.T) {
 			assert.Equal(t, tt.expectedDet, apiErr.Details)
 		})
 	}
+}
+
+func TestClient_DoRequest_EdgeCases(t *testing.T) {
+	tests := []struct {
+		name          string
+		request       *Request
+		setupClient   func() *Client
+		expectError   bool
+		errorContains string
+	}{
+		{
+			name: "malformed request body JSON",
+			request: &Request{
+				Method:   "POST",
+				Endpoint: "test",
+				Body:     make(chan int), // This cannot be marshaled to JSON
+			},
+			setupClient: func() *Client {
+				client, _ := New(WithBaseURL("https://example.com"))
+				return client
+			},
+			expectError:   true,
+			errorContains: "failed to marshal request body",
+		},
+		{
+			name: "authentication error",
+			request: &Request{
+				Method:   "GET",
+				Endpoint: "test",
+			},
+			setupClient: func() *Client {
+				client, _ := New(
+					WithBaseURL("https://example.com"),
+					WithAuth(&FailingAuth{}),
+				)
+				return client
+			},
+			expectError:   true,
+			errorContains: "failed to authenticate request",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			client := tt.setupClient()
+			_, err := client.DoRequest(context.Background(), tt.request)
+
+			if tt.expectError {
+				assert.Error(t, err)
+				assert.Contains(t, err.Error(), tt.errorContains)
+			} else {
+				assert.NoError(t, err)
+			}
+		})
+	}
+}
+
+func TestClient_sleepWithContext(t *testing.T) {
+	client, err := New()
+	require.NoError(t, err)
+
+	t.Run("zero duration returns immediately", func(t *testing.T) {
+		start := time.Now()
+		result := client.sleepWithContext(context.Background(), 0)
+		duration := time.Since(start)
+
+		assert.True(t, result)
+		assert.Less(t, duration, 10*time.Millisecond)
+	})
+
+	t.Run("negative duration returns immediately", func(t *testing.T) {
+		start := time.Now()
+		result := client.sleepWithContext(context.Background(), -100*time.Millisecond)
+		duration := time.Since(start)
+
+		assert.True(t, result)
+		assert.Less(t, duration, 10*time.Millisecond)
+	})
+
+	t.Run("context cancellation interrupts sleep", func(t *testing.T) {
+		ctx, cancel := context.WithCancel(context.Background())
+
+		// Cancel context after 10ms
+		go func() {
+			time.Sleep(10 * time.Millisecond)
+			cancel()
+		}()
+
+		start := time.Now()
+		result := client.sleepWithContext(ctx, 100*time.Millisecond)
+		duration := time.Since(start)
+
+		assert.False(t, result)
+		assert.Less(t, duration, 50*time.Millisecond) // Should be much less than 100ms
+	})
+
+	t.Run("normal sleep completes", func(t *testing.T) {
+		start := time.Now()
+		result := client.sleepWithContext(context.Background(), 20*time.Millisecond)
+		duration := time.Since(start)
+
+		assert.True(t, result)
+		assert.GreaterOrEqual(t, duration, 15*time.Millisecond)
+		assert.Less(t, duration, 50*time.Millisecond)
+	})
+}
+
+func TestUnmarshalResponseBody_EdgeCases(t *testing.T) {
+	t.Run("nil result pointer", func(t *testing.T) {
+		body := []byte(`{"test": "value"}`)
+		err := unmarshalResponseBody(body, nil)
+		assert.NoError(t, err)
+	})
+
+	t.Run("empty body with non-nil result", func(t *testing.T) {
+		var result map[string]string
+		err := unmarshalResponseBody([]byte{}, &result)
+		assert.NoError(t, err)
+		assert.Nil(t, result)
+	})
+
+	t.Run("malformed JSON", func(t *testing.T) {
+		var result map[string]string
+		body := []byte(`{"test": "value",}`)
+		err := unmarshalResponseBody(body, &result)
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "failed to unmarshal JSON response")
+	})
+
+	t.Run("type mismatch", func(t *testing.T) {
+		var result int
+		body := []byte(`{"test": "value"}`)
+		err := unmarshalResponseBody(body, &result)
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "failed to unmarshal JSON response")
+	})
+}
+
+// FailingAuth is a test authenticator that always fails
+type FailingAuth struct{}
+
+func (f *FailingAuth) Authenticate(req *http.Request) error {
+	return errors.New("authentication failed")
 }

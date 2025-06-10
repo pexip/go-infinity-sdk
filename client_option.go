@@ -53,3 +53,30 @@ func WithTokenAuth(token string) ClientOption {
 		return nil
 	}
 }
+
+// WithRetryConfig sets the retry configuration for the client
+func WithRetryConfig(config *RetryConfig) ClientOption {
+	return func(c *Client) error {
+		if config == nil {
+			return fmt.Errorf("retry config cannot be nil")
+		}
+		c.retryConfig = config
+		return nil
+	}
+}
+
+// WithMaxRetries sets the maximum number of retries (convenience function)
+func WithMaxRetries(maxRetries int) ClientOption {
+	return func(c *Client) error {
+		if maxRetries < 0 {
+			return fmt.Errorf("max retries cannot be negative")
+		}
+		c.retryConfig.MaxRetries = maxRetries
+		return nil
+	}
+}
+
+// WithNoRetries disables retries completely
+func WithNoRetries() ClientOption {
+	return WithMaxRetries(0)
+}

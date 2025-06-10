@@ -4,8 +4,11 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
+	"math"
+	"math/rand"
 	"net/http"
 	"net/url"
 	"strings"
@@ -19,16 +22,114 @@ import (
 )
 
 const (
-	DefaultBaseURL = "https://admin.example.com"
-	DefaultTimeout = 30 * time.Second
-	APIPrefix      = "/api/admin/"
+	DefaultBaseURL           = "https://admin.example.com"
+	DefaultTimeout           = 30 * time.Second
+	APIPrefix                = "/api/admin/"
+	DefaultMaxRetries        = 3
+	DefaultBackoffMin        = 1 * time.Second
+	DefaultBackoffMax        = 30 * time.Second
+	DefaultBackoffMultiplier = 2.0
+	DefaultJitterFactor      = 0.1
 )
+
+// RetryConfig defines the retry behavior for the client
+type RetryConfig struct {
+	MaxRetries   int           // Maximum number of retries (0 = no retries)
+	BackoffMin   time.Duration // Minimum backoff duration
+	BackoffMax   time.Duration // Maximum backoff duration
+	Multiplier   float64       // Backoff multiplier for exponential backoff
+	JitterFactor float64       // Jitter factor to add randomness (0.0-1.0)
+}
+
+// DefaultRetryConfig returns a sensible default retry configuration
+func DefaultRetryConfig() *RetryConfig {
+	return &RetryConfig{
+		MaxRetries:   DefaultMaxRetries,
+		BackoffMin:   DefaultBackoffMin,
+		BackoffMax:   DefaultBackoffMax,
+		Multiplier:   DefaultBackoffMultiplier,
+		JitterFactor: DefaultJitterFactor,
+	}
+}
+
+// IsRetriable determines if an error/status code should be retried
+func (rc *RetryConfig) IsRetriable(statusCode int, err error) bool {
+	if err != nil {
+		// Don't retry on context cancellation
+		if errors.Is(err, context.Canceled) || errors.Is(err, context.DeadlineExceeded) {
+			return false
+		}
+
+		// Check for URL errors (network issues)
+		if urlErr, ok := err.(*url.Error); ok {
+			// Don't retry on context cancellation wrapped in url.Error
+			if errors.Is(urlErr.Err, context.Canceled) || errors.Is(urlErr.Err, context.DeadlineExceeded) {
+				return false
+			}
+
+			// Check for common retriable network errors
+			errStr := strings.ToLower(urlErr.Err.Error())
+			if strings.Contains(errStr, "connection refused") ||
+				strings.Contains(errStr, "connection reset") ||
+				strings.Contains(errStr, "no such host") ||
+				strings.Contains(errStr, "timeout") ||
+				strings.Contains(errStr, "temporary failure") ||
+				urlErr.Temporary() || urlErr.Timeout() {
+				return true
+			}
+		}
+
+		// Retry on other network-related errors by default
+		return true
+	}
+
+	// Retry on specific HTTP status codes
+	switch statusCode {
+	case http.StatusTooManyRequests, // 429
+		http.StatusInternalServerError, // 500
+		http.StatusBadGateway,          // 502
+		http.StatusServiceUnavailable,  // 503
+		http.StatusGatewayTimeout:      // 504
+		return true
+	default:
+		return false
+	}
+}
+
+// CalculateBackoff calculates the backoff duration for a given attempt
+func (rc *RetryConfig) CalculateBackoff(attempt int) time.Duration {
+	if attempt <= 0 {
+		return 0
+	}
+
+	// Calculate exponential backoff
+	backoff := float64(rc.BackoffMin) * math.Pow(rc.Multiplier, float64(attempt-1))
+
+	// Apply maximum backoff limit
+	if maxBackoff := float64(rc.BackoffMax); backoff > maxBackoff {
+		backoff = maxBackoff
+	}
+
+	// Add jitter to prevent thundering herd
+	if rc.JitterFactor > 0 {
+		jitter := backoff * rc.JitterFactor * (rand.Float64()*2 - 1) // Random value between -jitter and +jitter
+		backoff += jitter
+	}
+
+	// Ensure backoff is not negative
+	if backoff < 0 {
+		backoff = float64(rc.BackoffMin)
+	}
+
+	return time.Duration(backoff)
+}
 
 // Client represents a Pexip Infinity Management API client
 type Client struct {
-	baseURL    *url.URL
-	httpClient *http.Client
-	auth       auth.Authenticator
+	baseURL     *url.URL
+	httpClient  *http.Client
+	auth        auth.Authenticator
+	retryConfig *RetryConfig
 
 	// API services
 	Config  *config.Service
@@ -49,6 +150,7 @@ func New(options ...ClientOption) (*Client, error) {
 		httpClient: &http.Client{
 			Timeout: DefaultTimeout,
 		},
+		retryConfig: DefaultRetryConfig(),
 	}
 
 	for _, option := range options {
@@ -82,71 +184,115 @@ type Response struct {
 	Headers    http.Header
 }
 
-// DoRequest performs an HTTP request to the Infinity API
+// DoRequest performs an HTTP request to the Infinity API with retry logic
 func (c *Client) DoRequest(ctx context.Context, req *Request) (*Response, error) {
-	// Build the full URL
 	fullURL := c.baseURL.JoinPath(APIPrefix, strings.TrimPrefix(req.Endpoint, "/"))
 	if req.QueryParams != nil {
 		fullURL.RawQuery = req.QueryParams.Encode()
 	}
 
-	// Prepare request body
-	var body io.Reader
+	// Pre-marshal request body once for all retries
+	var jsonBody []byte
+	var err error
 	if req.Body != nil {
-		jsonBody, err := json.Marshal(req.Body)
+		jsonBody, err = json.Marshal(req.Body)
 		if err != nil {
 			return nil, fmt.Errorf("failed to marshal request body: %w", err)
 		}
-		body = bytes.NewBuffer(jsonBody)
 	}
 
-	// Create HTTP request
-	httpReq, err := http.NewRequestWithContext(ctx, req.Method, fullURL.String(), body)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create HTTP request: %w", err)
-	}
+	var lastResponse *Response
+	var lastError error
 
-	// Set default headers
-	httpReq.Header.Set("Content-Type", "application/json")
-	httpReq.Header.Set("Accept", "application/json")
-
-	// Set custom headers
-	for key, value := range req.Headers {
-		httpReq.Header.Set(key, value)
-	}
-
-	// Apply authentication
-	if c.auth != nil {
-		if err := c.auth.Authenticate(httpReq); err != nil {
-			return nil, fmt.Errorf("failed to authenticate request: %w", err)
+	// Perform the request with retry logic
+	for attempt := 0; attempt <= c.retryConfig.MaxRetries; attempt++ {
+		// Check context cancellation before each attempt
+		select {
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		default:
 		}
+
+		var bodyReader io.Reader
+		if jsonBody != nil {
+			bodyReader = bytes.NewReader(jsonBody)
+		}
+
+		httpReq, err := http.NewRequestWithContext(ctx, req.Method, fullURL.String(), bodyReader)
+		if err != nil {
+			return nil, fmt.Errorf("failed to create HTTP request: %w", err)
+		}
+
+		// Set default headers
+		httpReq.Header.Set("Content-Type", "application/json")
+		httpReq.Header.Set("Accept", "application/json")
+
+		// Set custom headers
+		for key, value := range req.Headers {
+			httpReq.Header.Set(key, value)
+		}
+
+		// Apply authentication
+		if c.auth != nil {
+			if err := c.auth.Authenticate(httpReq); err != nil {
+				return nil, fmt.Errorf("failed to authenticate request: %w", err)
+			}
+		}
+
+		// Perform the HTTP request
+		resp, err := c.httpClient.Do(httpReq)
+		if err != nil {
+			lastError = err
+
+			// Check if this error should be retried
+			if attempt < c.retryConfig.MaxRetries && c.retryConfig.IsRetriable(0, err) {
+				if !c.sleepWithContext(ctx, c.retryConfig.CalculateBackoff(attempt+1)) {
+					return nil, ctx.Err()
+				}
+				continue
+			}
+			// No more retries or error is not retriable
+			return nil, fmt.Errorf("failed to perform HTTP request after %d attempts: %w", attempt+1, err)
+		}
+
+		// Read response body
+		respBody, err := io.ReadAll(resp.Body)
+		resp.Body.Close() // Always close the body
+		if err != nil {
+			return nil, fmt.Errorf("failed to read response body: %w", err)
+		}
+
+		response := &Response{
+			StatusCode: resp.StatusCode,
+			Body:       respBody,
+			Headers:    resp.Header,
+		}
+
+		// Check if we should retry based on status code
+		if resp.StatusCode >= 400 {
+			lastResponse = response
+
+			// Check if this status code should be retried
+			if attempt < c.retryConfig.MaxRetries && c.retryConfig.IsRetriable(resp.StatusCode, nil) {
+				if !c.sleepWithContext(ctx, c.retryConfig.CalculateBackoff(attempt+1)) {
+					return nil, ctx.Err()
+				}
+				continue
+			}
+
+			// No more retries or status code is not retriable - return error
+			return response, c.handleAPIError(response)
+		}
+
+		// Success - return the response
+		return response, nil
 	}
 
-	// Perform the request
-	resp, err := c.httpClient.Do(httpReq)
-	if err != nil {
-		return nil, fmt.Errorf("failed to perform HTTP request: %w", err)
+	// This should not be reached, but handle it just in case
+	if lastResponse != nil {
+		return lastResponse, c.handleAPIError(lastResponse)
 	}
-	defer resp.Body.Close()
-
-	// Read response body
-	respBody, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return nil, fmt.Errorf("failed to read response body: %w", err)
-	}
-
-	response := &Response{
-		StatusCode: resp.StatusCode,
-		Body:       respBody,
-		Headers:    resp.Header,
-	}
-
-	// Check for API errors
-	if resp.StatusCode >= 400 {
-		return response, c.handleAPIError(response)
-	}
-
-	return response, nil
+	return nil, fmt.Errorf("request failed after %d attempts: %w", c.retryConfig.MaxRetries+1, lastError)
 }
 
 // handleAPIError processes API error responses
@@ -205,4 +351,20 @@ func unmarshalResponseBody(body []byte, result interface{}) error {
 		}
 	}
 	return nil
+}
+
+// sleepWithContext sleeps for the given duration, respecting context cancellation.
+// Returns false if context is cancelled during sleep, true otherwise.
+func (c *Client) sleepWithContext(ctx context.Context, duration time.Duration) bool {
+	if duration <= 0 {
+		return true
+	}
+	timer := time.NewTimer(duration)
+	defer timer.Stop()
+	select {
+	case <-ctx.Done():
+		return false
+	case <-timer.C:
+		return true
+	}
 }

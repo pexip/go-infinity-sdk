@@ -2,6 +2,7 @@ package infinity
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -473,7 +474,8 @@ func TestClient_handleAPIError(t *testing.T) {
 			err := client.handleAPIError(resp)
 			require.Error(t, err)
 
-			apiErr, ok := err.(*APIError)
+			var apiErr *APIError
+			ok := errors.As(err, &apiErr)
 			require.True(t, ok, "Error should be of type *APIError")
 
 			assert.Equal(t, tt.statusCode, apiErr.StatusCode)

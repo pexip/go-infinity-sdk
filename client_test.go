@@ -137,6 +137,151 @@ func TestWithAuth(t *testing.T) {
 	assert.Equal(t, authenticator, client.auth)
 }
 
+func TestWithTransport(t *testing.T) {
+	customTransport := &http.Transport{
+		MaxIdleConns:       10,
+		IdleConnTimeout:    30 * time.Second,
+		DisableCompression: true,
+	}
+
+	tests := []struct {
+		name        string
+		setupClient func() *Client
+		transport   http.RoundTripper
+		wantErr     bool
+		errorMsg    string
+		validate    func(t *testing.T, client *Client, transport http.RoundTripper)
+	}{
+		{
+			name: "set transport on default client",
+			setupClient: func() *Client {
+				client, _ := New()
+				return client
+			},
+			transport: customTransport,
+			wantErr:   false,
+			validate: func(t *testing.T, client *Client, transport http.RoundTripper) {
+				assert.Equal(t, transport, client.httpClient.Transport)
+				assert.Equal(t, DefaultTimeout, client.httpClient.Timeout)
+			},
+		},
+		{
+			name: "set transport on client with custom timeout",
+			setupClient: func() *Client {
+				customClient := &http.Client{Timeout: 60 * time.Second}
+				client, _ := New(WithHTTPClient(customClient))
+				return client
+			},
+			transport: customTransport,
+			wantErr:   false,
+			validate: func(t *testing.T, client *Client, transport http.RoundTripper) {
+				assert.Equal(t, transport, client.httpClient.Transport)
+				assert.Equal(t, 60*time.Second, client.httpClient.Timeout)
+			},
+		},
+		{
+			name: "nil transport returns error",
+			setupClient: func() *Client {
+				client, _ := New()
+				return client
+			},
+			transport: nil,
+			wantErr:   true,
+			errorMsg:  "transport cannot be nil",
+			validate: func(t *testing.T, client *Client, transport http.RoundTripper) {
+				// Should not be called for error case
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			client := tt.setupClient()
+			option := WithTransport(tt.transport)
+			err := option(client)
+
+			if tt.wantErr {
+				assert.Error(t, err)
+				assert.Contains(t, err.Error(), tt.errorMsg)
+			} else {
+				assert.NoError(t, err)
+				tt.validate(t, client, tt.transport)
+			}
+		})
+	}
+}
+
+func TestWithTransport_Integration(t *testing.T) {
+	// Test that WithTransport works when creating a new client
+	customTransport := &http.Transport{
+		MaxIdleConns:       20,
+		IdleConnTimeout:    60 * time.Second,
+		DisableCompression: true,
+	}
+
+	client, err := New(
+		WithBaseURL("https://api.example.com"),
+		WithTransport(customTransport),
+		WithBasicAuth("user", "pass"),
+	)
+
+	require.NoError(t, err)
+	assert.Equal(t, customTransport, client.httpClient.Transport)
+	assert.Equal(t, DefaultTimeout, client.httpClient.Timeout)
+}
+
+func TestWithTransport_WithCustomHTTPClient(t *testing.T) {
+	// Test precedence when both WithHTTPClient and WithTransport are used
+	customTransport := &http.Transport{
+		MaxIdleConns: 50,
+	}
+
+	customClient := &http.Client{
+		Timeout: 45 * time.Second,
+		Transport: &http.Transport{
+			MaxIdleConns: 100, // This should be overridden
+		},
+	}
+
+	tests := []struct {
+		name    string
+		options []ClientOption
+		check   func(t *testing.T, client *Client)
+	}{
+		{
+			name: "WithTransport after WithHTTPClient",
+			options: []ClientOption{
+				WithHTTPClient(customClient),
+				WithTransport(customTransport),
+			},
+			check: func(t *testing.T, client *Client) {
+				assert.Equal(t, customTransport, client.httpClient.Transport)
+				assert.Equal(t, 45*time.Second, client.httpClient.Timeout)
+			},
+		},
+		{
+			name: "WithHTTPClient after WithTransport",
+			options: []ClientOption{
+				WithTransport(customTransport),
+				WithHTTPClient(customClient),
+			},
+			check: func(t *testing.T, client *Client) {
+				// WithHTTPClient should completely replace the client
+				assert.Equal(t, customClient.Transport, client.httpClient.Transport)
+				assert.Equal(t, 45*time.Second, client.httpClient.Timeout)
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			client, err := New(tt.options...)
+			require.NoError(t, err)
+			tt.check(t, client)
+		})
+	}
+}
+
 func TestDoRequest(t *testing.T) {
 	tests := []struct {
 		name           string
@@ -627,4 +772,26 @@ type FailingAuth struct{}
 
 func (f *FailingAuth) Authenticate(req *http.Request) error {
 	return errors.New("authentication failed")
+}
+
+func TestClient_HttpClient(t *testing.T) {
+	customClient := &http.Client{
+		Timeout: 45 * time.Second,
+	}
+
+	client, err := New(WithHTTPClient(customClient))
+	require.NoError(t, err)
+
+	// Test that HttpClient returns the same client we set
+	retrievedClient := client.HttpClient()
+	assert.Equal(t, customClient, retrievedClient)
+	assert.Equal(t, 45*time.Second, retrievedClient.Timeout)
+
+	// Test with default client
+	defaultClient, err := New()
+	require.NoError(t, err)
+
+	retrievedDefault := defaultClient.HttpClient()
+	assert.NotNil(t, retrievedDefault)
+	assert.Equal(t, DefaultTimeout, retrievedDefault.Timeout)
 }

@@ -274,3 +274,9 @@ func (c *Client) sleepWithContext(ctx context.Context, duration time.Duration) b
 		return true
 	}
 }
+
+// HttpClient returns the underlying HTTP client used by the SDK client.
+// This can be useful for accessing transport configuration or other HTTP client settings.
+func (c *Client) HttpClient() *http.Client {
+	return c.httpClient
+}

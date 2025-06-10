@@ -589,6 +589,52 @@ client, err := infinity.New(
 )
 ```
 
+### Custom HTTP Transport
+
+For more fine-grained control over HTTP transport settings (proxies, TLS configuration, connection pooling), you can use `WithTransport`:
+
+```go
+import (
+    "crypto/tls"
+    "net/http"
+    "net/url"
+    "time"
+)
+
+// Example 1: Custom transport with proxy and TLS settings
+proxyURL, _ := url.Parse("http://proxy.company.com:8080")
+customTransport := &http.Transport{
+    Proxy: http.ProxyURL(proxyURL),
+    TLSClientConfig: &tls.Config{
+        InsecureSkipVerify: true, // Only for testing!
+    },
+    MaxIdleConns:        50,
+    MaxIdleConnsPerHost: 10,
+    IdleConnTimeout:     30 * time.Second,
+    DisableCompression:  true,
+}
+
+client, err := infinity.New(
+    infinity.WithBaseURL("https://your-pexip-server.com"),
+    infinity.WithTransport(customTransport),
+    infinity.WithBasicAuth("admin", "password"),
+)
+
+// Example 2: Transport with client certificates
+cert, _ := tls.LoadX509KeyPair("client.crt", "client.key")
+tlsTransport := &http.Transport{
+    TLSClientConfig: &tls.Config{
+        Certificates: []tls.Certificate{cert},
+    },
+}
+
+tlsClient, err := infinity.New(
+    infinity.WithBaseURL("https://your-pexip-server.com"),
+    infinity.WithTransport(tlsTransport),
+    infinity.WithBasicAuth("admin", "password"),
+)
+```
+
 ### Error Handling
 
 ```go

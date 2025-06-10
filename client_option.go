@@ -30,6 +30,26 @@ func WithHTTPClient(httpClient *http.Client) ClientOption {
 	}
 }
 
+// WithTransport sets a custom HTTP transport for the client.
+func WithTransport(transport http.RoundTripper) ClientOption {
+	return func(c *Client) error {
+		if transport == nil {
+			return fmt.Errorf("transport cannot be nil")
+		}
+		// If no custom HTTP client was set, create one with the transport
+		if c.httpClient.Transport == http.DefaultTransport {
+			c.httpClient = &http.Client{
+				Timeout:   c.httpClient.Timeout,
+				Transport: transport,
+			}
+		} else {
+			// Modify existing client's transport
+			c.httpClient.Transport = transport
+		}
+		return nil
+	}
+}
+
 // WithAuth sets the authentication method
 func WithAuth(authenticator auth.Authenticator) ClientOption {
 	return func(c *Client) error {

@@ -3,8 +3,8 @@ package config
 import (
 	"testing"
 
-	mockClient "github.com/pexip/go-infinity-sdk/internal/mock"
-	"github.com/pexip/go-infinity-sdk/options"
+	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
+	"github.com/pexip/go-infinity-sdk/v38/options"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )

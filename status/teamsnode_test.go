@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	mockClient "github.com/pexip/go-infinity-sdk/internal/mock"
+	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )

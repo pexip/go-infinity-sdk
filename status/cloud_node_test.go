@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	mockClient "github.com/pexip/go-infinity-sdk/internal/mock"
+	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -18,32 +18,32 @@ func TestService_ListCloudNodes(t *testing.T) {
 	expectedResponse := &CloudNodeListResponse{
 		Objects: []CloudNode{
 			{
-				ID:                  "i-1234567890abcdef0",
-				Name:                "cloud-node-1",
-				Status:              "running",
-				InstanceType:        "m5.large",
-				Region:              "us-west-2",
-				LaunchTime:          &launchTime,
-				LastContactTime:     &lastContactTime,
-				CPU:                 45.5,
-				Memory:              68.2,
-				ActiveConferences:   3,
-				ActiveParticipants:  15,
-				ResourceURI:         "/api/admin/status/v1/cloud_node/i-1234567890abcdef0/",
+				ID:                 "i-1234567890abcdef0",
+				Name:               "cloud-node-1",
+				Status:             "running",
+				InstanceType:       "m5.large",
+				Region:             "us-west-2",
+				LaunchTime:         &launchTime,
+				LastContactTime:    &lastContactTime,
+				CPU:                45.5,
+				Memory:             68.2,
+				ActiveConferences:  3,
+				ActiveParticipants: 15,
+				ResourceURI:        "/api/admin/status/v1/cloud_node/i-1234567890abcdef0/",
 			},
 			{
-				ID:                  "i-0987654321fedcba0",
-				Name:                "cloud-node-2",
-				Status:              "running",
-				InstanceType:        "m5.xlarge",
-				Region:              "us-east-1",
-				LaunchTime:          &launchTime,
-				LastContactTime:     &lastContactTime,
-				CPU:                 72.1,
-				Memory:              84.3,
-				ActiveConferences:   5,
-				ActiveParticipants:  25,
-				ResourceURI:         "/api/admin/status/v1/cloud_node/i-0987654321fedcba0/",
+				ID:                 "i-0987654321fedcba0",
+				Name:               "cloud-node-2",
+				Status:             "running",
+				InstanceType:       "m5.xlarge",
+				Region:             "us-east-1",
+				LaunchTime:         &launchTime,
+				LastContactTime:    &lastContactTime,
+				CPU:                72.1,
+				Memory:             84.3,
+				ActiveConferences:  5,
+				ActiveParticipants: 25,
+				ResourceURI:        "/api/admin/status/v1/cloud_node/i-0987654321fedcba0/",
 			},
 		},
 	}
@@ -73,18 +73,18 @@ func TestService_GetCloudNode(t *testing.T) {
 	lastContactTime := time.Now().Add(-2 * time.Minute)
 
 	expectedNode := &CloudNode{
-		ID:                  "i-1234567890abcdef0",
-		Name:                "cloud-node-primary",
-		Status:              "running",
-		InstanceType:        "m5.2xlarge",
-		Region:              "eu-west-1",
-		LaunchTime:          &launchTime,
-		LastContactTime:     &lastContactTime,
-		CPU:                 85.7,
-		Memory:              76.4,
-		ActiveConferences:   8,
-		ActiveParticipants:  42,
-		ResourceURI:         "/api/admin/status/v1/cloud_node/i-1234567890abcdef0/",
+		ID:                 "i-1234567890abcdef0",
+		Name:               "cloud-node-primary",
+		Status:             "running",
+		InstanceType:       "m5.2xlarge",
+		Region:             "eu-west-1",
+		LaunchTime:         &launchTime,
+		LastContactTime:    &lastContactTime,
+		CPU:                85.7,
+		Memory:             76.4,
+		ActiveConferences:  8,
+		ActiveParticipants: 42,
+		ResourceURI:        "/api/admin/status/v1/cloud_node/i-1234567890abcdef0/",
 	}
 
 	client.On("GetJSON", t.Context(), "status/v1/cloud_node/i-1234567890abcdef0/", mock.AnythingOfType("*status.CloudNode")).Return(nil).Run(func(args mock.Arguments) {

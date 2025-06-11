@@ -14,11 +14,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/pexip/go-infinity-sdk/auth"
-	"github.com/pexip/go-infinity-sdk/command"
-	"github.com/pexip/go-infinity-sdk/config"
-	"github.com/pexip/go-infinity-sdk/history"
-	"github.com/pexip/go-infinity-sdk/status"
+	"github.com/pexip/go-infinity-sdk/v38/auth"
+	"github.com/pexip/go-infinity-sdk/v38/command"
+	"github.com/pexip/go-infinity-sdk/v38/config"
+	"github.com/pexip/go-infinity-sdk/v38/history"
+	"github.com/pexip/go-infinity-sdk/v38/status"
 )
 
 const (

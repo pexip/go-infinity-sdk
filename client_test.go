@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/pexip/go-infinity-sdk/auth"
+	"github.com/pexip/go-infinity-sdk/v38/auth"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

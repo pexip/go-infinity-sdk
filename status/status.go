@@ -6,7 +6,7 @@ package status
 import (
 	"context"
 
-	"github.com/pexip/go-infinity-sdk/options"
+	"github.com/pexip/go-infinity-sdk/v38/options"
 )
 
 // ClientInterface defines the interface for the HTTP client
@@ -28,4 +28,3 @@ func New(client ClientInterface) *Service {
 
 // ListOptions contains options for listing resources
 type ListOptions = options.BaseListOptions
-

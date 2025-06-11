@@ -1,4 +1,4 @@
-module github.com/pexip/go-infinity-sdk
+module github.com/pexip/go-infinity-sdk/v38
 
 go 1.24.3
 

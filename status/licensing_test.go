@@ -3,7 +3,7 @@ package status
 import (
 	"testing"
 
-	mockClient "github.com/pexip/go-infinity-sdk/internal/mock"
+	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -11,25 +11,25 @@ import (
 func TestService_GetLicensing(t *testing.T) {
 	client := &mockClient.Client{}
 	expectedLicensing := &Licensing{
-		AudioCount:           50,
-		AudioTotal:           100,
-		PortCount:            25,
-		PortTotal:            50,
-		SystemCount:          1,
-		SystemTotal:          1,
-		VMRCount:             10,
-		VMRTotal:             20,
-		TeamsCount:           15,
-		TeamsTotal:           30,
-		GHMCount:             5,
-		GHMTotal:             10,
-		OTJCount:             8,
-		OTJTotal:             15,
-		SchedulingCount:      3,
-		SchedulingTotal:      5,
-		TelehealthCount:      2,
-		TelehealthTotal:      5,
-		CustomLayoutsActive:  true,
+		AudioCount:          50,
+		AudioTotal:          100,
+		PortCount:           25,
+		PortTotal:           50,
+		SystemCount:         1,
+		SystemTotal:         1,
+		VMRCount:            10,
+		VMRTotal:            20,
+		TeamsCount:          15,
+		TeamsTotal:          30,
+		GHMCount:            5,
+		GHMTotal:            10,
+		OTJCount:            8,
+		OTJTotal:            15,
+		SchedulingCount:     3,
+		SchedulingTotal:     5,
+		TelehealthCount:     2,
+		TelehealthTotal:     5,
+		CustomLayoutsActive: true,
 	}
 
 	client.On("GetJSON", t.Context(), "status/v1/licensing/", mock.AnythingOfType("*status.Licensing")).Return(nil).Run(func(args mock.Arguments) {

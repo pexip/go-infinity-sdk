@@ -15,7 +15,7 @@ A comprehensive Go client library for the Pexip Infinity Management API, providi
 ## Installation
 
 ```bash
-go get github.com/pexip/go-infinity-sdk
+go get github.com/pexip/go-infinity-sdk/v38
 ```
 
 ## Quick Start
@@ -30,7 +30,7 @@ import (
     "fmt"
     "log"
 
-    infinity "github.com/pexip/go-infinity-sdk"
+    infinity "github.com/pexip/go-infinity-sdk/v38"
 )
 
 func main() {
@@ -76,7 +76,7 @@ client, err := infinity.New(
 
 #### Bearer Authentication
 ```go
-import "github.com/pexip/go-infinity-sdk/auth"
+import "github.com/pexip/go-infinity-sdk/v38/auth"
 
 client, err := infinity.New(
     infinity.WithBaseURL("https://your-pexip-server.com"),
@@ -86,7 +86,7 @@ client, err := infinity.New(
 
 #### Custom Authentication
 ```go
-import "github.com/pexip/go-infinity-sdk/auth"
+import "github.com/pexip/go-infinity-sdk/v38/auth"
 
 client, err := infinity.New(
     infinity.WithBaseURL("https://your-pexip-server.com"),
@@ -166,8 +166,8 @@ import (
     "fmt"
     "log"
 
-    infinity "github.com/pexip/go-infinity-sdk"
-    "github.com/pexip/go-infinity-sdk/config"
+    infinity "github.com/pexip/go-infinity-sdk/v38"
+    "github.com/pexip/go-infinity-sdk/v38/config"
 )
 
 func main() {
@@ -270,8 +270,8 @@ import (
     "fmt"
     "log"
 
-    infinity "github.com/pexip/go-infinity-sdk"
-    "github.com/pexip/go-infinity-sdk/status"
+    infinity "github.com/pexip/go-infinity-sdk/v38"
+    "github.com/pexip/go-infinity-sdk/v38/status"
 )
 
 func main() {
@@ -378,8 +378,8 @@ import (
     "log"
     "time"
 
-    infinity "github.com/pexip/go-infinity-sdk"
-    "github.com/pexip/go-infinity-sdk/history"
+    infinity "github.com/pexip/go-infinity-sdk/v38"
+    "github.com/pexip/go-infinity-sdk/v38/history"
 )
 
 func main() {
@@ -465,8 +465,8 @@ import (
     "fmt"
     "log"
 
-    infinity "github.com/pexip/go-infinity-sdk"
-    "github.com/pexip/go-infinity-sdk/command"
+    infinity "github.com/pexip/go-infinity-sdk/v38"
+    "github.com/pexip/go-infinity-sdk/v38/command"
 )
 
 func main() {
@@ -636,7 +636,7 @@ tlsClient, err := infinity.New(
 ### Error Handling
 
 ```go
-import "github.com/pexip/go-infinity-sdk"
+import "github.com/pexip/go-infinity-sdk/v38"
 
 // All API calls return typed errors
 conferences, err := client.Config.ListConferences(ctx, nil)

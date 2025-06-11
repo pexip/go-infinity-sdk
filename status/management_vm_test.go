@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	mockClient "github.com/pexip/go-infinity-sdk/internal/mock"
+	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -58,7 +58,7 @@ func TestService_GetManagementVM(t *testing.T) {
 	client := &mockClient.Client{}
 	lastUpdated := time.Now()
 	lastAttemptedContact := time.Now().Add(-1 * time.Hour)
-	
+
 	expectedVM := &ManagementVM{
 		ID:                   1,
 		ConfigurationID:      101,

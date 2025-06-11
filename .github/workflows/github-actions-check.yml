@@ -1,4 +1,4 @@
-name: Github Actions Security Checker
+name: GitHub Actions Security Checker
 on:
   push :
     branches:

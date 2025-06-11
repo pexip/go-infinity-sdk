@@ -6,13 +6,12 @@ import (
 	mockClient "github.com/pexip/go-infinity-sdk/internal/mock"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"github.com/stretchr/testify/require"
 )
 
 func TestService_DisconnectParticipant(t *testing.T) {
 	client := &mockClient.Client{}
 
-	expectedRequest := &ParticipantDisconnectRequest{
+	expectedRequest := &ParticipantDisconnectRequestLegacy{
 		ParticipantUUID: "test-uuid",
 	}
 
@@ -37,7 +36,7 @@ func TestService_DisconnectParticipant(t *testing.T) {
 func TestService_MuteParticipant(t *testing.T) {
 	client := &mockClient.Client{}
 
-	expectedRequest := &ParticipantMuteRequest{
+	expectedRequest := &ParticipantMuteRequestLegacy{
 		ParticipantUUID: "test-uuid",
 		Setting:         "mute",
 	}
@@ -63,7 +62,7 @@ func TestService_MuteParticipant(t *testing.T) {
 func TestService_UnmuteParticipant(t *testing.T) {
 	client := &mockClient.Client{}
 
-	expectedRequest := &ParticipantMuteRequest{
+	expectedRequest := &ParticipantMuteRequestLegacy{
 		ParticipantUUID: "test-uuid",
 		Setting:         "unmute",
 	}
@@ -89,7 +88,7 @@ func TestService_UnmuteParticipant(t *testing.T) {
 func TestService_ToggleMuteParticipant(t *testing.T) {
 	client := &mockClient.Client{}
 
-	expectedRequest := &ParticipantMuteRequest{
+	expectedRequest := &ParticipantMuteRequestLegacy{
 		ParticipantUUID: "test-uuid",
 		Setting:         "toggle",
 	}
@@ -138,52 +137,52 @@ func TestService_SpotlightParticipant(t *testing.T) {
 	client.AssertExpectations(t)
 }
 
-func TestService_LockConference(t *testing.T) {
+func TestService_UnspotlightParticipant(t *testing.T) {
 	client := &mockClient.Client{}
 
-	expectedRequest := &ConferenceLockRequest{
-		ConferenceID: 1,
-		Setting:      "lock",
+	expectedRequest := &ParticipantSpotlightRequest{
+		ParticipantUUID: "test-uuid",
+		Setting:         "off",
 	}
 
 	expectedResponse := &CommandResponse{
 		Status:  "success",
-		Message: "Conference locked",
+		Message: "Participant unspotlighted",
 	}
 
-	client.On("PostJSON", t.Context(), "command/v1/conference/lock/", expectedRequest, mock.AnythingOfType("*command.CommandResponse")).Return(nil).Run(func(args mock.Arguments) {
+	client.On("PostJSON", t.Context(), "command/v1/participant/spotlight/", expectedRequest, mock.AnythingOfType("*command.CommandResponse")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(3).(*CommandResponse)
 		*result = *expectedResponse
 	})
 
 	service := New(client)
-	result, err := service.LockConference(t.Context(), 1)
+	result, err := service.UnspotlightParticipant(t.Context(), "test-uuid")
 
 	assert.NoError(t, err)
 	assert.Equal(t, expectedResponse, result)
 	client.AssertExpectations(t)
 }
 
-func TestService_UnlockConference(t *testing.T) {
+func TestService_ToggleSpotlightParticipant(t *testing.T) {
 	client := &mockClient.Client{}
 
-	expectedRequest := &ConferenceLockRequest{
-		ConferenceID: 1,
-		Setting:      "unlock",
+	expectedRequest := &ParticipantSpotlightRequest{
+		ParticipantUUID: "test-uuid",
+		Setting:         "toggle",
 	}
 
 	expectedResponse := &CommandResponse{
-		Status:  "success",
-		Message: "Conference unlocked",
+		Status: "success",
+		Result: "spotlighted",
 	}
 
-	client.On("PostJSON", t.Context(), "command/v1/conference/lock/", expectedRequest, mock.AnythingOfType("*command.CommandResponse")).Return(nil).Run(func(args mock.Arguments) {
+	client.On("PostJSON", t.Context(), "command/v1/participant/spotlight/", expectedRequest, mock.AnythingOfType("*command.CommandResponse")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(3).(*CommandResponse)
 		*result = *expectedResponse
 	})
 
 	service := New(client)
-	result, err := service.UnlockConference(t.Context(), 1)
+	result, err := service.ToggleSpotlightParticipant(t.Context(), "test-uuid")
 
 	assert.NoError(t, err)
 	assert.Equal(t, expectedResponse, result)
@@ -216,39 +215,13 @@ func TestService_SendMessageToParticipant(t *testing.T) {
 	client.AssertExpectations(t)
 }
 
-func TestService_SendMessageToConference(t *testing.T) {
-	client := &mockClient.Client{}
-
-	expectedRequest := &ConferenceMessageRequest{
-		ConferenceID: 1,
-		Message:      "Hello, everyone!",
-	}
-
-	expectedResponse := &CommandResponse{
-		Status:  "success",
-		Message: "Message sent to conference",
-	}
-
-	client.On("PostJSON", t.Context(), "command/v1/conference/message/", expectedRequest, mock.AnythingOfType("*command.CommandResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(3).(*CommandResponse)
-		*result = *expectedResponse
-	})
-
-	service := New(client)
-	result, err := service.SendMessageToConference(t.Context(), 1, "Hello, everyone!")
-
-	assert.NoError(t, err)
-	assert.Equal(t, expectedResponse, result)
-	client.AssertExpectations(t)
-}
-
 func TestService_TransferParticipant(t *testing.T) {
 	tests := []struct {
 		name            string
 		participantUUID string
 		conferenceAlias string
 		opts            *TransferOptions
-		expectedRequest *ParticipantTransferRequest
+		expectedRequest *ParticipantTransferRequestLegacy
 		wantErr         bool
 	}{
 		{
@@ -256,7 +229,7 @@ func TestService_TransferParticipant(t *testing.T) {
 			participantUUID: "test-uuid",
 			conferenceAlias: "new-conference",
 			opts:            nil,
-			expectedRequest: &ParticipantTransferRequest{
+			expectedRequest: &ParticipantTransferRequestLegacy{
 				ParticipantUUID: "test-uuid",
 				ConferenceAlias: "new-conference",
 			},
@@ -270,7 +243,7 @@ func TestService_TransferParticipant(t *testing.T) {
 				Role: "chair",
 				PIN:  "1234",
 			},
-			expectedRequest: &ParticipantTransferRequest{
+			expectedRequest: &ParticipantTransferRequestLegacy{
 				ParticipantUUID: "test-uuid",
 				ConferenceAlias: "new-conference",
 				Role:            "chair",
@@ -289,7 +262,7 @@ func TestService_TransferParticipant(t *testing.T) {
 				Message: "Participant transferred",
 			}
 
-			client.On("PostJSON", t.Context(), "command/v1/participant/transfer/", mock.MatchedBy(func(req *ParticipantTransferRequest) bool {
+			client.On("PostJSON", t.Context(), "command/v1/participant/transfer/", mock.MatchedBy(func(req *ParticipantTransferRequestLegacy) bool {
 				return req.ParticipantUUID == tt.expectedRequest.ParticipantUUID &&
 					req.ConferenceAlias == tt.expectedRequest.ConferenceAlias
 			}), mock.AnythingOfType("*command.CommandResponse")).Return(nil).Run(func(args mock.Arguments) {
@@ -312,60 +285,10 @@ func TestService_TransferParticipant(t *testing.T) {
 	}
 }
 
-func TestService_StartConference(t *testing.T) {
-	client := &mockClient.Client{}
-
-	expectedRequest := &ConferenceStartRequest{
-		ConferenceAlias: "test-conference",
-	}
-
-	expectedResponse := &CommandResponse{
-		Status:  "success",
-		Message: "Conference started",
-	}
-
-	client.On("PostJSON", t.Context(), "command/v1/conference/start/", expectedRequest, mock.AnythingOfType("*command.CommandResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(3).(*CommandResponse)
-		*result = *expectedResponse
-	})
-
-	service := New(client)
-	result, err := service.StartConference(t.Context(), "test-conference")
-
-	assert.NoError(t, err)
-	assert.Equal(t, expectedResponse, result)
-	client.AssertExpectations(t)
-}
-
-func TestService_StopConference(t *testing.T) {
-	client := &mockClient.Client{}
-
-	expectedRequest := &ConferenceStopRequest{
-		ConferenceID: 1,
-	}
-
-	expectedResponse := &CommandResponse{
-		Status:  "success",
-		Message: "Conference stopped",
-	}
-
-	client.On("PostJSON", t.Context(), "command/v1/conference/stop/", expectedRequest, mock.AnythingOfType("*command.CommandResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(3).(*CommandResponse)
-		*result = *expectedResponse
-	})
-
-	service := New(client)
-	result, err := service.StopConference(t.Context(), 1)
-
-	assert.NoError(t, err)
-	assert.Equal(t, expectedResponse, result)
-	client.AssertExpectations(t)
-}
-
 func TestService_PromoteParticipant(t *testing.T) {
 	client := &mockClient.Client{}
 
-	expectedRequest := &ParticipantRoleRequest{
+	expectedRequest := &ParticipantRoleRequestLegacy{
 		ParticipantUUID: "test-uuid",
 		Role:            "chair",
 	}
@@ -391,7 +314,7 @@ func TestService_PromoteParticipant(t *testing.T) {
 func TestService_DemoteParticipant(t *testing.T) {
 	client := &mockClient.Client{}
 
-	expectedRequest := &ParticipantRoleRequest{
+	expectedRequest := &ParticipantRoleRequestLegacy{
 		ParticipantUUID: "test-uuid",
 		Role:            "guest",
 	}
@@ -412,12 +335,4 @@ func TestService_DemoteParticipant(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, expectedResponse, result)
 	client.AssertExpectations(t)
-}
-
-func TestNew(t *testing.T) {
-	client := &mockClient.Client{}
-	service := New(client)
-
-	require.NotNil(t, service)
-	assert.Equal(t, client, service.client)
 }

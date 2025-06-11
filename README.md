@@ -677,4 +677,4 @@ if err != nil {
 
 ## Support
 
-For questions and support, please refer to the [Pexip Infinity API Documentation](https://docs.pexip.com/api_manage/) or open an issue in this repository.
+For questions and support, please refer to the [Pexip Infinity API Documentation](https://docs.pexip.com/admin/integrate_api.htm) or open an issue in this repository.

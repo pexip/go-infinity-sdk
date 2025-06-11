@@ -1,0 +1,164 @@
+package config
+
+import (
+	"testing"
+
+	mockClient "github.com/pexip/go-infinity-sdk/internal/mock"
+	"github.com/pexip/go-infinity-sdk/options"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+)
+
+func TestService_ListDNSServers(t *testing.T) {
+	tests := []struct {
+		name    string
+		opts    *ListOptions
+		setup   func(m *mockClient.Client)
+		wantErr bool
+	}{
+		{
+			name: "successful list without options",
+			opts: nil,
+			setup: func(m *mockClient.Client) {
+				expectedResponse := &DNSServerListResponse{
+					Objects: []DNSServer{
+						{ID: 1, Address: "8.8.8.8", Description: "Google DNS"},
+						{ID: 2, Address: "1.1.1.1", Description: "Cloudflare DNS"},
+					},
+				}
+				m.On("GetJSON", t.Context(), "configuration/v1/dns_server/", mock.AnythingOfType("*config.DNSServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(2).(*DNSServerListResponse)
+					*result = *expectedResponse
+				})
+			},
+			wantErr: false,
+		},
+		{
+			name: "successful list with options",
+			opts: &ListOptions{
+				BaseListOptions: options.BaseListOptions{
+					Limit: 5,
+				},
+				Search: "google",
+			},
+			setup: func(m *mockClient.Client) {
+				expectedResponse := &DNSServerListResponse{
+					Objects: []DNSServer{
+						{ID: 1, Address: "8.8.8.8", Description: "Google DNS"},
+					},
+				}
+				m.On("GetJSON", t.Context(), "configuration/v1/dns_server/?limit=5&name__icontains=google", mock.AnythingOfType("*config.DNSServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(2).(*DNSServerListResponse)
+					*result = *expectedResponse
+				})
+			},
+			wantErr: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			client := &mockClient.Client{}
+			tt.setup(client)
+
+			service := New(client)
+			result, err := service.ListDNSServers(t.Context(), tt.opts)
+
+			if tt.wantErr {
+				assert.Error(t, err)
+				assert.Nil(t, result)
+			} else {
+				assert.NoError(t, err)
+				assert.NotNil(t, result)
+			}
+
+			client.AssertExpectations(t)
+		})
+	}
+}
+
+func TestService_GetDNSServer(t *testing.T) {
+	client := &mockClient.Client{}
+	expectedServer := &DNSServer{
+		ID:          1,
+		Address:     "8.8.8.8",
+		Description: "Google DNS Server",
+	}
+
+	client.On("GetJSON", t.Context(), "configuration/v1/dns_server/1/", mock.AnythingOfType("*config.DNSServer")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(2).(*DNSServer)
+		*result = *expectedServer
+	})
+
+	service := New(client)
+	result, err := service.GetDNSServer(t.Context(), 1)
+
+	assert.NoError(t, err)
+	assert.Equal(t, expectedServer, result)
+	client.AssertExpectations(t)
+}
+
+func TestService_CreateDNSServer(t *testing.T) {
+	client := &mockClient.Client{}
+
+	createRequest := &DNSServerCreateRequest{
+		Address:     "9.9.9.9",
+		Description: "Quad9 DNS",
+	}
+
+	expectedServer := &DNSServer{
+		ID:          1,
+		Address:     "9.9.9.9",
+		Description: "Quad9 DNS",
+	}
+
+	client.On("PostJSON", t.Context(), "configuration/v1/dns_server/", createRequest, mock.AnythingOfType("*config.DNSServer")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*DNSServer)
+		*result = *expectedServer
+	})
+
+	service := New(client)
+	result, err := service.CreateDNSServer(t.Context(), createRequest)
+
+	assert.NoError(t, err)
+	assert.Equal(t, expectedServer, result)
+	client.AssertExpectations(t)
+}
+
+func TestService_UpdateDNSServer(t *testing.T) {
+	client := &mockClient.Client{}
+
+	updateRequest := &DNSServerUpdateRequest{
+		Description: "Updated DNS Server",
+	}
+
+	expectedServer := &DNSServer{
+		ID:          1,
+		Address:     "8.8.8.8",
+		Description: "Updated DNS Server",
+	}
+
+	client.On("PutJSON", t.Context(), "configuration/v1/dns_server/1/", updateRequest, mock.AnythingOfType("*config.DNSServer")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*DNSServer)
+		*result = *expectedServer
+	})
+
+	service := New(client)
+	result, err := service.UpdateDNSServer(t.Context(), 1, updateRequest)
+
+	assert.NoError(t, err)
+	assert.Equal(t, expectedServer, result)
+	client.AssertExpectations(t)
+}
+
+func TestService_DeleteDNSServer(t *testing.T) {
+	client := &mockClient.Client{}
+
+	client.On("DeleteJSON", t.Context(), "configuration/v1/dns_server/1/", mock.Anything).Return(nil)
+
+	service := New(client)
+	err := service.DeleteDNSServer(t.Context(), 1)
+
+	assert.NoError(t, err)
+	client.AssertExpectations(t)
+}

@@ -1,0 +1,31 @@
+package status
+
+import (
+	"context"
+	"fmt"
+)
+
+// ListExchangeSchedulers retrieves a list of Exchange scheduler statuses
+func (s *Service) ListExchangeSchedulers(ctx context.Context, opts *ListOptions) (*ExchangeSchedulerListResponse, error) {
+	endpoint := "status/v1/exchange_scheduler/"
+
+	if opts != nil {
+		params := opts.ToURLValues()
+		if len(params) > 0 {
+			endpoint += "?" + params.Encode()
+		}
+	}
+
+	var result ExchangeSchedulerListResponse
+	err := s.client.GetJSON(ctx, endpoint, &result)
+	return &result, err
+}
+
+// GetExchangeScheduler retrieves a specific Exchange scheduler status by ID
+func (s *Service) GetExchangeScheduler(ctx context.Context, id int) (*ExchangeScheduler, error) {
+	endpoint := fmt.Sprintf("status/v1/exchange_scheduler/%d/", id)
+
+	var result ExchangeScheduler
+	err := s.client.GetJSON(ctx, endpoint, &result)
+	return &result, err
+}

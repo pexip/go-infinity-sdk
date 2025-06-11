@@ -40,7 +40,8 @@ func (rc *RetryConfig) IsRetriable(statusCode int, err error) bool {
 		}
 
 		// Check for URL errors (network issues)
-		if urlErr, ok := err.(*url.Error); ok {
+		var urlErr *url.Error
+		if errors.As(err, &urlErr) {
 			// Don't retry on context cancellation wrapped in url.Error
 			if errors.Is(urlErr.Err, context.Canceled) || errors.Is(urlErr.Err, context.DeadlineExceeded) {
 				return false

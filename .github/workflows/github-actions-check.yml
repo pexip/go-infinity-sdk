@@ -1,0 +1,35 @@
+name: GitHub Actions Security Checker
+on:
+  push :
+    branches:
+      - master
+    paths:
+      - '.github/workflows/**'
+  pull_request:
+    branches:
+      - master
+    paths:
+      - '.github/workflows/**'
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  check-gha:
+    runs-on: ubuntu-latest
+    environment: development
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - uses: pexip/shared-github-actions/setup-zizmor-action@d02e99acb8ab1e3a50fd22455dd61753327d4e33
+        with:
+          version: "latest"
+          force: "false"
+      - name: Run zizmor on all workflow files
+        continue-on-error: true
+        run: |
+          for file in .github/workflows/*.yml; do
+            zizmor --format=github "$file"
+          done

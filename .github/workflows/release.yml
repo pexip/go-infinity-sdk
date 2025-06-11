@@ -1,0 +1,40 @@
+name: Release
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Release version (v0.0.0)
+        required: true
+      pre_release:
+        type: boolean
+        default: false
+        description: Pre-release?
+
+permissions: {}
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    environment: production
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Validate version format
+        run: |
+          if [[ ! "${{ inputs.version }}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.-]+)?$ ]]; then
+            echo "Error: Version must be in format v0.0.0 or v0.0.0-suffix (e.g., v1.2.3, v1.2.3-beta.1)"
+            exit 1
+          fi
+      - name: Checkout
+        uses: actions/checkout@v4
+      - uses: pexip/shared-github-actions/.github/actions/release@master
+        with:
+          version: ${{ inputs.version }}
+          pre_release: ${{ inputs.pre_release }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}

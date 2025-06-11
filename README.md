@@ -152,8 +152,6 @@ It will **NOT** retry on:
 - **Client Errors**: 4xx status codes (400, 401, 403, 404, etc.)
 - **Context Cancellation**: Respects context timeouts and cancellation
 
-For detailed documentation, see [RETRY.md](RETRY.md).
-
 ## API Examples
 
 ### Configuration API

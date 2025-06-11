@@ -1,0 +1,31 @@
+package status
+
+import (
+	"context"
+	"fmt"
+)
+
+// ListBackupRequests retrieves a list of backup request statuses
+func (s *Service) ListBackupRequests(ctx context.Context, opts *ListOptions) (*BackupRequestListResponse, error) {
+	endpoint := "status/v1/backup_request/"
+
+	if opts != nil {
+		params := opts.ToURLValues()
+		if len(params) > 0 {
+			endpoint += "?" + params.Encode()
+		}
+	}
+
+	var result BackupRequestListResponse
+	err := s.client.GetJSON(ctx, endpoint, &result)
+	return &result, err
+}
+
+// GetBackupRequest retrieves a specific backup request status by ID
+func (s *Service) GetBackupRequest(ctx context.Context, id int) (*BackupRequest, error) {
+	endpoint := fmt.Sprintf("status/v1/backup_request/%d/", id)
+
+	var result BackupRequest
+	err := s.client.GetJSON(ctx, endpoint, &result)
+	return &result, err
+}

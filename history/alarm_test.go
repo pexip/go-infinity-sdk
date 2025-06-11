@@ -1,0 +1,159 @@
+package history
+
+import (
+	"context"
+	"errors"
+	"testing"
+	"time"
+
+	mockClient "github.com/pexip/go-infinity-sdk/internal/mock"
+	"github.com/pexip/go-infinity-sdk/options"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+)
+
+func TestService_ListAlarms(t *testing.T) {
+	client := &mockClient.Client{}
+	service := New(client)
+
+	expectedResponse := &AlarmListResponse{
+		Meta: struct {
+			Limit      int    `json:"limit"`
+			Next       string `json:"next"`
+			Offset     int    `json:"offset"`
+			Previous   string `json:"previous"`
+			TotalCount int    `json:"total_count"`
+		}{
+			Limit:      20,
+			TotalCount: 1,
+		},
+		Objects: []Alarm{
+			{
+				ID:          1,
+				Details:     "Test alarm details",
+				Identifier:  100,
+				Instance:    "test-instance",
+				Level:       "warning",
+				Name:        "capacity_exhausted",
+				Node:        "192.168.1.1",
+				TimeRaised:  &time.Time{},
+				ResourceURI: "/api/admin/history/v1/alarm/1/",
+			},
+		},
+	}
+
+	client.On("GetJSON", context.Background(), "history/v1/alarm/", mock.AnythingOfType("*history.AlarmListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(2).(*AlarmListResponse)
+		*result = *expectedResponse
+	})
+
+	result, err := service.ListAlarms(context.Background(), nil)
+	assert.NoError(t, err)
+	assert.Equal(t, 1, len(result.Objects))
+	assert.Equal(t, "warning", result.Objects[0].Level)
+	assert.Equal(t, "capacity_exhausted", result.Objects[0].Name)
+
+	client.AssertExpectations(t)
+}
+
+func TestService_GetAlarm(t *testing.T) {
+	client := &mockClient.Client{}
+	service := New(client)
+
+	expectedAlarm := &Alarm{
+		ID:          1,
+		Details:     "Test alarm details",
+		Identifier:  100,
+		Instance:    "test-instance",
+		Level:       "critical",
+		Name:        "licenses_exhausted",
+		Node:        "192.168.1.1",
+		TimeRaised:  &time.Time{},
+		ResourceURI: "/api/admin/history/v1/alarm/1/",
+	}
+
+	client.On("GetJSON", context.Background(), "history/v1/alarm/1/", mock.AnythingOfType("*history.Alarm")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(2).(*Alarm)
+		*result = *expectedAlarm
+	})
+
+	result, err := service.GetAlarm(context.Background(), 1)
+	assert.NoError(t, err)
+	assert.Equal(t, expectedAlarm, result)
+
+	client.AssertExpectations(t)
+}
+
+func TestService_ListAlarms_WithOptions(t *testing.T) {
+	client := &mockClient.Client{}
+	service := New(client)
+
+	startTime := time.Now().Add(-24 * time.Hour)
+	endTime := time.Now()
+	opts := &ListOptions{
+		SearchableListOptions: options.SearchableListOptions{
+			BaseListOptions: options.BaseListOptions{
+				Limit:  10,
+				Offset: 5,
+			},
+			Search: "critical",
+		},
+		StartTime: &startTime,
+		EndTime:   &endTime,
+	}
+
+	expectedResponse := &AlarmListResponse{
+		Meta: struct {
+			Limit      int    `json:"limit"`
+			Next       string `json:"next"`
+			Offset     int    `json:"offset"`
+			Previous   string `json:"previous"`
+			TotalCount int    `json:"total_count"`
+		}{
+			Limit:      10,
+			Offset:     5,
+			TotalCount: 1,
+		},
+		Objects: []Alarm{},
+	}
+
+	client.On("GetJSON", context.Background(), mock.MatchedBy(func(endpoint string) bool {
+		return endpoint != "history/v1/alarm/" &&
+			endpoint != "" // Allow any endpoint with parameters
+	}), mock.AnythingOfType("*history.AlarmListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(2).(*AlarmListResponse)
+		*result = *expectedResponse
+	})
+
+	result, err := service.ListAlarms(context.Background(), opts)
+	assert.NoError(t, err)
+	assert.Equal(t, 10, result.Meta.Limit)
+	assert.Equal(t, 5, result.Meta.Offset)
+
+	client.AssertExpectations(t)
+}
+
+func TestService_ListAlarms_Error(t *testing.T) {
+	client := &mockClient.Client{}
+	service := New(client)
+
+	client.On("GetJSON", context.Background(), "history/v1/alarm/", mock.AnythingOfType("*history.AlarmListResponse")).Return(errors.New("server error"))
+
+	_, err := service.ListAlarms(context.Background(), nil)
+	assert.Error(t, err)
+	assert.Equal(t, "server error", err.Error())
+
+	client.AssertExpectations(t)
+}
+
+func TestService_GetAlarm_NotFound(t *testing.T) {
+	client := &mockClient.Client{}
+	service := New(client)
+
+	client.On("GetJSON", context.Background(), "history/v1/alarm/999/", mock.AnythingOfType("*history.Alarm")).Return(errors.New("alarm not found"))
+
+	_, err := service.GetAlarm(context.Background(), 999)
+	assert.Error(t, err)
+
+	client.AssertExpectations(t)
+}

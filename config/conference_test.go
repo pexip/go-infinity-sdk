@@ -8,7 +8,6 @@ import (
 	"github.com/pexip/go-infinity-sdk/options"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"github.com/stretchr/testify/require"
 )
 
 func TestService_ListConferences(t *testing.T) {
@@ -166,122 +165,63 @@ func TestService_DeleteConference(t *testing.T) {
 	client.AssertExpectations(t)
 }
 
-func TestService_ListLocations(t *testing.T) {
-	client := &mockClient.Client{}
-
-	expectedResponse := &LocationListResponse{
-		Objects: []Location{
-			{ID: 1, Name: "Location 1"},
-			{ID: 2, Name: "Location 2"},
+func TestService_ListConferences_QueryParameterValidation(t *testing.T) {
+	tests := []struct {
+		name          string
+		opts          *ListOptions
+		expectedQuery string
+	}{
+		{
+			name:          "nil options",
+			opts:          nil,
+			expectedQuery: "configuration/v1/conference/",
+		},
+		{
+			name: "empty search string",
+			opts: &ListOptions{
+				BaseListOptions: options.BaseListOptions{Limit: 10},
+				Search:          "",
+			},
+			expectedQuery: "configuration/v1/conference/?limit=10",
+		},
+		{
+			name: "search with special characters",
+			opts: &ListOptions{
+				BaseListOptions: options.BaseListOptions{Limit: 5},
+				Search:          "test@domain.com",
+			},
+			expectedQuery: "configuration/v1/conference/?limit=5&name__icontains=test%40domain.com",
+		},
+		{
+			name: "unicode search",
+			opts: &ListOptions{
+				BaseListOptions: options.BaseListOptions{Limit: 5},
+				Search:          "cönférence",
+			},
+			expectedQuery: "configuration/v1/conference/?limit=5&name__icontains=c%C3%B6nf%C3%A9rence",
 		},
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/location/", mock.AnythingOfType("*config.LocationListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*LocationListResponse)
-		*result = *expectedResponse
-	})
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			client := &mockClient.Client{}
+			expectedResponse := &ConferenceListResponse{Objects: []Conference{}}
 
-	service := New(client)
-	result, err := service.ListLocations(t.Context(), nil)
+			client.On("GetJSON", t.Context(), tt.expectedQuery, mock.AnythingOfType("*config.ConferenceListResponse")).Return(nil).Run(func(args mock.Arguments) {
+				result := args.Get(2).(*ConferenceListResponse)
+				*result = *expectedResponse
+			})
 
-	assert.NoError(t, err)
-	assert.Equal(t, 2, len(result.Objects))
-	client.AssertExpectations(t)
-}
+			service := New(client)
+			_, err := service.ListConferences(t.Context(), tt.opts)
 
-func TestService_GetLocation(t *testing.T) {
-	client := &mockClient.Client{}
-	expectedLocation := &Location{
-		ID:   1,
-		Name: "Test Location",
+			assert.NoError(t, err)
+			client.AssertExpectations(t)
+		})
 	}
-
-	client.On("GetJSON", t.Context(), "configuration/v1/location/1/", mock.AnythingOfType("*config.Location")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*Location)
-		*result = *expectedLocation
-	})
-
-	service := New(client)
-	result, err := service.GetLocation(t.Context(), 1)
-
-	assert.NoError(t, err)
-	assert.Equal(t, expectedLocation, result)
-	client.AssertExpectations(t)
 }
 
-func TestService_CreateLocation(t *testing.T) {
-	client := &mockClient.Client{}
-
-	createRequest := &LocationCreateRequest{
-		Name:        "New Location",
-		Description: "Test location",
-	}
-
-	expectedLocation := &Location{
-		ID:          1,
-		Name:        "New Location",
-		Description: "Test location",
-	}
-
-	client.On("PostJSON", t.Context(), "configuration/v1/location/", createRequest, mock.AnythingOfType("*config.Location")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(3).(*Location)
-		*result = *expectedLocation
-	})
-
-	service := New(client)
-	result, err := service.CreateLocation(t.Context(), createRequest)
-
-	assert.NoError(t, err)
-	assert.Equal(t, expectedLocation, result)
-	client.AssertExpectations(t)
-}
-
-func TestService_UpdateLocation(t *testing.T) {
-	client := &mockClient.Client{}
-
-	updateRequest := &LocationUpdateRequest{
-		Name: "Updated Location",
-	}
-
-	expectedLocation := &Location{
-		ID:   1,
-		Name: "Updated Location",
-	}
-
-	client.On("PutJSON", t.Context(), "configuration/v1/location/1/", updateRequest, mock.AnythingOfType("*config.Location")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(3).(*Location)
-		*result = *expectedLocation
-	})
-
-	service := New(client)
-	result, err := service.UpdateLocation(t.Context(), 1, updateRequest)
-
-	assert.NoError(t, err)
-	assert.Equal(t, expectedLocation, result)
-	client.AssertExpectations(t)
-}
-
-func TestService_DeleteLocation(t *testing.T) {
-	client := &mockClient.Client{}
-
-	client.On("DeleteJSON", t.Context(), "configuration/v1/location/1/", mock.Anything).Return(nil)
-
-	service := New(client)
-	err := service.DeleteLocation(t.Context(), 1)
-
-	assert.NoError(t, err)
-	client.AssertExpectations(t)
-}
-
-func TestNew(t *testing.T) {
-	client := &mockClient.Client{}
-	service := New(client)
-
-	require.NotNil(t, service)
-	assert.Equal(t, client, service.client)
-}
-
-func TestService_ErrorHandling(t *testing.T) {
+func TestService_ConferenceErrorHandling(t *testing.T) {
 	tests := []struct {
 		name      string
 		setup     func(m *mockClient.Client)
@@ -347,62 +287,6 @@ func TestService_ErrorHandling(t *testing.T) {
 			err := tt.operation(service)
 
 			assert.Error(t, err)
-			client.AssertExpectations(t)
-		})
-	}
-}
-
-func TestService_ListConferences_QueryParameterValidation(t *testing.T) {
-	tests := []struct {
-		name          string
-		opts          *ListOptions
-		expectedQuery string
-	}{
-		{
-			name:          "nil options",
-			opts:          nil,
-			expectedQuery: "configuration/v1/conference/",
-		},
-		{
-			name: "empty search string",
-			opts: &ListOptions{
-				BaseListOptions: options.BaseListOptions{Limit: 10},
-				Search:          "",
-			},
-			expectedQuery: "configuration/v1/conference/?limit=10",
-		},
-		{
-			name: "search with special characters",
-			opts: &ListOptions{
-				BaseListOptions: options.BaseListOptions{Limit: 5},
-				Search:          "test@domain.com",
-			},
-			expectedQuery: "configuration/v1/conference/?limit=5&name__icontains=test%40domain.com",
-		},
-		{
-			name: "unicode search",
-			opts: &ListOptions{
-				BaseListOptions: options.BaseListOptions{Limit: 5},
-				Search:          "cönférence",
-			},
-			expectedQuery: "configuration/v1/conference/?limit=5&name__icontains=c%C3%B6nf%C3%A9rence",
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			client := &mockClient.Client{}
-			expectedResponse := &ConferenceListResponse{Objects: []Conference{}}
-
-			client.On("GetJSON", t.Context(), tt.expectedQuery, mock.AnythingOfType("*config.ConferenceListResponse")).Return(nil).Run(func(args mock.Arguments) {
-				result := args.Get(2).(*ConferenceListResponse)
-				*result = *expectedResponse
-			})
-
-			service := New(client)
-			_, err := service.ListConferences(t.Context(), tt.opts)
-
-			assert.NoError(t, err)
 			client.AssertExpectations(t)
 		})
 	}

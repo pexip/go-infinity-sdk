@@ -86,17 +86,17 @@ func main() {
 		}
 	}
 
-	// Example 5: List worker nodes
-	fmt.Println("\n=== Status: Worker Nodes ===")
-	workers, err := client.Status.ListWorkers(ctx, nil)
+	// Example 5: List worker VMs
+	fmt.Println("\n=== Status: Worker VMs ===")
+	workers, err := client.Status.ListWorkerVMs(ctx, nil)
 	if err != nil {
-		log.Printf("Failed to list workers: %v", err)
+		log.Printf("Failed to list worker VMs: %v", err)
 	} else {
-		fmt.Printf("Found %d worker nodes:\n", len(workers.Objects))
+		fmt.Printf("Found %d worker VMs:\n", len(workers.Objects))
 		for _, worker := range workers.Objects {
-			fmt.Printf("- %s (%s): %d conferences, %d participants\n",
-				worker.HostName, worker.Status,
-				worker.Conferences, worker.Participants)
+			fmt.Printf("- %s (%s): Media load: %d, Signaling count: %d\n",
+				worker.Name, worker.SyncStatus,
+				worker.MediaLoad, worker.SignalingCount)
 		}
 	}
 

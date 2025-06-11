@@ -21,14 +21,14 @@ func TestService_ListConferences(t *testing.T) {
 			name: "successful list without options",
 			opts: nil,
 			setup: func(m *mockClient.Client) {
-				expectedResponse := &ConferenceListResponse{
-					Objects: []Conference{
-						{ID: 1, Name: "Test Conference 1", DurationSeconds: 3600},
-						{ID: 2, Name: "Test Conference 2", DurationSeconds: 1800},
+				expectedResponse := &ConferenceRecordListResponse{
+					Objects: []ConferenceRecord{
+						{ID: 1, Name: "Test ConferenceRecord 1", DurationSeconds: 3600},
+						{ID: 2, Name: "Test ConferenceRecord 2", DurationSeconds: 1800},
 					},
 				}
-				m.On("GetJSON", t.Context(), "history/v1/conference/", mock.AnythingOfType("*history.ConferenceListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*ConferenceListResponse)
+				m.On("GetJSON", t.Context(), "history/v1/conference/", mock.AnythingOfType("*history.ConferenceRecordListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(2).(*ConferenceRecordListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -48,16 +48,16 @@ func TestService_ListConferences(t *testing.T) {
 				EndTime:   &time.Time{},
 			},
 			setup: func(m *mockClient.Client) {
-				expectedResponse := &ConferenceListResponse{
-					Objects: []Conference{
-						{ID: 1, Name: "Test Conference"},
+				expectedResponse := &ConferenceRecordListResponse{
+					Objects: []ConferenceRecord{
+						{ID: 1, Name: "Test ConferenceRecord"},
 					},
 				}
 				// Note: The exact query string will vary based on time formatting
 				m.On("GetJSON", t.Context(), mock.MatchedBy(func(endpoint string) bool {
 					return endpoint != "" && endpoint != "history/v1/conference/"
-				}), mock.AnythingOfType("*history.ConferenceListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*ConferenceListResponse)
+				}), mock.AnythingOfType("*history.ConferenceRecordListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(2).(*ConferenceRecordListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -71,7 +71,7 @@ func TestService_ListConferences(t *testing.T) {
 			tt.setup(client)
 
 			service := New(client)
-			result, err := service.ListConferences(t.Context(), tt.opts)
+			result, err := service.ListConferenceRecords(t.Context(), tt.opts)
 
 			if tt.wantErr {
 				assert.Error(t, err)
@@ -88,21 +88,21 @@ func TestService_ListConferences(t *testing.T) {
 
 func TestService_GetConference(t *testing.T) {
 	client := &mockClient.Client{}
-	expectedConference := &Conference{
+	expectedConference := &ConferenceRecord{
 		ID:                1,
-		Name:              "Test Conference",
+		Name:              "Test ConferenceRecord",
 		ServiceType:       "conference",
 		DurationSeconds:   3600,
 		TotalParticipants: 5,
 	}
 
-	client.On("GetJSON", t.Context(), "history/v1/conference/1/", mock.AnythingOfType("*history.Conference")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*Conference)
+	client.On("GetJSON", t.Context(), "history/v1/conference/1/", mock.AnythingOfType("*history.ConferenceRecord")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(2).(*ConferenceRecord)
 		*result = *expectedConference
 	})
 
 	service := New(client)
-	result, err := service.GetConference(t.Context(), 1)
+	result, err := service.GetConferenceRecord(t.Context(), 1)
 
 	assert.NoError(t, err)
 	assert.Equal(t, expectedConference, result)

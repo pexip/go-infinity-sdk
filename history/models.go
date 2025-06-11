@@ -104,8 +104,8 @@ type BackplaneMediaStreamListResponse struct {
 	Objects []BackplaneMediaStream `json:"objects"`
 }
 
-// Conference represents a conference history record
-type Conference struct {
+// ConferenceRecord represents a conference history record
+type ConferenceRecord struct {
 	ID                  int       `json:"id"`
 	Name                string    `json:"name"`
 	ServiceType         string    `json:"service_type"`
@@ -122,8 +122,8 @@ type Conference struct {
 	ResourceURI         string    `json:"resource_uri"`
 }
 
-// ConferenceListResponse represents the response from listing conference history
-type ConferenceListResponse struct {
+// ConferenceRecordListResponse represents the response from listing conference history
+type ConferenceRecordListResponse struct {
 	Meta struct {
 		Limit      int    `json:"limit"`
 		Next       string `json:"next"`
@@ -131,7 +131,7 @@ type ConferenceListResponse struct {
 		Previous   string `json:"previous"`
 		TotalCount int    `json:"total_count"`
 	} `json:"meta"`
-	Objects []Conference `json:"objects"`
+	Objects []ConferenceRecord `json:"objects"`
 }
 
 // MediaStream represents a media stream history record

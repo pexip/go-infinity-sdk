@@ -1,9 +1,8 @@
 package config
 
 import (
-	"time"
-
 	"github.com/pexip/go-infinity-sdk/v38/options"
+	"github.com/pexip/go-infinity-sdk/v38/util"
 )
 
 // ListOptions contains options for listing resources
@@ -98,12 +97,12 @@ type LocationListResponse struct {
 
 // ConferenceAlias represents a conference alias configuration
 type ConferenceAlias struct {
-	ID           int       `json:"id,omitempty"`
-	Alias        string    `json:"alias"`
-	Conference   string    `json:"conference"`
-	Description  string    `json:"description,omitempty"`
-	CreationTime time.Time `json:"creation_time,omitempty"`
-	ResourceURI  string    `json:"resource_uri,omitempty"`
+	ID           int               `json:"id,omitempty"`
+	Alias        string            `json:"alias"`
+	Conference   string            `json:"conference"`
+	Description  string            `json:"description,omitempty"`
+	CreationTime util.InfinityTime `json:"creation_time,omitempty"`
+	ResourceURI  string            `json:"resource_uri,omitempty"`
 }
 
 // ConferenceAliasCreateRequest represents a request to create a conference alias

@@ -8,6 +8,7 @@ import (
 
 	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
 	"github.com/pexip/go-infinity-sdk/v38/options"
+	"github.com/pexip/go-infinity-sdk/v38/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -32,8 +33,8 @@ func TestService_ListBackplaneMediaStreams(t *testing.T) {
 				ID:                1,
 				StreamID:          "stream-123",
 				StreamType:        "video",
-				StartTime:         &time.Time{},
-				EndTime:           &time.Time{},
+				StartTime:         &util.InfinityTime{},
+				EndTime:           &util.InfinityTime{},
 				Node:              "node1.example.com",
 				RxBitrate:         1024,
 				RxCodec:           "H.264",
@@ -77,8 +78,8 @@ func TestService_GetBackplaneMediaStream(t *testing.T) {
 		ID:                1,
 		StreamID:          "stream-456",
 		StreamType:        "audio",
-		StartTime:         &time.Time{},
-		EndTime:           &time.Time{},
+		StartTime:         &util.InfinityTime{},
+		EndTime:           &util.InfinityTime{},
 		Node:              "node2.example.com",
 		RxBitrate:         64,
 		RxCodec:           "Opus",

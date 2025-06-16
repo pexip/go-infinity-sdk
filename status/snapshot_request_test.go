@@ -5,6 +5,7 @@ import (
 	"time"
 
 	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
+	"github.com/pexip/go-infinity-sdk/v38/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -21,9 +22,9 @@ func TestService_ListSnapshotRequests(t *testing.T) {
 			{
 				ID:          1,
 				Status:      "completed",
-				Created:     &created,
-				Started:     &started,
-				Completed:   &completed,
+				Created:     &util.InfinityTime{Time: created},
+				Started:     &util.InfinityTime{Time: started},
+				Completed:   &util.InfinityTime{Time: completed},
 				Size:        512000000,
 				Description: "Daily snapshot",
 				ResourceURI: "/api/admin/status/v1/snapshot_request/1/",
@@ -63,8 +64,8 @@ func TestService_ListSnapshotRequests_WithOptions(t *testing.T) {
 			{
 				ID:          2,
 				Status:      "completed",
-				Created:     &created,
-				Completed:   &completed,
+				Created:     &util.InfinityTime{Time: created},
+				Completed:   &util.InfinityTime{Time: completed},
 				Size:        1024000000,
 				Description: "Options Test Snapshot",
 			},
@@ -94,8 +95,8 @@ func TestService_GetSnapshotRequest(t *testing.T) {
 	expectedRequest := &SnapshotRequest{
 		ID:          1,
 		Status:      "running",
-		Created:     &created,
-		Started:     &started,
+		Created:     &util.InfinityTime{Time: created},
+		Started:     &util.InfinityTime{Time: started},
 		Size:        0,
 		Description: "Manual snapshot",
 		ResourceURI: "/api/admin/status/v1/snapshot_request/1/",

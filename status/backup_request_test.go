@@ -5,6 +5,7 @@ import (
 	"time"
 
 	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
+	"github.com/pexip/go-infinity-sdk/v38/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -21,9 +22,9 @@ func TestService_ListBackupRequests(t *testing.T) {
 			{
 				ID:          1,
 				Status:      "completed",
-				Created:     &created,
-				Started:     &started,
-				Completed:   &completed,
+				Created:     &util.InfinityTime{Time: created},
+				Started:     &util.InfinityTime{Time: started},
+				Completed:   &util.InfinityTime{Time: completed},
 				Size:        1024000000,
 				Description: "Scheduled backup",
 				ResourceURI: "/api/admin/status/v1/backup_request/1/",
@@ -31,8 +32,8 @@ func TestService_ListBackupRequests(t *testing.T) {
 			{
 				ID:          2,
 				Status:      "running",
-				Created:     &created,
-				Started:     &started,
+				Created:     &util.InfinityTime{Time: created},
+				Started:     &util.InfinityTime{Time: started},
 				Size:        0,
 				Description: "Manual backup",
 				ResourceURI: "/api/admin/status/v1/backup_request/2/",
@@ -67,9 +68,9 @@ func TestService_GetBackupRequest(t *testing.T) {
 	expectedRequest := &BackupRequest{
 		ID:          1,
 		Status:      "completed",
-		Created:     &created,
-		Started:     &started,
-		Completed:   &completed,
+		Created:     &util.InfinityTime{Time: created},
+		Started:     &util.InfinityTime{Time: started},
+		Completed:   &util.InfinityTime{Time: completed},
 		Size:        2048000000,
 		Description: "Full system backup",
 		ResourceURI: "/api/admin/status/v1/backup_request/1/",

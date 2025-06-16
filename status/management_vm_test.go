@@ -5,6 +5,7 @@ import (
 	"time"
 
 	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
+	"github.com/pexip/go-infinity-sdk/v38/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -67,8 +68,8 @@ func TestService_GetManagementVM(t *testing.T) {
 		SyncStatus:           "SYNCED",
 		UpgradeStatus:        "COMPLETE",
 		Version:              "30.1.0",
-		LastAttemptedContact: &lastAttemptedContact,
-		LastUpdated:          &lastUpdated,
+		LastAttemptedContact: &util.InfinityTime{Time: lastAttemptedContact},
+		LastUpdated:          &util.InfinityTime{Time: lastUpdated},
 		ResourceURI:          "/api/admin/status/v1/management_vm/1/",
 	}
 

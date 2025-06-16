@@ -8,6 +8,7 @@ import (
 
 	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
 	"github.com/pexip/go-infinity-sdk/v38/options"
+	"github.com/pexip/go-infinity-sdk/v38/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -37,8 +38,8 @@ func TestService_ListRegistrationAliases(t *testing.T) {
 				Protocol:       "SIP",
 				RemoteAddress:  "192.168.1.100",
 				IsNatted:       false,
-				StartTime:      &time.Time{},
-				EndTime:        &time.Time{},
+				StartTime:      &util.InfinityTime{},
+				EndTime:        &util.InfinityTime{},
 				ResourceURI:    "/api/admin/history/v1/registration_alias/1/",
 			},
 		},
@@ -72,8 +73,8 @@ func TestService_GetRegistrationAlias(t *testing.T) {
 		Protocol:       "H323",
 		RemoteAddress:  "10.0.0.50",
 		IsNatted:       true,
-		StartTime:      &time.Time{},
-		EndTime:        &time.Time{},
+		StartTime:      &util.InfinityTime{},
+		EndTime:        &util.InfinityTime{},
 		ResourceURI:    "/api/admin/history/v1/registration_alias/1/",
 	}
 

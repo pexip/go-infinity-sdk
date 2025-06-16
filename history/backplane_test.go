@@ -8,6 +8,7 @@ import (
 
 	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
 	"github.com/pexip/go-infinity-sdk/v38/options"
+	"github.com/pexip/go-infinity-sdk/v38/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -33,8 +34,8 @@ func TestService_ListBackplanes(t *testing.T) {
 				ConferenceName:       "test-conference",
 				DisconnectReason:     "Normal call clearing",
 				Duration:             &[]int{3600}[0],
-				StartTime:            &time.Time{},
-				EndTime:              &time.Time{},
+				StartTime:            &util.InfinityTime{},
+				EndTime:              &util.InfinityTime{},
 				MediaNode:            "node1.example.com",
 				Protocol:             "INTERNAL",
 				RemoteConferenceName: "remote-conference",
@@ -70,8 +71,8 @@ func TestService_GetBackplane(t *testing.T) {
 		ConferenceName:       "test-conference",
 		DisconnectReason:     "Normal call clearing",
 		Duration:             &[]int{7200}[0],
-		StartTime:            &time.Time{},
-		EndTime:              &time.Time{},
+		StartTime:            &util.InfinityTime{},
+		EndTime:              &util.InfinityTime{},
 		MediaNode:            "node1.example.com",
 		Protocol:             "GMS",
 		RemoteConferenceName: "remote-conference",

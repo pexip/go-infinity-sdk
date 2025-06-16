@@ -5,6 +5,7 @@ import (
 	"time"
 
 	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
+	"github.com/pexip/go-infinity-sdk/v38/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -21,7 +22,7 @@ func TestService_ListTeamsNodes(t *testing.T) {
 				Name:        "teams-node-1",
 				Status:      "active",
 				Version:     "2.0.1",
-				LastContact: &lastContact,
+				LastContact: &util.InfinityTime{Time: lastContact},
 				ActiveCalls: 5,
 				ResourceURI: "/api/admin/status/v1/teamsnode/1/",
 			},
@@ -30,7 +31,7 @@ func TestService_ListTeamsNodes(t *testing.T) {
 				Name:        "teams-node-2",
 				Status:      "inactive",
 				Version:     "2.0.0",
-				LastContact: &lastContact,
+				LastContact: &util.InfinityTime{Time: lastContact},
 				ActiveCalls: 0,
 				ResourceURI: "/api/admin/status/v1/teamsnode/2/",
 			},
@@ -66,7 +67,7 @@ func TestService_GetTeamsNode(t *testing.T) {
 		Name:        "teams-node-primary",
 		Status:      "active",
 		Version:     "2.1.0",
-		LastContact: &lastContact,
+		LastContact: &util.InfinityTime{Time: lastContact},
 		ActiveCalls: 12,
 		ResourceURI: "/api/admin/status/v1/teamsnode/1/",
 	}

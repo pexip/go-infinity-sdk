@@ -5,6 +5,7 @@ import (
 	"time"
 
 	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
+	"github.com/pexip/go-infinity-sdk/v38/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -21,8 +22,8 @@ func TestService_ListExchangeSchedulers(t *testing.T) {
 				ID:                1,
 				Name:              "Primary Exchange",
 				Status:            "active",
-				LastSync:          &lastSync,
-				NextSync:          &nextSync,
+				LastSync:          &util.InfinityTime{Time: lastSync},
+				NextSync:          &util.InfinityTime{Time: nextSync},
 				ProcessedMeetings: 45,
 				ErrorCount:        0,
 				ResourceURI:       "/api/admin/status/v1/exchange_scheduler/1/",
@@ -91,8 +92,8 @@ func TestService_GetExchangeScheduler(t *testing.T) {
 		ID:                1,
 		Name:              "Test Exchange",
 		Status:            "syncing",
-		LastSync:          &lastSync,
-		NextSync:          &nextSync,
+		LastSync:          &util.InfinityTime{Time: lastSync},
+		NextSync:          &util.InfinityTime{Time: nextSync},
 		ProcessedMeetings: 12,
 		ErrorCount:        1,
 		ResourceURI:       "/api/admin/status/v1/exchange_scheduler/1/",

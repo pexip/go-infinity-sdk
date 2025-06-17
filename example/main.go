@@ -82,7 +82,7 @@ func main() {
 			fmt.Printf("- %s (%s) in %s\n",
 				participant.DisplayName,
 				participant.Role,
-				participant.ConferenceName)
+				participant.Conference)
 		}
 	}
 
@@ -103,7 +103,7 @@ func main() {
 	// Example 6: Command API - demonstrate participant control
 	if len(participants.Objects) > 0 {
 		fmt.Println("\n=== Command: Participant Control ===")
-		participantUUID := participants.Objects[0].UUID
+		participantUUID := participants.Objects[0].CallUUID
 
 		// Send a welcome message
 		result, err := client.Command.SendMessageToParticipant(ctx, participantUUID, "Welcome! This message was sent via the Go SDK.")

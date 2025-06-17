@@ -5,6 +5,7 @@ import (
 	"time"
 
 	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
+	util "github.com/pexip/go-infinity-sdk/v38/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -20,7 +21,7 @@ func TestService_ListConferenceSyncs(t *testing.T) {
 				ID:           1,
 				Name:         "Primary Sync",
 				Status:       "active",
-				LastSync:     &lastSync,
+				LastSync:     &util.InfinityTime{Time: lastSync},
 				SyncInterval: 300,
 				ErrorMessage: "",
 				ResourceURI:  "/api/admin/status/v1/conference_sync/1/",
@@ -87,7 +88,7 @@ func TestService_GetConferenceSync(t *testing.T) {
 		ID:           1,
 		Name:         "Test Sync",
 		Status:       "syncing",
-		LastSync:     &lastSync,
+		LastSync:     &util.InfinityTime{Time: lastSync},
 		SyncInterval: 600,
 		ErrorMessage: "",
 		ResourceURI:  "/api/admin/status/v1/conference_sync/1/",

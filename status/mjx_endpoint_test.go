@@ -5,6 +5,7 @@ import (
 	"time"
 
 	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
+	"github.com/pexip/go-infinity-sdk/v38/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -21,7 +22,7 @@ func TestService_ListMJXEndpoints(t *testing.T) {
 				Name:              "mjx-endpoint-1",
 				Status:            "connected",
 				EndpointType:      "teams",
-				LastContact:       &lastContact,
+				LastContact:       &util.InfinityTime{Time: lastContact},
 				Version:           "1.5.0",
 				ActiveConnections: 3,
 				ResourceURI:       "/api/admin/status/v1/mjx_endpoint/1/",
@@ -31,7 +32,7 @@ func TestService_ListMJXEndpoints(t *testing.T) {
 				Name:              "mjx-endpoint-2",
 				Status:            "disconnected",
 				EndpointType:      "google",
-				LastContact:       &lastContact,
+				LastContact:       &util.InfinityTime{Time: lastContact},
 				Version:           "1.4.2",
 				ActiveConnections: 0,
 				ResourceURI:       "/api/admin/status/v1/mjx_endpoint/2/",
@@ -69,7 +70,7 @@ func TestService_GetMJXEndpoint(t *testing.T) {
 		Name:              "mjx-primary-endpoint",
 		Status:            "connected",
 		EndpointType:      "teams",
-		LastContact:       &lastContact,
+		LastContact:       &util.InfinityTime{Time: lastContact},
 		Version:           "1.6.0",
 		ActiveConnections: 8,
 		ResourceURI:       "/api/admin/status/v1/mjx_endpoint/1/",

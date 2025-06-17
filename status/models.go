@@ -1,7 +1,7 @@
 package status
 
 import (
-	"time"
+	util "github.com/pexip/go-infinity-sdk/v38/util"
 )
 
 // Meta represents the pagination metadata for list responses
@@ -15,135 +15,135 @@ type Meta struct {
 
 // SystemStatus represents the overall system status
 type SystemStatus struct {
-	Status      string    `json:"status"`
-	Version     string    `json:"version"`
-	Uptime      int       `json:"uptime"`
-	Timestamp   time.Time `json:"timestamp"`
-	HostName    string    `json:"hostname"`
-	TotalMemory int64     `json:"total_memory"`
-	UsedMemory  int64     `json:"used_memory"`
-	CPULoad     float64   `json:"cpu_load"`
+	Status      string            `json:"status"`
+	Version     string            `json:"version"`
+	Uptime      int               `json:"uptime"`
+	Timestamp   util.InfinityTime `json:"timestamp"`
+	HostName    string            `json:"hostname"`
+	TotalMemory int64             `json:"total_memory"`
+	UsedMemory  int64             `json:"used_memory"`
+	CPULoad     float64           `json:"cpu_load"`
 }
 
 // ConferenceStatus represents a conference status
 type ConferenceStatus struct {
-	ID                   string     `json:"id"`
-	Name                 string     `json:"name"`
-	ServiceType          string     `json:"service_type"`
-	IsStarted            bool       `json:"is_started"`
-	IsLocked             bool       `json:"is_locked"`
-	GuestsMuted          bool       `json:"guests_muted"`
-	DirectMediaAvailable bool       `json:"direct_media_available"`
-	StartTime            *time.Time `json:"start_time,omitempty"`
-	Tag                  string     `json:"tag"`
-	ResourceURI          string     `json:"resource_uri"`
+	ID                   string             `json:"id"`
+	Name                 string             `json:"name"`
+	ServiceType          string             `json:"service_type"`
+	IsStarted            bool               `json:"is_started"`
+	IsLocked             bool               `json:"is_locked"`
+	GuestsMuted          bool               `json:"guests_muted"`
+	DirectMediaAvailable bool               `json:"direct_media_available"`
+	StartTime            *util.InfinityTime `json:"start_time,omitempty"`
+	Tag                  string             `json:"tag"`
+	ResourceURI          string             `json:"resource_uri"`
 }
 
 // Participant represents a participant status
 type Participant struct {
-	ID               string    `json:"id"`
-	UUID             string    `json:"uuid"`
-	DisplayName      string    `json:"display_name"`
-	ConferenceID     int       `json:"conference_id"`
-	ConferenceName   string    `json:"conference_name"`
-	ServiceType      string    `json:"service_type"`
-	Role             string    `json:"role"`
-	ConnectTime      time.Time `json:"connect_time"`
-	IsOnHold         bool      `json:"is_on_hold"`
-	IsMuted          bool      `json:"is_muted"`
-	IsGuest          bool      `json:"is_guest"`
-	IsWaiting        bool      `json:"is_waiting"`
-	HasMedia         bool      `json:"has_media"`
-	IsPresenting     bool      `json:"is_presenting"`
-	Bandwidth        int       `json:"bandwidth"`
-	CallDirection    string    `json:"call_direction"`
-	CallUUID         string    `json:"call_uuid"`
-	DestinationAlias string    `json:"destination_alias"`
-	SourceAlias      string    `json:"source_alias"`
-	RemoteAddress    string    `json:"remote_address"`
-	RemotePort       int       `json:"remote_port"`
-	Protocol         string    `json:"protocol"`
-	VendorID         string    `json:"vendor_id"`
-	ParentID         string    `json:"parent_id"`
-	SystemLocation   string    `json:"system_location"`
-	NodeID           string    `json:"node_id"`
-	ResourceURI      string    `json:"resource_uri"`
+	ID               string            `json:"id"`
+	UUID             string            `json:"uuid"`
+	DisplayName      string            `json:"display_name"`
+	ConferenceID     int               `json:"conference_id"`
+	ConferenceName   string            `json:"conference_name"`
+	ServiceType      string            `json:"service_type"`
+	Role             string            `json:"role"`
+	ConnectTime      util.InfinityTime `json:"connect_time"`
+	IsOnHold         bool              `json:"is_on_hold"`
+	IsMuted          bool              `json:"is_muted"`
+	IsGuest          bool              `json:"is_guest"`
+	IsWaiting        bool              `json:"is_waiting"`
+	HasMedia         bool              `json:"has_media"`
+	IsPresenting     bool              `json:"is_presenting"`
+	Bandwidth        int               `json:"bandwidth"`
+	CallDirection    string            `json:"call_direction"`
+	CallUUID         string            `json:"call_uuid"`
+	DestinationAlias string            `json:"destination_alias"`
+	SourceAlias      string            `json:"source_alias"`
+	RemoteAddress    string            `json:"remote_address"`
+	RemotePort       int               `json:"remote_port"`
+	Protocol         string            `json:"protocol"`
+	VendorID         string            `json:"vendor_id"`
+	ParentID         string            `json:"parent_id"`
+	SystemLocation   string            `json:"system_location"`
+	NodeID           string            `json:"node_id"`
+	ResourceURI      string            `json:"resource_uri"`
 }
 
 // WorkerVM represents a worker node status
 type WorkerVM struct {
-	ID                    int        `json:"id"`
-	ConfigurationID       int        `json:"configuration_id"`
-	Name                  string     `json:"name"`
-	NodeType              string     `json:"node_type"`
-	SystemLocation        string     `json:"system_location"`
-	SyncStatus            string     `json:"sync_status"`
-	UpgradeStatus         string     `json:"upgrade_status"`
-	Version               string     `json:"version"`
-	BootTime              *time.Time `json:"boot_time,omitempty"`
-	LastAttemptedContact  *time.Time `json:"last_attempted_contact,omitempty"`
-	LastUpdated           *time.Time `json:"last_updated,omitempty"`
-	MaintenanceMode       bool       `json:"maintenance_mode"`
-	MaintenanceModeReason string     `json:"maintenance_mode_reason"`
-	CPUCapabilities       string     `json:"cpu_capabilities"`
-	CPUCount              int        `json:"cpu_count"`
-	CPUModel              string     `json:"cpu_model"`
-	TotalRAM              int        `json:"total_ram"`
-	Hypervisor            string     `json:"hypervisor"`
-	DeployStatus          string     `json:"deploy_status"`
-	MaxAudioCalls         int        `json:"max_audio_calls"`
-	MaxSDCalls            int        `json:"max_sd_calls"`
-	MaxHDCalls            int        `json:"max_hd_calls"`
-	MaxFullHDCalls        int        `json:"max_full_hd_calls"`
-	MaxDirectParticipants int        `json:"max_direct_participants"`
-	MaxMediaTokens        int        `json:"max_media_tokens"`
-	MediaTokensUsed       int        `json:"media_tokens_used"`
-	MediaLoad             int        `json:"media_load"`
-	SignalingCount        int        `json:"signaling_count"`
-	ResourceURI           string     `json:"resource_uri"`
+	ID                    int                `json:"id"`
+	ConfigurationID       int                `json:"configuration_id"`
+	Name                  string             `json:"name"`
+	NodeType              string             `json:"node_type"`
+	SystemLocation        string             `json:"system_location"`
+	SyncStatus            string             `json:"sync_status"`
+	UpgradeStatus         string             `json:"upgrade_status"`
+	Version               string             `json:"version"`
+	BootTime              *util.InfinityTime `json:"boot_time,omitempty"`
+	LastAttemptedContact  *util.InfinityTime `json:"last_attempted_contact,omitempty"`
+	LastUpdated           *util.InfinityTime `json:"last_updated,omitempty"`
+	MaintenanceMode       bool               `json:"maintenance_mode"`
+	MaintenanceModeReason string             `json:"maintenance_mode_reason"`
+	CPUCapabilities       string             `json:"cpu_capabilities"`
+	CPUCount              int                `json:"cpu_count"`
+	CPUModel              string             `json:"cpu_model"`
+	TotalRAM              int                `json:"total_ram"`
+	Hypervisor            string             `json:"hypervisor"`
+	DeployStatus          string             `json:"deploy_status"`
+	MaxAudioCalls         int                `json:"max_audio_calls"`
+	MaxSDCalls            int                `json:"max_sd_calls"`
+	MaxHDCalls            int                `json:"max_hd_calls"`
+	MaxFullHDCalls        int                `json:"max_full_hd_calls"`
+	MaxDirectParticipants int                `json:"max_direct_participants"`
+	MaxMediaTokens        int                `json:"max_media_tokens"`
+	MediaTokensUsed       int                `json:"media_tokens_used"`
+	MediaLoad             int                `json:"media_load"`
+	SignalingCount        int                `json:"signaling_count"`
+	ResourceURI           string             `json:"resource_uri"`
 }
 
 // Alarm represents a system alarm
 type Alarm struct {
-	ID           int        `json:"id"`
-	Identifier   int        `json:"identifier"`
-	Level        string     `json:"level"`
-	Name         string     `json:"name"`
-	Details      string     `json:"details"`
-	Instance     string     `json:"instance"`
-	Node         string     `json:"node"`
-	Acknowledged bool       `json:"acknowledged"`
-	TimeRaised   *time.Time `json:"time_raised,omitempty"`
-	ResourceURI  string     `json:"resource_uri"`
+	ID           int                `json:"id"`
+	Identifier   int                `json:"identifier"`
+	Level        string             `json:"level"`
+	Name         string             `json:"name"`
+	Details      string             `json:"details"`
+	Instance     string             `json:"instance"`
+	Node         string             `json:"node"`
+	Acknowledged bool               `json:"acknowledged"`
+	TimeRaised   *util.InfinityTime `json:"time_raised,omitempty"`
+	ResourceURI  string             `json:"resource_uri"`
 }
 
 // Backplane represents a backplane connection status
 type Backplane struct {
-	ID                   string     `json:"id"`
-	Conference           string     `json:"conference"`
-	Type                 string     `json:"type"`
-	Protocol             string     `json:"protocol"`
-	ConnectTime          *time.Time `json:"connect_time,omitempty"`
-	ServiceTag           string     `json:"service_tag"`
-	SystemLocation       string     `json:"system_location"`
-	MediaNode            string     `json:"media_node"`
-	ProxyNode            string     `json:"proxy_node"`
-	RemoteConferenceName string     `json:"remote_conference_name"`
-	RemoteMediaNode      string     `json:"remote_media_node"`
-	RemoteNodeName       string     `json:"remote_node_name"`
-	ResourceURI          string     `json:"resource_uri"`
+	ID                   string             `json:"id"`
+	Conference           string             `json:"conference"`
+	Type                 string             `json:"type"`
+	Protocol             string             `json:"protocol"`
+	ConnectTime          *util.InfinityTime `json:"connect_time,omitempty"`
+	ServiceTag           string             `json:"service_tag"`
+	SystemLocation       string             `json:"system_location"`
+	MediaNode            string             `json:"media_node"`
+	ProxyNode            string             `json:"proxy_node"`
+	RemoteConferenceName string             `json:"remote_conference_name"`
+	RemoteMediaNode      string             `json:"remote_media_node"`
+	RemoteNodeName       string             `json:"remote_node_name"`
+	ResourceURI          string             `json:"resource_uri"`
 }
 
 // BackupRequest represents a backup request status
 type BackupRequest struct {
-	ID          int        `json:"id"`
-	Status      string     `json:"status"`
-	Created     *time.Time `json:"created,omitempty"`
-	Started     *time.Time `json:"started,omitempty"`
-	Completed   *time.Time `json:"completed,omitempty"`
-	Size        int64      `json:"size"`
-	Description string     `json:"description"`
-	ResourceURI string     `json:"resource_uri"`
+	ID          int                `json:"id"`
+	Status      string             `json:"status"`
+	Created     *util.InfinityTime `json:"created,omitempty"`
+	Started     *util.InfinityTime `json:"started,omitempty"`
+	Completed   *util.InfinityTime `json:"completed,omitempty"`
+	Size        int64              `json:"size"`
+	Description string             `json:"description"`
+	ResourceURI string             `json:"resource_uri"`
 }
 
 // CloudMonitoredLocation represents a cloud monitored location status
@@ -159,18 +159,18 @@ type CloudMonitoredLocation struct {
 
 // CloudNode represents a cloud node status
 type CloudNode struct {
-	ID                 string     `json:"id"`
-	Name               string     `json:"name"`
-	Status             string     `json:"status"`
-	InstanceType       string     `json:"instance_type"`
-	Region             string     `json:"region"`
-	LaunchTime         *time.Time `json:"launch_time,omitempty"`
-	LastContactTime    *time.Time `json:"last_contact_time,omitempty"`
-	CPU                float64    `json:"cpu"`
-	Memory             float64    `json:"memory"`
-	ActiveConferences  int        `json:"active_conferences"`
-	ActiveParticipants int        `json:"active_participants"`
-	ResourceURI        string     `json:"resource_uri"`
+	ID                 string             `json:"id"`
+	Name               string             `json:"name"`
+	Status             string             `json:"status"`
+	InstanceType       string             `json:"instance_type"`
+	Region             string             `json:"region"`
+	LaunchTime         *util.InfinityTime `json:"launch_time,omitempty"`
+	LastContactTime    *util.InfinityTime `json:"last_contact_time,omitempty"`
+	CPU                float64            `json:"cpu"`
+	Memory             float64            `json:"memory"`
+	ActiveConferences  int                `json:"active_conferences"`
+	ActiveParticipants int                `json:"active_participants"`
+	ResourceURI        string             `json:"resource_uri"`
 }
 
 // CloudOverflowLocation represents a cloud overflow location status
@@ -195,25 +195,25 @@ type ConferenceShard struct {
 
 // ConferenceSync represents a conference sync status
 type ConferenceSync struct {
-	ID           int        `json:"id"`
-	Name         string     `json:"name"`
-	Status       string     `json:"status"`
-	LastSync     *time.Time `json:"last_sync,omitempty"`
-	SyncInterval int        `json:"sync_interval"`
-	ErrorMessage string     `json:"error_message"`
-	ResourceURI  string     `json:"resource_uri"`
+	ID           int                `json:"id"`
+	Name         string             `json:"name"`
+	Status       string             `json:"status"`
+	LastSync     *util.InfinityTime `json:"last_sync,omitempty"`
+	SyncInterval int                `json:"sync_interval"`
+	ErrorMessage string             `json:"error_message"`
+	ResourceURI  string             `json:"resource_uri"`
 }
 
 // ExchangeScheduler represents an Exchange scheduler status
 type ExchangeScheduler struct {
-	ID                int        `json:"id"`
-	Name              string     `json:"name"`
-	Status            string     `json:"status"`
-	LastSync          *time.Time `json:"last_sync,omitempty"`
-	NextSync          *time.Time `json:"next_sync,omitempty"`
-	ProcessedMeetings int        `json:"processed_meetings"`
-	ErrorCount        int        `json:"error_count"`
-	ResourceURI       string     `json:"resource_uri"`
+	ID                int                `json:"id"`
+	Name              string             `json:"name"`
+	Status            string             `json:"status"`
+	LastSync          *util.InfinityTime `json:"last_sync,omitempty"`
+	NextSync          *util.InfinityTime `json:"next_sync,omitempty"`
+	ProcessedMeetings int                `json:"processed_meetings"`
+	ErrorCount        int                `json:"error_count"`
+	ResourceURI       string             `json:"resource_uri"`
 }
 
 // Licensing represents licensing status
@@ -241,41 +241,41 @@ type Licensing struct {
 
 // ManagementVM represents a management VM status
 type ManagementVM struct {
-	ID                   int        `json:"id"`
-	ConfigurationID      int        `json:"configuration_id"`
-	Name                 string     `json:"name"`
-	Primary              bool       `json:"primary"`
-	SyncStatus           string     `json:"sync_status"`
-	UpgradeStatus        string     `json:"upgrade_status"`
-	Version              string     `json:"version"`
-	LastAttemptedContact *time.Time `json:"last_attempted_contact,omitempty"`
-	LastUpdated          *time.Time `json:"last_updated,omitempty"`
-	ResourceURI          string     `json:"resource_uri"`
+	ID                   int                `json:"id"`
+	ConfigurationID      int                `json:"configuration_id"`
+	Name                 string             `json:"name"`
+	Primary              bool               `json:"primary"`
+	SyncStatus           string             `json:"sync_status"`
+	UpgradeStatus        string             `json:"upgrade_status"`
+	Version              string             `json:"version"`
+	LastAttemptedContact *util.InfinityTime `json:"last_attempted_contact,omitempty"`
+	LastUpdated          *util.InfinityTime `json:"last_updated,omitempty"`
+	ResourceURI          string             `json:"resource_uri"`
 }
 
 // MJXEndpoint represents an MJX endpoint status
 type MJXEndpoint struct {
-	ID                int        `json:"id"`
-	Name              string     `json:"name"`
-	Status            string     `json:"status"`
-	EndpointType      string     `json:"endpoint_type"`
-	LastContact       *time.Time `json:"last_contact,omitempty"`
-	Version           string     `json:"version"`
-	ActiveConnections int        `json:"active_connections"`
-	ResourceURI       string     `json:"resource_uri"`
+	ID                int                `json:"id"`
+	Name              string             `json:"name"`
+	Status            string             `json:"status"`
+	EndpointType      string             `json:"endpoint_type"`
+	LastContact       *util.InfinityTime `json:"last_contact,omitempty"`
+	Version           string             `json:"version"`
+	ActiveConnections int                `json:"active_connections"`
+	ResourceURI       string             `json:"resource_uri"`
 }
 
 // MJXMeeting represents an MJX meeting status
 type MJXMeeting struct {
-	ID               string     `json:"id"`
-	Subject          string     `json:"subject"`
-	Organizer        string     `json:"organizer"`
-	StartTime        *time.Time `json:"start_time,omitempty"`
-	EndTime          *time.Time `json:"end_time,omitempty"`
-	Status           string     `json:"status"`
-	ParticipantCount int        `json:"participant_count"`
-	ConferenceAlias  string     `json:"conference_alias"`
-	ResourceURI      string     `json:"resource_uri"`
+	ID               string             `json:"id"`
+	Subject          string             `json:"subject"`
+	Organizer        string             `json:"organizer"`
+	StartTime        *util.InfinityTime `json:"start_time,omitempty"`
+	EndTime          *util.InfinityTime `json:"end_time,omitempty"`
+	Status           string             `json:"status"`
+	ParticipantCount int                `json:"participant_count"`
+	ConferenceAlias  string             `json:"conference_alias"`
+	ResourceURI      string             `json:"resource_uri"`
 }
 
 // RegistrationAlias represents a registration alias status
@@ -290,26 +290,26 @@ type RegistrationAlias struct {
 
 // SchedulingOperation represents a scheduling operation status
 type SchedulingOperation struct {
-	ID             int        `json:"id"`
-	OperationType  string     `json:"operation_type"`
-	Status         string     `json:"status"`
-	CreatedTime    *time.Time `json:"created_time,omitempty"`
-	CompletedTime  *time.Time `json:"completed_time,omitempty"`
-	ErrorMessage   string     `json:"error_message"`
-	ConferenceName string     `json:"conference_name"`
-	ResourceURI    string     `json:"resource_uri"`
+	ID             int                `json:"id"`
+	OperationType  string             `json:"operation_type"`
+	Status         string             `json:"status"`
+	CreatedTime    *util.InfinityTime `json:"created_time,omitempty"`
+	CompletedTime  *util.InfinityTime `json:"completed_time,omitempty"`
+	ErrorMessage   string             `json:"error_message"`
+	ConferenceName string             `json:"conference_name"`
+	ResourceURI    string             `json:"resource_uri"`
 }
 
 // SnapshotRequest represents a snapshot request status
 type SnapshotRequest struct {
-	ID          int        `json:"id"`
-	Status      string     `json:"status"`
-	Created     *time.Time `json:"created,omitempty"`
-	Started     *time.Time `json:"started,omitempty"`
-	Completed   *time.Time `json:"completed,omitempty"`
-	Size        int64      `json:"size"`
-	Description string     `json:"description"`
-	ResourceURI string     `json:"resource_uri"`
+	ID          int                `json:"id"`
+	Status      string             `json:"status"`
+	Created     *util.InfinityTime `json:"created,omitempty"`
+	Started     *util.InfinityTime `json:"started,omitempty"`
+	Completed   *util.InfinityTime `json:"completed,omitempty"`
+	Size        int64              `json:"size"`
+	Description string             `json:"description"`
+	ResourceURI string             `json:"resource_uri"`
 }
 
 // SystemLocation represents a system location status
@@ -325,26 +325,26 @@ type SystemLocation struct {
 
 // TeamsNode represents a Teams node status
 type TeamsNode struct {
-	ID          int        `json:"id"`
-	Name        string     `json:"name"`
-	Status      string     `json:"status"`
-	Version     string     `json:"version"`
-	LastContact *time.Time `json:"last_contact,omitempty"`
-	ActiveCalls int        `json:"active_calls"`
-	ResourceURI string     `json:"resource_uri"`
+	ID          int                `json:"id"`
+	Name        string             `json:"name"`
+	Status      string             `json:"status"`
+	Version     string             `json:"version"`
+	LastContact *util.InfinityTime `json:"last_contact,omitempty"`
+	ActiveCalls int                `json:"active_calls"`
+	ResourceURI string             `json:"resource_uri"`
 }
 
 // TeamsNodeCall represents a Teams node call status
 type TeamsNodeCall struct {
-	ID              string     `json:"id"`
-	TeamsNodeID     int        `json:"teams_node_id"`
-	ConferenceName  string     `json:"conference_name"`
-	ParticipantName string     `json:"participant_name"`
-	CallDirection   string     `json:"call_direction"`
-	StartTime       *time.Time `json:"start_time,omitempty"`
-	Duration        int        `json:"duration"`
-	Status          string     `json:"status"`
-	ResourceURI     string     `json:"resource_uri"`
+	ID              string             `json:"id"`
+	TeamsNodeID     int                `json:"teams_node_id"`
+	ConferenceName  string             `json:"conference_name"`
+	ParticipantName string             `json:"participant_name"`
+	CallDirection   string             `json:"call_direction"`
+	StartTime       *util.InfinityTime `json:"start_time,omitempty"`
+	Duration        int                `json:"duration"`
+	Status          string             `json:"status"`
+	ResourceURI     string             `json:"resource_uri"`
 }
 
 type ConferenceListResponse struct {

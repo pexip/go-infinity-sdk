@@ -5,6 +5,7 @@ import (
 	"time"
 
 	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
+	"github.com/pexip/go-infinity-sdk/v38/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -21,8 +22,8 @@ func TestService_ListSchedulingOperations(t *testing.T) {
 				ID:             1,
 				OperationType:  "create",
 				Status:         "completed",
-				CreatedTime:    &createdTime,
-				CompletedTime:  &completedTime,
+				CreatedTime:    &util.InfinityTime{Time: createdTime},
+				CompletedTime:  &util.InfinityTime{Time: completedTime},
 				ErrorMessage:   "",
 				ConferenceName: "Test Meeting",
 				ResourceURI:    "/api/admin/status/v1/scheduling_operation/1/",
@@ -61,7 +62,7 @@ func TestService_ListSchedulingOperations_WithOptions(t *testing.T) {
 				ID:             2,
 				OperationType:  "delete",
 				Status:         "completed",
-				CreatedTime:    &createdTime,
+				CreatedTime:    &util.InfinityTime{Time: createdTime},
 				ErrorMessage:   "",
 				ConferenceName: "Test Meeting With Options",
 			},
@@ -91,7 +92,7 @@ func TestService_GetSchedulingOperation(t *testing.T) {
 		ID:             1,
 		OperationType:  "update",
 		Status:         "running",
-		CreatedTime:    &createdTime,
+		CreatedTime:    &util.InfinityTime{Time: createdTime},
 		ErrorMessage:   "",
 		ConferenceName: "Updated Meeting",
 		ResourceURI:    "/api/admin/status/v1/scheduling_operation/1/",

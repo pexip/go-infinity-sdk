@@ -8,6 +8,7 @@ import (
 
 	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
 	"github.com/pexip/go-infinity-sdk/v38/options"
+	"github.com/pexip/go-infinity-sdk/v38/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -41,7 +42,7 @@ func TestService_ListWorkerVMStatusEvents(t *testing.T) {
 				State:                             &state,
 				Context:                           &contextValue,
 				Details:                           &details,
-				TimeChanged:                       &time.Time{},
+				TimeChanged:                       &util.InfinityTime{},
 				WorkerVMAddress:                   "192.168.1.10",
 				WorkerVMConfigurationID:           &configID,
 				WorkerVMConfigurationName:         &configName,
@@ -83,7 +84,7 @@ func TestService_GetWorkerVMStatusEvent(t *testing.T) {
 		State:                             &state,
 		Context:                           &contextValue,
 		Details:                           &details,
-		TimeChanged:                       &time.Time{},
+		TimeChanged:                       &util.InfinityTime{},
 		WorkerVMAddress:                   "192.168.1.20",
 		WorkerVMConfigurationID:           &configID,
 		WorkerVMConfigurationName:         &configName,

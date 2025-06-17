@@ -5,6 +5,7 @@ import (
 	"time"
 
 	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
+	util "github.com/pexip/go-infinity-sdk/v38/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -23,8 +24,8 @@ func TestService_ListCloudNodes(t *testing.T) {
 				Status:             "running",
 				InstanceType:       "m5.large",
 				Region:             "us-west-2",
-				LaunchTime:         &launchTime,
-				LastContactTime:    &lastContactTime,
+				LaunchTime:         &util.InfinityTime{Time: launchTime},
+				LastContactTime:    &util.InfinityTime{Time: lastContactTime},
 				CPU:                45.5,
 				Memory:             68.2,
 				ActiveConferences:  3,
@@ -37,8 +38,8 @@ func TestService_ListCloudNodes(t *testing.T) {
 				Status:             "running",
 				InstanceType:       "m5.xlarge",
 				Region:             "us-east-1",
-				LaunchTime:         &launchTime,
-				LastContactTime:    &lastContactTime,
+				LaunchTime:         &util.InfinityTime{Time: launchTime},
+				LastContactTime:    &util.InfinityTime{Time: lastContactTime},
 				CPU:                72.1,
 				Memory:             84.3,
 				ActiveConferences:  5,
@@ -78,8 +79,8 @@ func TestService_GetCloudNode(t *testing.T) {
 		Status:             "running",
 		InstanceType:       "m5.2xlarge",
 		Region:             "eu-west-1",
-		LaunchTime:         &launchTime,
-		LastContactTime:    &lastContactTime,
+		LaunchTime:         &util.InfinityTime{Time: launchTime},
+		LastContactTime:    &util.InfinityTime{Time: lastContactTime},
 		CPU:                85.7,
 		Memory:             76.4,
 		ActiveConferences:  8,

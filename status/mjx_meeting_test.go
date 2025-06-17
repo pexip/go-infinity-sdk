@@ -5,6 +5,7 @@ import (
 	"time"
 
 	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
+	"github.com/pexip/go-infinity-sdk/v38/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -21,8 +22,8 @@ func TestService_ListMJXMeetings(t *testing.T) {
 				ID:               "meeting-123",
 				Subject:          "Weekly Team Meeting",
 				Organizer:        "john.doe@company.com",
-				StartTime:        &startTime,
-				EndTime:          &endTime,
+				StartTime:        &util.InfinityTime{Time: startTime},
+				EndTime:          &util.InfinityTime{Time: endTime},
 				Status:           "active",
 				ParticipantCount: 8,
 				ConferenceAlias:  "team-weekly",
@@ -65,8 +66,8 @@ func TestService_ListMJXMeetings_WithOptions(t *testing.T) {
 				ID:               "meeting-options-test",
 				Subject:          "Test Meeting With Options",
 				Organizer:        "test@company.com",
-				StartTime:        &startTime,
-				EndTime:          &endTime,
+				StartTime:        &util.InfinityTime{Time: startTime},
+				EndTime:          &util.InfinityTime{Time: endTime},
 				Status:           "active",
 				ParticipantCount: 5,
 				ConferenceAlias:  "test-options",
@@ -98,8 +99,8 @@ func TestService_GetMJXMeeting(t *testing.T) {
 		ID:               "meeting-456",
 		Subject:          "Board Meeting",
 		Organizer:        "ceo@company.com",
-		StartTime:        &startTime,
-		EndTime:          &endTime,
+		StartTime:        &util.InfinityTime{Time: startTime},
+		EndTime:          &util.InfinityTime{Time: endTime},
 		Status:           "completed",
 		ParticipantCount: 12,
 		ConferenceAlias:  "board-meeting",

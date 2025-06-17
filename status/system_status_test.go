@@ -5,6 +5,7 @@ import (
 	"time"
 
 	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
+	"github.com/pexip/go-infinity-sdk/v38/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -16,7 +17,7 @@ func TestService_GetSystemStatus(t *testing.T) {
 		Status:      "healthy",
 		Version:     "29.0.0",
 		Uptime:      3600,
-		Timestamp:   time.Now(),
+		Timestamp:   util.InfinityTime{Time: time.Now()},
 		HostName:    "pexip-mgmt",
 		TotalMemory: 8589934592,
 		UsedMemory:  4294967296,

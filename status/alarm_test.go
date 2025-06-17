@@ -5,6 +5,7 @@ import (
 	"time"
 
 	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
+	util "github.com/pexip/go-infinity-sdk/v38/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -95,7 +96,7 @@ func TestService_GetAlarm(t *testing.T) {
 		Details:    "CPU usage is above 80%",
 		Instance:   "worker-1",
 		Node:       "worker-1",
-		TimeRaised: &timeRaised,
+		TimeRaised: &util.InfinityTime{Time: timeRaised},
 	}
 
 	client.On("GetJSON", t.Context(), "status/v1/alarm/1/", mock.AnythingOfType("*status.Alarm")).Return(nil).Run(func(args mock.Arguments) {

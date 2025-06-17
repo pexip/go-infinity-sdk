@@ -5,6 +5,7 @@ import (
 	"time"
 
 	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
+	util "github.com/pexip/go-infinity-sdk/v38/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -55,7 +56,7 @@ func TestService_GetBackplane(t *testing.T) {
 		Conference:           "Test Conference",
 		Type:                 "geo-backplane",
 		Protocol:             "MSSIP",
-		ConnectTime:          &connectTime,
+		ConnectTime:          &util.InfinityTime{Time: connectTime},
 		ServiceTag:           "tag123",
 		SystemLocation:       "main-site",
 		MediaNode:            "node1",

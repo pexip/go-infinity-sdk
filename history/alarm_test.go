@@ -8,6 +8,7 @@ import (
 
 	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
 	"github.com/pexip/go-infinity-sdk/v38/options"
+	"github.com/pexip/go-infinity-sdk/v38/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -36,7 +37,7 @@ func TestService_ListAlarms(t *testing.T) {
 				Level:       "warning",
 				Name:        "capacity_exhausted",
 				Node:        "192.168.1.1",
-				TimeRaised:  &time.Time{},
+				TimeRaised:  &util.InfinityTime{},
 				ResourceURI: "/api/admin/history/v1/alarm/1/",
 			},
 		},
@@ -68,7 +69,7 @@ func TestService_GetAlarm(t *testing.T) {
 		Level:       "critical",
 		Name:        "licenses_exhausted",
 		Node:        "192.168.1.1",
-		TimeRaised:  &time.Time{},
+		TimeRaised:  &util.InfinityTime{},
 		ResourceURI: "/api/admin/history/v1/alarm/1/",
 	}
 

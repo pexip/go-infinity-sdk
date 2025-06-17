@@ -6,6 +6,7 @@ import (
 
 	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
 	"github.com/pexip/go-infinity-sdk/v38/options"
+	"github.com/pexip/go-infinity-sdk/v38/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -86,7 +87,7 @@ func TestService_GetConferenceAlias(t *testing.T) {
 		Alias:        "test-alias",
 		Conference:   "/api/admin/configuration/v1/conference/1/",
 		Description:  "Test conference alias",
-		CreationTime: time.Now(),
+		CreationTime: util.InfinityTime{Time: time.Now()},
 	}
 
 	client.On("GetJSON", t.Context(), "configuration/v1/conference_alias/1/", mock.AnythingOfType("*config.ConferenceAlias")).Return(nil).Run(func(args mock.Arguments) {

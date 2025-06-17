@@ -335,7 +335,7 @@ type TeamsNodeCall struct {
 }
 
 type WorkerVM struct {
-	BootTime              string            `json:"boot_time"`
+	BootTime              util.InfinityTime `json:"boot_time"`
 	ConfigurationID       int               `json:"configuration_id"`
 	CPUCapabilities       string            `json:"cpu_capabilities"`
 	CPUCount              int               `json:"cpu_count"`

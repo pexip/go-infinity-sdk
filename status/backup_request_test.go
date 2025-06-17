@@ -14,29 +14,25 @@ func TestService_ListBackupRequests(t *testing.T) {
 	client := &mockClient.Client{}
 
 	created := time.Now().Add(-2 * time.Hour)
-	started := time.Now().Add(-1 * time.Hour)
-	completed := time.Now()
+	updated := time.Now().Add(-30 * time.Minute)
 
 	expectedResponse := &BackupRequestListResponse{
 		Objects: []BackupRequest{
 			{
-				ID:          1,
-				Status:      "completed",
-				Created:     &util.InfinityTime{Time: created},
-				Started:     &util.InfinityTime{Time: started},
-				Completed:   &util.InfinityTime{Time: completed},
-				Size:        1024000000,
-				Description: "Scheduled backup",
+				CreatedAt:   &util.InfinityTime{Time: created},
+				UpdatedAt:   &util.InfinityTime{Time: updated},
+				DownloadURI: "/downloads/backup/1",
+				Message:     "Backup completed successfully",
 				ResourceURI: "/api/admin/status/v1/backup_request/1/",
+				State:       "completed",
 			},
 			{
-				ID:          2,
-				Status:      "running",
-				Created:     &util.InfinityTime{Time: created},
-				Started:     &util.InfinityTime{Time: started},
-				Size:        0,
-				Description: "Manual backup",
+				CreatedAt:   &util.InfinityTime{Time: created},
+				UpdatedAt:   nil,
+				DownloadURI: "",
+				Message:     "Backup in progress",
 				ResourceURI: "/api/admin/status/v1/backup_request/2/",
+				State:       "running",
 			},
 		},
 	}
@@ -51,29 +47,33 @@ func TestService_ListBackupRequests(t *testing.T) {
 
 	assert.NoError(t, err)
 	assert.Equal(t, 2, len(result.Objects))
-	assert.Equal(t, "completed", result.Objects[0].Status)
-	assert.Equal(t, "Scheduled backup", result.Objects[0].Description)
-	assert.Equal(t, int64(1024000000), result.Objects[0].Size)
-	assert.Equal(t, "running", result.Objects[1].Status)
-	assert.Equal(t, "Manual backup", result.Objects[1].Description)
+	assert.Equal(t, "completed", result.Objects[0].State)
+	assert.Equal(t, "Backup completed successfully", result.Objects[0].Message)
+	assert.Equal(t, "/downloads/backup/1", result.Objects[0].DownloadURI)
+	assert.Equal(t, "/api/admin/status/v1/backup_request/1/", result.Objects[0].ResourceURI)
+	assert.Equal(t, created.Unix(), result.Objects[0].CreatedAt.Time.Unix())
+	assert.Equal(t, updated.Unix(), result.Objects[0].UpdatedAt.Time.Unix())
+	assert.Equal(t, "running", result.Objects[1].State)
+	assert.Equal(t, "Backup in progress", result.Objects[1].Message)
+	assert.Equal(t, "", result.Objects[1].DownloadURI)
+	assert.Equal(t, "/api/admin/status/v1/backup_request/2/", result.Objects[1].ResourceURI)
+	assert.Equal(t, created.Unix(), result.Objects[1].CreatedAt.Time.Unix())
+	assert.Nil(t, result.Objects[1].UpdatedAt)
 	client.AssertExpectations(t)
 }
 
 func TestService_GetBackupRequest(t *testing.T) {
 	client := &mockClient.Client{}
 	created := time.Now().Add(-3 * time.Hour)
-	started := time.Now().Add(-2 * time.Hour)
 	completed := time.Now().Add(-1 * time.Hour)
 
 	expectedRequest := &BackupRequest{
-		ID:          1,
-		Status:      "completed",
-		Created:     &util.InfinityTime{Time: created},
-		Started:     &util.InfinityTime{Time: started},
-		Completed:   &util.InfinityTime{Time: completed},
-		Size:        2048000000,
-		Description: "Full system backup",
+		CreatedAt:   &util.InfinityTime{Time: created},
+		UpdatedAt:   &util.InfinityTime{Time: completed},
+		DownloadURI: "/downloads/backup/1",
+		Message:     "Full system backup completed",
 		ResourceURI: "/api/admin/status/v1/backup_request/1/",
+		State:       "completed",
 	}
 
 	client.On("GetJSON", t.Context(), "status/v1/backup_request/1/", mock.AnythingOfType("*status.BackupRequest")).Return(nil).Run(func(args mock.Arguments) {
@@ -86,9 +86,12 @@ func TestService_GetBackupRequest(t *testing.T) {
 
 	assert.NoError(t, err)
 	assert.Equal(t, expectedRequest, result)
-	assert.Equal(t, "completed", result.Status)
-	assert.Equal(t, "Full system backup", result.Description)
-	assert.Equal(t, int64(2048000000), result.Size)
+	assert.Equal(t, "completed", result.State)
+	assert.Equal(t, "Full system backup completed", result.Message)
+	assert.Equal(t, "/downloads/backup/1", result.DownloadURI)
+	assert.Equal(t, "/api/admin/status/v1/backup_request/1/", result.ResourceURI)
+	assert.Equal(t, created.Unix(), result.CreatedAt.Time.Unix())
+	assert.Equal(t, completed.Unix(), result.UpdatedAt.Time.Unix())
 	client.AssertExpectations(t)
 }
 
@@ -102,12 +105,21 @@ func TestService_ListBackupRequests_WithOptions(t *testing.T) {
 	}
 
 	expectedResponse := &BackupRequestListResponse{
+		Meta: Meta{
+			Limit:      10,
+			Next:       "",
+			Offset:     0,
+			Previous:   "",
+			TotalCount: 1,
+		},
 		Objects: []BackupRequest{
 			{
-				ID:          1,
-				Status:      "pending",
-				Description: "Automated backup",
-				Size:        0,
+				CreatedAt:   nil,
+				UpdatedAt:   nil,
+				DownloadURI: "",
+				Message:     "Automated backup pending",
+				ResourceURI: "/api/admin/status/v1/backup_request/3/",
+				State:       "pending",
 			},
 		},
 	}
@@ -122,8 +134,10 @@ func TestService_ListBackupRequests_WithOptions(t *testing.T) {
 	result, err := service.ListBackupRequests(t.Context(), opts)
 	assert.NoError(t, err)
 	assert.Equal(t, 1, len(result.Objects))
-	assert.Equal(t, "pending", result.Objects[0].Status)
-	assert.Equal(t, "Automated backup", result.Objects[0].Description)
+	assert.Equal(t, "pending", result.Objects[0].State)
+	assert.Equal(t, "Automated backup pending", result.Objects[0].Message)
+	assert.Equal(t, "/api/admin/status/v1/backup_request/3/", result.Objects[0].ResourceURI)
+	assert.Equal(t, 1, result.Meta.TotalCount)
 
 	client.AssertExpectations(t)
 }

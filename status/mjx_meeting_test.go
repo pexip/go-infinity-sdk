@@ -19,15 +19,22 @@ func TestService_ListMJXMeetings(t *testing.T) {
 	expectedResponse := &MJXMeetingListResponse{
 		Objects: []MJXMeeting{
 			{
-				ID:               "meeting-123",
-				Subject:          "Weekly Team Meeting",
-				Organizer:        "john.doe@company.com",
-				StartTime:        &util.InfinityTime{Time: startTime},
-				EndTime:          &util.InfinityTime{Time: endTime},
-				Status:           "active",
-				ParticipantCount: 8,
-				ConferenceAlias:  "team-weekly",
-				ResourceURI:      "/api/admin/status/v1/mjx_meeting/meeting-123/",
+				Alias:                        "team-weekly",
+				EndTime:                      &util.InfinityTime{Time: endTime},
+				EndpointName:                 "endpoint-1",
+				ID:                           123,
+				LastModifiedTime:             nil,
+				MatchedMeetingProcessingRule: "",
+				MeetingID:                    "meeting-123",
+				MJXIntegrationID:             0,
+				MJXIntegrationName:           "",
+				OrganizerEmail:               "john.doe@company.com",
+				OrganizerName:                "",
+				ResourceURI:                  "/api/admin/status/v1/mjx_meeting/meeting-123/",
+				RoomEmail:                    "",
+				StartTime:                    &util.InfinityTime{Time: startTime},
+				Subject:                      "Weekly Team Meeting",
+				WorkerID:                     0,
 			},
 		},
 	}
@@ -43,9 +50,14 @@ func TestService_ListMJXMeetings(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, 1, len(result.Objects))
 	assert.Equal(t, "Weekly Team Meeting", result.Objects[0].Subject)
-	assert.Equal(t, "john.doe@company.com", result.Objects[0].Organizer)
-	assert.Equal(t, "active", result.Objects[0].Status)
-	assert.Equal(t, 8, result.Objects[0].ParticipantCount)
+	assert.Equal(t, "john.doe@company.com", result.Objects[0].OrganizerEmail)
+	assert.Equal(t, "team-weekly", result.Objects[0].Alias)
+	assert.Equal(t, "meeting-123", result.Objects[0].MeetingID)
+	assert.Equal(t, "/api/admin/status/v1/mjx_meeting/meeting-123/", result.Objects[0].ResourceURI)
+	assert.Equal(t, 123, result.Objects[0].ID)
+	assert.Equal(t, "endpoint-1", result.Objects[0].EndpointName)
+	assert.Equal(t, startTime.Unix(), result.Objects[0].StartTime.Time.Unix())
+	assert.Equal(t, endTime.Unix(), result.Objects[0].EndTime.Time.Unix())
 	client.AssertExpectations(t)
 }
 
@@ -63,14 +75,22 @@ func TestService_ListMJXMeetings_WithOptions(t *testing.T) {
 	expectedResponse := &MJXMeetingListResponse{
 		Objects: []MJXMeeting{
 			{
-				ID:               "meeting-options-test",
-				Subject:          "Test Meeting With Options",
-				Organizer:        "test@company.com",
-				StartTime:        &util.InfinityTime{Time: startTime},
-				EndTime:          &util.InfinityTime{Time: endTime},
-				Status:           "active",
-				ParticipantCount: 5,
-				ConferenceAlias:  "test-options",
+				Alias:                        "test-options",
+				EndTime:                      &util.InfinityTime{Time: endTime},
+				EndpointName:                 "endpoint-test",
+				ID:                           456,
+				LastModifiedTime:             nil,
+				MatchedMeetingProcessingRule: "",
+				MeetingID:                    "meeting-options-test",
+				MJXIntegrationID:             0,
+				MJXIntegrationName:           "",
+				OrganizerEmail:               "test@company.com",
+				OrganizerName:                "",
+				ResourceURI:                  "",
+				RoomEmail:                    "",
+				StartTime:                    &util.InfinityTime{Time: startTime},
+				Subject:                      "Test Meeting With Options",
+				WorkerID:                     0,
 			},
 		},
 	}
@@ -86,6 +106,12 @@ func TestService_ListMJXMeetings_WithOptions(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, 1, len(result.Objects))
 	assert.Equal(t, "Test Meeting With Options", result.Objects[0].Subject)
+	assert.Equal(t, "test@company.com", result.Objects[0].OrganizerEmail)
+	assert.Equal(t, "test-options", result.Objects[0].Alias)
+	assert.Equal(t, "meeting-options-test", result.Objects[0].MeetingID)
+	assert.Equal(t, "endpoint-test", result.Objects[0].EndpointName)
+	assert.Equal(t, startTime.Unix(), result.Objects[0].StartTime.Time.Unix())
+	assert.Equal(t, endTime.Unix(), result.Objects[0].EndTime.Time.Unix())
 
 	client.AssertExpectations(t)
 }
@@ -96,15 +122,22 @@ func TestService_GetMJXMeeting(t *testing.T) {
 	startTime := time.Now().Add(-2 * time.Hour)
 	endTime := time.Now().Add(-1 * time.Hour)
 	expectedMeeting := &MJXMeeting{
-		ID:               "meeting-456",
-		Subject:          "Board Meeting",
-		Organizer:        "ceo@company.com",
-		StartTime:        &util.InfinityTime{Time: startTime},
-		EndTime:          &util.InfinityTime{Time: endTime},
-		Status:           "completed",
-		ParticipantCount: 12,
-		ConferenceAlias:  "board-meeting",
-		ResourceURI:      "/api/admin/status/v1/mjx_meeting/meeting-456/",
+		Alias:                        "board-meeting",
+		EndTime:                      &util.InfinityTime{Time: endTime},
+		EndpointName:                 "endpoint-board",
+		ID:                           789,
+		LastModifiedTime:             nil,
+		MatchedMeetingProcessingRule: "",
+		MeetingID:                    "meeting-456",
+		MJXIntegrationID:             0,
+		MJXIntegrationName:           "",
+		OrganizerEmail:               "ceo@company.com",
+		OrganizerName:                "",
+		ResourceURI:                  "/api/admin/status/v1/mjx_meeting/meeting-456/",
+		RoomEmail:                    "",
+		StartTime:                    &util.InfinityTime{Time: startTime},
+		Subject:                      "Board Meeting",
+		WorkerID:                     0,
 	}
 
 	client.On("GetJSON", t.Context(), "status/v1/mjx_meeting/meeting-456/", mock.AnythingOfType("*status.MJXMeeting")).Return(nil).Run(func(args mock.Arguments) {
@@ -118,6 +151,13 @@ func TestService_GetMJXMeeting(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, expectedMeeting, result)
 	assert.Equal(t, "Board Meeting", result.Subject)
-	assert.Equal(t, "completed", result.Status)
+	assert.Equal(t, "ceo@company.com", result.OrganizerEmail)
+	assert.Equal(t, "board-meeting", result.Alias)
+	assert.Equal(t, "meeting-456", result.MeetingID)
+	assert.Equal(t, "/api/admin/status/v1/mjx_meeting/meeting-456/", result.ResourceURI)
+	assert.Equal(t, 789, result.ID)
+	assert.Equal(t, "endpoint-board", result.EndpointName)
+	assert.Equal(t, startTime.Unix(), result.StartTime.Time.Unix())
+	assert.Equal(t, endTime.Unix(), result.EndTime.Time.Unix())
 	client.AssertExpectations(t)
 }

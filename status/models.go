@@ -1,7 +1,7 @@
 package status
 
 import (
-	util "github.com/pexip/go-infinity-sdk/v38/util"
+	"github.com/pexip/go-infinity-sdk/v38/util"
 )
 
 // Meta represents the pagination metadata for list responses
@@ -41,66 +41,53 @@ type ConferenceStatus struct {
 
 // Participant represents a participant status
 type Participant struct {
-	ID               string            `json:"id"`
-	UUID             string            `json:"uuid"`
-	DisplayName      string            `json:"display_name"`
-	ConferenceID     int               `json:"conference_id"`
-	ConferenceName   string            `json:"conference_name"`
-	ServiceType      string            `json:"service_type"`
-	Role             string            `json:"role"`
-	ConnectTime      util.InfinityTime `json:"connect_time"`
-	IsOnHold         bool              `json:"is_on_hold"`
-	IsMuted          bool              `json:"is_muted"`
-	IsGuest          bool              `json:"is_guest"`
-	IsWaiting        bool              `json:"is_waiting"`
-	HasMedia         bool              `json:"has_media"`
-	IsPresenting     bool              `json:"is_presenting"`
-	Bandwidth        int               `json:"bandwidth"`
-	CallDirection    string            `json:"call_direction"`
-	CallUUID         string            `json:"call_uuid"`
-	DestinationAlias string            `json:"destination_alias"`
-	SourceAlias      string            `json:"source_alias"`
-	RemoteAddress    string            `json:"remote_address"`
-	RemotePort       int               `json:"remote_port"`
-	Protocol         string            `json:"protocol"`
-	VendorID         string            `json:"vendor_id"`
-	ParentID         string            `json:"parent_id"`
-	SystemLocation   string            `json:"system_location"`
-	NodeID           string            `json:"node_id"`
-	ResourceURI      string            `json:"resource_uri"`
-}
-
-// WorkerVM represents a worker node status
-type WorkerVM struct {
-	ID                    int                `json:"id"`
-	ConfigurationID       int                `json:"configuration_id"`
-	Name                  string             `json:"name"`
-	NodeType              string             `json:"node_type"`
-	SystemLocation        string             `json:"system_location"`
-	SyncStatus            string             `json:"sync_status"`
-	UpgradeStatus         string             `json:"upgrade_status"`
-	Version               string             `json:"version"`
-	BootTime              *util.InfinityTime `json:"boot_time,omitempty"`
-	LastAttemptedContact  *util.InfinityTime `json:"last_attempted_contact,omitempty"`
-	LastUpdated           *util.InfinityTime `json:"last_updated,omitempty"`
-	MaintenanceMode       bool               `json:"maintenance_mode"`
-	MaintenanceModeReason string             `json:"maintenance_mode_reason"`
-	CPUCapabilities       string             `json:"cpu_capabilities"`
-	CPUCount              int                `json:"cpu_count"`
-	CPUModel              string             `json:"cpu_model"`
-	TotalRAM              int                `json:"total_ram"`
-	Hypervisor            string             `json:"hypervisor"`
-	DeployStatus          string             `json:"deploy_status"`
-	MaxAudioCalls         int                `json:"max_audio_calls"`
-	MaxSDCalls            int                `json:"max_sd_calls"`
-	MaxHDCalls            int                `json:"max_hd_calls"`
-	MaxFullHDCalls        int                `json:"max_full_hd_calls"`
-	MaxDirectParticipants int                `json:"max_direct_participants"`
-	MaxMediaTokens        int                `json:"max_media_tokens"`
-	MediaTokensUsed       int                `json:"media_tokens_used"`
-	MediaLoad             int                `json:"media_load"`
-	SignalingCount        int                `json:"signaling_count"`
-	ResourceURI           string             `json:"resource_uri"`
+	Bandwidth               int               `json:"bandwidth"`
+	CallDirection           string            `json:"call_direction"`
+	CallQuality             string            `json:"call_quality"`
+	CallTag                 string            `json:"call_tag"`
+	CallUUID                string            `json:"call_uuid"`
+	Conference              string            `json:"conference"`
+	ConnectTime             util.InfinityTime `json:"connect_time"`
+	ConversationID          string            `json:"conversation_id"`
+	DestinationAlias        string            `json:"destination_alias"`
+	DisplayName             string            `json:"display_name"`
+	Encryption              string            `json:"encryption"`
+	HasMedia                bool              `json:"has_media"`
+	ID                      string            `json:"id"`
+	IdpUUID                 string            `json:"idp_uuid"`
+	IsClientMuted           bool              `json:"is_client_muted"`
+	IsDirect                bool              `json:"is_direct"`
+	IsDisconnectSupported   bool              `json:"is_disconnect_supported"`
+	IsIdpAuthenticated      bool              `json:"is_idp_authenticated"`
+	IsMuteSupported         bool              `json:"is_mute_supported"`
+	IsMuted                 bool              `json:"is_muted"`
+	IsOnHold                bool              `json:"is_on_hold"`
+	IsPresentationSupported bool              `json:"is_presentation_supported"`
+	IsPresenting            bool              `json:"is_presenting"`
+	IsRecording             bool              `json:"is_recording"`
+	IsStreaming             bool              `json:"is_streaming"`
+	IsTranscribing          bool              `json:"is_transcribing"`
+	IsTransferSupported     bool              `json:"is_transfer_supported"`
+	LicenseCount            int               `json:"license_count"`
+	LicenseType             string            `json:"license_type"`
+	MediaNode               string            `json:"media_node"`
+	ParentID                string            `json:"parent_id"`
+	ParticipantAlias        string            `json:"participant_alias"`
+	Protocol                string            `json:"protocol"`
+	ProxyNode               string            `json:"proxy_node"`
+	RemoteAddress           string            `json:"remote_address"`
+	RemotePort              int               `json:"remote_port"`
+	ResourceURI             string            `json:"resource_uri"`
+	Role                    string            `json:"role"`
+	RxBandwidth             int               `json:"rx_bandwidth"`
+	ServiceTag              string            `json:"service_tag"`
+	ServiceType             string            `json:"service_type"`
+	SignallingNode          string            `json:"signalling_node"`
+	SourceAlias             string            `json:"source_alias"`
+	SystemLocation          string            `json:"system_location"`
+	TranscodingEnabled      bool              `json:"transcoding_enabled"`
+	TxBandwidth             int               `json:"tx_bandwidth"`
+	Vendor                  string            `json:"vendor"`
 }
 
 // Alarm represents a system alarm
@@ -148,13 +135,13 @@ type BackupRequest struct {
 
 // CloudMonitoredLocation represents a cloud monitored location status
 type CloudMonitoredLocation struct {
-	ID            int    `json:"id"`
-	Name          string `json:"name"`
-	Region        string `json:"region"`
-	Status        string `json:"status"`
-	InstanceCount int    `json:"instance_count"`
-	ActiveCalls   int    `json:"active_calls"`
-	ResourceURI   string `json:"resource_uri"`
+	FreeHDCalls      int    `json:"free_hd_calls"`
+	ID               int    `json:"id"`
+	MaxHDCalls       int    `json:"max_hd_calls"`
+	MediaLoad        int    `json:"media_load"`
+	Name             string `json:"name"`
+	OverflowLocation string `json:"overflow_location"`
+	ResourceURI      string `json:"resource_uri"`
 }
 
 // CloudNode represents a cloud node status
@@ -345,6 +332,39 @@ type TeamsNodeCall struct {
 	Duration        int                `json:"duration"`
 	Status          string             `json:"status"`
 	ResourceURI     string             `json:"resource_uri"`
+}
+
+type WorkerVM struct {
+	BootTime              string            `json:"boot_time"`
+	ConfigurationID       int               `json:"configuration_id"`
+	CPUCapabilities       string            `json:"cpu_capabilities"`
+	CPUCount              int               `json:"cpu_count"`
+	CPUModel              string            `json:"cpu_model"`
+	DeployStatus          string            `json:"deploy_status"`
+	Hypervisor            string            `json:"hypervisor"`
+	ID                    int               `json:"id"`
+	LastAttemptedContact  util.InfinityTime `json:"last_attempted_contact"`
+	LastReported          util.InfinityTime `json:"last_reported"`
+	LastUpdated           util.InfinityTime `json:"last_updated"`
+	MaintenanceMode       bool              `json:"maintenance_mode"`
+	MaintenanceModeReason string            `json:"maintenance_mode_reason"`
+	MaxAudioCalls         int               `json:"max_audio_calls"`
+	MaxDirectParticipants int               `json:"max_direct_participants"`
+	MaxFullHDCalls        int               `json:"max_full_hd_calls"`
+	MaxHDCalls            int               `json:"max_hd_calls"`
+	MaxMediaTokens        int               `json:"max_media_tokens"`
+	MaxSDCalls            int               `json:"max_sd_calls"`
+	MediaLoad             int               `json:"media_load"`
+	MediaTokensUsed       int               `json:"media_tokens_used"`
+	Name                  string            `json:"name"`
+	NodeType              string            `json:"node_type"`
+	ResourceURI           string            `json:"resource_uri"`
+	SignalingCount        int               `json:"signaling_count"`
+	SyncStatus            string            `json:"sync_status"`
+	SystemLocation        string            `json:"system_location"`
+	TotalRAM              int               `json:"total_ram"`
+	UpgradeStatus         string            `json:"upgrade_status"`
+	Version               string            `json:"version"`
 }
 
 type ConferenceListResponse struct {

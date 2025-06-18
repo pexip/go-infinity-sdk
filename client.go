@@ -227,6 +227,10 @@ func (c *Client) PostJSON(ctx context.Context, endpoint string, body interface{}
 	return c.performJSONRequest(ctx, http.MethodPost, endpoint, body, result)
 }
 
+func (c *Client) PostJSONRawBodyResponse(ctx context.Context, endpoint string, requestBody interface{}) (*config.ResourceCreateResponse, error) {
+	return c.performJSONPOSTRequest(ctx, endpoint, requestBody)
+}
+
 // PutJSON performs a PUT request with JSON body and unmarshal the JSON response
 func (c *Client) PutJSON(ctx context.Context, endpoint string, body interface{}, result interface{}) error {
 	return c.performJSONRequest(ctx, http.MethodPut, endpoint, body, result)
@@ -235,6 +239,25 @@ func (c *Client) PutJSON(ctx context.Context, endpoint string, body interface{},
 // DeleteJSON performs a DELETE request and unmarshal the JSON response
 func (c *Client) DeleteJSON(ctx context.Context, endpoint string, result interface{}) error {
 	return c.performJSONRequest(ctx, http.MethodDelete, endpoint, nil, result)
+}
+
+func (c *Client) performJSONPOSTRequest(ctx context.Context, endpoint string, requestBody interface{}) (*config.ResourceCreateResponse, error) {
+	req := &Request{
+		Method:   http.MethodPost,
+		Endpoint: endpoint,
+		Body:     requestBody,
+	}
+
+	resp, err := c.DoRequest(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	r := &config.ResourceCreateResponse{
+		ResourceURI: resp.Headers.Get("Location"),
+		Body:        string(resp.Body),
+	}
+	return r, nil
 }
 
 func (c *Client) performJSONRequest(ctx context.Context, method string, endpoint string, requestBody interface{}, result interface{}) error {

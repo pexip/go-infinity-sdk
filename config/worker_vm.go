@@ -31,12 +31,11 @@ func (s *Service) GetWorkerVM(ctx context.Context, id int) (*WorkerVM, error) {
 }
 
 // CreateWorkerVM creates a new worker VM
-func (s *Service) CreateWorkerVM(ctx context.Context, req *WorkerVMCreateRequest) (*WorkerVM, error) {
+func (s *Service) CreateWorkerVM(ctx context.Context, req *WorkerVMCreateRequest) (*ResourceCreateResponse, error) {
 	endpoint := "configuration/v1/worker_vm/"
 
-	var result WorkerVM
-	err := s.client.PostJSON(ctx, endpoint, req, &result)
-	return &result, err
+	resp, err := s.client.PostJSONRawBodyResponse(ctx, endpoint, req)
+	return resp, err
 }
 
 // UpdateWorkerVM updates an existing worker VM

@@ -6,6 +6,7 @@ import (
 
 	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
 	"github.com/pexip/go-infinity-sdk/v38/options"
+	"github.com/pexip/go-infinity-sdk/v38/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -108,23 +109,17 @@ func TestService_CreateConference(t *testing.T) {
 		AllowGuests: true,
 	}
 
-	expectedConference := &Conference{
-		ID:          1,
-		Name:        "New Conference",
-		ServiceType: "conference",
-		AllowGuests: true,
+	expectedResponse := &types.PostResponse{
+		Body:        []byte{},
+		ResourceURI: "/api/admin/configuration/v1/conference/123/",
 	}
-
-	client.On("PostJSON", t.Context(), "configuration/v1/conference/", createRequest, mock.AnythingOfType("*config.Conference")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(3).(*Conference)
-		*result = *expectedConference
-	})
+	client.On("PostWithResponse", t.Context(), "configuration/v1/conference/", createRequest, nil).Return(expectedResponse, nil)
 
 	service := New(client)
 	result, err := service.CreateConference(t.Context(), createRequest)
 
 	assert.NoError(t, err)
-	assert.Equal(t, expectedConference, result)
+	assert.Equal(t, expectedResponse, result)
 	client.AssertExpectations(t)
 }
 
@@ -250,7 +245,7 @@ func TestService_ConferenceErrorHandling(t *testing.T) {
 		{
 			name: "CreateConference client error",
 			setup: func(m *mockClient.Client) {
-				m.On("PostJSON", t.Context(), "configuration/v1/conference/", mock.Anything, mock.AnythingOfType("*config.Conference")).Return(errors.New("validation error"))
+				m.On("PostWithResponse", t.Context(), "configuration/v1/conference/", mock.Anything, nil).Return(nil, errors.New("validation error"))
 			},
 			operation: func(service *Service) error {
 				_, err := service.CreateConference(t.Context(), &ConferenceCreateRequest{Name: "Test"})

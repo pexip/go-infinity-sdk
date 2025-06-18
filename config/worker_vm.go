@@ -33,24 +33,9 @@ func (s *Service) GetWorkerVM(ctx context.Context, id int) (*WorkerVM, error) {
 }
 
 // CreateWorkerVM creates a new worker VM
-func (s *Service) CreateWorkerVM(ctx context.Context, req *WorkerVMCreateRequest) (*WorkerVM, error) {
+func (s *Service) CreateWorkerVM(ctx context.Context, req *WorkerVMCreateRequest) (*types.PostResponse, error) {
 	endpoint := "configuration/v1/worker_vm/"
-
-	var result WorkerVM
-	err := s.client.PostJSON(ctx, endpoint, req, &result)
-	return &result, err
-}
-
-// CreateWorkerVMWithResponse creates a new worker VM and returns both the response body and location header
-func (s *Service) CreateWorkerVMWithResponse(ctx context.Context, req *WorkerVMCreateRequest) (*WorkerVM, *types.PostResponse, error) {
-	endpoint := "configuration/v1/worker_vm/"
-
-	var result WorkerVM
-	postResp, err := s.client.PostWithResponse(ctx, endpoint, req, &result)
-	if err != nil {
-		return nil, postResp, err
-	}
-	return &result, postResp, nil
+	return s.client.PostWithResponse(ctx, endpoint, req, nil)
 }
 
 // UpdateWorkerVM updates an existing worker VM

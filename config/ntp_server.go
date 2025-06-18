@@ -33,24 +33,9 @@ func (s *Service) GetNTPServer(ctx context.Context, id int) (*NTPServer, error) 
 }
 
 // CreateNTPServer creates a new NTP server
-func (s *Service) CreateNTPServer(ctx context.Context, req *NTPServerCreateRequest) (*NTPServer, error) {
+func (s *Service) CreateNTPServer(ctx context.Context, req *NTPServerCreateRequest) (*types.PostResponse, error) {
 	endpoint := "configuration/v1/ntp_server/"
-
-	var result NTPServer
-	err := s.client.PostJSON(ctx, endpoint, req, &result)
-	return &result, err
-}
-
-// CreateNTPServerWithResponse creates a new NTP server and returns both the response body and location header
-func (s *Service) CreateNTPServerWithResponse(ctx context.Context, req *NTPServerCreateRequest) (*NTPServer, *types.PostResponse, error) {
-	endpoint := "configuration/v1/ntp_server/"
-
-	var result NTPServer
-	postResp, err := s.client.PostWithResponse(ctx, endpoint, req, &result)
-	if err != nil {
-		return nil, postResp, err
-	}
-	return &result, postResp, nil
+	return s.client.PostWithResponse(ctx, endpoint, req, nil)
 }
 
 // UpdateNTPServer updates an existing NTP server

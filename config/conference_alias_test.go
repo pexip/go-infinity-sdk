@@ -6,6 +6,7 @@ import (
 
 	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
 	"github.com/pexip/go-infinity-sdk/v38/options"
+	"github.com/pexip/go-infinity-sdk/v38/types"
 	"github.com/pexip/go-infinity-sdk/v38/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -112,23 +113,17 @@ func TestService_CreateConferenceAlias(t *testing.T) {
 		Description: "New test alias",
 	}
 
-	expectedAlias := &ConferenceAlias{
-		ID:          1,
-		Alias:       "new-alias",
-		Conference:  "/api/admin/configuration/v1/conference/1/",
-		Description: "New test alias",
+	expectedResponse := &types.PostResponse{
+		Body:        []byte{},
+		ResourceURI: "/api/admin/configuration/v1/conference_alias/123/",
 	}
-
-	client.On("PostJSON", t.Context(), "configuration/v1/conference_alias/", createRequest, mock.AnythingOfType("*config.ConferenceAlias")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(3).(*ConferenceAlias)
-		*result = *expectedAlias
-	})
+	client.On("PostWithResponse", t.Context(), "configuration/v1/conference_alias/", createRequest, nil).Return(expectedResponse, nil)
 
 	service := New(client)
 	result, err := service.CreateConferenceAlias(t.Context(), createRequest)
 
 	assert.NoError(t, err)
-	assert.Equal(t, expectedAlias, result)
+	assert.Equal(t, expectedResponse, result)
 	client.AssertExpectations(t)
 }
 

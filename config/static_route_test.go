@@ -5,6 +5,7 @@ import (
 
 	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
 	"github.com/pexip/go-infinity-sdk/v38/options"
+	"github.com/pexip/go-infinity-sdk/v38/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -110,24 +111,18 @@ func TestService_CreateStaticRoute(t *testing.T) {
 		Gateway: "192.168.1.1",
 	}
 
-	expectedRoute := &StaticRoute{
-		ID:      1,
-		Name:    "new-route",
-		Address: "172.16.0.0",
-		Prefix:  16,
-		Gateway: "192.168.1.1",
+	expectedResponse := &types.PostResponse{
+		Body:        []byte{},
+		ResourceURI: "/api/admin/configuration/v1/static_route/123/",
 	}
 
-	client.On("PostJSON", t.Context(), "configuration/v1/static_route/", createRequest, mock.AnythingOfType("*config.StaticRoute")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(3).(*StaticRoute)
-		*result = *expectedRoute
-	})
+	client.On("PostWithResponse", t.Context(), "configuration/v1/static_route/", createRequest, nil).Return(expectedResponse, nil)
 
 	service := New(client)
 	result, err := service.CreateStaticRoute(t.Context(), createRequest)
 
 	assert.NoError(t, err)
-	assert.Equal(t, expectedRoute, result)
+	assert.Equal(t, expectedResponse, result)
 	client.AssertExpectations(t)
 }
 

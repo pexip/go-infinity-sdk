@@ -5,6 +5,7 @@ import (
 
 	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
 	"github.com/pexip/go-infinity-sdk/v38/options"
+	"github.com/pexip/go-infinity-sdk/v38/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -112,24 +113,18 @@ func TestService_CreateEndUser(t *testing.T) {
 		DisplayName:         "New User",
 	}
 
-	expectedUser := &EndUser{
-		ID:                  1,
-		PrimaryEmailAddress: "newuser@example.com",
-		FirstName:           "New",
-		LastName:            "User",
-		DisplayName:         "New User",
+	expectedResponse := &types.PostResponse{
+		Body:        []byte{},
+		ResourceURI: "/api/admin/configuration/v1/end_user/123/",
 	}
 
-	client.On("PostJSON", t.Context(), "configuration/v1/end_user/", createRequest, mock.AnythingOfType("*config.EndUser")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(3).(*EndUser)
-		*result = *expectedUser
-	})
+	client.On("PostWithResponse", t.Context(), "configuration/v1/end_user/", createRequest, nil).Return(expectedResponse, nil)
 
 	service := New(client)
 	result, err := service.CreateEndUser(t.Context(), createRequest)
 
 	assert.NoError(t, err)
-	assert.Equal(t, expectedUser, result)
+	assert.Equal(t, expectedResponse, result)
 	client.AssertExpectations(t)
 }
 

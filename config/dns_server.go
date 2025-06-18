@@ -33,24 +33,9 @@ func (s *Service) GetDNSServer(ctx context.Context, id int) (*DNSServer, error) 
 }
 
 // CreateDNSServer creates a new DNS server
-func (s *Service) CreateDNSServer(ctx context.Context, req *DNSServerCreateRequest) (*DNSServer, error) {
+func (s *Service) CreateDNSServer(ctx context.Context, req *DNSServerCreateRequest) (*types.PostResponse, error) {
 	endpoint := "configuration/v1/dns_server/"
-
-	var result DNSServer
-	err := s.client.PostJSON(ctx, endpoint, req, &result)
-	return &result, err
-}
-
-// CreateDNSServerWithResponse creates a new DNS server and returns both the response body and location header
-func (s *Service) CreateDNSServerWithResponse(ctx context.Context, req *DNSServerCreateRequest) (*DNSServer, *types.PostResponse, error) {
-	endpoint := "configuration/v1/dns_server/"
-
-	var result DNSServer
-	postResp, err := s.client.PostWithResponse(ctx, endpoint, req, &result)
-	if err != nil {
-		return nil, postResp, err
-	}
-	return &result, postResp, nil
+	return s.client.PostWithResponse(ctx, endpoint, req, nil)
 }
 
 // UpdateDNSServer updates an existing DNS server

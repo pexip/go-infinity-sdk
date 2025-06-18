@@ -33,24 +33,9 @@ func (s *Service) GetConferenceAlias(ctx context.Context, id int) (*ConferenceAl
 }
 
 // CreateConferenceAlias creates a new conference alias
-func (s *Service) CreateConferenceAlias(ctx context.Context, req *ConferenceAliasCreateRequest) (*ConferenceAlias, error) {
+func (s *Service) CreateConferenceAlias(ctx context.Context, req *ConferenceAliasCreateRequest) (*types.PostResponse, error) {
 	endpoint := "configuration/v1/conference_alias/"
-
-	var result ConferenceAlias
-	err := s.client.PostJSON(ctx, endpoint, req, &result)
-	return &result, err
-}
-
-// CreateConferenceAliasWithResponse creates a new conference alias and returns both the response body and location header
-func (s *Service) CreateConferenceAliasWithResponse(ctx context.Context, req *ConferenceAliasCreateRequest) (*ConferenceAlias, *types.PostResponse, error) {
-	endpoint := "configuration/v1/conference_alias/"
-
-	var result ConferenceAlias
-	postResp, err := s.client.PostWithResponse(ctx, endpoint, req, &result)
-	if err != nil {
-		return nil, postResp, err
-	}
-	return &result, postResp, nil
+	return s.client.PostWithResponse(ctx, endpoint, req, nil)
 }
 
 // UpdateConferenceAlias updates an existing conference alias

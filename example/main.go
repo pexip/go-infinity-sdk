@@ -60,10 +60,11 @@ func main() {
 	if err != nil {
 		log.Printf("Failed to create conference: %v", err)
 	} else {
-		fmt.Printf("Created conference: %s (ID: %d)\n", newConf.Name, newConf.ID)
+		id, _ := newConf.ResourceID()
+		fmt.Printf("Created conference (ID: %d)\n", id)
 
 		// Clean up - delete the conference we just created
-		err = client.Config.DeleteConference(ctx, newConf.ID)
+		err = client.Config.DeleteConference(ctx, id)
 		if err != nil {
 			log.Printf("Failed to delete conference: %v", err)
 		} else {

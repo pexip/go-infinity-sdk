@@ -5,6 +5,7 @@ import (
 
 	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
 	"github.com/pexip/go-infinity-sdk/v38/options"
+	"github.com/pexip/go-infinity-sdk/v38/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -113,24 +114,18 @@ func TestService_CreateNTPServer(t *testing.T) {
 		KeyID:       &keyID,
 	}
 
-	expectedServer := &NTPServer{
-		ID:          1,
-		Address:     "time.cloudflare.com",
-		Description: "Cloudflare Time",
-		Key:         "test-key",
-		KeyID:       &keyID,
+	expectedResponse := &types.PostResponse{
+		Body:        []byte{},
+		ResourceURI: "/api/admin/configuration/v1/ntp_server/123/",
 	}
 
-	client.On("PostJSON", t.Context(), "configuration/v1/ntp_server/", createRequest, mock.AnythingOfType("*config.NTPServer")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(3).(*NTPServer)
-		*result = *expectedServer
-	})
+	client.On("PostWithResponse", t.Context(), "configuration/v1/ntp_server/", createRequest, nil).Return(expectedResponse, nil)
 
 	service := New(client)
 	result, err := service.CreateNTPServer(t.Context(), createRequest)
 
 	assert.NoError(t, err)
-	assert.Equal(t, expectedServer, result)
+	assert.Equal(t, expectedResponse, result)
 	client.AssertExpectations(t)
 }
 

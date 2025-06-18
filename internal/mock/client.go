@@ -41,5 +41,8 @@ func (m *Client) DeleteJSON(ctx context.Context, endpoint string, result interfa
 // PostWithResponse mocks the PostWithResponse method
 func (m *Client) PostWithResponse(ctx context.Context, endpoint string, body interface{}, result interface{}) (*types.PostResponse, error) {
 	args := m.Called(ctx, endpoint, body, result)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
 	return args.Get(0).(*types.PostResponse), args.Error(1)
 }

@@ -3,6 +3,8 @@ package config
 import (
 	"context"
 	"fmt"
+
+	"github.com/pexip/go-infinity-sdk/v38/types"
 )
 
 // ListWorkerVMs retrieves a list of worker VMs
@@ -31,11 +33,24 @@ func (s *Service) GetWorkerVM(ctx context.Context, id int) (*WorkerVM, error) {
 }
 
 // CreateWorkerVM creates a new worker VM
-func (s *Service) CreateWorkerVM(ctx context.Context, req *WorkerVMCreateRequest) (*ResourceCreateResponse, error) {
+func (s *Service) CreateWorkerVM(ctx context.Context, req *WorkerVMCreateRequest) (*WorkerVM, error) {
 	endpoint := "configuration/v1/worker_vm/"
 
-	resp, err := s.client.PostJSONRawBodyResponse(ctx, endpoint, req)
-	return resp, err
+	var result WorkerVM
+	err := s.client.PostJSON(ctx, endpoint, req, &result)
+	return &result, err
+}
+
+// CreateWorkerVMWithResponse creates a new worker VM and returns both the response body and location header
+func (s *Service) CreateWorkerVMWithResponse(ctx context.Context, req *WorkerVMCreateRequest) (*WorkerVM, *types.PostResponse, error) {
+	endpoint := "configuration/v1/worker_vm/"
+
+	var result WorkerVM
+	postResp, err := s.client.PostWithResponse(ctx, endpoint, req, &result)
+	if err != nil {
+		return nil, postResp, err
+	}
+	return &result, postResp, nil
 }
 
 // UpdateWorkerVM updates an existing worker VM

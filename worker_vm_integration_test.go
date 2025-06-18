@@ -7,17 +7,20 @@ import (
 	"github.com/pexip/go-infinity-sdk/v38/config"
 	"github.com/stretchr/testify/require"
 	"net/http"
+	"os"
 	"testing"
 )
 
-func TestRegisterWorkWithInfinity(t *testing.T) {
-	infinityURL := "https://34.13.196.28"
-	infinityUsername := "pi99admin"
-	infinityPassword := "Pexme123web"
+var (
+	infinityURL      = os.Getenv("INFINITY_URL")
+	infinityUsername = os.Getenv("INFINITY_USERNAME")
+	infinityPassword = os.Getenv("INFINITY_PASSWORD")
+)
 
+func TestRegisterWorkWithInfinity(t *testing.T) {
 	transport := &http.Transport{
 		TLSClientConfig: &tls.Config{
-			InsecureSkipVerify: true, // For testing purposes only, do not use in production
+			InsecureSkipVerify: true,
 		},
 	}
 
@@ -29,12 +32,11 @@ func TestRegisterWorkWithInfinity(t *testing.T) {
 	)
 	require.NoError(t, err)
 
-	resp, err := client.Config.ListSystemLocations(t.Context(), nil)
+	locationsResp, err := client.Config.ListSystemLocations(t.Context(), nil)
 	require.NoError(t, err)
-	require.NotNil(t, resp)
+	require.NotNil(t, locationsResp)
 
-	location := resp.Objects[0]
-
+	location := locationsResp.Objects[0]
 	req := &config.WorkerVMCreateRequest{
 		Name:            "test-worker",
 		Hostname:        "testworker",
@@ -49,11 +51,11 @@ func TestRegisterWorkWithInfinity(t *testing.T) {
 		SystemLocation:  location.ResourceURI,
 	}
 
-	r, err := client.Config.CreateWorkerVM(t.Context(), req)
+	_, VMresp, err := client.Config.CreateWorkerVMWithResponse(t.Context(), req)
 	require.NoError(t, err)
-	require.NotNil(t, resp)
+	require.NotNil(t, VMresp)
 
-	id, err := r.GetID()
+	id, err := VMresp.ResourceID()
 	require.NoError(t, err)
 
 	err = client.Config.DeleteWorkerVM(t.Context(), id)

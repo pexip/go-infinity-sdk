@@ -5,13 +5,15 @@ package config
 
 import (
 	"context"
+
+	"github.com/pexip/go-infinity-sdk/v38/types"
 )
 
 // ClientInterface defines the interface for the HTTP client
 type ClientInterface interface {
 	GetJSON(ctx context.Context, endpoint string, result interface{}) error
 	PostJSON(ctx context.Context, endpoint string, body interface{}, result interface{}) error
-	PostJSONRawBodyResponse(ctx context.Context, endpoint string, requestBody interface{}) (*ResourceCreateResponse, error)
+	PostWithResponse(ctx context.Context, endpoint string, body interface{}, result interface{}) (*types.PostResponse, error)
 	PutJSON(ctx context.Context, endpoint string, body interface{}, result interface{}) error
 	DeleteJSON(ctx context.Context, endpoint string, result interface{}) error
 }

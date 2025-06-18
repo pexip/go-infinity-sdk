@@ -3,6 +3,8 @@ package config
 import (
 	"context"
 	"fmt"
+
+	"github.com/pexip/go-infinity-sdk/v38/types"
 )
 
 // ListConferences retrieves a list of conferences
@@ -37,6 +39,18 @@ func (s *Service) CreateConference(ctx context.Context, req *ConferenceCreateReq
 	var result Conference
 	err := s.client.PostJSON(ctx, endpoint, req, &result)
 	return &result, err
+}
+
+// CreateConferenceWithResponse creates a new conference and returns both the response body and location header
+func (s *Service) CreateConferenceWithResponse(ctx context.Context, req *ConferenceCreateRequest) (*Conference, *types.PostResponse, error) {
+	endpoint := "configuration/v1/conference/"
+
+	var result Conference
+	postResp, err := s.client.PostWithResponse(ctx, endpoint, req, &result)
+	if err != nil {
+		return nil, postResp, err
+	}
+	return &result, postResp, nil
 }
 
 // UpdateConference updates an existing conference

@@ -3,6 +3,8 @@ package config
 import (
 	"context"
 	"fmt"
+
+	"github.com/pexip/go-infinity-sdk/v38/types"
 )
 
 // ListNTPServers retrieves a list of NTP servers
@@ -37,6 +39,18 @@ func (s *Service) CreateNTPServer(ctx context.Context, req *NTPServerCreateReque
 	var result NTPServer
 	err := s.client.PostJSON(ctx, endpoint, req, &result)
 	return &result, err
+}
+
+// CreateNTPServerWithResponse creates a new NTP server and returns both the response body and location header
+func (s *Service) CreateNTPServerWithResponse(ctx context.Context, req *NTPServerCreateRequest) (*NTPServer, *types.PostResponse, error) {
+	endpoint := "configuration/v1/ntp_server/"
+
+	var result NTPServer
+	postResp, err := s.client.PostWithResponse(ctx, endpoint, req, &result)
+	if err != nil {
+		return nil, postResp, err
+	}
+	return &result, postResp, nil
 }
 
 // UpdateNTPServer updates an existing NTP server

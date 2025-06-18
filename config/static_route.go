@@ -3,6 +3,8 @@ package config
 import (
 	"context"
 	"fmt"
+
+	"github.com/pexip/go-infinity-sdk/v38/types"
 )
 
 // ListStaticRoutes retrieves a list of static routes
@@ -37,6 +39,18 @@ func (s *Service) CreateStaticRoute(ctx context.Context, req *StaticRouteCreateR
 	var result StaticRoute
 	err := s.client.PostJSON(ctx, endpoint, req, &result)
 	return &result, err
+}
+
+// CreateStaticRouteWithResponse creates a new static route and returns both the response body and location header
+func (s *Service) CreateStaticRouteWithResponse(ctx context.Context, req *StaticRouteCreateRequest) (*StaticRoute, *types.PostResponse, error) {
+	endpoint := "configuration/v1/static_route/"
+
+	var result StaticRoute
+	postResp, err := s.client.PostWithResponse(ctx, endpoint, req, &result)
+	if err != nil {
+		return nil, postResp, err
+	}
+	return &result, postResp, nil
 }
 
 // UpdateStaticRoute updates an existing static route

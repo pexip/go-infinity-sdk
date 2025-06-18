@@ -1,9 +1,6 @@
 package config
 
 import (
-	"fmt"
-	"regexp"
-	"strconv"
 	"time"
 
 	"github.com/pexip/go-infinity-sdk/v38/options"
@@ -12,25 +9,6 @@ import (
 
 // ListOptions contains options for listing resources
 type ListOptions = options.SearchableListOptions
-
-type ResourceCreateResponse struct {
-	ResourceURI string
-	Body        string
-}
-
-func (r *ResourceCreateResponse) GetID() (int, error) {
-	// The ResourceURI is expected to be in the format "/api/admin/configuration/v1/worker_vm/21/"
-	re := regexp.MustCompile(`/(\d+)/?$`)
-	matches := re.FindStringSubmatch(r.ResourceURI)
-	if matches == nil || len(matches) < 2 {
-		return 0, fmt.Errorf("invalid ResourceURI format: %s", r.ResourceURI)
-	}
-	id, err := strconv.Atoi(matches[1])
-	if err != nil {
-		return 0, fmt.Errorf("invalid ID in ResourceURI: %w", err)
-	}
-	return id, nil
-}
 
 // Conference represents a conference configuration
 type Conference struct {

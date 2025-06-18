@@ -35,6 +35,7 @@ func TestRegisterWorkWithInfinity(t *testing.T) {
 	locationsResp, err := client.Config.ListSystemLocations(t.Context(), nil)
 	require.NoError(t, err)
 	require.NotNil(t, locationsResp)
+	require.Greater(t, len(locationsResp.Objects), 0, "locationsResp.Objects is empty")
 
 	location := locationsResp.Objects[0]
 	req := &config.WorkerVMCreateRequest{

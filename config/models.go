@@ -1,8 +1,6 @@
 package config
 
 import (
-	"time"
-
 	"github.com/pexip/go-infinity-sdk/v38/options"
 	"github.com/pexip/go-infinity-sdk/v38/util"
 )

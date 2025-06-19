@@ -13,20 +13,22 @@ import (
 func TestService_ListExchangeSchedulers(t *testing.T) {
 	client := &mockClient.Client{}
 
-	lastSync := time.Now().Add(-1 * time.Hour)
-	nextSync := time.Now().Add(1 * time.Hour)
+	lastModified := time.Now().Add(-1 * time.Hour)
 
 	expectedResponse := &ExchangeSchedulerListResponse{
+		Meta: Meta{
+			Limit:      100,
+			Next:       "",
+			Offset:     0,
+			Previous:   "",
+			TotalCount: 1,
+		},
 		Objects: []ExchangeScheduler{
 			{
-				ID:                1,
-				Name:              "Primary Exchange",
-				Status:            "active",
-				LastSync:          &util.InfinityTime{Time: lastSync},
-				NextSync:          &util.InfinityTime{Time: nextSync},
-				ProcessedMeetings: 45,
-				ErrorCount:        0,
-				ResourceURI:       "/api/admin/status/v1/exchange_scheduler/1/",
+				ExchangeConnectorID: 10,
+				ID:                  1,
+				LastModifiedTime:    &util.InfinityTime{Time: lastModified},
+				ResourceURI:         "/api/admin/status/v1/exchange_scheduler/1/",
 			},
 		},
 	}
@@ -41,9 +43,10 @@ func TestService_ListExchangeSchedulers(t *testing.T) {
 
 	assert.NoError(t, err)
 	assert.Equal(t, 1, len(result.Objects))
-	assert.Equal(t, "Primary Exchange", result.Objects[0].Name)
-	assert.Equal(t, "active", result.Objects[0].Status)
-	assert.Equal(t, 45, result.Objects[0].ProcessedMeetings)
+	assert.Equal(t, 1, result.Objects[0].ID)
+	assert.Equal(t, 10, result.Objects[0].ExchangeConnectorID)
+	assert.Equal(t, "/api/admin/status/v1/exchange_scheduler/1/", result.Objects[0].ResourceURI)
+	assert.Equal(t, lastModified.Unix(), result.Objects[0].LastModifiedTime.Time.Unix())
 	client.AssertExpectations(t)
 }
 
@@ -57,13 +60,19 @@ func TestService_ListExchangeSchedulers_WithOptions(t *testing.T) {
 	}
 
 	expectedResponse := &ExchangeSchedulerListResponse{
+		Meta: Meta{
+			Limit:      10,
+			Next:       "",
+			Offset:     0,
+			Previous:   "",
+			TotalCount: 1,
+		},
 		Objects: []ExchangeScheduler{
 			{
-				ID:                2,
-				Name:              "Test Exchange With Options",
-				Status:            "active",
-				ProcessedMeetings: 25,
-				ErrorCount:        0,
+				ExchangeConnectorID: 20,
+				ID:                  2,
+				LastModifiedTime:    nil,
+				ResourceURI:         "/api/admin/status/v1/exchange_scheduler/2/",
 			},
 		},
 	}
@@ -78,7 +87,10 @@ func TestService_ListExchangeSchedulers_WithOptions(t *testing.T) {
 	result, err := service.ListExchangeSchedulers(t.Context(), opts)
 	assert.NoError(t, err)
 	assert.Equal(t, 1, len(result.Objects))
-	assert.Equal(t, "Test Exchange With Options", result.Objects[0].Name)
+	assert.Equal(t, 2, result.Objects[0].ID)
+	assert.Equal(t, 20, result.Objects[0].ExchangeConnectorID)
+	assert.Equal(t, "/api/admin/status/v1/exchange_scheduler/2/", result.Objects[0].ResourceURI)
+	assert.Nil(t, result.Objects[0].LastModifiedTime)
 
 	client.AssertExpectations(t)
 }
@@ -86,17 +98,12 @@ func TestService_ListExchangeSchedulers_WithOptions(t *testing.T) {
 func TestService_GetExchangeScheduler(t *testing.T) {
 	client := &mockClient.Client{}
 
-	lastSync := time.Now().Add(-30 * time.Minute)
-	nextSync := time.Now().Add(30 * time.Minute)
+	lastModified := time.Now().Add(-30 * time.Minute)
 	expectedScheduler := &ExchangeScheduler{
-		ID:                1,
-		Name:              "Test Exchange",
-		Status:            "syncing",
-		LastSync:          &util.InfinityTime{Time: lastSync},
-		NextSync:          &util.InfinityTime{Time: nextSync},
-		ProcessedMeetings: 12,
-		ErrorCount:        1,
-		ResourceURI:       "/api/admin/status/v1/exchange_scheduler/1/",
+		ExchangeConnectorID: 10,
+		ID:                  1,
+		LastModifiedTime:    &util.InfinityTime{Time: lastModified},
+		ResourceURI:         "/api/admin/status/v1/exchange_scheduler/1/",
 	}
 
 	client.On("GetJSON", t.Context(), "status/v1/exchange_scheduler/1/", mock.AnythingOfType("*status.ExchangeScheduler")).Return(nil).Run(func(args mock.Arguments) {
@@ -109,5 +116,9 @@ func TestService_GetExchangeScheduler(t *testing.T) {
 
 	assert.NoError(t, err)
 	assert.Equal(t, expectedScheduler, result)
+	assert.Equal(t, 1, result.ID)
+	assert.Equal(t, 10, result.ExchangeConnectorID)
+	assert.Equal(t, "/api/admin/status/v1/exchange_scheduler/1/", result.ResourceURI)
+	assert.Equal(t, lastModified.Unix(), result.LastModifiedTime.Time.Unix())
 	client.AssertExpectations(t)
 }

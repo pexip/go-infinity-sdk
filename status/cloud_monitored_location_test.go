@@ -11,25 +11,41 @@ import (
 func TestService_ListCloudMonitoredLocations(t *testing.T) {
 	client := &mockClient.Client{}
 
+	name1 := "AWS US West"
+	name2 := "Azure EU West"
+	maxHD1 := 10
+	maxHD2 := 8
+	freeHD1 := 8
+	freeHD2 := 6
+	mediaLoad1 := 20
+	mediaLoad2 := 40
+
 	expectedResponse := &CloudMonitoredLocationListResponse{
+		Meta: Meta{
+			Limit:      100,
+			Next:       "",
+			Offset:     0,
+			Previous:   "",
+			TotalCount: 2,
+		},
 		Objects: []CloudMonitoredLocation{
 			{
-				ID:            1,
-				Name:          "AWS US West",
-				Region:        "us-west-2",
-				Status:        "healthy",
-				InstanceCount: 5,
-				ActiveCalls:   15,
-				ResourceURI:   "/api/admin/status/v1/cloud_monitored_location/1/",
+				ID:               1,
+				Name:             &name1,
+				OverflowLocation: "/api/admin/status/v1/cloud_overflow_location/2/",
+				MaxHDCalls:       &maxHD1,
+				FreeHDCalls:      &freeHD1,
+				MediaLoad:        &mediaLoad1,
+				ResourceURI:      "/api/admin/status/v1/cloud_monitored_location/1/",
 			},
 			{
-				ID:            2,
-				Name:          "Azure EU West",
-				Region:        "eu-west-1",
-				Status:        "degraded",
-				InstanceCount: 3,
-				ActiveCalls:   8,
-				ResourceURI:   "/api/admin/status/v1/cloud_monitored_location/2/",
+				ID:               2,
+				Name:             &name2,
+				OverflowLocation: "/api/admin/status/v1/cloud_overflow_location/3/",
+				MaxHDCalls:       &maxHD2,
+				FreeHDCalls:      &freeHD2,
+				MediaLoad:        &mediaLoad2,
+				ResourceURI:      "/api/admin/status/v1/cloud_monitored_location/2/",
 			},
 		},
 	}
@@ -44,27 +60,31 @@ func TestService_ListCloudMonitoredLocations(t *testing.T) {
 
 	assert.NoError(t, err)
 	assert.Equal(t, 2, len(result.Objects))
-	assert.Equal(t, "AWS US West", result.Objects[0].Name)
-	assert.Equal(t, "us-west-2", result.Objects[0].Region)
-	assert.Equal(t, "healthy", result.Objects[0].Status)
-	assert.Equal(t, 5, result.Objects[0].InstanceCount)
-	assert.Equal(t, 15, result.Objects[0].ActiveCalls)
-	assert.Equal(t, "Azure EU West", result.Objects[1].Name)
-	assert.Equal(t, "degraded", result.Objects[1].Status)
+	assert.Equal(t, name1, derefString(result.Objects[0].Name))
+	assert.Equal(t, "/api/admin/status/v1/cloud_overflow_location/2/", result.Objects[0].OverflowLocation)
+	assert.Equal(t, maxHD1, derefInt(result.Objects[0].MaxHDCalls))
+	assert.Equal(t, freeHD1, derefInt(result.Objects[0].FreeHDCalls))
+	assert.Equal(t, mediaLoad1, derefInt(result.Objects[0].MediaLoad))
+	assert.Equal(t, name2, derefString(result.Objects[1].Name))
 	client.AssertExpectations(t)
 }
 
 func TestService_GetCloudMonitoredLocation(t *testing.T) {
 	client := &mockClient.Client{}
 
+	name := "GCP Asia Pacific"
+	maxHD := 12
+	freeHD := 10
+	mediaLoad := 30
+
 	expectedLocation := &CloudMonitoredLocation{
-		ID:            1,
-		Name:          "GCP Asia Pacific",
-		Region:        "asia-pacific-1",
-		Status:        "healthy",
-		InstanceCount: 8,
-		ActiveCalls:   32,
-		ResourceURI:   "/api/admin/status/v1/cloud_monitored_location/1/",
+		ID:               1,
+		Name:             &name,
+		OverflowLocation: "/api/admin/status/v1/cloud_overflow_location/4/",
+		MaxHDCalls:       &maxHD,
+		FreeHDCalls:      &freeHD,
+		MediaLoad:        &mediaLoad,
+		ResourceURI:      "/api/admin/status/v1/cloud_monitored_location/1/",
 	}
 
 	client.On("GetJSON", t.Context(), "status/v1/cloud_monitored_location/1/", mock.AnythingOfType("*status.CloudMonitoredLocation")).Return(nil).Run(func(args mock.Arguments) {
@@ -77,11 +97,11 @@ func TestService_GetCloudMonitoredLocation(t *testing.T) {
 
 	assert.NoError(t, err)
 	assert.Equal(t, expectedLocation, result)
-	assert.Equal(t, "GCP Asia Pacific", result.Name)
-	assert.Equal(t, "asia-pacific-1", result.Region)
-	assert.Equal(t, "healthy", result.Status)
-	assert.Equal(t, 8, result.InstanceCount)
-	assert.Equal(t, 32, result.ActiveCalls)
+	assert.Equal(t, name, derefString(result.Name))
+	assert.Equal(t, "/api/admin/status/v1/cloud_overflow_location/4/", result.OverflowLocation)
+	assert.Equal(t, maxHD, derefInt(result.MaxHDCalls))
+	assert.Equal(t, freeHD, derefInt(result.FreeHDCalls))
+	assert.Equal(t, mediaLoad, derefInt(result.MediaLoad))
 	client.AssertExpectations(t)
 }
 
@@ -94,15 +114,28 @@ func TestService_ListCloudMonitoredLocations_WithOptions(t *testing.T) {
 		Offset: 0,
 	}
 
+	name := "AWS EU Central"
+	maxHD := 9
+	freeHD := 7
+	mediaLoad := 25
+
 	expectedResponse := &CloudMonitoredLocationListResponse{
+		Meta: Meta{
+			Limit:      10,
+			Next:       "",
+			Offset:     0,
+			Previous:   "",
+			TotalCount: 1,
+		},
 		Objects: []CloudMonitoredLocation{
 			{
-				ID:            3,
-				Name:          "AWS EU Central",
-				Region:        "eu-central-1",
-				Status:        "healthy",
-				InstanceCount: 4,
-				ActiveCalls:   18,
+				ID:               3,
+				Name:             &name,
+				OverflowLocation: "/api/admin/status/v1/cloud_overflow_location/5/",
+				MaxHDCalls:       &maxHD,
+				FreeHDCalls:      &freeHD,
+				MediaLoad:        &mediaLoad,
+				ResourceURI:      "/api/admin/status/v1/cloud_monitored_location/3/",
 			},
 		},
 	}
@@ -117,9 +150,12 @@ func TestService_ListCloudMonitoredLocations_WithOptions(t *testing.T) {
 	result, err := service.ListCloudMonitoredLocations(t.Context(), opts)
 	assert.NoError(t, err)
 	assert.Equal(t, 1, len(result.Objects))
-	assert.Equal(t, "AWS EU Central", result.Objects[0].Name)
-	assert.Equal(t, "eu-central-1", result.Objects[0].Region)
-	assert.Equal(t, "healthy", result.Objects[0].Status)
+	assert.Equal(t, name, derefString(result.Objects[0].Name))
+	assert.Equal(t, "/api/admin/status/v1/cloud_overflow_location/5/", result.Objects[0].OverflowLocation)
+	assert.Equal(t, maxHD, derefInt(result.Objects[0].MaxHDCalls))
+	assert.Equal(t, freeHD, derefInt(result.Objects[0].FreeHDCalls))
+	assert.Equal(t, mediaLoad, derefInt(result.Objects[0].MediaLoad))
+	assert.Equal(t, 1, result.Meta.TotalCount)
 
 	client.AssertExpectations(t)
 }

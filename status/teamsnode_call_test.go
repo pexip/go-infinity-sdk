@@ -18,15 +18,12 @@ func TestService_ListTeamsNodeCalls(t *testing.T) {
 	expectedResponse := &TeamsNodeCallListResponse{
 		Objects: []TeamsNodeCall{
 			{
-				ID:              "call-123",
-				TeamsNodeID:     1,
-				ConferenceName:  "Team Meeting",
-				ParticipantName: "John Doe",
-				CallDirection:   "inbound",
-				StartTime:       &util.InfinityTime{Time: startTime},
-				Duration:        1800,
-				Status:          "active",
-				ResourceURI:     "/api/admin/status/v1/teamsnode_call/call-123/",
+				ID:          "call-123",
+				TeamsNodeID: "1",
+				StartTime:   &util.InfinityTime{Time: startTime},
+				ResourceURI: "/api/admin/status/v1/teamsnode_call/call-123/",
+				// Only fields present in the struct are set
+				// Destination, Source, State, HeartbeatTime are omitted for brevity
 			},
 		},
 	}
@@ -42,10 +39,9 @@ func TestService_ListTeamsNodeCalls(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, 1, len(result.Objects))
 	assert.Equal(t, "call-123", result.Objects[0].ID)
-	assert.Equal(t, "Team Meeting", result.Objects[0].ConferenceName)
-	assert.Equal(t, "John Doe", result.Objects[0].ParticipantName)
-	assert.Equal(t, "inbound", result.Objects[0].CallDirection)
-	assert.Equal(t, "active", result.Objects[0].Status)
+	assert.Equal(t, "1", result.Objects[0].TeamsNodeID)
+	assert.Equal(t, "/api/admin/status/v1/teamsnode_call/call-123/", result.Objects[0].ResourceURI)
+	assert.Equal(t, startTime.Unix(), result.Objects[0].StartTime.Time.Unix())
 	client.AssertExpectations(t)
 }
 
@@ -62,14 +58,10 @@ func TestService_ListTeamsNodeCalls_WithOptions(t *testing.T) {
 	expectedResponse := &TeamsNodeCallListResponse{
 		Objects: []TeamsNodeCall{
 			{
-				ID:              "call-options-test",
-				TeamsNodeID:     3,
-				ConferenceName:  "Options Test Meeting",
-				ParticipantName: "Test User",
-				CallDirection:   "inbound",
-				StartTime:       &util.InfinityTime{Time: startTime},
-				Duration:        900,
-				Status:          "active",
+				ID:          "call-options-test",
+				TeamsNodeID: "3",
+				StartTime:   &util.InfinityTime{Time: startTime},
+				// Only fields present in the struct are set
 			},
 		},
 	}
@@ -84,7 +76,9 @@ func TestService_ListTeamsNodeCalls_WithOptions(t *testing.T) {
 	result, err := service.ListTeamsNodeCalls(t.Context(), opts)
 	assert.NoError(t, err)
 	assert.Equal(t, 1, len(result.Objects))
-	assert.Equal(t, "Options Test Meeting", result.Objects[0].ConferenceName)
+	assert.Equal(t, "call-options-test", result.Objects[0].ID)
+	assert.Equal(t, "3", result.Objects[0].TeamsNodeID)
+	assert.Equal(t, startTime.Unix(), result.Objects[0].StartTime.Time.Unix())
 
 	client.AssertExpectations(t)
 }
@@ -94,15 +88,11 @@ func TestService_GetTeamsNodeCall(t *testing.T) {
 
 	startTime := time.Now().Add(-1 * time.Hour)
 	expectedCall := &TeamsNodeCall{
-		ID:              "call-456",
-		TeamsNodeID:     2,
-		ConferenceName:  "Executive Meeting",
-		ParticipantName: "Jane Smith",
-		CallDirection:   "outbound",
-		StartTime:       &util.InfinityTime{Time: startTime},
-		Duration:        3600,
-		Status:          "completed",
-		ResourceURI:     "/api/admin/status/v1/teamsnode_call/call-456/",
+		ID:          "call-456",
+		TeamsNodeID: "2",
+		StartTime:   &util.InfinityTime{Time: startTime},
+		ResourceURI: "/api/admin/status/v1/teamsnode_call/call-456/",
+		// Only fields present in the struct are set
 	}
 
 	client.On("GetJSON", t.Context(), "status/v1/teamsnode_call/call-456/", mock.AnythingOfType("*status.TeamsNodeCall")).Return(nil).Run(func(args mock.Arguments) {
@@ -115,7 +105,9 @@ func TestService_GetTeamsNodeCall(t *testing.T) {
 
 	assert.NoError(t, err)
 	assert.Equal(t, expectedCall, result)
-	assert.Equal(t, "Executive Meeting", result.ConferenceName)
-	assert.Equal(t, "completed", result.Status)
+	assert.Equal(t, "call-456", result.ID)
+	assert.Equal(t, "2", result.TeamsNodeID)
+	assert.Equal(t, "/api/admin/status/v1/teamsnode_call/call-456/", result.ResourceURI)
+	assert.Equal(t, startTime.Unix(), result.StartTime.Time.Unix())
 	client.AssertExpectations(t)
 }

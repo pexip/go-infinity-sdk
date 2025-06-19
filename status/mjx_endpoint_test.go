@@ -18,24 +18,28 @@ func TestService_ListMJXEndpoints(t *testing.T) {
 	expectedResponse := &MJXEndpointListResponse{
 		Objects: []MJXEndpoint{
 			{
-				ID:                1,
-				Name:              "mjx-endpoint-1",
-				Status:            "connected",
-				EndpointType:      "teams",
-				LastContact:       &util.InfinityTime{Time: lastContact},
-				Version:           "1.5.0",
-				ActiveConnections: 3,
-				ResourceURI:       "/api/admin/status/v1/mjx_endpoint/1/",
+				EndpointAddress:    "10.0.0.1",
+				EndpointName:       "mjx-endpoint-1",
+				EndpointType:       "teams",
+				ID:                 1,
+				LastContactTime:    &util.InfinityTime{Time: lastContact},
+				LastWorker:         "worker-1",
+				MJXIntegrationName: "integration-1",
+				NumberOfMeetings:   3,
+				ResourceURI:        "/api/admin/status/v1/mjx_endpoint/1/",
+				RoomEmail:          "room1@example.com",
 			},
 			{
-				ID:                2,
-				Name:              "mjx-endpoint-2",
-				Status:            "disconnected",
-				EndpointType:      "google",
-				LastContact:       &util.InfinityTime{Time: lastContact},
-				Version:           "1.4.2",
-				ActiveConnections: 0,
-				ResourceURI:       "/api/admin/status/v1/mjx_endpoint/2/",
+				EndpointAddress:    "10.0.0.2",
+				EndpointName:       "mjx-endpoint-2",
+				EndpointType:       "google",
+				ID:                 2,
+				LastContactTime:    &util.InfinityTime{Time: lastContact},
+				LastWorker:         "worker-2",
+				MJXIntegrationName: "integration-2",
+				NumberOfMeetings:   0,
+				ResourceURI:        "/api/admin/status/v1/mjx_endpoint/2/",
+				RoomEmail:          "room2@example.com",
 			},
 		},
 	}
@@ -50,14 +54,22 @@ func TestService_ListMJXEndpoints(t *testing.T) {
 
 	assert.NoError(t, err)
 	assert.Equal(t, 2, len(result.Objects))
-	assert.Equal(t, "mjx-endpoint-1", result.Objects[0].Name)
-	assert.Equal(t, "connected", result.Objects[0].Status)
+	assert.Equal(t, "mjx-endpoint-1", result.Objects[0].EndpointName)
+	assert.Equal(t, "10.0.0.1", result.Objects[0].EndpointAddress)
 	assert.Equal(t, "teams", result.Objects[0].EndpointType)
-	assert.Equal(t, 3, result.Objects[0].ActiveConnections)
-	assert.Equal(t, "mjx-endpoint-2", result.Objects[1].Name)
-	assert.Equal(t, "disconnected", result.Objects[1].Status)
+	assert.Equal(t, 3, result.Objects[0].NumberOfMeetings)
+	assert.Equal(t, "worker-1", result.Objects[0].LastWorker)
+	assert.Equal(t, "integration-1", result.Objects[0].MJXIntegrationName)
+	assert.Equal(t, "room1@example.com", result.Objects[0].RoomEmail)
+	assert.Equal(t, "/api/admin/status/v1/mjx_endpoint/1/", result.Objects[0].ResourceURI)
+	assert.Equal(t, "mjx-endpoint-2", result.Objects[1].EndpointName)
+	assert.Equal(t, "10.0.0.2", result.Objects[1].EndpointAddress)
 	assert.Equal(t, "google", result.Objects[1].EndpointType)
-	assert.Equal(t, 0, result.Objects[1].ActiveConnections)
+	assert.Equal(t, 0, result.Objects[1].NumberOfMeetings)
+	assert.Equal(t, "worker-2", result.Objects[1].LastWorker)
+	assert.Equal(t, "integration-2", result.Objects[1].MJXIntegrationName)
+	assert.Equal(t, "room2@example.com", result.Objects[1].RoomEmail)
+	assert.Equal(t, "/api/admin/status/v1/mjx_endpoint/2/", result.Objects[1].ResourceURI)
 	client.AssertExpectations(t)
 }
 
@@ -66,14 +78,16 @@ func TestService_GetMJXEndpoint(t *testing.T) {
 	lastContact := time.Now().Add(-2 * time.Minute)
 
 	expectedEndpoint := &MJXEndpoint{
-		ID:                1,
-		Name:              "mjx-primary-endpoint",
-		Status:            "connected",
-		EndpointType:      "teams",
-		LastContact:       &util.InfinityTime{Time: lastContact},
-		Version:           "1.6.0",
-		ActiveConnections: 8,
-		ResourceURI:       "/api/admin/status/v1/mjx_endpoint/1/",
+		EndpointAddress:    "10.0.0.10",
+		EndpointName:       "mjx-primary-endpoint",
+		EndpointType:       "teams",
+		ID:                 1,
+		LastContactTime:    &util.InfinityTime{Time: lastContact},
+		LastWorker:         "worker-primary",
+		MJXIntegrationName: "integration-primary",
+		NumberOfMeetings:   8,
+		ResourceURI:        "/api/admin/status/v1/mjx_endpoint/1/",
+		RoomEmail:          "room-primary@example.com",
 	}
 
 	client.On("GetJSON", t.Context(), "status/v1/mjx_endpoint/1/", mock.AnythingOfType("*status.MJXEndpoint")).Return(nil).Run(func(args mock.Arguments) {
@@ -86,11 +100,14 @@ func TestService_GetMJXEndpoint(t *testing.T) {
 
 	assert.NoError(t, err)
 	assert.Equal(t, expectedEndpoint, result)
-	assert.Equal(t, "mjx-primary-endpoint", result.Name)
-	assert.Equal(t, "connected", result.Status)
+	assert.Equal(t, "mjx-primary-endpoint", result.EndpointName)
+	assert.Equal(t, "10.0.0.10", result.EndpointAddress)
 	assert.Equal(t, "teams", result.EndpointType)
-	assert.Equal(t, "1.6.0", result.Version)
-	assert.Equal(t, 8, result.ActiveConnections)
+	assert.Equal(t, 8, result.NumberOfMeetings)
+	assert.Equal(t, "worker-primary", result.LastWorker)
+	assert.Equal(t, "integration-primary", result.MJXIntegrationName)
+	assert.Equal(t, "room-primary@example.com", result.RoomEmail)
+	assert.Equal(t, "/api/admin/status/v1/mjx_endpoint/1/", result.ResourceURI)
 	client.AssertExpectations(t)
 }
 
@@ -106,12 +123,16 @@ func TestService_ListMJXEndpoints_WithOptions(t *testing.T) {
 	expectedResponse := &MJXEndpointListResponse{
 		Objects: []MJXEndpoint{
 			{
-				ID:                3,
-				Name:              "mjx-test-endpoint",
-				Status:            "maintenance",
-				EndpointType:      "webex",
-				Version:           "1.5.1",
-				ActiveConnections: 0,
+				EndpointAddress:    "10.0.0.3",
+				EndpointName:       "mjx-test-endpoint",
+				EndpointType:       "webex",
+				ID:                 3,
+				LastContactTime:    nil,
+				LastWorker:         "worker-test",
+				MJXIntegrationName: "integration-test",
+				NumberOfMeetings:   0,
+				ResourceURI:        "/api/admin/status/v1/mjx_endpoint/3/",
+				RoomEmail:          "room3@example.com",
 			},
 		},
 	}
@@ -126,9 +147,14 @@ func TestService_ListMJXEndpoints_WithOptions(t *testing.T) {
 	result, err := service.ListMJXEndpoints(t.Context(), opts)
 	assert.NoError(t, err)
 	assert.Equal(t, 1, len(result.Objects))
-	assert.Equal(t, "mjx-test-endpoint", result.Objects[0].Name)
-	assert.Equal(t, "maintenance", result.Objects[0].Status)
+	assert.Equal(t, "mjx-test-endpoint", result.Objects[0].EndpointName)
+	assert.Equal(t, "10.0.0.3", result.Objects[0].EndpointAddress)
 	assert.Equal(t, "webex", result.Objects[0].EndpointType)
+	assert.Equal(t, 0, result.Objects[0].NumberOfMeetings)
+	assert.Equal(t, "worker-test", result.Objects[0].LastWorker)
+	assert.Equal(t, "integration-test", result.Objects[0].MJXIntegrationName)
+	assert.Equal(t, "room3@example.com", result.Objects[0].RoomEmail)
+	assert.Equal(t, "/api/admin/status/v1/mjx_endpoint/3/", result.Objects[0].ResourceURI)
 
 	client.AssertExpectations(t)
 }

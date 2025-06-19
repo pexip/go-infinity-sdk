@@ -3,6 +3,8 @@ package config
 import (
 	"context"
 	"fmt"
+
+	"github.com/pexip/go-infinity-sdk/v38/types"
 )
 
 // ListEndUsers retrieves a list of end users
@@ -31,12 +33,9 @@ func (s *Service) GetEndUser(ctx context.Context, id int) (*EndUser, error) {
 }
 
 // CreateEndUser creates a new end user
-func (s *Service) CreateEndUser(ctx context.Context, req *EndUserCreateRequest) (*EndUser, error) {
+func (s *Service) CreateEndUser(ctx context.Context, req *EndUserCreateRequest) (*types.PostResponse, error) {
 	endpoint := "configuration/v1/end_user/"
-
-	var result EndUser
-	err := s.client.PostJSON(ctx, endpoint, req, &result)
-	return &result, err
+	return s.client.PostWithResponse(ctx, endpoint, req, nil)
 }
 
 // UpdateEndUser updates an existing end user

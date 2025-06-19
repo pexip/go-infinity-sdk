@@ -7,6 +7,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"encoding/xml"
 	"fmt"
 	"io"
 	"net/http"
@@ -19,6 +20,7 @@ import (
 	"github.com/pexip/go-infinity-sdk/v38/config"
 	"github.com/pexip/go-infinity-sdk/v38/history"
 	"github.com/pexip/go-infinity-sdk/v38/status"
+	"github.com/pexip/go-infinity-sdk/v38/types"
 )
 
 const (
@@ -237,6 +239,33 @@ func (c *Client) DeleteJSON(ctx context.Context, endpoint string, result interfa
 	return c.performJSONRequest(ctx, http.MethodDelete, endpoint, nil, result)
 }
 
+// PostWithResponse performs a POST request and returns both the response body and location header
+func (c *Client) PostWithResponse(ctx context.Context, endpoint string, body interface{}, result interface{}) (*types.PostResponse, error) {
+	req := &Request{
+		Method:   http.MethodPost,
+		Endpoint: endpoint,
+		Body:     body,
+	}
+
+	resp, err := c.DoRequest(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	postResp := &types.PostResponse{
+		Body:        resp.Body,
+		ResourceURI: resp.Headers.Get("Location"),
+	}
+
+	if result != nil {
+		if err := unmarshalResponseBodyAuto(resp.Body, result); err != nil {
+			return postResp, err
+		}
+	}
+
+	return postResp, nil
+}
+
 func (c *Client) performJSONRequest(ctx context.Context, method string, endpoint string, requestBody interface{}, result interface{}) error {
 	req := &Request{
 		Method:   method,
@@ -258,6 +287,25 @@ func unmarshalResponseBody(body []byte, result interface{}) error {
 			return fmt.Errorf("failed to unmarshal JSON response: %w", err)
 		}
 	}
+	return nil
+}
+
+// unmarshalResponseBodyAuto attempts to unmarshal response body as JSON first, then XML if JSON fails
+func unmarshalResponseBodyAuto(body []byte, result interface{}) error {
+	if result == nil || len(body) == 0 {
+		return nil
+	}
+
+	// Try JSON first
+	if err := json.Unmarshal(body, result); err == nil {
+		return nil
+	}
+
+	// If JSON fails, try XML
+	if err := xml.Unmarshal(body, result); err != nil {
+		return fmt.Errorf("failed to unmarshal response as both JSON and XML: %w", err)
+	}
+
 	return nil
 }
 

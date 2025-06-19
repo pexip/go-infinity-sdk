@@ -3,6 +3,8 @@ package config
 import (
 	"context"
 	"fmt"
+
+	"github.com/pexip/go-infinity-sdk/v38/types"
 )
 
 // ListSystemLocations retrieves a list of system locations
@@ -31,12 +33,9 @@ func (s *Service) GetSystemLocation(ctx context.Context, id int) (*SystemLocatio
 }
 
 // CreateSystemLocation creates a new system location
-func (s *Service) CreateSystemLocation(ctx context.Context, req *SystemLocationCreateRequest) (*SystemLocation, error) {
+func (s *Service) CreateSystemLocation(ctx context.Context, req *SystemLocationCreateRequest) (*types.PostResponse, error) {
 	endpoint := "configuration/v1/system_location/"
-
-	var result SystemLocation
-	err := s.client.PostJSON(ctx, endpoint, req, &result)
-	return &result, err
+	return s.client.PostWithResponse(ctx, endpoint, req, nil)
 }
 
 // UpdateSystemLocation updates an existing system location

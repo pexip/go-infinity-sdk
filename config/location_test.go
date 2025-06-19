@@ -5,6 +5,7 @@ import (
 
 	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
 	"github.com/pexip/go-infinity-sdk/v38/options"
+	"github.com/pexip/go-infinity-sdk/v38/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -60,22 +61,18 @@ func TestService_CreateLocation(t *testing.T) {
 		Description: "Test location",
 	}
 
-	expectedLocation := &Location{
-		ID:          1,
-		Name:        "New Location",
-		Description: "Test location",
+	expectedResponse := &types.PostResponse{
+		Body:        []byte{},
+		ResourceURI: "/api/admin/configuration/v1/location/123/",
 	}
 
-	client.On("PostJSON", t.Context(), "configuration/v1/location/", createRequest, mock.AnythingOfType("*config.Location")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(3).(*Location)
-		*result = *expectedLocation
-	})
+	client.On("PostWithResponse", t.Context(), "configuration/v1/location/", createRequest, nil).Return(expectedResponse, nil)
 
 	service := New(client)
 	result, err := service.CreateLocation(t.Context(), createRequest)
 
 	assert.NoError(t, err)
-	assert.Equal(t, expectedLocation, result)
+	assert.Equal(t, expectedResponse, result)
 	client.AssertExpectations(t)
 }
 

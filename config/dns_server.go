@@ -3,6 +3,8 @@ package config
 import (
 	"context"
 	"fmt"
+
+	"github.com/pexip/go-infinity-sdk/v38/types"
 )
 
 // ListDNSServers retrieves a list of DNS servers
@@ -31,12 +33,9 @@ func (s *Service) GetDNSServer(ctx context.Context, id int) (*DNSServer, error) 
 }
 
 // CreateDNSServer creates a new DNS server
-func (s *Service) CreateDNSServer(ctx context.Context, req *DNSServerCreateRequest) (*DNSServer, error) {
+func (s *Service) CreateDNSServer(ctx context.Context, req *DNSServerCreateRequest) (*types.PostResponse, error) {
 	endpoint := "configuration/v1/dns_server/"
-
-	var result DNSServer
-	err := s.client.PostJSON(ctx, endpoint, req, &result)
-	return &result, err
+	return s.client.PostWithResponse(ctx, endpoint, req, nil)
 }
 
 // UpdateDNSServer updates an existing DNS server

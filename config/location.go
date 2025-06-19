@@ -3,6 +3,8 @@ package config
 import (
 	"context"
 	"fmt"
+
+	"github.com/pexip/go-infinity-sdk/v38/types"
 )
 
 // ListLocations retrieves a list of locations
@@ -31,12 +33,9 @@ func (s *Service) GetLocation(ctx context.Context, id int) (*Location, error) {
 }
 
 // CreateLocation creates a new location
-func (s *Service) CreateLocation(ctx context.Context, req *LocationCreateRequest) (*Location, error) {
+func (s *Service) CreateLocation(ctx context.Context, req *LocationCreateRequest) (*types.PostResponse, error) {
 	endpoint := "configuration/v1/location/"
-
-	var result Location
-	err := s.client.PostJSON(ctx, endpoint, req, &result)
-	return &result, err
+	return s.client.PostWithResponse(ctx, endpoint, req, nil)
 }
 
 // UpdateLocation updates an existing location

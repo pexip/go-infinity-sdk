@@ -5,6 +5,7 @@ import (
 
 	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
 	"github.com/pexip/go-infinity-sdk/v38/options"
+	"github.com/pexip/go-infinity-sdk/v38/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -109,23 +110,18 @@ func TestService_CreateSystemLocation(t *testing.T) {
 		MTU:         1400,
 	}
 
-	expectedLocation := &SystemLocation{
-		ID:          1,
-		Name:        "New Location",
-		Description: "New system location",
-		MTU:         1400,
+	expectedResponse := &types.PostResponse{
+		Body:        []byte{},
+		ResourceURI: "/api/admin/configuration/v1/system_location/123/",
 	}
 
-	client.On("PostJSON", t.Context(), "configuration/v1/system_location/", createRequest, mock.AnythingOfType("*config.SystemLocation")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(3).(*SystemLocation)
-		*result = *expectedLocation
-	})
+	client.On("PostWithResponse", t.Context(), "configuration/v1/system_location/", createRequest, nil).Return(expectedResponse, nil)
 
 	service := New(client)
 	result, err := service.CreateSystemLocation(t.Context(), createRequest)
 
 	assert.NoError(t, err)
-	assert.Equal(t, expectedLocation, result)
+	assert.Equal(t, expectedResponse, result)
 	client.AssertExpectations(t)
 }
 

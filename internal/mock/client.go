@@ -5,6 +5,7 @@ package mock
 import (
 	"context"
 
+	"github.com/pexip/go-infinity-sdk/v38/types"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -35,4 +36,13 @@ func (m *Client) PutJSON(ctx context.Context, endpoint string, body interface{},
 func (m *Client) DeleteJSON(ctx context.Context, endpoint string, result interface{}) error {
 	args := m.Called(ctx, endpoint, result)
 	return args.Error(0)
+}
+
+// PostWithResponse mocks the PostWithResponse method
+func (m *Client) PostWithResponse(ctx context.Context, endpoint string, body interface{}, result interface{}) (*types.PostResponse, error) {
+	args := m.Called(ctx, endpoint, body, result)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*types.PostResponse), args.Error(1)
 }

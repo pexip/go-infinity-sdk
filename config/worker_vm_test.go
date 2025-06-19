@@ -5,6 +5,7 @@ import (
 
 	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
 	"github.com/pexip/go-infinity-sdk/v38/options"
+	"github.com/pexip/go-infinity-sdk/v38/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -117,27 +118,18 @@ func TestService_CreateWorkerVM(t *testing.T) {
 		SystemLocation: "/api/admin/configuration/v1/system_location/1/",
 	}
 
-	expectedVM := &WorkerVM{
-		ID:             1,
-		Name:           "new-worker",
-		Hostname:       "newworker.example.com",
-		Domain:         "example.com",
-		Address:        "192.168.1.101",
-		Netmask:        "255.255.255.0",
-		Gateway:        "192.168.1.1",
-		SystemLocation: "/api/admin/configuration/v1/system_location/1/",
+	expectedResponse := &types.PostResponse{
+		Body:        []byte{},
+		ResourceURI: "/api/admin/configuration/v1/worker_vm/123/",
 	}
 
-	client.On("PostJSON", t.Context(), "configuration/v1/worker_vm/", createRequest, mock.AnythingOfType("*config.WorkerVM")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(3).(*WorkerVM)
-		*result = *expectedVM
-	})
+	client.On("PostWithResponse", t.Context(), "configuration/v1/worker_vm/", createRequest, nil).Return(expectedResponse, nil)
 
 	service := New(client)
 	result, err := service.CreateWorkerVM(t.Context(), createRequest)
 
 	assert.NoError(t, err)
-	assert.Equal(t, expectedVM, result)
+	assert.Equal(t, expectedResponse, result)
 	client.AssertExpectations(t)
 }
 

@@ -5,11 +5,14 @@ package history
 
 import (
 	"context"
+
+	"github.com/pexip/go-infinity-sdk/v38/types"
 )
 
 // ClientInterface defines the interface for the HTTP client
 type ClientInterface interface {
 	GetJSON(ctx context.Context, endpoint string, result interface{}) error
+	PostWithResponse(ctx context.Context, endpoint string, body interface{}, result interface{}) (*types.PostResponse, error)
 }
 
 // Service handles History API endpoints

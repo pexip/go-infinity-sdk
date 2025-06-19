@@ -3,6 +3,8 @@ package config
 import (
 	"context"
 	"fmt"
+
+	"github.com/pexip/go-infinity-sdk/v38/types"
 )
 
 // ListConferenceAliases retrieves a list of conference aliases
@@ -31,12 +33,9 @@ func (s *Service) GetConferenceAlias(ctx context.Context, id int) (*ConferenceAl
 }
 
 // CreateConferenceAlias creates a new conference alias
-func (s *Service) CreateConferenceAlias(ctx context.Context, req *ConferenceAliasCreateRequest) (*ConferenceAlias, error) {
+func (s *Service) CreateConferenceAlias(ctx context.Context, req *ConferenceAliasCreateRequest) (*types.PostResponse, error) {
 	endpoint := "configuration/v1/conference_alias/"
-
-	var result ConferenceAlias
-	err := s.client.PostJSON(ctx, endpoint, req, &result)
-	return &result, err
+	return s.client.PostWithResponse(ctx, endpoint, req, nil)
 }
 
 // UpdateConferenceAlias updates an existing conference alias

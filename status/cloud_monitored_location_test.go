@@ -159,18 +159,3 @@ func TestService_ListCloudMonitoredLocations_WithOptions(t *testing.T) {
 
 	client.AssertExpectations(t)
 }
-
-// Helper functions for pointer dereferencing
-func derefString(s *string) string {
-	if s == nil {
-		return ""
-	}
-	return *s
-}
-
-func derefInt(i *int) int {
-	if i == nil {
-		return 0
-	}
-	return *i
-}

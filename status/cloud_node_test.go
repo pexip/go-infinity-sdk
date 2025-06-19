@@ -10,9 +10,6 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-func intPtr(i int) *int       { return &i }
-func strPtr(s string) *string { return &s }
-
 func TestService_ListCloudNodes(t *testing.T) {
 	client := &mockClient.Client{}
 

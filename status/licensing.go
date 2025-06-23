@@ -10,9 +10,12 @@ func (s *Service) GetLicensing(ctx context.Context) (*Licensing, error) {
 
 	var result LicensingResponse
 	err := s.client.GetJSON(ctx, endpoint, &result)
+	if err != nil {
+		return nil, err
+	}
 	if len(result.Objects) == 0 {
 		return nil, err
 	}
-	licensing := result.Objects[0]
-	return &licensing, err
+	// Assuming we always expect only one object in the response
+	return &result.Objects[0], err
 }

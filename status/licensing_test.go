@@ -10,7 +10,7 @@ import (
 
 func TestService_GetLicensing(t *testing.T) {
 	client := &mockClient.Client{}
-	expectedLicensing := &LicensingResponse{
+	expectedLicensingResponse := &LicensingResponse{
 		Objects: []Licensing{
 			{
 				AudioCount:          50,
@@ -38,14 +38,14 @@ func TestService_GetLicensing(t *testing.T) {
 
 	client.On("GetJSON", t.Context(), "status/v1/licensing/", mock.AnythingOfType("*status.LicensingResponse")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(2).(*LicensingResponse)
-		*result = *expectedLicensing
+		*result = *expectedLicensingResponse
 	})
 
 	service := New(client)
 	result, err := service.GetLicensing(t.Context())
 
 	assert.NoError(t, err)
-	assert.Equal(t, &expectedLicensing.Objects[0], result)
+	assert.Equal(t, &expectedLicensingResponse.Objects[0], result)
 	assert.Equal(t, 50, result.AudioCount)
 	assert.Equal(t, 100, result.AudioTotal)
 	assert.Equal(t, 25, result.PortCount)

@@ -5,7 +5,8 @@ import (
 	"fmt"
 )
 
-// GetLicensing retrieves the current licensing status
+// GetLicensing retrieves the current licensing status, taken from the first element of a LicensingResponse.
+// It returns a Licensing object or an error if the request fails or no data is returned.
 func (s *Service) GetLicensing(ctx context.Context) (*Licensing, error) {
 	endpoint := "status/v1/licensing/"
 

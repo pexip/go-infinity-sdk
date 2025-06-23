@@ -513,6 +513,7 @@ type TeamsNodeCallListResponse struct {
 	Objects []TeamsNodeCall `json:"objects"`
 }
 
+// LicensingResponse wraps a singleton licensing payload in a list.
 type LicensingResponse struct {
 	Meta    Meta        `json:"meta"`
 	Objects []Licensing `json:"objects"`

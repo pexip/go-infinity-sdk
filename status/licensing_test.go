@@ -67,3 +67,23 @@ func TestService_GetLicensing(t *testing.T) {
 	assert.True(t, result.CustomLayoutsActive)
 	client.AssertExpectations(t)
 }
+
+func TestService_GetLicensing_EmptyResponse(t *testing.T) {
+	client := &mockClient.Client{}
+	emptyLicensing := &LicensingResponse{
+		Objects: []Licensing{},
+	}
+
+	client.On("GetJSON", t.Context(), "status/v1/licensing/", mock.AnythingOfType("*status.LicensingResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(2).(*LicensingResponse)
+		*result = *emptyLicensing
+	})
+
+	service := New(client)
+	result, err := service.GetLicensing(t.Context())
+
+	assert.Nil(t, result)
+	assert.Error(t, err)
+	assert.EqualError(t, err, "no licensing data returned")
+	client.AssertExpectations(t)
+}

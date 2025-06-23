@@ -8,7 +8,11 @@ import (
 func (s *Service) GetLicensing(ctx context.Context) (*Licensing, error) {
 	endpoint := "status/v1/licensing/"
 
-	var result Licensing
+	var result LicensingResponse
 	err := s.client.GetJSON(ctx, endpoint, &result)
-	return &result, err
+	if len(result.Objects) == 0 {
+		return nil, err
+	}
+	licensing := result.Objects[0]
+	return &licensing, err
 }

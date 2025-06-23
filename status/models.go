@@ -512,3 +512,8 @@ type TeamsNodeCallListResponse struct {
 	Meta    Meta            `json:"meta"`
 	Objects []TeamsNodeCall `json:"objects"`
 }
+
+type LicensingResponse struct {
+	Meta    Meta        `json:"meta"`
+	Objects []Licensing `json:"objects"`
+}

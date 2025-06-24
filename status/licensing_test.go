@@ -82,8 +82,8 @@ func TestService_GetLicensing_EmptyResponse(t *testing.T) {
 	service := New(client)
 	result, err := service.GetLicensing(t.Context())
 
-	assert.Nil(t, result)
 	assert.Error(t, err)
-	assert.EqualError(t, err, "no licensing data returned")
+	assert.ErrorIs(t, err, ErrNoLicensingData)
+	assert.Nil(t, result)
 	client.AssertExpectations(t)
 }

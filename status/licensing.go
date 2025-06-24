@@ -2,8 +2,10 @@ package status
 
 import (
 	"context"
-	"fmt"
+	"errors"
 )
+
+var ErrNoLicensingData = errors.New("no licensing data returned")
 
 // GetLicensing retrieves the current licensing status, taken from the first element of a LicensingResponse.
 // It returns a Licensing object or an error if the request fails or no data is returned.
@@ -16,7 +18,7 @@ func (s *Service) GetLicensing(ctx context.Context) (*Licensing, error) {
 		return nil, err
 	}
 	if len(result.Objects) == 0 {
-		return nil, fmt.Errorf("no licensing data returned")
+		return nil, ErrNoLicensingData
 	}
 	// Assuming we always expect only one object in the response
 	return &result.Objects[0], nil

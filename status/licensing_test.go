@@ -10,38 +10,42 @@ import (
 
 func TestService_GetLicensing(t *testing.T) {
 	client := &mockClient.Client{}
-	expectedLicensing := &Licensing{
-		AudioCount:          50,
-		AudioTotal:          100,
-		PortCount:           25,
-		PortTotal:           50,
-		SystemCount:         1,
-		SystemTotal:         1,
-		VMRCount:            10,
-		VMRTotal:            20,
-		TeamsCount:          15,
-		TeamsTotal:          30,
-		GHMCount:            5,
-		GHMTotal:            10,
-		OTJCount:            8,
-		OTJTotal:            15,
-		SchedulingCount:     3,
-		SchedulingTotal:     5,
-		TelehealthCount:     2,
-		TelehealthTotal:     5,
-		CustomLayoutsActive: true,
+	expectedLicensingResponse := &LicensingResponse{
+		Objects: []Licensing{
+			{
+				AudioCount:          50,
+				AudioTotal:          100,
+				PortCount:           25,
+				PortTotal:           50,
+				SystemCount:         1,
+				SystemTotal:         1,
+				VMRCount:            10,
+				VMRTotal:            20,
+				TeamsCount:          15,
+				TeamsTotal:          30,
+				GHMCount:            5,
+				GHMTotal:            10,
+				OTJCount:            8,
+				OTJTotal:            15,
+				SchedulingCount:     3,
+				SchedulingTotal:     5,
+				TelehealthCount:     2,
+				TelehealthTotal:     5,
+				CustomLayoutsActive: true,
+			},
+		},
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/licensing/", mock.AnythingOfType("*status.Licensing")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*Licensing)
-		*result = *expectedLicensing
+	client.On("GetJSON", t.Context(), "status/v1/licensing/", mock.AnythingOfType("*status.LicensingResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(2).(*LicensingResponse)
+		*result = *expectedLicensingResponse
 	})
 
 	service := New(client)
 	result, err := service.GetLicensing(t.Context())
 
 	assert.NoError(t, err)
-	assert.Equal(t, expectedLicensing, result)
+	assert.Equal(t, &expectedLicensingResponse.Objects[0], result)
 	assert.Equal(t, 50, result.AudioCount)
 	assert.Equal(t, 100, result.AudioTotal)
 	assert.Equal(t, 25, result.PortCount)
@@ -61,5 +65,25 @@ func TestService_GetLicensing(t *testing.T) {
 	assert.Equal(t, 2, result.TelehealthCount)
 	assert.Equal(t, 5, result.TelehealthTotal)
 	assert.True(t, result.CustomLayoutsActive)
+	client.AssertExpectations(t)
+}
+
+func TestService_GetLicensing_EmptyResponse(t *testing.T) {
+	client := &mockClient.Client{}
+	emptyLicensing := &LicensingResponse{
+		Objects: []Licensing{},
+	}
+
+	client.On("GetJSON", t.Context(), "status/v1/licensing/", mock.AnythingOfType("*status.LicensingResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(2).(*LicensingResponse)
+		*result = *emptyLicensing
+	})
+
+	service := New(client)
+	result, err := service.GetLicensing(t.Context())
+
+	assert.Error(t, err)
+	assert.ErrorIs(t, err, ErrNoLicensingData)
+	assert.Nil(t, result)
 	client.AssertExpectations(t)
 }

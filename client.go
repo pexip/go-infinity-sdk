@@ -207,9 +207,15 @@ func (c *Client) DoRequest(ctx context.Context, req *Request) (*Response, error)
 
 // handleAPIError processes API error responses
 func (c *Client) handleAPIError(resp *Response) error {
+	details := ""
+	if len(resp.Body) > 0 {
+		details = string(resp.Body)
+	}
+
 	apiErr := &APIError{
 		StatusCode: resp.StatusCode,
 		Message:    http.StatusText(resp.StatusCode),
+		Details:    details,
 	}
 
 	// Try to parse error details from response body using the APIError's UnmarshalJSON method

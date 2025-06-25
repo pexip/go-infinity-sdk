@@ -52,7 +52,7 @@ func TestRegisterWorkWithInfinity(t *testing.T) {
 		SystemLocation:  location.ResourceURI,
 	}
 
-	_, VMresp, err := client.Config.CreateWorkerVMWithResponse(t.Context(), req)
+	VMresp, err := client.Config.CreateWorkerVM(t.Context(), req)
 	require.NoError(t, err)
 	require.NotNil(t, VMresp)
 
@@ -61,4 +61,35 @@ func TestRegisterWorkWithInfinity(t *testing.T) {
 
 	err = client.Config.DeleteWorkerVM(t.Context(), id)
 	require.NoError(t, err, "Failed to delete worker VM after test")
+}
+
+func TestRegisterDNSServerWithInfinity(t *testing.T) {
+	transport := &http.Transport{
+		TLSClientConfig: &tls.Config{
+			InsecureSkipVerify: true,
+		},
+	}
+
+	client, err := New(
+		WithBaseURL(infinityURL),
+		WithBasicAuth(infinityUsername, infinityPassword),
+		WithMaxRetries(2),
+		WithTransport(transport),
+	)
+	require.NoError(t, err)
+
+	req := &config.DNSServerCreateRequest{
+		Address:     "1.1.1.1",
+		Description: "Test DNS Server",
+	}
+
+	dnsResp, err := client.Config.CreateDNSServer(t.Context(), req)
+	require.NoError(t, err)
+	require.NotNil(t, dnsResp)
+
+	id, err := dnsResp.ResourceID()
+	require.NoError(t, err)
+
+	err = client.Config.DeleteDNSServer(t.Context(), id)
+	require.NoError(t, err, "Failed to delete DNS server after test")
 }

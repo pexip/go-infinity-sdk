@@ -599,7 +599,7 @@ func TestClient_handleAPIError(t *testing.T) {
 			statusCode:   500,
 			responseBody: `{invalid json}`,
 			expectedMsg:  "Internal Server Error", // Falls back to HTTP status text
-			expectedDet:  "",
+			expectedDet:  "{invalid json}",
 		},
 		{
 			name:         "error with empty response body",

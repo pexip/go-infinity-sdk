@@ -3,13 +3,13 @@ package status
 import (
 	"testing"
 
-	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
+	"github.com/pexip/go-infinity-sdk/v38/interfaces"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestService_ListConferenceShards(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	expectedResponse := &ConferenceShardListResponse{
 		Meta: Meta{
@@ -74,7 +74,7 @@ func TestService_ListConferenceShards(t *testing.T) {
 }
 
 func TestService_GetConferenceShard(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	expectedShard := &ConferenceShard{
 		ID:                 "shard-primary",
@@ -116,7 +116,7 @@ func TestService_GetConferenceShard(t *testing.T) {
 }
 
 func TestService_ListConferenceShards_WithOptions(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 	service := New(client)
 
 	opts := &ListOptions{

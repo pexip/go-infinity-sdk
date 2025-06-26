@@ -3,13 +3,13 @@ package status
 import (
 	"testing"
 
-	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
+	"github.com/pexip/go-infinity-sdk/v38/interfaces"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestService_ListCloudOverflowLocations(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	expectedResponse := &CloudOverflowLocationListResponse{
 		Meta: Meta{
@@ -53,7 +53,7 @@ func TestService_ListCloudOverflowLocations(t *testing.T) {
 }
 
 func TestService_ListCloudOverflowLocations_WithOptions(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 	service := New(client)
 
 	opts := &ListOptions{
@@ -104,7 +104,7 @@ func TestService_ListCloudOverflowLocations_WithOptions(t *testing.T) {
 }
 
 func TestService_GetCloudOverflowLocation(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	expectedLocation := &CloudOverflowLocation{
 		ID:               1,

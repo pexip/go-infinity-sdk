@@ -3,13 +3,13 @@ package command
 import (
 	"testing"
 
-	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
+	"github.com/pexip/go-infinity-sdk/v38/interfaces"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestService_TransformLayout(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	enableOverlay := true
 	expectedRequest := &ConferenceTransformLayoutRequest{
@@ -37,7 +37,7 @@ func TestService_TransformLayout(t *testing.T) {
 }
 
 func TestService_TransformLayoutSimple(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	expectedResponse := &CommandResponse{
 		Status:  "success",
@@ -96,7 +96,7 @@ func TestService_TransformLayoutWithOptions(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := &mockClient.Client{}
+			client := interfaces.NewHTTPClientMock()
 
 			expectedResponse := &CommandResponse{
 				Status:  "success",

@@ -3,7 +3,7 @@ package command
 import (
 	"testing"
 
-	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
+	"github.com/pexip/go-infinity-sdk/v38/interfaces"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -31,7 +31,7 @@ func TestService_SendConferenceEmail(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := &mockClient.Client{}
+			client := interfaces.NewHTTPClientMock()
 
 			expectedRequest := &ConferenceSendEmailRequest{
 				ConferenceID:             tt.conferenceID,
@@ -86,7 +86,7 @@ func TestService_SendDeviceEmail(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := &mockClient.Client{}
+			client := interfaces.NewHTTPClientMock()
 
 			expectedRequest := &DeviceSendEmailRequest{
 				DeviceID:                 tt.deviceID,

@@ -3,13 +3,13 @@ package command
 import (
 	"testing"
 
-	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
+	"github.com/pexip/go-infinity-sdk/v38/interfaces"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestService_MuteGuests(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	expectedRequest := &ConferenceMuteGuestsRequest{
 		ConferenceID: "test-conference-id",
@@ -34,7 +34,7 @@ func TestService_MuteGuests(t *testing.T) {
 }
 
 func TestService_UnmuteGuests(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	expectedRequest := &ConferenceUnmuteGuestsRequest{
 		ConferenceID: "test-conference-id",

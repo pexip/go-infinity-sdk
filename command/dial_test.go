@@ -3,13 +3,13 @@ package command
 import (
 	"testing"
 
-	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
+	"github.com/pexip/go-infinity-sdk/v38/interfaces"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestService_DialParticipant(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	expectedRequest := &ParticipantDialRequest{
 		ConferenceAlias: "test-conference",
@@ -84,7 +84,7 @@ func TestService_DialParticipantWithOptions(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := &mockClient.Client{}
+			client := interfaces.NewHTTPClientMock()
 
 			expectedResponse := &CommandResponse{
 				Status:  "success",

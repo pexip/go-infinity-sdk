@@ -3,7 +3,7 @@ package config
 import (
 	"testing"
 
-	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
+	"github.com/pexip/go-infinity-sdk/v38/interfaces"
 	"github.com/pexip/go-infinity-sdk/v38/options"
 	"github.com/pexip/go-infinity-sdk/v38/types"
 	"github.com/stretchr/testify/assert"
@@ -11,7 +11,7 @@ import (
 )
 
 func TestService_ListLocations(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	expectedResponse := &LocationListResponse{
 		Objects: []Location{
@@ -34,7 +34,7 @@ func TestService_ListLocations(t *testing.T) {
 }
 
 func TestService_GetLocation(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 	expectedLocation := &Location{
 		ID:   1,
 		Name: "Test Location",
@@ -54,7 +54,7 @@ func TestService_GetLocation(t *testing.T) {
 }
 
 func TestService_CreateLocation(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	createRequest := &LocationCreateRequest{
 		Name:        "New Location",
@@ -77,7 +77,7 @@ func TestService_CreateLocation(t *testing.T) {
 }
 
 func TestService_UpdateLocation(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	updateRequest := &LocationUpdateRequest{
 		Name: "Updated Location",
@@ -102,7 +102,7 @@ func TestService_UpdateLocation(t *testing.T) {
 }
 
 func TestService_DeleteLocation(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/location/1/", mock.Anything).Return(nil)
 
@@ -114,7 +114,7 @@ func TestService_DeleteLocation(t *testing.T) {
 }
 
 func TestService_ListLocations_WithOptions(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	opts := &ListOptions{
 		BaseListOptions: options.BaseListOptions{

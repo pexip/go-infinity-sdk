@@ -4,14 +4,14 @@ import (
 	"testing"
 	"time"
 
-	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
+	"github.com/pexip/go-infinity-sdk/v38/interfaces"
 	util "github.com/pexip/go-infinity-sdk/v38/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestService_ListAlarms(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	expectedResponse := &AlarmListResponse{
 		Objects: []Alarm{
@@ -50,7 +50,7 @@ func TestService_ListAlarms(t *testing.T) {
 }
 
 func TestService_ListAlarms_WithOptions(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 	service := New(client)
 
 	opts := &ListOptions{
@@ -87,7 +87,7 @@ func TestService_ListAlarms_WithOptions(t *testing.T) {
 }
 
 func TestService_GetAlarm(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 	timeRaised := time.Now()
 	expectedAlarm := &Alarm{
 		ID:         1,

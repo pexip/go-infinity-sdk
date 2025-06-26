@@ -32,7 +32,7 @@ func TestRegisterWorkWithInfinity(t *testing.T) {
 	)
 	require.NoError(t, err)
 
-	locationsResp, err := client.Config.ListSystemLocations(t.Context(), nil)
+	locationsResp, err := client.config.ListSystemLocations(t.Context(), nil)
 	require.NoError(t, err)
 	require.NotNil(t, locationsResp)
 	require.Greater(t, len(locationsResp.Objects), 0, "locationsResp.Objects is empty")
@@ -52,14 +52,14 @@ func TestRegisterWorkWithInfinity(t *testing.T) {
 		SystemLocation:  location.ResourceURI,
 	}
 
-	VMresp, err := client.Config.CreateWorkerVM(t.Context(), req)
+	VMresp, err := client.config.CreateWorkerVM(t.Context(), req)
 	require.NoError(t, err)
 	require.NotNil(t, VMresp)
 
 	id, err := VMresp.ResourceID()
 	require.NoError(t, err)
 
-	err = client.Config.DeleteWorkerVM(t.Context(), id)
+	err = client.config.DeleteWorkerVM(t.Context(), id)
 	require.NoError(t, err, "Failed to delete worker VM after test")
 }
 
@@ -83,13 +83,13 @@ func TestRegisterDNSServerWithInfinity(t *testing.T) {
 		Description: "Test DNS Server",
 	}
 
-	dnsResp, err := client.Config.CreateDNSServer(t.Context(), req)
+	dnsResp, err := client.config.CreateDNSServer(t.Context(), req)
 	require.NoError(t, err)
 	require.NotNil(t, dnsResp)
 
 	id, err := dnsResp.ResourceID()
 	require.NoError(t, err)
 
-	err = client.Config.DeleteDNSServer(t.Context(), id)
+	err = client.config.DeleteDNSServer(t.Context(), id)
 	require.NoError(t, err, "Failed to delete DNS server after test")
 }

@@ -4,14 +4,14 @@ import (
 	"testing"
 	"time"
 
-	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
+	"github.com/pexip/go-infinity-sdk/v38/interfaces"
 	"github.com/pexip/go-infinity-sdk/v38/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestService_ListBackupRequests(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	created := time.Now().Add(-2 * time.Hour)
 	updated := time.Now().Add(-30 * time.Minute)
@@ -63,7 +63,7 @@ func TestService_ListBackupRequests(t *testing.T) {
 }
 
 func TestService_GetBackupRequest(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 	created := time.Now().Add(-3 * time.Hour)
 	completed := time.Now().Add(-1 * time.Hour)
 
@@ -96,7 +96,7 @@ func TestService_GetBackupRequest(t *testing.T) {
 }
 
 func TestService_ListBackupRequests_WithOptions(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 	service := New(client)
 
 	opts := &ListOptions{

@@ -22,12 +22,12 @@ func main() {
 	ctx := context.Background()
 
 	// Example 1: Get system status
-	fmt.Println("=== System Status ===")
-	status, err := client.Status.GetSystemStatus(ctx)
+	fmt.Println("=== System status ===")
+	status, err := client.Status().GetSystemStatus(ctx)
 	if err != nil {
 		log.Printf("Failed to get system status: %v", err)
 	} else {
-		fmt.Printf("Status: %s, Version: %s, Uptime: %d seconds\n",
+		fmt.Printf("status: %s, Version: %s, Uptime: %d seconds\n",
 			status.Status, status.Version, status.Uptime)
 	}
 
@@ -36,7 +36,7 @@ func main() {
 	listOpts := &config.ListOptions{}
 	listOpts.Limit = 5
 	listOpts.Search = "example" // Optional: search for conferences containing "example"
-	conferences, err := client.Config.ListConferences(ctx, listOpts)
+	conferences, err := client.Config().ListConferences(ctx, listOpts)
 	if err != nil {
 		log.Printf("Failed to list conferences: %v", err)
 	} else {
@@ -56,7 +56,7 @@ func main() {
 		GuestsMuted: false,
 	}
 
-	newConf, err := client.Config.CreateConference(ctx, createReq)
+	newConf, err := client.Config().CreateConference(ctx, createReq)
 	if err != nil {
 		log.Printf("Failed to create conference: %v", err)
 	} else {
@@ -64,7 +64,7 @@ func main() {
 		fmt.Printf("Created conference (ID: %d)\n", id)
 
 		// Clean up - delete the conference we just created
-		err = client.Config.DeleteConference(ctx, id)
+		err = client.Config().DeleteConference(ctx, id)
 		if err != nil {
 			log.Printf("Failed to delete conference: %v", err)
 		} else {
@@ -73,8 +73,8 @@ func main() {
 	}
 
 	// Example 4: List active participants
-	fmt.Println("\n=== Status: Active Participants ===")
-	participants, err := client.Status.ListParticipants(ctx, nil)
+	fmt.Println("\n=== status: Active Participants ===")
+	participants, err := client.Status().ListParticipants(ctx, nil)
 	if err != nil {
 		log.Printf("Failed to list participants: %v", err)
 	} else {
@@ -88,8 +88,8 @@ func main() {
 	}
 
 	// Example 5: List worker VMs
-	fmt.Println("\n=== Status: Worker VMs ===")
-	workers, err := client.Status.ListWorkerVMs(ctx, nil)
+	fmt.Println("\n=== status: Worker VMs ===")
+	workers, err := client.Status().ListWorkerVMs(ctx, nil)
 	if err != nil {
 		log.Printf("Failed to list worker VMs: %v", err)
 	} else {
@@ -101,13 +101,13 @@ func main() {
 		}
 	}
 
-	// Example 6: Command API - demonstrate participant control
+	// Example 6: command API - demonstrate participant control
 	if len(participants.Objects) > 0 {
-		fmt.Println("\n=== Command: Participant Control ===")
+		fmt.Println("\n=== command: Participant Control ===")
 		participantUUID := participants.Objects[0].CallUUID
 
 		// Send a welcome message
-		result, err := client.Command.SendMessageToParticipant(ctx, participantUUID, "Welcome! This message was sent via the Go SDK.")
+		result, err := client.Command().SendMessageToParticipant(ctx, participantUUID, "Welcome! This message was sent via the Go SDK.")
 		if err != nil {
 			log.Printf("Failed to send message: %v", err)
 		} else {

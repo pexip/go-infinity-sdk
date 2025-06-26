@@ -4,14 +4,14 @@ import (
 	"testing"
 	"time"
 
-	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
+	"github.com/pexip/go-infinity-sdk/v38/interfaces"
 	util "github.com/pexip/go-infinity-sdk/v38/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestService_ListConferenceSyncs(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	lastUpdated := time.Now().Add(-30 * time.Minute)
 
@@ -66,7 +66,7 @@ func TestService_ListConferenceSyncs(t *testing.T) {
 }
 
 func TestService_ListConferenceSyncs_WithOptions(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 	service := New(client)
 
 	opts := &ListOptions{
@@ -126,7 +126,7 @@ func TestService_ListConferenceSyncs_WithOptions(t *testing.T) {
 }
 
 func TestService_GetConferenceSync(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	lastUpdated := time.Now().Add(-15 * time.Minute)
 	expectedSync := &ConferenceSync{

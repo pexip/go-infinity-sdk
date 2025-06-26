@@ -69,10 +69,10 @@ func TestNew(t *testing.T) {
 
 			require.NoError(t, err)
 			require.NotNil(t, client)
-			assert.NotNil(t, client.Config)
-			assert.NotNil(t, client.Status)
-			assert.NotNil(t, client.History)
-			assert.NotNil(t, client.Command)
+			assert.NotNil(t, client.config)
+			assert.NotNil(t, client.status)
+			assert.NotNil(t, client.history)
+			assert.NotNil(t, client.command)
 		})
 	}
 }

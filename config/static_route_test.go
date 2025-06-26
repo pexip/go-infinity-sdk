@@ -3,7 +3,7 @@ package config
 import (
 	"testing"
 
-	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
+	"github.com/pexip/go-infinity-sdk/v38/interfaces"
 	"github.com/pexip/go-infinity-sdk/v38/options"
 	"github.com/pexip/go-infinity-sdk/v38/types"
 	"github.com/stretchr/testify/assert"
@@ -14,13 +14,13 @@ func TestService_ListStaticRoutes(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *mockClient.Client)
+		setup   func(m *interfaces.HTTPClientMock)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *mockClient.Client) {
+			setup: func(m *interfaces.HTTPClientMock) {
 				expectedResponse := &StaticRouteListResponse{
 					Objects: []StaticRoute{
 						{ID: 1, Name: "route-1", Address: "10.0.0.0", Prefix: 24, Gateway: "192.168.1.1"},
@@ -42,7 +42,7 @@ func TestService_ListStaticRoutes(t *testing.T) {
 				},
 				Search: "route",
 			},
-			setup: func(m *mockClient.Client) {
+			setup: func(m *interfaces.HTTPClientMock) {
 				expectedResponse := &StaticRouteListResponse{
 					Objects: []StaticRoute{
 						{ID: 1, Name: "test-route", Address: "10.0.0.0", Prefix: 24, Gateway: "192.168.1.1"},
@@ -59,7 +59,7 @@ func TestService_ListStaticRoutes(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := &mockClient.Client{}
+			client := interfaces.NewHTTPClientMock()
 			tt.setup(client)
 
 			service := New(client)
@@ -79,7 +79,7 @@ func TestService_ListStaticRoutes(t *testing.T) {
 }
 
 func TestService_GetStaticRoute(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 	expectedRoute := &StaticRoute{
 		ID:      1,
 		Name:    "test-route",
@@ -102,7 +102,7 @@ func TestService_GetStaticRoute(t *testing.T) {
 }
 
 func TestService_CreateStaticRoute(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	createRequest := &StaticRouteCreateRequest{
 		Name:    "new-route",
@@ -127,7 +127,7 @@ func TestService_CreateStaticRoute(t *testing.T) {
 }
 
 func TestService_UpdateStaticRoute(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	updateRequest := &StaticRouteUpdateRequest{
 		Name:    "updated-route",
@@ -156,7 +156,7 @@ func TestService_UpdateStaticRoute(t *testing.T) {
 }
 
 func TestService_DeleteStaticRoute(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/static_route/1/", mock.Anything).Return(nil)
 

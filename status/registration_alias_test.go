@@ -3,13 +3,13 @@ package status
 import (
 	"testing"
 
-	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
+	"github.com/pexip/go-infinity-sdk/v38/interfaces"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestService_ListRegistrationAliases(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	expectedResponse := &RegistrationAliasListResponse{
 		Objects: []RegistrationAlias{
@@ -49,7 +49,7 @@ func TestService_ListRegistrationAliases(t *testing.T) {
 }
 
 func TestService_ListRegistrationAliases_WithOptions(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 	service := New(client)
 
 	opts := &ListOptions{
@@ -95,7 +95,7 @@ func TestService_ListRegistrationAliases_WithOptions(t *testing.T) {
 }
 
 func TestService_GetRegistrationAlias(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	expectedAlias := &RegistrationAlias{
 		ID:             1,

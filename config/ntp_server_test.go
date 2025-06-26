@@ -3,7 +3,7 @@ package config
 import (
 	"testing"
 
-	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
+	"github.com/pexip/go-infinity-sdk/v38/interfaces"
 	"github.com/pexip/go-infinity-sdk/v38/options"
 	"github.com/pexip/go-infinity-sdk/v38/types"
 	"github.com/stretchr/testify/assert"
@@ -14,13 +14,13 @@ func TestService_ListNTPServers(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *mockClient.Client)
+		setup   func(m *interfaces.HTTPClientMock)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *mockClient.Client) {
+			setup: func(m *interfaces.HTTPClientMock) {
 				expectedResponse := &NTPServerListResponse{
 					Objects: []NTPServer{
 						{ID: 1, Address: "pool.ntp.org", Description: "NTP Pool"},
@@ -43,7 +43,7 @@ func TestService_ListNTPServers(t *testing.T) {
 				},
 				Search: "google",
 			},
-			setup: func(m *mockClient.Client) {
+			setup: func(m *interfaces.HTTPClientMock) {
 				expectedResponse := &NTPServerListResponse{
 					Objects: []NTPServer{
 						{ID: 2, Address: "time.google.com", Description: "Google Time"},
@@ -60,7 +60,7 @@ func TestService_ListNTPServers(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := &mockClient.Client{}
+			client := interfaces.NewHTTPClientMock()
 			tt.setup(client)
 
 			service := New(client)
@@ -80,7 +80,7 @@ func TestService_ListNTPServers(t *testing.T) {
 }
 
 func TestService_GetNTPServer(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 	keyID := 1
 	expectedServer := &NTPServer{
 		ID:          1,
@@ -104,7 +104,7 @@ func TestService_GetNTPServer(t *testing.T) {
 }
 
 func TestService_CreateNTPServer(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	keyID := 2
 	createRequest := &NTPServerCreateRequest{
@@ -130,7 +130,7 @@ func TestService_CreateNTPServer(t *testing.T) {
 }
 
 func TestService_UpdateNTPServer(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	updateRequest := &NTPServerUpdateRequest{
 		Description: "Updated NTP Server",
@@ -156,7 +156,7 @@ func TestService_UpdateNTPServer(t *testing.T) {
 }
 
 func TestService_DeleteNTPServer(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/ntp_server/1/", mock.Anything).Return(nil)
 

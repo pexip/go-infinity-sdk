@@ -40,6 +40,7 @@ type Client struct {
 	httpClient  *http.Client
 	auth        auth.Authenticator
 	retryConfig *RetryConfig
+	userAgent   string
 
 	// API services
 	config  *config.Service
@@ -136,6 +137,11 @@ func (c *Client) DoRequest(ctx context.Context, req *Request) (*Response, error)
 		// Set default headers
 		httpReq.Header.Set("Content-Type", "application/json")
 		httpReq.Header.Set("Accept", "application/json")
+
+		// Set User-Agent header if configured
+		if c.userAgent != "" {
+			httpReq.Header.Set("User-Agent", c.userAgent)
+		}
 
 		// Set custom headers
 		for key, value := range req.Headers {

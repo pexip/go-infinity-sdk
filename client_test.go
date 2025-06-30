@@ -55,6 +55,20 @@ func TestNew(t *testing.T) {
 			},
 			wantErr: false,
 		},
+		{
+			name: "with user agent",
+			options: []ClientOption{
+				WithUserAgent("TestApp/1.0"),
+			},
+			wantErr: false,
+		},
+		{
+			name: "with empty user agent",
+			options: []ClientOption{
+				WithUserAgent(""),
+			},
+			wantErr: true,
+		},
 	}
 
 	for _, tt := range tests {
@@ -135,6 +149,49 @@ func TestWithAuth(t *testing.T) {
 
 	assert.NoError(t, err)
 	assert.Equal(t, authenticator, client.auth)
+}
+
+func TestWithUserAgent(t *testing.T) {
+	tests := []struct {
+		name      string
+		userAgent string
+		wantErr   bool
+		errorMsg  string
+	}{
+		{
+			name:      "valid user agent",
+			userAgent: "MyApp/1.0 (https://example.com)",
+			wantErr:   false,
+		},
+		{
+			name:      "another valid user agent",
+			userAgent: "go-infinity-sdk/v38",
+			wantErr:   false,
+		},
+		{
+			name:      "empty user agent",
+			userAgent: "",
+			wantErr:   true,
+			errorMsg:  "user agent cannot be empty",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			client := &Client{}
+			option := WithUserAgent(tt.userAgent)
+			err := option(client)
+
+			if tt.wantErr {
+				assert.Error(t, err)
+				assert.Contains(t, err.Error(), tt.errorMsg)
+				return
+			}
+
+			assert.NoError(t, err)
+			assert.Equal(t, tt.userAgent, client.userAgent)
+		})
+	}
 }
 
 func TestWithTransport(t *testing.T) {
@@ -410,6 +467,58 @@ func TestClientWithAuthentication(t *testing.T) {
 	client, err := New(
 		WithBaseURL(server.URL),
 		WithBasicAuth("admin", "password"),
+	)
+	require.NoError(t, err)
+
+	req := &Request{
+		Method:   http.MethodGet,
+		Endpoint: "test",
+	}
+
+	resp, err := client.DoRequest(t.Context(), req)
+	assert.NoError(t, err)
+	assert.Equal(t, http.StatusOK, resp.StatusCode)
+}
+
+func TestClientWithUserAgent(t *testing.T) {
+	expectedUserAgent := "TestApp/1.0 (test environment)"
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		userAgent := r.Header.Get("User-Agent")
+		assert.Equal(t, expectedUserAgent, userAgent)
+		w.WriteHeader(http.StatusOK)
+		_ = json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
+	}))
+	defer server.Close()
+
+	client, err := New(
+		WithBaseURL(server.URL),
+		WithUserAgent(expectedUserAgent),
+	)
+	require.NoError(t, err)
+
+	req := &Request{
+		Method:   http.MethodGet,
+		Endpoint: "test",
+	}
+
+	resp, err := client.DoRequest(t.Context(), req)
+	assert.NoError(t, err)
+	assert.Equal(t, http.StatusOK, resp.StatusCode)
+}
+
+func TestClientWithoutUserAgent(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		userAgent := r.Header.Get("User-Agent")
+		// Should use the default Go HTTP client User-Agent when no custom one is set
+		assert.Equal(t, "Go-http-client/1.1", userAgent)
+		w.WriteHeader(http.StatusOK)
+		_ = json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
+	}))
+	defer server.Close()
+
+	client, err := New(
+		WithBaseURL(server.URL),
 	)
 	require.NoError(t, err)
 

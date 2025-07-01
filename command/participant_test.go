@@ -3,13 +3,13 @@ package command
 import (
 	"testing"
 
-	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
+	"github.com/pexip/go-infinity-sdk/v38/interfaces"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestService_DisconnectParticipantByID(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	expectedRequest := &ParticipantDisconnectRequest{
 		ParticipantID: "test-participant-id",
@@ -34,7 +34,7 @@ func TestService_DisconnectParticipantByID(t *testing.T) {
 }
 
 func TestService_MuteParticipantByID(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	expectedRequest := &ParticipantMuteRequest{
 		ParticipantID: "test-participant-id",
@@ -59,7 +59,7 @@ func TestService_MuteParticipantByID(t *testing.T) {
 }
 
 func TestService_UnmuteParticipantByID(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	expectedRequest := &ParticipantUnmuteRequest{
 		ParticipantID: "test-participant-id",
@@ -106,7 +106,7 @@ func TestService_ChangeParticipantRoleByID(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := &mockClient.Client{}
+			client := interfaces.NewHTTPClientMock()
 
 			expectedRequest := &ParticipantRoleRequest{
 				ParticipantID: tt.participantID,
@@ -139,7 +139,7 @@ func TestService_ChangeParticipantRoleByID(t *testing.T) {
 }
 
 func TestService_TransferParticipantByID(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	expectedRequest := &ParticipantTransferRequest{
 		ParticipantID:   "test-participant-id",
@@ -166,7 +166,7 @@ func TestService_TransferParticipantByID(t *testing.T) {
 }
 
 func TestService_PromoteParticipantByID(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	expectedRequest := &ParticipantRoleRequest{
 		ParticipantID: "test-participant-id",
@@ -192,7 +192,7 @@ func TestService_PromoteParticipantByID(t *testing.T) {
 }
 
 func TestService_DemoteParticipantByID(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	expectedRequest := &ParticipantRoleRequest{
 		ParticipantID: "test-participant-id",

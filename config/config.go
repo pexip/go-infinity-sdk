@@ -4,27 +4,16 @@
 package config
 
 import (
-	"context"
-
-	"github.com/pexip/go-infinity-sdk/v38/types"
+	"github.com/pexip/go-infinity-sdk/v38/interfaces"
 )
-
-// ClientInterface defines the interface for the HTTP client
-type ClientInterface interface {
-	GetJSON(ctx context.Context, endpoint string, result interface{}) error
-	PostJSON(ctx context.Context, endpoint string, body interface{}, result interface{}) error
-	PostWithResponse(ctx context.Context, endpoint string, body interface{}, result interface{}) (*types.PostResponse, error)
-	PutJSON(ctx context.Context, endpoint string, body interface{}, result interface{}) error
-	DeleteJSON(ctx context.Context, endpoint string, result interface{}) error
-}
 
 // Service handles Configuration API endpoints
 type Service struct {
-	client ClientInterface
+	client interfaces.HTTPClient
 }
 
 // New creates a new Configuration API service
-func New(client ClientInterface) *Service {
+func New(client interfaces.HTTPClient) *Service {
 	return &Service{
 		client: client,
 	}

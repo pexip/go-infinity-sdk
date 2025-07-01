@@ -3,7 +3,7 @@ package config
 import (
 	"testing"
 
-	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
+	"github.com/pexip/go-infinity-sdk/v38/interfaces"
 	"github.com/pexip/go-infinity-sdk/v38/options"
 	"github.com/pexip/go-infinity-sdk/v38/types"
 	"github.com/stretchr/testify/assert"
@@ -14,13 +14,13 @@ func TestService_ListWorkerVMs(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *mockClient.Client)
+		setup   func(m *interfaces.HTTPClientMock)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *mockClient.Client) {
+			setup: func(m *interfaces.HTTPClientMock) {
 				expectedResponse := &WorkerVMListResponse{
 					Objects: []WorkerVM{
 						{ID: 1, Name: "worker-1", Hostname: "worker1.example.com"},
@@ -43,7 +43,7 @@ func TestService_ListWorkerVMs(t *testing.T) {
 				},
 				Search: "worker",
 			},
-			setup: func(m *mockClient.Client) {
+			setup: func(m *interfaces.HTTPClientMock) {
 				expectedResponse := &WorkerVMListResponse{
 					Objects: []WorkerVM{
 						{ID: 1, Name: "test-worker", Hostname: "testworker.example.com"},
@@ -60,7 +60,7 @@ func TestService_ListWorkerVMs(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := &mockClient.Client{}
+			client := interfaces.NewHTTPClientMock()
 			tt.setup(client)
 
 			service := New(client)
@@ -80,7 +80,7 @@ func TestService_ListWorkerVMs(t *testing.T) {
 }
 
 func TestService_GetWorkerVM(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 	expectedVM := &WorkerVM{
 		ID:             1,
 		Name:           "worker-1",
@@ -106,7 +106,7 @@ func TestService_GetWorkerVM(t *testing.T) {
 }
 
 func TestService_CreateWorkerVM(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	createRequest := &WorkerVMCreateRequest{
 		Name:           "new-worker",
@@ -134,7 +134,7 @@ func TestService_CreateWorkerVM(t *testing.T) {
 }
 
 func TestService_UpdateWorkerVM(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	updateRequest := &WorkerVMUpdateRequest{
 		Name: "updated-worker",
@@ -159,7 +159,7 @@ func TestService_UpdateWorkerVM(t *testing.T) {
 }
 
 func TestService_DeleteWorkerVM(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/worker_vm/1/", mock.Anything).Return(nil)
 

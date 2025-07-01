@@ -3,13 +3,13 @@ package config
 import (
 	"testing"
 
-	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
+	"github.com/pexip/go-infinity-sdk/v38/interfaces"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestService_GetGlobalConfiguration(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 	expectedConfig := &GlobalConfiguration{
 		ID:                     1,
 		EnableWebRTC:           true,
@@ -44,7 +44,7 @@ func TestService_GetGlobalConfiguration(t *testing.T) {
 }
 
 func TestService_UpdateGlobalConfiguration(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	enableAnalytics := false
 	enableWebRTC := true

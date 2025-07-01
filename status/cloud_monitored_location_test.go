@@ -3,13 +3,13 @@ package status
 import (
 	"testing"
 
-	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
+	"github.com/pexip/go-infinity-sdk/v38/interfaces"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestService_ListCloudMonitoredLocations(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	name1 := "AWS US West"
 	name2 := "Azure EU West"
@@ -70,7 +70,7 @@ func TestService_ListCloudMonitoredLocations(t *testing.T) {
 }
 
 func TestService_GetCloudMonitoredLocation(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	name := "GCP Asia Pacific"
 	maxHD := 12
@@ -106,7 +106,7 @@ func TestService_GetCloudMonitoredLocation(t *testing.T) {
 }
 
 func TestService_ListCloudMonitoredLocations_WithOptions(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 	service := New(client)
 
 	opts := &ListOptions{

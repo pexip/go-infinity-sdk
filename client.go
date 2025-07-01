@@ -1,5 +1,5 @@
 // Package infinity provides a comprehensive Go client library for the Pexip Infinity Management API.
-// It offers complete support for all four API categories: Configuration, Status, History, and Command APIs
+// It offers complete support for all four API categories: Configuration, status, history, and command APIs
 // with features including type-safe operations, automatic retry with exponential backoff, and flexible authentication.
 package infinity
 
@@ -40,12 +40,13 @@ type Client struct {
 	httpClient  *http.Client
 	auth        auth.Authenticator
 	retryConfig *RetryConfig
+	userAgent   string
 
 	// API services
-	Config  *config.Service
-	Status  *status.Service
-	History *history.Service
-	Command *command.Service
+	config  *config.Service
+	status  *status.Service
+	history *history.Service
+	command *command.Service
 }
 
 // New creates a new Infinity API client with the given options
@@ -70,10 +71,10 @@ func New(options ...ClientOption) (*Client, error) {
 	}
 
 	// Initialize API services
-	c.Config = config.New(c)
-	c.Status = status.New(c)
-	c.History = history.New(c)
-	c.Command = command.New(c)
+	c.config = config.New(c)
+	c.status = status.New(c)
+	c.history = history.New(c)
+	c.command = command.New(c)
 
 	return c, nil
 }
@@ -136,6 +137,11 @@ func (c *Client) DoRequest(ctx context.Context, req *Request) (*Response, error)
 		// Set default headers
 		httpReq.Header.Set("Content-Type", "application/json")
 		httpReq.Header.Set("Accept", "application/json")
+
+		// Set User-Agent header if configured
+		if c.userAgent != "" {
+			httpReq.Header.Set("User-Agent", c.userAgent)
+		}
 
 		// Set custom headers
 		for key, value := range req.Headers {
@@ -223,6 +229,22 @@ func (c *Client) handleAPIError(resp *Response) error {
 		_ = json.Unmarshal(resp.Body, apiErr)
 	}
 	return apiErr
+}
+
+func (client *Client) Config() *config.Service {
+	return client.config
+}
+
+func (client *Client) Status() *status.Service {
+	return client.status
+}
+
+func (client *Client) History() *history.Service {
+	return client.history
+}
+
+func (client *Client) Command() *command.Service {
+	return client.command
 }
 
 // GetJSON performs a GET request and unmarshal the JSON response

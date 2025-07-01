@@ -3,7 +3,7 @@ package config
 import (
 	"testing"
 
-	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
+	"github.com/pexip/go-infinity-sdk/v38/interfaces"
 	"github.com/pexip/go-infinity-sdk/v38/options"
 	"github.com/pexip/go-infinity-sdk/v38/types"
 	"github.com/stretchr/testify/assert"
@@ -14,13 +14,13 @@ func TestService_ListDNSServers(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *mockClient.Client)
+		setup   func(m *interfaces.HTTPClientMock)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *mockClient.Client) {
+			setup: func(m *interfaces.HTTPClientMock) {
 				expectedResponse := &DNSServerListResponse{
 					Objects: []DNSServer{
 						{ID: 1, Address: "8.8.8.8", Description: "Google DNS"},
@@ -42,7 +42,7 @@ func TestService_ListDNSServers(t *testing.T) {
 				},
 				Search: "google",
 			},
-			setup: func(m *mockClient.Client) {
+			setup: func(m *interfaces.HTTPClientMock) {
 				expectedResponse := &DNSServerListResponse{
 					Objects: []DNSServer{
 						{ID: 1, Address: "8.8.8.8", Description: "Google DNS"},
@@ -59,7 +59,7 @@ func TestService_ListDNSServers(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := &mockClient.Client{}
+			client := interfaces.NewHTTPClientMock()
 			tt.setup(client)
 
 			service := New(client)
@@ -79,7 +79,7 @@ func TestService_ListDNSServers(t *testing.T) {
 }
 
 func TestService_GetDNSServer(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 	expectedServer := &DNSServer{
 		ID:          1,
 		Address:     "8.8.8.8",
@@ -100,7 +100,7 @@ func TestService_GetDNSServer(t *testing.T) {
 }
 
 func TestService_CreateDNSServer(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	createRequest := &DNSServerCreateRequest{
 		Address:     "9.9.9.9",
@@ -123,7 +123,7 @@ func TestService_CreateDNSServer(t *testing.T) {
 }
 
 func TestService_UpdateDNSServer(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	updateRequest := &DNSServerUpdateRequest{
 		Description: "Updated DNS Server",
@@ -149,7 +149,7 @@ func TestService_UpdateDNSServer(t *testing.T) {
 }
 
 func TestService_DeleteDNSServer(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/dns_server/1/", mock.Anything).Return(nil)
 

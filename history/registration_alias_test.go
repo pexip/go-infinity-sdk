@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
+	"github.com/pexip/go-infinity-sdk/v38/interfaces"
 	"github.com/pexip/go-infinity-sdk/v38/options"
 	"github.com/pexip/go-infinity-sdk/v38/util"
 	"github.com/stretchr/testify/assert"
@@ -14,7 +14,7 @@ import (
 )
 
 func TestService_ListRegistrationAliases(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 	service := New(client)
 
 	expectedResponse := &RegistrationAliasListResponse{
@@ -61,7 +61,7 @@ func TestService_ListRegistrationAliases(t *testing.T) {
 }
 
 func TestService_GetRegistrationAlias(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 	service := New(client)
 
 	expectedAlias := &RegistrationAlias{
@@ -91,7 +91,7 @@ func TestService_GetRegistrationAlias(t *testing.T) {
 }
 
 func TestService_ListRegistrationAliases_WithOptions(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 	service := New(client)
 
 	startTime := time.Now().Add(-6 * time.Hour)
@@ -146,7 +146,7 @@ func TestService_ListRegistrationAliases_WithOptions(t *testing.T) {
 }
 
 func TestService_ListRegistrationAliases_Error(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 	service := New(client)
 
 	client.On("GetJSON", context.Background(), "history/v1/registration_alias/", mock.AnythingOfType("*history.RegistrationAliasListResponse")).Return(errors.New("server error"))
@@ -159,7 +159,7 @@ func TestService_ListRegistrationAliases_Error(t *testing.T) {
 }
 
 func TestService_GetRegistrationAlias_NotFound(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 	service := New(client)
 
 	client.On("GetJSON", context.Background(), "history/v1/registration_alias/999/", mock.AnythingOfType("*history.RegistrationAlias")).Return(errors.New("registration alias not found"))

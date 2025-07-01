@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
+	"github.com/pexip/go-infinity-sdk/v38/interfaces"
 	"github.com/pexip/go-infinity-sdk/v38/options"
 	"github.com/pexip/go-infinity-sdk/v38/util"
 	"github.com/stretchr/testify/assert"
@@ -14,7 +14,7 @@ import (
 )
 
 func TestService_ListBackplaneMediaStreams(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 	service := New(client)
 
 	expectedResponse := &BackplaneMediaStreamListResponse{
@@ -71,7 +71,7 @@ func TestService_ListBackplaneMediaStreams(t *testing.T) {
 }
 
 func TestService_GetBackplaneMediaStream(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 	service := New(client)
 
 	expectedStream := &BackplaneMediaStream{
@@ -109,7 +109,7 @@ func TestService_GetBackplaneMediaStream(t *testing.T) {
 }
 
 func TestService_ListBackplaneMediaStreamsByBackplane(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 	service := New(client)
 
 	expectedResponse := &BackplaneMediaStreamListResponse{
@@ -154,7 +154,7 @@ func TestService_ListBackplaneMediaStreamsByBackplane(t *testing.T) {
 }
 
 func TestService_ListBackplaneMediaStreams_WithOptions(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 	service := New(client)
 
 	startTime := time.Now().Add(-2 * time.Hour)
@@ -199,7 +199,7 @@ func TestService_ListBackplaneMediaStreams_WithOptions(t *testing.T) {
 }
 
 func TestService_ListBackplaneMediaStreamsByBackplane_WithOptions(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 	service := New(client)
 
 	startTime := time.Now().Add(-1 * time.Hour)
@@ -250,7 +250,7 @@ func TestService_ListBackplaneMediaStreamsByBackplane_WithOptions(t *testing.T) 
 }
 
 func TestService_ListBackplaneMediaStreams_Error(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 	service := New(client)
 
 	client.On("GetJSON", context.Background(), "history/v1/backplane_media_stream/", mock.AnythingOfType("*history.BackplaneMediaStreamListResponse")).Return(errors.New("server error"))
@@ -263,7 +263,7 @@ func TestService_ListBackplaneMediaStreams_Error(t *testing.T) {
 }
 
 func TestService_ListBackplaneMediaStreamsByBackplane_Error(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 	service := New(client)
 
 	client.On("GetJSON", context.Background(), mock.MatchedBy(func(endpoint string) bool {
@@ -278,7 +278,7 @@ func TestService_ListBackplaneMediaStreamsByBackplane_Error(t *testing.T) {
 }
 
 func TestService_GetBackplaneMediaStream_NotFound(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 	service := New(client)
 
 	client.On("GetJSON", context.Background(), "history/v1/backplane_media_stream/999/", mock.AnythingOfType("*history.BackplaneMediaStream")).Return(errors.New("backplane media stream not found"))

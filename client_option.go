@@ -100,3 +100,14 @@ func WithMaxRetries(maxRetries int) ClientOption {
 func WithNoRetries() ClientOption {
 	return WithMaxRetries(0)
 }
+
+// WithUserAgent sets the User-Agent header for HTTP requests
+func WithUserAgent(userAgent string) ClientOption {
+	return func(c *Client) error {
+		if userAgent == "" {
+			return fmt.Errorf("user agent cannot be empty")
+		}
+		c.userAgent = userAgent
+		return nil
+	}
+}

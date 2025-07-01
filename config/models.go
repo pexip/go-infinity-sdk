@@ -202,27 +202,27 @@ type EndUserListResponse struct {
 
 // SystemLocation represents a system location configuration
 type SystemLocation struct {
-	ID                        int         `json:"id,omitempty"`
-	Name                      string      `json:"name"`
-	Description               string      `json:"description,omitempty"`
-	MTU                       int         `json:"mtu,omitempty"`
-	MediaQoS                  *int        `json:"media_qos,omitempty"`
-	SignallingQoS             *int        `json:"signalling_qos,omitempty"`
-	LocalMSSIPDomain          string      `json:"local_mssip_domain,omitempty"`
-	DNSServers                []DNSServer `json:"dns_servers,omitempty"`
-	NTPServers                []NTPServer `json:"ntp_servers,omitempty"`
-	SyslogServers             []string    `json:"syslog_servers,omitempty"`
-	H323Gatekeeper            *string     `json:"h323_gatekeeper,omitempty"`
-	SIPProxy                  *string     `json:"sip_proxy,omitempty"`
-	MSSIPProxy                *string     `json:"mssip_proxy,omitempty"`
-	TeamsProxy                *string     `json:"teams_proxy,omitempty"`
-	OverflowLocation1         *string     `json:"overflow_location1,omitempty"`
-	OverflowLocation2         *string     `json:"overflow_location2,omitempty"`
-	TranscodingLocation       *string     `json:"transcoding_location,omitempty"`
-	BDPMPinChecksEnabled      string      `json:"bdpm_pin_checks_enabled,omitempty"`
-	BDPMScanQuarantineEnabled string      `json:"bdpm_scan_quarantine_enabled,omitempty"`
-	UseRelayCandidatesOnly    bool        `json:"use_relay_candidates_only,omitempty"`
-	ResourceURI               string      `json:"resource_uri,omitempty"`
+	ID                        int            `json:"id,omitempty"`
+	Name                      string         `json:"name"`
+	Description               string         `json:"description,omitempty"`
+	MTU                       int            `json:"mtu,omitempty"`
+	MediaQoS                  *int           `json:"media_qos,omitempty"`
+	SignallingQoS             *int           `json:"signalling_qos,omitempty"`
+	LocalMSSIPDomain          string         `json:"local_mssip_domain,omitempty"`
+	DNSServers                []DNSServer    `json:"dns_servers,omitempty"`
+	NTPServers                []NTPServer    `json:"ntp_servers,omitempty"`
+	SyslogServers             []SyslogServer `json:"syslog_servers,omitempty"`
+	H323Gatekeeper            *string        `json:"h323_gatekeeper,omitempty"`
+	SIPProxy                  *string        `json:"sip_proxy,omitempty"`
+	MSSIPProxy                *string        `json:"mssip_proxy,omitempty"`
+	TeamsProxy                *string        `json:"teams_proxy,omitempty"`
+	OverflowLocation1         *string        `json:"overflow_location1,omitempty"`
+	OverflowLocation2         *string        `json:"overflow_location2,omitempty"`
+	TranscodingLocation       *string        `json:"transcoding_location,omitempty"`
+	BDPMPinChecksEnabled      string         `json:"bdpm_pin_checks_enabled,omitempty"`
+	BDPMScanQuarantineEnabled string         `json:"bdpm_scan_quarantine_enabled,omitempty"`
+	UseRelayCandidatesOnly    bool           `json:"use_relay_candidates_only,omitempty"`
+	ResourceURI               string         `json:"resource_uri,omitempty"`
 }
 
 // SystemLocationCreateRequest represents a request to create a system location
@@ -523,4 +523,51 @@ type GlobalConfigurationUpdateRequest struct {
 	BandwidthRestrictions        string   `json:"bandwidth_restrictions,omitempty"`
 	AdministratorEmail           string   `json:"administrator_email,omitempty"`
 	GlobalConferenceCreateGroups []string `json:"global_conference_create_groups,omitempty"`
+}
+
+// SyslogServer represents a syslog server configuration
+type SyslogServer struct {
+	ID          int    `json:"id,omitempty"`
+	Address     string `json:"address"`
+	Description string `json:"description,omitempty"`
+	Port        int    `json:"port"`
+	Transport   string `json:"transport"`
+	AuditLog    bool   `json:"audit_log"`
+	SupportLog  bool   `json:"support_log"`
+	WebLog      bool   `json:"web_log"`
+	ResourceURI string `json:"resource_uri,omitempty"`
+}
+
+// SyslogServerCreateRequest represents a request to create a syslog server
+type SyslogServerCreateRequest struct {
+	Address     string `json:"address"`
+	Description string `json:"description,omitempty"`
+	Port        int    `json:"port"`
+	Transport   string `json:"transport"`
+	AuditLog    bool   `json:"audit_log"`
+	SupportLog  bool   `json:"support_log"`
+	WebLog      bool   `json:"web_log"`
+}
+
+// SyslogServerUpdateRequest represents a request to update a syslog server
+type SyslogServerUpdateRequest struct {
+	Address     string `json:"address,omitempty"`
+	Description string `json:"description,omitempty"`
+	Port        int    `json:"port,omitempty"`
+	Transport   string `json:"transport,omitempty"`
+	AuditLog    *bool  `json:"audit_log,omitempty"`
+	SupportLog  *bool  `json:"support_log,omitempty"`
+	WebLog      *bool  `json:"web_log,omitempty"`
+}
+
+// SyslogServerListResponse represents the response from listing syslog servers
+type SyslogServerListResponse struct {
+	Meta struct {
+		Limit      int    `json:"limit"`
+		Next       string `json:"next"`
+		Offset     int    `json:"offset"`
+		Previous   string `json:"previous"`
+		TotalCount int    `json:"total_count"`
+	} `json:"meta"`
+	Objects []SyslogServer `json:"objects"`
 }

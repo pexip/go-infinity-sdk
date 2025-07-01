@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
+	"github.com/pexip/go-infinity-sdk/v38/interfaces"
 	"github.com/pexip/go-infinity-sdk/v38/options"
 	"github.com/pexip/go-infinity-sdk/v38/util"
 	"github.com/stretchr/testify/assert"
@@ -14,7 +14,7 @@ import (
 )
 
 func TestService_ListAlarms(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 	service := New(client)
 
 	expectedResponse := &AlarmListResponse{
@@ -58,7 +58,7 @@ func TestService_ListAlarms(t *testing.T) {
 }
 
 func TestService_GetAlarm(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 	service := New(client)
 
 	expectedAlarm := &Alarm{
@@ -86,7 +86,7 @@ func TestService_GetAlarm(t *testing.T) {
 }
 
 func TestService_ListAlarms_WithOptions(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 	service := New(client)
 
 	startTime := time.Now().Add(-24 * time.Hour)
@@ -135,7 +135,7 @@ func TestService_ListAlarms_WithOptions(t *testing.T) {
 }
 
 func TestService_ListAlarms_Error(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 	service := New(client)
 
 	client.On("GetJSON", context.Background(), "history/v1/alarm/", mock.AnythingOfType("*history.AlarmListResponse")).Return(errors.New("server error"))
@@ -148,7 +148,7 @@ func TestService_ListAlarms_Error(t *testing.T) {
 }
 
 func TestService_GetAlarm_NotFound(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 	service := New(client)
 
 	client.On("GetJSON", context.Background(), "history/v1/alarm/999/", mock.AnythingOfType("*history.Alarm")).Return(errors.New("alarm not found"))

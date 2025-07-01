@@ -3,7 +3,7 @@ package status
 import (
 	"testing"
 
-	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
+	"github.com/pexip/go-infinity-sdk/v38/interfaces"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -12,13 +12,13 @@ func TestService_ListConferences(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *mockClient.Client)
+		setup   func(m *interfaces.HTTPClientMock)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *mockClient.Client) {
+			setup: func(m *interfaces.HTTPClientMock) {
 				expectedResponse := &ConferenceListResponse{
 					Objects: []ConferenceStatus{
 						{ID: "1", Name: "Test Conference 1", IsStarted: true, ServiceType: "conference"},
@@ -38,7 +38,7 @@ func TestService_ListConferences(t *testing.T) {
 				Limit:  5,
 				Offset: 10,
 			},
-			setup: func(m *mockClient.Client) {
+			setup: func(m *interfaces.HTTPClientMock) {
 				expectedResponse := &ConferenceListResponse{
 					Objects: []ConferenceStatus{
 						{ID: "3", Name: "Test Conference 3", IsStarted: true, ServiceType: "conference"},
@@ -55,7 +55,7 @@ func TestService_ListConferences(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := &mockClient.Client{}
+			client := interfaces.NewHTTPClientMock()
 			tt.setup(client)
 
 			service := New(client)
@@ -75,7 +75,7 @@ func TestService_ListConferences(t *testing.T) {
 }
 
 func TestService_GetConference(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 	expectedConference := &ConferenceStatus{
 		ID:          "1",
 		Name:        "Test Conference",

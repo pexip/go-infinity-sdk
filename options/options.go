@@ -1,6 +1,6 @@
 // Package options provides shared option types for list operations across all API modules.
 // It includes base types for pagination, search, and time filtering that are used
-// throughout the Configuration, Status, and History APIs.
+// throughout the Configuration, status, and history APIs.
 package options
 
 import (

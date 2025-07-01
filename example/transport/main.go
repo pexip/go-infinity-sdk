@@ -52,7 +52,7 @@ func proxyExample() {
 		return
 	}
 
-	fmt.Printf("Client created with proxy transport: %+v\n", client)
+	fmt.Printf("ClientMock created with proxy transport: %+v\n", client)
 }
 
 func tlsExample() {
@@ -85,7 +85,7 @@ func tlsExample() {
 	defer cancel()
 
 	// This would make a real API call if the server was accessible
-	_, err = client.Status.GetSystemStatus(ctx)
+	_, err = client.Status().GetSystemStatus(ctx)
 	if err != nil {
 		fmt.Printf("API call failed (expected in example): %v\n", err)
 	} else {
@@ -118,7 +118,7 @@ func connectionPoolingExample() {
 		return
 	}
 
-	fmt.Printf("Client created with optimized connection pooling\n")
+	fmt.Printf("ClientMock created with optimized connection pooling\n")
 	fmt.Printf("Max idle connections: %d\n", poolingTransport.MaxIdleConns)
 	fmt.Printf("Max idle connections per host: %d\n", poolingTransport.MaxIdleConnsPerHost)
 	fmt.Printf("Max connections per host: %d\n", poolingTransport.MaxConnsPerHost)

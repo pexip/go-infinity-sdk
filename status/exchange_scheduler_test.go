@@ -4,14 +4,14 @@ import (
 	"testing"
 	"time"
 
-	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
+	"github.com/pexip/go-infinity-sdk/v38/interfaces"
 	"github.com/pexip/go-infinity-sdk/v38/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestService_ListExchangeSchedulers(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	lastModified := time.Now().Add(-1 * time.Hour)
 
@@ -51,7 +51,7 @@ func TestService_ListExchangeSchedulers(t *testing.T) {
 }
 
 func TestService_ListExchangeSchedulers_WithOptions(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 	service := New(client)
 
 	opts := &ListOptions{
@@ -96,7 +96,7 @@ func TestService_ListExchangeSchedulers_WithOptions(t *testing.T) {
 }
 
 func TestService_GetExchangeScheduler(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	lastModified := time.Now().Add(-30 * time.Minute)
 	expectedScheduler := &ExchangeScheduler{

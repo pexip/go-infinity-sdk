@@ -3,13 +3,13 @@ package command
 import (
 	"testing"
 
-	mockClient "github.com/pexip/go-infinity-sdk/v38/internal/mock"
+	"github.com/pexip/go-infinity-sdk/v38/interfaces"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestService_CreateSnapshot(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	includeDiagnostics := true
 	expectedRequest := &SnapshotRequest{
@@ -37,7 +37,7 @@ func TestService_CreateSnapshot(t *testing.T) {
 }
 
 func TestService_CreateSnapshotSimple(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	expectedResponse := &CommandResponse{
 		Status:  "success",
@@ -58,7 +58,7 @@ func TestService_CreateSnapshotSimple(t *testing.T) {
 }
 
 func TestService_ImportCertificates(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	expectedRequest := &CertificatesImportRequest{
 		Bundle:               "-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----",
@@ -84,7 +84,7 @@ func TestService_ImportCertificates(t *testing.T) {
 }
 
 func TestService_ManageSoftwareBundle(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	expectedRequest := &SoftwareBundleRequest{
 		Package: "software-bundle.zip",
@@ -109,7 +109,7 @@ func TestService_ManageSoftwareBundle(t *testing.T) {
 }
 
 func TestService_UpgradeSystem(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	expectedRequest := &UpgradeRequest{
 		Package: "upgrade-package.zip",
@@ -134,7 +134,7 @@ func TestService_UpgradeSystem(t *testing.T) {
 }
 
 func TestService_StartCloudNode(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	expectedRequest := &StartCloudNodeRequest{
 		InstanceID: "cloud-instance-123",
@@ -159,7 +159,7 @@ func TestService_StartCloudNode(t *testing.T) {
 }
 
 func TestService_Sync(t *testing.T) {
-	client := &mockClient.Client{}
+	client := interfaces.NewHTTPClientMock()
 
 	expectedRequest := &SyncRequest{
 		ConferenceSyncTemplateID: "sync-template-456",

@@ -262,6 +262,11 @@ func (c *Client) PutJSON(ctx context.Context, endpoint string, body interface{},
 	return c.performJSONRequest(ctx, http.MethodPut, endpoint, body, result)
 }
 
+// PatchJSON performs a PATCH request with JSON body and unmarshal the JSON response
+func (c *Client) PatchJSON(ctx context.Context, endpoint string, body interface{}, result interface{}) error {
+	return c.performJSONRequest(ctx, http.MethodPatch, endpoint, body, result)
+}
+
 // DeleteJSON performs a DELETE request and unmarshal the JSON response
 func (c *Client) DeleteJSON(ctx context.Context, endpoint string, result interface{}) error {
 	return c.performJSONRequest(ctx, http.MethodDelete, endpoint, nil, result)

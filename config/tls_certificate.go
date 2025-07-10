@@ -43,7 +43,7 @@ func (s *Service) UpdateTLSCertificate(ctx context.Context, id int, req *TLSCert
 	endpoint := fmt.Sprintf("configuration/v1/tls_certificate/%d/", id)
 
 	var result TLSCertificate
-	err := s.client.PutJSON(ctx, endpoint, req, &result)
+	err := s.client.PatchJSON(ctx, endpoint, req, &result)
 	return &result, err
 }
 

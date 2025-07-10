@@ -20,6 +20,9 @@ type HTTPClient interface {
 	// PutJSON performs a PUT request with JSON body and unmarshals the JSON response
 	PutJSON(ctx context.Context, endpoint string, body interface{}, result interface{}) error
 
+	// PatchJSON performs a PATCH request with JSON body and unmarshals the JSON response
+	PatchJSON(ctx context.Context, endpoint string, body interface{}, result interface{}) error
+
 	// DeleteJSON performs a DELETE request and unmarshals the JSON response
 	DeleteJSON(ctx context.Context, endpoint string, result interface{}) error
 

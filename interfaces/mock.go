@@ -30,6 +30,12 @@ func (m *HTTPClientMock) PutJSON(ctx context.Context, endpoint string, body inte
 	return args.Error(0)
 }
 
+// PatchJSON performs a PATCH request with JSON body and unmarshals the JSON response
+func (m *HTTPClientMock) PatchJSON(ctx context.Context, endpoint string, body interface{}, result interface{}) error {
+	args := m.Called(ctx, endpoint, body, result)
+	return args.Error(0)
+}
+
 // DeleteJSON performs a DELETE request and unmarshals the JSON response
 func (m *HTTPClientMock) DeleteJSON(ctx context.Context, endpoint string, result interface{}) error {
 	args := m.Called(ctx, endpoint, result)

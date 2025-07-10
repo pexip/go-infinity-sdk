@@ -20,5 +20,10 @@ func (ft *InfinityTime) UnmarshalJSON(b []byte) error {
 	}
 	// Try without timezone
 	ft.Time, err = time.Parse("2006-01-02T15:04:05.000000", s)
+	if err == nil {
+		return nil
+	}
+	// Try without seconds
+	ft.Time, err = time.Parse("2006-01-02T15:04:05", s)
 	return err
 }

@@ -68,6 +68,12 @@ func (m *ClientMock) PutJSON(ctx context.Context, endpoint string, body interfac
 	return args.Error(0)
 }
 
+// PatchJSON mocks the PatchJSON method
+func (m *ClientMock) PatchJSON(ctx context.Context, endpoint string, body interface{}, result interface{}) error {
+	args := m.Called(ctx, endpoint, body, result)
+	return args.Error(0)
+}
+
 // DeleteJSON mocks the DeleteJSON method
 func (m *ClientMock) DeleteJSON(ctx context.Context, endpoint string, result interface{}) error {
 	args := m.Called(ctx, endpoint, result)

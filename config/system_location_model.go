@@ -91,7 +91,7 @@ type SystemLocationUpdateRequest struct {
 	BDPMPinChecksEnabled        string   `json:"bdpm_pin_checks_enabled,omitempty"`
 	BDPMScanQuarantineEnabled   string   `json:"bdpm_scan_quarantine_enabled,omitempty"`
 	UseRelayCandidatesOnly      bool     `json:"use_relay_candidates_only,omitempty"`
-	SNMPNetworkManagementSystem *string  `json:"snmp_network_management_system"`
+	SNMPNetworkManagementSystem *string  `json:"snmp_network_management_system,omitempty"`
 	HTTPProxy                   *string  `json:"http_proxy,omitempty"`
 	TURNServer                  *string  `json:"turn_server,omitempty"`
 	STUNServer                  *string  `json:"stun_server,omitempty"`

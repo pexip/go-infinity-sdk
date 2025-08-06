@@ -27,13 +27,13 @@ type SystemLocation struct {
 	HTTPProxy                   *string        `json:"http_proxy,omitempty"`
 	TURNServer                  *string        `json:"turn_server,omitempty"`
 	STUNServer                  *string        `json:"stun_server,omitempty"`
-	ClientTURNServers           []TURNServer   `json:"client_turn_servers,omitempty"`
-	ClientSTUNServers           []STUNServer   `json:"client_stun_servers,omitempty"`
+	ClientTURNServers           []string       `json:"client_turn_servers,omitempty"`
+	ClientSTUNServers           []string       `json:"client_stun_servers,omitempty"`
 	EventSinks                  []EventSink    `json:"event_sinks,omitempty"`
 	PolicyServer                *string        `json:"policy_server,omitempty"`
-	LiveCaptionsDialOut1        *string        `json:"live_captions_dial_out1,omitempty"`
-	LiveCaptionsDialOut2        *string        `json:"live_captions_dial_out2,omitempty"`
-	LiveCaptionsDialOut3        *string        `json:"live_captions_dial_out3,omitempty"`
+	LiveCaptionsDialOut1        *string        `json:"live_captions_dial_out_1,omitempty"`
+	LiveCaptionsDialOut2        *string        `json:"live_captions_dial_out_2,omitempty"`
+	LiveCaptionsDialOut3        *string        `json:"live_captions_dial_out_3,omitempty"`
 }
 
 // SystemLocationCreateRequest represents a request to create a system location
@@ -65,9 +65,9 @@ type SystemLocationCreateRequest struct {
 	ClientSTUNServers           []string `json:"client_stun_servers,omitempty"`
 	PolicyServer                *string  `json:"policy_server,omitempty"`
 	EventSinks                  []string `json:"event_sinks,omitempty"`
-	LiveCaptionsDialOut1        *string  `json:"live_captions_dial_out1,omitempty"`
-	LiveCaptionsDialOut2        *string  `json:"live_captions_dial_out2,omitempty"`
-	LiveCaptionsDialOut3        *string  `json:"live_captions_dial_out3,omitempty"`
+	LiveCaptionsDialOut1        *string  `json:"live_captions_dial_out_1,omitempty"`
+	LiveCaptionsDialOut2        *string  `json:"live_captions_dial_out_2,omitempty"`
+	LiveCaptionsDialOut3        *string  `json:"live_captions_dial_out_3,omitempty"`
 }
 
 // SystemLocationUpdateRequest represents a request to update a system location
@@ -99,9 +99,9 @@ type SystemLocationUpdateRequest struct {
 	ClientSTUNServers           []string `json:"client_stun_servers,omitempty"`
 	PolicyServer                *string  `json:"policy_server,omitempty"`
 	EventSinks                  []string `json:"event_sinks,omitempty"`
-	LiveCaptionsDialOut1        *string  `json:"live_captions_dial_out1,omitempty"`
-	LiveCaptionsDialOut2        *string  `json:"live_captions_dial_out2,omitempty"`
-	LiveCaptionsDialOut3        *string  `json:"live_captions_dial_out3,omitempty"`
+	LiveCaptionsDialOut1        *string  `json:"live_captions_dial_out_1,omitempty"`
+	LiveCaptionsDialOut2        *string  `json:"live_captions_dial_out_2,omitempty"`
+	LiveCaptionsDialOut3        *string  `json:"live_captions_dial_out_3,omitempty"`
 }
 
 // SystemLocationListResponse represents the response from listing system locations

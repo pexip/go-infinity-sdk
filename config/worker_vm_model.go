@@ -96,13 +96,13 @@ type WorkerVMCreateRequest struct {
 // WorkerVMUpdateRequest represents a request to update a worker VM
 type WorkerVMUpdateRequest struct {
 	ID                         int      `json:"id,omitempty"`
-	Name                       string   `json:"name"`
+	Name                       string   `json:"name,omitempty"`
 	Description                string   `json:"description,omitempty"`
-	Hostname                   string   `json:"hostname"`
-	Domain                     string   `json:"domain"`
-	Address                    string   `json:"address"`
-	Netmask                    string   `json:"netmask"`
-	Gateway                    string   `json:"gateway"`
+	Hostname                   string   `json:"hostname,omitempty"`
+	Domain                     string   `json:"domain,omitempty"`
+	Address                    string   `json:"address,omitempty"`
+	Netmask                    string   `json:"netmask,omitempty"`
+	Gateway                    string   `json:"gateway,omitempty"`
 	VMCPUCount                 int      `json:"vm_cpu_count,omitempty"`
 	VMSystemMemory             int      `json:"vm_system_memory,omitempty"`
 	DeploymentType             string   `json:"deployment_type,omitempty"`

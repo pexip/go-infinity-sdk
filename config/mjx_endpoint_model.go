@@ -1,3 +1,9 @@
+/*
+ * SPDX-FileCopyrightText: 2025 Pexip AS
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 package config
 
 // MjxEndpoint represents a MJX endpoint configuration

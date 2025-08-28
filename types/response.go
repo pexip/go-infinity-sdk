@@ -1,3 +1,9 @@
+/*
+ * SPDX-FileCopyrightText: 2025 Pexip AS
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 // Package types provides common types used across the Pexip Infinity SDK.
 package types
 

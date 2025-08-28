@@ -1,3 +1,9 @@
+/*
+ * SPDX-FileCopyrightText: 2025 Pexip AS
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 // Package auth provides authentication implementations for the Pexip Infinity SDK.
 // It supports multiple authentication methods including Basic Auth, Token Auth, Bearer Auth, and custom authentication.
 package auth

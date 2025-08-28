@@ -1,3 +1,9 @@
+/*
+ * SPDX-FileCopyrightText: 2025 Pexip AS
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 package command
 
 // CommandResponse represents a generic command response

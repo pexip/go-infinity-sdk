@@ -1,3 +1,9 @@
+/*
+ * SPDX-FileCopyrightText: 2025 Pexip AS
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 package config
 
 // ADFSAuthServerDomain represents a domain associated with an AD FS OAuth 2.0 Client

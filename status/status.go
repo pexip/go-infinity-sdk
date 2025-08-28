@@ -1,3 +1,9 @@
+/*
+ * SPDX-FileCopyrightText: 2025 Pexip AS
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 // Package status provides access to the Pexip Infinity status API.
 // It allows monitoring of system status, active conferences, participants, worker nodes, and alarms
 // with real-time status information and health monitoring capabilities.

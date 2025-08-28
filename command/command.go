@@ -1,3 +1,9 @@
+/*
+ * SPDX-FileCopyrightText: 2025 Pexip AS
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 // Package command provides access to the Pexip Infinity command API.
 // It allows real-time control of conferences and participants including operations like
 // muting, spotlighting, transferring, and sending messages.

@@ -1,3 +1,9 @@
+/*
+ * SPDX-FileCopyrightText: 2025 Pexip AS
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 // Package history provides access to the Pexip Infinity history API.
 // It allows retrieval of historical data for conferences, participants, and media streams
 // with support for time-based filtering and search capabilities.

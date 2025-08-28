@@ -1,3 +1,9 @@
+/*
+ * SPDX-FileCopyrightText: 2025 Pexip AS
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 package config
 
 // GoogleAuthServer represents a Google OAuth 2.0 Credential configuration

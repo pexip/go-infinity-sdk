@@ -1,3 +1,9 @@
+/*
+ * SPDX-FileCopyrightText: 2025 Pexip AS
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 // Package infinity provides a comprehensive Go client library for the Pexip Infinity Management API.
 // It offers complete support for all four API categories: Configuration, status, history, and command APIs
 // with features including type-safe operations, automatic retry with exponential backoff, and flexible authentication.

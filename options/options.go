@@ -1,3 +1,9 @@
+/*
+ * SPDX-FileCopyrightText: 2025 Pexip AS
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 // Package options provides shared option types for list operations across all API modules.
 // It includes base types for pagination, search, and time filtering that are used
 // throughout the Configuration, status, and history APIs.

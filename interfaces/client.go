@@ -1,3 +1,9 @@
+/*
+ * SPDX-FileCopyrightText: 2025 Pexip AS
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 // Package interfaces defines shared interfaces used across the go-infinity-sdk packages
 // to enable dependency injection and avoid import cycles.
 package interfaces

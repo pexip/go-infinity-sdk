@@ -49,7 +49,7 @@ func (s *Service) UpdateCACertificate(ctx context.Context, id int, req *CACertif
 	endpoint := fmt.Sprintf("configuration/v1/ca_certificate/%d/", id)
 
 	var result CACertificate
-	err := s.client.PutJSON(ctx, endpoint, req, &result)
+	err := s.client.PatchJSON(ctx, endpoint, req, &result)
 	return &result, err
 }
 

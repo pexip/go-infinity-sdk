@@ -10,7 +10,7 @@ package config
 type Role struct {
 	ID          int      `json:"id,omitempty"`
 	Name        string   `json:"name"`
-	Permissions []string `json:"permissions,omitempty"`
+	Permissions []Permission `json:"permissions,omitempty"`
 	ResourceURI string   `json:"resource_uri,omitempty"`
 }
 

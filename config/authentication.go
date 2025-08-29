@@ -24,6 +24,6 @@ func (s *Service) UpdateAuthentication(ctx context.Context, req *AuthenticationU
 	endpoint := "configuration/v1/authentication/1/"
 
 	var result Authentication
-	err := s.client.PutJSON(ctx, endpoint, req, &result)
+	err := s.client.PatchJSON(ctx, endpoint, req, &result)
 	return &result, err
 }

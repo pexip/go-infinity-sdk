@@ -44,6 +44,15 @@ func (s *Service) CreateManagementVM(ctx context.Context, req *ManagementVMCreat
 	return s.client.PostWithResponse(ctx, endpoint, req, nil)
 }
 
+// UpdateManagementVM updates an existing management VM
+func (s *Service) UpdateManagementVM(ctx context.Context, id int, req *ManagementVMUpdateRequest) (*ManagementVM, error) {
+	endpoint := fmt.Sprintf("configuration/v1/management_vm/%d/", id)
+
+	var result ManagementVM
+	err := s.client.PatchJSON(ctx, endpoint, req, &result)
+	return &result, err
+}
+
 // DeleteManagementVM deletes a management VM
 func (s *Service) DeleteManagementVM(ctx context.Context, id int) error {
 	endpoint := fmt.Sprintf("configuration/v1/management_vm/%d/", id)

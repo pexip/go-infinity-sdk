@@ -81,6 +81,42 @@ type ManagementVMCreateRequest struct {
 	Initializing                bool     `json:"initializing"`
 }
 
+// ManagementVMUpdateRequest represents a request to update a management VM
+type ManagementVMUpdateRequest struct {
+	Name                        string   `json:"name"`
+	Description                 string   `json:"description,omitempty"`
+	Address                     string   `json:"address"`
+	Netmask                     string   `json:"netmask"`
+	Gateway                     string   `json:"gateway"`
+	Hostname                    string   `json:"hostname"`
+	Domain                      string   `json:"domain"`
+	AlternativeFQDN             string   `json:"alternative_fqdn,omitempty"`
+	IPV6Address                 *string  `json:"ipv6_address,omitempty"`
+	IPV6Gateway                 *string  `json:"ipv6_gateway,omitempty"`
+	MTU                         int      `json:"mtu"`
+	StaticNATAddress            *string  `json:"static_nat_address,omitempty"`
+	DNSServers                  []string `json:"dns_servers,omitempty"`
+	NTPServers                  []string `json:"ntp_servers,omitempty"`
+	SyslogServers               []string `json:"syslog_servers,omitempty"`
+	StaticRoutes                []string `json:"static_routes,omitempty"`
+	EventSinks                  []string `json:"event_sinks,omitempty"`
+	HTTPProxy                   *string  `json:"http_proxy,omitempty"`
+	TLSCertificate              *string  `json:"tls_certificate,omitempty"`
+	EnableSSH                   string   `json:"enable_ssh"`
+	SSHAuthorizedKeys           []string `json:"ssh_authorized_keys,omitempty"`
+	SSHAuthorizedKeysUseCloud   bool     `json:"ssh_authorized_keys_use_cloud"`
+	SecondaryConfigPassphrase   string   `json:"secondary_config_passphrase,omitempty"`
+	SNMPMode                    string   `json:"snmp_mode"`
+	SNMPCommunity               string   `json:"snmp_community,omitempty"`
+	SNMPUsername                string   `json:"snmp_username,omitempty"`
+	SNMPAuthenticationPassword  string   `json:"snmp_authentication_password,omitempty"`
+	SNMPPrivacyPassword         string   `json:"snmp_privacy_password,omitempty"`
+	SNMPSystemContact           string   `json:"snmp_system_contact,omitempty"`
+	SNMPSystemLocation          string   `json:"snmp_system_location,omitempty"`
+	SNMPNetworkManagementSystem *string  `json:"snmp_network_management_system,omitempty"`
+	Initializing                bool     `json:"initializing"`
+}
+
 // ManagementVMListResponse represents the response from listing management VMs
 type ManagementVMListResponse struct {
 	Meta struct {

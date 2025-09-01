@@ -1,3 +1,5 @@
+> **Beta Notice:** The go-infinity-sdk is currently in Beta and is not recommended for production deployments. Please use with caution.
+
 # Pexip Infinity Go SDK
 
 A comprehensive Go client library for the Pexip Infinity Management API, providing easy access to all four API categories: Configuration, Status, History, and Command APIs.

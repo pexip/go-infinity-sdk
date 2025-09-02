@@ -84,7 +84,7 @@ type ManagementVMCreateRequest struct {
 // ManagementVMUpdateRequest represents a request to update a management VM
 type ManagementVMUpdateRequest struct {
 	Name                        string   `json:"name"`
-	Description                 string   `json:"description,omitempty"`
+	Description                 string   `json:"description"`
 	Address                     string   `json:"address"`
 	Netmask                     string   `json:"netmask"`
 	Gateway                     string   `json:"gateway"`
@@ -106,7 +106,7 @@ type ManagementVMUpdateRequest struct {
 	SSHAuthorizedKeys           []string `json:"ssh_authorized_keys,omitempty"`
 	SSHAuthorizedKeysUseCloud   bool     `json:"ssh_authorized_keys_use_cloud"`
 	SecondaryConfigPassphrase   string   `json:"secondary_config_passphrase,omitempty"`
-	SNMPMode                    string   `json:"snmp_mode"`
+	SNMPMode                    string   `json:"snmp_mode,omitempty"`
 	SNMPCommunity               string   `json:"snmp_community,omitempty"`
 	SNMPUsername                string   `json:"snmp_username,omitempty"`
 	SNMPAuthenticationPassword  string   `json:"snmp_authentication_password,omitempty"`

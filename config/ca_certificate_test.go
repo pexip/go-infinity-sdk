@@ -146,7 +146,7 @@ func TestService_UpdateCACertificate(t *testing.T) {
 	trustedIntermediate := false
 	updateRequest := &CACertificateUpdateRequest{
 		Certificate:         "-----BEGIN CERTIFICATE-----\nMIIUpdatedCertificate\n-----END CERTIFICATE-----",
-		TrustedIntermediate: &trustedIntermediate,
+		TrustedIntermediate: trustedIntermediate,
 	}
 
 	keyID := "12:34:56:78:9a:bc:de:f0"

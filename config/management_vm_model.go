@@ -101,7 +101,7 @@ type ManagementVMUpdateRequest struct {
 	StaticRoutes                []string `json:"static_routes,omitempty"`
 	EventSinks                  []string `json:"event_sinks,omitempty"`
 	HTTPProxy                   *string  `json:"http_proxy,omitempty"`
-	TLSCertificate              *string  `json:"tls_certificate,omitempty"`
+	TLSCertificate              *string  `json:"tls_certificate"`
 	EnableSSH                   string   `json:"enable_ssh"`
 	SSHAuthorizedKeys           []string `json:"ssh_authorized_keys,omitempty"`
 	SSHAuthorizedKeysUseCloud   bool     `json:"ssh_authorized_keys_use_cloud"`

@@ -83,27 +83,27 @@ type ManagementVMCreateRequest struct {
 
 // ManagementVMUpdateRequest represents a request to update a management VM
 type ManagementVMUpdateRequest struct {
-	Name                        string   `json:"name"`
+	Name                        string   `json:"name,omitempty"`
 	Description                 string   `json:"description"`
-	Address                     string   `json:"address"`
-	Netmask                     string   `json:"netmask"`
-	Gateway                     string   `json:"gateway"`
-	Hostname                    string   `json:"hostname"`
-	Domain                      string   `json:"domain"`
+	Address                     string   `json:"address,omitempty"`
+	Netmask                     string   `json:"netmask,omitempty"`
+	Gateway                     string   `json:"gateway,omitempty"`
+	Hostname                    string   `json:"hostname,omitempty"`
+	Domain                      string   `json:"domain,omitempty"`
 	AlternativeFQDN             string   `json:"alternative_fqdn,omitempty"`
 	IPV6Address                 *string  `json:"ipv6_address,omitempty"`
 	IPV6Gateway                 *string  `json:"ipv6_gateway,omitempty"`
-	MTU                         int      `json:"mtu"`
+	MTU                         int      `json:"mtu,omitempty"`
 	StaticNATAddress            *string  `json:"static_nat_address,omitempty"`
-	DNSServers                  []string `json:"dns_servers,omitempty"`
-	NTPServers                  []string `json:"ntp_servers,omitempty"`
-	SyslogServers               []string `json:"syslog_servers,omitempty"`
-	StaticRoutes                []string `json:"static_routes,omitempty"`
+	DNSServers                  []string `json:"dns_servers"`
+	NTPServers                  []string `json:"ntp_servers"`
+	SyslogServers               []string `json:"syslog_servers"`
+	StaticRoutes                []string `json:"static_routes"`
 	EventSinks                  []string `json:"event_sinks,omitempty"`
 	HTTPProxy                   *string  `json:"http_proxy,omitempty"`
 	TLSCertificate              *string  `json:"tls_certificate"`
-	EnableSSH                   string   `json:"enable_ssh"`
-	SSHAuthorizedKeys           []string `json:"ssh_authorized_keys,omitempty"`
+	EnableSSH                   string   `json:"enable_ssh,omitempty"`
+	SSHAuthorizedKeys           []string `json:"ssh_authorized_keys"`
 	SSHAuthorizedKeysUseCloud   bool     `json:"ssh_authorized_keys_use_cloud"`
 	SecondaryConfigPassphrase   string   `json:"secondary_config_passphrase,omitempty"`
 	SNMPMode                    string   `json:"snmp_mode,omitempty"`
@@ -113,7 +113,7 @@ type ManagementVMUpdateRequest struct {
 	SNMPPrivacyPassword         string   `json:"snmp_privacy_password,omitempty"`
 	SNMPSystemContact           string   `json:"snmp_system_contact,omitempty"`
 	SNMPSystemLocation          string   `json:"snmp_system_location,omitempty"`
-	SNMPNetworkManagementSystem *string  `json:"snmp_network_management_system,omitempty"`
+	SNMPNetworkManagementSystem *string  `json:"snmp_network_management_system"`
 	Initializing                bool     `json:"initializing"`
 }
 

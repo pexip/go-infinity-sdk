@@ -9,6 +9,7 @@ package config
 import (
 	"context"
 	"fmt"
+	"net/url"
 
 	"github.com/pexip/go-infinity-sdk/v38/types"
 )
@@ -17,15 +18,14 @@ import (
 func (s *Service) ListScheduledConferences(ctx context.Context, opts *ListOptions) (*ScheduledConferenceListResponse, error) {
 	endpoint := "configuration/v1/scheduled_conference/"
 
+	var params *url.Values
 	if opts != nil {
-		params := opts.ToURLValues()
-		if len(params) > 0 {
-			endpoint += "?" + params.Encode()
-		}
+		urlValues := opts.ToURLValues()
+		params = &urlValues
 	}
 
 	var result ScheduledConferenceListResponse
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, params, &result)
 	return &result, err
 }
 
@@ -34,7 +34,7 @@ func (s *Service) GetScheduledConference(ctx context.Context, id int) (*Schedule
 	endpoint := fmt.Sprintf("configuration/v1/scheduled_conference/%d/", id)
 
 	var result ScheduledConference
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, nil, &result)
 	return &result, err
 }
 

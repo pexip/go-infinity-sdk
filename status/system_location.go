@@ -15,15 +15,8 @@ import (
 func (s *Service) ListSystemLocations(ctx context.Context, opts *ListOptions) (*SystemLocationListResponse, error) {
 	endpoint := "status/v1/system_location/"
 
-	if opts != nil {
-		params := opts.ToURLValues()
-		if len(params) > 0 {
-			endpoint += "?" + params.Encode()
-		}
-	}
-
 	var result SystemLocationListResponse
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.listEndpoint(ctx, endpoint, opts, &result)
 	return &result, err
 }
 
@@ -32,6 +25,6 @@ func (s *Service) GetSystemLocation(ctx context.Context, id int) (*SystemLocatio
 	endpoint := fmt.Sprintf("status/v1/system_location/%d/", id)
 
 	var result SystemLocation
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, nil, &result)
 	return &result, err
 }

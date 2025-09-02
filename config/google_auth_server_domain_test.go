@@ -33,8 +33,8 @@ func TestService_ListGoogleAuthServerDomains(t *testing.T) {
 						{ID: 2, Domain: "test.com", Description: "Test domain", GoogleAuthServer: "/api/admin/configuration/v1/google_auth_server/2/"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/google_auth_server_domain/", mock.AnythingOfType("*config.GoogleAuthServerDomainListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*GoogleAuthServerDomainListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/google_auth_server_domain/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.GoogleAuthServerDomainListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*GoogleAuthServerDomainListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -54,8 +54,8 @@ func TestService_ListGoogleAuthServerDomains(t *testing.T) {
 						{ID: 1, Domain: "example.com", Description: "Primary domain", GoogleAuthServer: "/api/admin/configuration/v1/google_auth_server/1/"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/google_auth_server_domain/?limit=5&name__icontains=example", mock.AnythingOfType("*config.GoogleAuthServerDomainListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*GoogleAuthServerDomainListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/google_auth_server_domain/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.GoogleAuthServerDomainListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*GoogleAuthServerDomainListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -94,8 +94,8 @@ func TestService_GetGoogleAuthServerDomain(t *testing.T) {
 		ResourceURI:      "/api/admin/configuration/v1/google_auth_server_domain/1/",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/google_auth_server_domain/1/", mock.AnythingOfType("*config.GoogleAuthServerDomain")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*GoogleAuthServerDomain)
+	client.On("GetJSON", t.Context(), "configuration/v1/google_auth_server_domain/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.GoogleAuthServerDomain")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*GoogleAuthServerDomain)
 		*result = *expectedDomain
 	})
 

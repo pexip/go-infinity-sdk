@@ -15,15 +15,8 @@ import (
 func (s *Service) ListWorkerVMStatusEvents(ctx context.Context, opts *ListOptions) (*WorkerVMStatusEventListResponse, error) {
 	endpoint := "history/v1/workervm_status_event/"
 
-	if opts != nil {
-		params := opts.ToURLValues()
-		if len(params) > 0 {
-			endpoint += "?" + params.Encode()
-		}
-	}
-
 	var result WorkerVMStatusEventListResponse
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.listEndpoint(ctx, endpoint, opts, &result)
 	return &result, err
 }
 
@@ -32,6 +25,6 @@ func (s *Service) GetWorkerVMStatusEvent(ctx context.Context, id int) (*WorkerVM
 	endpoint := fmt.Sprintf("history/v1/workervm_status_event/%d/", id)
 
 	var result WorkerVMStatusEvent
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, nil, &result)
 	return &result, err
 }

@@ -26,8 +26,8 @@ func TestService_ListLocations(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/location/", mock.AnythingOfType("*config.LocationListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*LocationListResponse)
+	client.On("GetJSON", t.Context(), "configuration/v1/location/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.LocationListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*LocationListResponse)
 		*result = *expectedResponse
 	})
 
@@ -46,8 +46,8 @@ func TestService_GetLocation(t *testing.T) {
 		Name: "Test Location",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/location/1/", mock.AnythingOfType("*config.Location")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*Location)
+	client.On("GetJSON", t.Context(), "configuration/v1/location/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.Location")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*Location)
 		*result = *expectedLocation
 	})
 
@@ -136,8 +136,8 @@ func TestService_ListLocations_WithOptions(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/location/?limit=10&name__icontains=test&offset=5", mock.AnythingOfType("*config.LocationListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*LocationListResponse)
+	client.On("GetJSON", t.Context(), "configuration/v1/location/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.LocationListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*LocationListResponse)
 		*result = *expectedResponse
 	})
 

@@ -17,21 +17,8 @@ import (
 func (s *Service) ListBackplaneMediaStreams(ctx context.Context, opts *ListOptions) (*BackplaneMediaStreamListResponse, error) {
 	endpoint := "history/v1/backplane_media_stream/"
 
-	if opts != nil {
-		params := opts.BaseListOptions.ToURLValues()
-		if opts.StartTime != nil {
-			params.Set("start_time__gte", opts.StartTime.Format(time.RFC3339))
-		}
-		if opts.EndTime != nil {
-			params.Set("end_time__lt", opts.EndTime.Format(time.RFC3339))
-		}
-		if len(params) > 0 {
-			endpoint += "?" + params.Encode()
-		}
-	}
-
 	var result BackplaneMediaStreamListResponse
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.listEndpoint(ctx, endpoint, opts, &result)
 	return &result, err
 }
 
@@ -40,7 +27,7 @@ func (s *Service) GetBackplaneMediaStream(ctx context.Context, id int) (*Backpla
 	endpoint := fmt.Sprintf("history/v1/backplane_media_stream/%d/", id)
 
 	var result BackplaneMediaStream
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, nil, &result)
 	return &result, err
 }
 
@@ -66,9 +53,7 @@ func (s *Service) ListBackplaneMediaStreamsByBackplane(ctx context.Context, back
 		}
 	}
 
-	endpoint += "?" + params.Encode()
-
 	var result BackplaneMediaStreamListResponse
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, &params, &result)
 	return &result, err
 }

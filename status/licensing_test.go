@@ -42,8 +42,8 @@ func TestService_GetLicensing(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/licensing/", mock.AnythingOfType("*status.LicensingResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*LicensingResponse)
+	client.On("GetJSON", t.Context(), "status/v1/licensing/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.LicensingResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*LicensingResponse)
 		*result = *expectedLicensingResponse
 	})
 
@@ -80,8 +80,8 @@ func TestService_GetLicensing_EmptyResponse(t *testing.T) {
 		Objects: []Licensing{},
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/licensing/", mock.AnythingOfType("*status.LicensingResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*LicensingResponse)
+	client.On("GetJSON", t.Context(), "status/v1/licensing/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.LicensingResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*LicensingResponse)
 		*result = *emptyLicensing
 	})
 

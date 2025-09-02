@@ -34,8 +34,8 @@ func TestService_ListMediaStreams(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), "history/v1/media_stream/", mock.AnythingOfType("*history.MediaStreamListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*MediaStreamListResponse)
+	client.On("GetJSON", t.Context(), "history/v1/media_stream/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.MediaStreamListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*MediaStreamListResponse)
 		*result = *expectedResponse
 	})
 
@@ -61,8 +61,8 @@ func TestService_GetMediaStream(t *testing.T) {
 		DurationSeconds: 1800,
 	}
 
-	client.On("GetJSON", t.Context(), "history/v1/media_stream/1/", mock.AnythingOfType("*history.MediaStream")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*MediaStream)
+	client.On("GetJSON", t.Context(), "history/v1/media_stream/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.MediaStream")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*MediaStream)
 		*result = *expectedStream
 	})
 
@@ -96,10 +96,8 @@ func TestService_ListMediaStreamsByParticipant(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), mock.MatchedBy(func(endpoint string) bool {
-		return endpoint != "" && endpoint != "history/v1/media_stream/"
-	}), mock.AnythingOfType("*history.MediaStreamListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*MediaStreamListResponse)
+	client.On("GetJSON", t.Context(), "history/v1/media_stream/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.MediaStreamListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*MediaStreamListResponse)
 		*result = *expectedResponse
 	})
 
@@ -142,10 +140,8 @@ func TestService_ListMediaStreams_WithOptions(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), mock.MatchedBy(func(endpoint string) bool {
-		return endpoint != "history/v1/media_stream/"
-	}), mock.AnythingOfType("*history.MediaStreamListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*MediaStreamListResponse)
+	client.On("GetJSON", t.Context(), "history/v1/media_stream/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.MediaStreamListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*MediaStreamListResponse)
 		*result = *expectedResponse
 	})
 
@@ -192,10 +188,8 @@ func TestService_ListMediaStreamsByParticipant_WithOptions(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), mock.MatchedBy(func(endpoint string) bool {
-		return endpoint != "history/v1/media_stream/"
-	}), mock.AnythingOfType("*history.MediaStreamListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*MediaStreamListResponse)
+	client.On("GetJSON", t.Context(), "history/v1/media_stream/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.MediaStreamListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*MediaStreamListResponse)
 		*result = *expectedResponse
 	})
 

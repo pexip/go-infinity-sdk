@@ -45,8 +45,8 @@ func TestService_GetAuthentication(t *testing.T) {
 		OidcScope:                 "",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/authentication/1/", mock.AnythingOfType("*config.Authentication")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*Authentication)
+	client.On("GetJSON", t.Context(), "configuration/v1/authentication/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.Authentication")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*Authentication)
 		*result = *expectedAuthentication
 	})
 

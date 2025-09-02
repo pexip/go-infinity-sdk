@@ -45,8 +45,8 @@ func TestService_ListMJXMeetings(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/mjx_meeting/", mock.AnythingOfType("*status.MJXMeetingListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*MJXMeetingListResponse)
+	client.On("GetJSON", t.Context(), "status/v1/mjx_meeting/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.MJXMeetingListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*MJXMeetingListResponse)
 		*result = *expectedResponse
 	})
 
@@ -101,10 +101,8 @@ func TestService_ListMJXMeetings_WithOptions(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), mock.MatchedBy(func(endpoint string) bool {
-		return endpoint != "status/v1/mjx_meeting/"
-	}), mock.AnythingOfType("*status.MJXMeetingListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*MJXMeetingListResponse)
+	client.On("GetJSON", t.Context(), "status/v1/mjx_meeting/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.MJXMeetingListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*MJXMeetingListResponse)
 		*result = *expectedResponse
 	})
 
@@ -146,8 +144,8 @@ func TestService_GetMJXMeeting(t *testing.T) {
 		WorkerID:                     0,
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/mjx_meeting/meeting-456/", mock.AnythingOfType("*status.MJXMeeting")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*MJXMeeting)
+	client.On("GetJSON", t.Context(), "status/v1/mjx_meeting/meeting-456/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.MJXMeeting")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*MJXMeeting)
 		*result = *expectedMeeting
 	})
 

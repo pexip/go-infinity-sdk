@@ -9,6 +9,7 @@ package config
 import (
 	"context"
 	"fmt"
+	"net/url"
 
 	"github.com/pexip/go-infinity-sdk/v38/types"
 )
@@ -17,15 +18,14 @@ import (
 func (s *Service) ListStaticRoutes(ctx context.Context, opts *ListOptions) (*StaticRouteListResponse, error) {
 	endpoint := "configuration/v1/static_route/"
 
+	var params *url.Values
 	if opts != nil {
-		params := opts.ToURLValues()
-		if len(params) > 0 {
-			endpoint += "?" + params.Encode()
-		}
+		urlValues := opts.ToURLValues()
+		params = &urlValues
 	}
 
 	var result StaticRouteListResponse
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, params, &result)
 	return &result, err
 }
 
@@ -34,7 +34,7 @@ func (s *Service) GetStaticRoute(ctx context.Context, id int) (*StaticRoute, err
 	endpoint := fmt.Sprintf("configuration/v1/static_route/%d/", id)
 
 	var result StaticRoute
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, nil, &result)
 	return &result, err
 }
 

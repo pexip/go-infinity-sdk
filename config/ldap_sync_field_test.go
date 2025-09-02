@@ -45,8 +45,8 @@ func TestService_ListLdapSyncFields(t *testing.T) {
 						},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/ldap_sync_field/", mock.AnythingOfType("*config.LdapSyncFieldListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*LdapSyncFieldListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/ldap_sync_field/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.LdapSyncFieldListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*LdapSyncFieldListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -72,8 +72,8 @@ func TestService_ListLdapSyncFields(t *testing.T) {
 						},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/ldap_sync_field/?limit=5&name__icontains=email", mock.AnythingOfType("*config.LdapSyncFieldListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*LdapSyncFieldListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/ldap_sync_field/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.LdapSyncFieldListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*LdapSyncFieldListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -113,8 +113,8 @@ func TestService_GetLdapSyncField(t *testing.T) {
 		ResourceURI:          "/api/admin/configuration/v1/ldap_sync_field/1/",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/ldap_sync_field/1/", mock.AnythingOfType("*config.LdapSyncField")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*LdapSyncField)
+	client.On("GetJSON", t.Context(), "configuration/v1/ldap_sync_field/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.LdapSyncField")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*LdapSyncField)
 		*result = *expectedField
 	})
 

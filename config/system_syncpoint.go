@@ -24,6 +24,6 @@ func (s *Service) GetSystemSyncpoint(ctx context.Context, id int) (*SystemSyncpo
 	endpoint := fmt.Sprintf("configuration/v1/system_syncpoint/%d/", id)
 
 	var result SystemSyncpoint
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, nil, &result)
 	return &result, err
 }

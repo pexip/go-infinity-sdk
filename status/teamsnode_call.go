@@ -15,15 +15,8 @@ import (
 func (s *Service) ListTeamsNodeCalls(ctx context.Context, opts *ListOptions) (*TeamsNodeCallListResponse, error) {
 	endpoint := "status/v1/teamsnode_call/"
 
-	if opts != nil {
-		params := opts.ToURLValues()
-		if len(params) > 0 {
-			endpoint += "?" + params.Encode()
-		}
-	}
-
 	var result TeamsNodeCallListResponse
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.listEndpoint(ctx, endpoint, opts, &result)
 	return &result, err
 }
 
@@ -32,6 +25,6 @@ func (s *Service) GetTeamsNodeCall(ctx context.Context, id string) (*TeamsNodeCa
 	endpoint := fmt.Sprintf("status/v1/teamsnode_call/%s/", id)
 
 	var result TeamsNodeCall
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, nil, &result)
 	return &result, err
 }

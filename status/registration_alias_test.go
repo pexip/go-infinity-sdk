@@ -35,8 +35,8 @@ func TestService_ListRegistrationAliases(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/registration_alias/", mock.AnythingOfType("*status.RegistrationAliasListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*RegistrationAliasListResponse)
+	client.On("GetJSON", t.Context(), "status/v1/registration_alias/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.RegistrationAliasListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*RegistrationAliasListResponse)
 		*result = *expectedResponse
 	})
 
@@ -81,10 +81,8 @@ func TestService_ListRegistrationAliases_WithOptions(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), mock.MatchedBy(func(endpoint string) bool {
-		return endpoint != "status/v1/registration_alias/"
-	}), mock.AnythingOfType("*status.RegistrationAliasListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*RegistrationAliasListResponse)
+	client.On("GetJSON", t.Context(), "status/v1/registration_alias/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.RegistrationAliasListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*RegistrationAliasListResponse)
 		*result = *expectedResponse
 	})
 
@@ -117,8 +115,8 @@ func TestService_GetRegistrationAlias(t *testing.T) {
 		Username:       "",
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/registration_alias/1/", mock.AnythingOfType("*status.RegistrationAlias")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*RegistrationAlias)
+	client.On("GetJSON", t.Context(), "status/v1/registration_alias/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.RegistrationAlias")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*RegistrationAlias)
 		*result = *expectedAlias
 	})
 

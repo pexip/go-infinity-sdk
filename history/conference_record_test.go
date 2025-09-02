@@ -33,8 +33,8 @@ func TestService_ListConferences(t *testing.T) {
 						{ID: 2, Name: "Test ConferenceRecord 2", DurationSeconds: 1800},
 					},
 				}
-				m.On("GetJSON", t.Context(), "history/v1/conference/", mock.AnythingOfType("*history.ConferenceRecordListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*ConferenceRecordListResponse)
+				m.On("GetJSON", t.Context(), "history/v1/conference/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.ConferenceRecordListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*ConferenceRecordListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -60,10 +60,8 @@ func TestService_ListConferences(t *testing.T) {
 					},
 				}
 				// Note: The exact query string will vary based on time formatting
-				m.On("GetJSON", t.Context(), mock.MatchedBy(func(endpoint string) bool {
-					return endpoint != "" && endpoint != "history/v1/conference/"
-				}), mock.AnythingOfType("*history.ConferenceRecordListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*ConferenceRecordListResponse)
+				m.On("GetJSON", t.Context(), "history/v1/conference/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.ConferenceRecordListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*ConferenceRecordListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -102,8 +100,8 @@ func TestService_GetConference(t *testing.T) {
 		TotalParticipants: 5,
 	}
 
-	client.On("GetJSON", t.Context(), "history/v1/conference/1/", mock.AnythingOfType("*history.ConferenceRecord")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*ConferenceRecord)
+	client.On("GetJSON", t.Context(), "history/v1/conference/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.ConferenceRecord")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*ConferenceRecord)
 		*result = *expectedConference
 	})
 

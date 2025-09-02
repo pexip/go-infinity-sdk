@@ -19,7 +19,7 @@ func (s *Service) GetLicensing(ctx context.Context) (*Licensing, error) {
 	endpoint := "status/v1/licensing/"
 
 	var result LicensingResponse
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, nil, &result)
 	if err != nil {
 		return nil, err
 	}

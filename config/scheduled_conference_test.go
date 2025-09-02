@@ -43,8 +43,8 @@ func TestService_ListScheduledConferences(t *testing.T) {
 						{ID: 2, Conference: "/api/admin/configuration/v1/conference/2/", StartTime: startTime2, EndTime: endTime2, Subject: "Project Review", EWSItemID: "ews-id-2", EWSItemUID: "ews-uid-2", ScheduledAlias: &scheduledAlias2},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/scheduled_conference/", mock.AnythingOfType("*config.ScheduledConferenceListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*ScheduledConferenceListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/scheduled_conference/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.ScheduledConferenceListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*ScheduledConferenceListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -69,8 +69,8 @@ func TestService_ListScheduledConferences(t *testing.T) {
 						{ID: 1, Conference: "/api/admin/configuration/v1/conference/1/", StartTime: startTime, EndTime: endTime, Subject: "Weekly Team Meeting", EWSItemID: "ews-id-1", EWSItemUID: "ews-uid-1", RecurringConference: &recurringConf, ScheduledAlias: &scheduledAlias},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/scheduled_conference/?limit=5&name__icontains=team", mock.AnythingOfType("*config.ScheduledConferenceListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*ScheduledConferenceListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/scheduled_conference/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.ScheduledConferenceListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*ScheduledConferenceListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -118,8 +118,8 @@ func TestService_GetScheduledConference(t *testing.T) {
 		ScheduledAlias:      &scheduledAlias,
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/scheduled_conference/1/", mock.AnythingOfType("*config.ScheduledConference")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*ScheduledConference)
+	client.On("GetJSON", t.Context(), "configuration/v1/scheduled_conference/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.ScheduledConference")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*ScheduledConference)
 		*result = *expectedScheduledConference
 	})
 

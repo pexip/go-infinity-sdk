@@ -254,7 +254,10 @@ func (client *Client) Command() *command.Service {
 }
 
 // GetJSON performs a GET request and unmarshal the JSON response
-func (c *Client) GetJSON(ctx context.Context, endpoint string, result interface{}) error {
+func (c *Client) GetJSON(ctx context.Context, endpoint string, queryParams *url.Values, result interface{}) error {
+	if queryParams != nil && len(*queryParams) > 0 {
+		return c.performJSONRequestWithQueryParams(ctx, http.MethodGet, endpoint, nil, *queryParams, result)
+	}
 	return c.performJSONRequest(ctx, http.MethodGet, endpoint, nil, result)
 }
 
@@ -310,6 +313,22 @@ func (c *Client) performJSONRequest(ctx context.Context, method string, endpoint
 		Method:   method,
 		Endpoint: endpoint,
 		Body:     requestBody,
+	}
+
+	resp, err := c.DoRequest(ctx, req)
+	if err != nil {
+		return err
+	}
+
+	return unmarshalResponseBody(resp.Body, result)
+}
+
+func (c *Client) performJSONRequestWithQueryParams(ctx context.Context, method string, endpoint string, requestBody interface{}, queryParams url.Values, result interface{}) error {
+	req := &Request{
+		Method:      method,
+		Endpoint:    endpoint,
+		Body:        requestBody,
+		QueryParams: queryParams,
 	}
 
 	resp, err := c.DoRequest(ctx, req)

@@ -9,6 +9,7 @@ package config
 import (
 	"context"
 	"fmt"
+	"net/url"
 
 	"github.com/pexip/go-infinity-sdk/v38/types"
 )
@@ -17,15 +18,14 @@ import (
 func (s *Service) ListSSHAuthorizedKeys(ctx context.Context, opts *ListOptions) (*SSHAuthorizedKeyListResponse, error) {
 	endpoint := "configuration/v1/ssh_authorized_key/"
 
+	var params *url.Values
 	if opts != nil {
-		params := opts.ToURLValues()
-		if len(params) > 0 {
-			endpoint += "?" + params.Encode()
-		}
+		urlValues := opts.ToURLValues()
+		params = &urlValues
 	}
 
 	var result SSHAuthorizedKeyListResponse
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, params, &result)
 	return &result, err
 }
 
@@ -34,7 +34,7 @@ func (s *Service) GetSSHAuthorizedKey(ctx context.Context, id int) (*SSHAuthoriz
 	endpoint := fmt.Sprintf("configuration/v1/ssh_authorized_key/%d/", id)
 
 	var result SSHAuthorizedKey
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, nil, &result)
 	return &result, err
 }
 

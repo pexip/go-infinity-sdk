@@ -33,8 +33,8 @@ func TestService_ListSyslogServers(t *testing.T) {
 						{ID: 2, Address: "syslog.example.com", Port: 6514, Transport: "tls", Description: "Remote syslog server"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/syslog_server/", mock.AnythingOfType("*config.SyslogServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*SyslogServerListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/syslog_server/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.SyslogServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*SyslogServerListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -54,8 +54,8 @@ func TestService_ListSyslogServers(t *testing.T) {
 						{ID: 1, Address: "192.168.1.100", Port: 514, Transport: "udp", Description: "Main syslog server"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/syslog_server/?limit=5&name__icontains=main", mock.AnythingOfType("*config.SyslogServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*SyslogServerListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/syslog_server/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.SyslogServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*SyslogServerListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -97,8 +97,8 @@ func TestService_GetSyslogServer(t *testing.T) {
 		WebLog:      false,
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/syslog_server/1/", mock.AnythingOfType("*config.SyslogServer")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*SyslogServer)
+	client.On("GetJSON", t.Context(), "configuration/v1/syslog_server/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.SyslogServer")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*SyslogServer)
 		*result = *expectedServer
 	})
 

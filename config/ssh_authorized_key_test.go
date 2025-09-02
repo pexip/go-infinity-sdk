@@ -33,8 +33,8 @@ func TestService_ListSSHAuthorizedKeys(t *testing.T) {
 						{ID: 2, Keytype: "ssh-ed25519", Key: "AAAAC3NzaC1lZDI1NTE5AAAAID...", Comment: "user@example.com", Nodes: []string{"management", "conferencing"}},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/ssh_authorized_key/", mock.AnythingOfType("*config.SSHAuthorizedKeyListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*SSHAuthorizedKeyListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/ssh_authorized_key/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.SSHAuthorizedKeyListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*SSHAuthorizedKeyListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -54,8 +54,8 @@ func TestService_ListSSHAuthorizedKeys(t *testing.T) {
 						{ID: 1, Keytype: "ssh-rsa", Key: "AAAAB3NzaC1yc2EAAAADAQABAAABAQ...", Comment: "admin@example.com", Nodes: []string{"management"}},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/ssh_authorized_key/?limit=5&name__icontains=admin", mock.AnythingOfType("*config.SSHAuthorizedKeyListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*SSHAuthorizedKeyListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/ssh_authorized_key/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.SSHAuthorizedKeyListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*SSHAuthorizedKeyListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -95,8 +95,8 @@ func TestService_GetSSHAuthorizedKey(t *testing.T) {
 		ResourceURI: "/api/admin/configuration/v1/ssh_authorized_key/1/",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/ssh_authorized_key/1/", mock.AnythingOfType("*config.SSHAuthorizedKey")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*SSHAuthorizedKey)
+	client.On("GetJSON", t.Context(), "configuration/v1/ssh_authorized_key/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.SSHAuthorizedKey")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*SSHAuthorizedKey)
 		*result = *expectedSSHAuthorizedKey
 	})
 

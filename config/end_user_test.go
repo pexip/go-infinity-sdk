@@ -33,8 +33,8 @@ func TestService_ListEndUsers(t *testing.T) {
 						{ID: 2, PrimaryEmailAddress: "user2@example.com", FirstName: "Jane", LastName: "Smith"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/end_user/", mock.AnythingOfType("*config.EndUserListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*EndUserListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/end_user/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.EndUserListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*EndUserListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -55,8 +55,8 @@ func TestService_ListEndUsers(t *testing.T) {
 						{ID: 1, PrimaryEmailAddress: "john@example.com", FirstName: "John", LastName: "Doe"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/end_user/?limit=5&name__icontains=john&offset=10", mock.AnythingOfType("*config.EndUserListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*EndUserListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/end_user/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.EndUserListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*EndUserListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -96,8 +96,8 @@ func TestService_GetEndUser(t *testing.T) {
 		TelephoneNumber:     "+1234567890",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/end_user/1/", mock.AnythingOfType("*config.EndUser")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*EndUser)
+	client.On("GetJSON", t.Context(), "configuration/v1/end_user/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.EndUser")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*EndUser)
 		*result = *expectedUser
 	})
 

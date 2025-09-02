@@ -33,8 +33,8 @@ func TestService_ListUserGroupEntityMappings(t *testing.T) {
 						{ID: 2, Description: "Location mapping for user group", EntityResourceURI: "/api/admin/configuration/v1/location/1/", UserGroup: "/api/admin/configuration/v1/user_group/2/"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/user_group_entity_mapping/", mock.AnythingOfType("*config.UserGroupEntityMappingListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*UserGroupEntityMappingListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/user_group_entity_mapping/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.UserGroupEntityMappingListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*UserGroupEntityMappingListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -54,8 +54,8 @@ func TestService_ListUserGroupEntityMappings(t *testing.T) {
 						{ID: 1, Description: "Conference mapping for admin group", EntityResourceURI: "/api/admin/configuration/v1/conference/1/", UserGroup: "/api/admin/configuration/v1/user_group/1/"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/user_group_entity_mapping/?limit=5&name__icontains=conference", mock.AnythingOfType("*config.UserGroupEntityMappingListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*UserGroupEntityMappingListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/user_group_entity_mapping/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.UserGroupEntityMappingListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*UserGroupEntityMappingListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -94,8 +94,8 @@ func TestService_GetUserGroupEntityMapping(t *testing.T) {
 		ResourceURI:       "/api/admin/configuration/v1/user_group_entity_mapping/1/",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/user_group_entity_mapping/1/", mock.AnythingOfType("*config.UserGroupEntityMapping")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*UserGroupEntityMapping)
+	client.On("GetJSON", t.Context(), "configuration/v1/user_group_entity_mapping/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.UserGroupEntityMapping")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*UserGroupEntityMapping)
 		*result = *expectedUserGroupEntityMapping
 	})
 

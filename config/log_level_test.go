@@ -33,8 +33,8 @@ func TestService_ListLogLevels(t *testing.T) {
 						{ID: 2, Name: "conference_manager", Level: "DEBUG"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/log_level/", mock.AnythingOfType("*config.LogLevelListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*LogLevelListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/log_level/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.LogLevelListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*LogLevelListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -54,8 +54,8 @@ func TestService_ListLogLevels(t *testing.T) {
 						{ID: 1, Name: "media_processing", Level: "INFO"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/log_level/?limit=5&name__icontains=media", mock.AnythingOfType("*config.LogLevelListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*LogLevelListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/log_level/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.LogLevelListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*LogLevelListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -92,8 +92,8 @@ func TestService_GetLogLevel(t *testing.T) {
 		Level: "WARN",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/log_level/1/", mock.AnythingOfType("*config.LogLevel")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*LogLevel)
+	client.On("GetJSON", t.Context(), "configuration/v1/log_level/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.LogLevel")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*LogLevel)
 		*result = *expectedLogLevel
 	})
 

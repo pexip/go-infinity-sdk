@@ -33,8 +33,8 @@ func TestService_ListBreakInAllowListAddresses(t *testing.T) {
 						{ID: 2, Name: "vpn-range", Description: "VPN IP range", Address: "10.0.0.0", Prefix: 16, AllowlistEntryType: "alias_only", IgnoreIncorrectAliases: false, IgnoreIncorrectPins: true},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/break_in_allow_list_address/", mock.AnythingOfType("*config.BreakInAllowListAddressListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*BreakInAllowListAddressListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/break_in_allow_list_address/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.BreakInAllowListAddressListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*BreakInAllowListAddressListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -54,8 +54,8 @@ func TestService_ListBreakInAllowListAddresses(t *testing.T) {
 						{ID: 1, Name: "corporate-network", Description: "Corporate network range", Address: "192.168.1.0", Prefix: 24, AllowlistEntryType: "all", IgnoreIncorrectAliases: true, IgnoreIncorrectPins: false},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/break_in_allow_list_address/?limit=5&name__icontains=corporate", mock.AnythingOfType("*config.BreakInAllowListAddressListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*BreakInAllowListAddressListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/break_in_allow_list_address/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.BreakInAllowListAddressListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*BreakInAllowListAddressListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -97,8 +97,8 @@ func TestService_GetBreakInAllowListAddress(t *testing.T) {
 		IgnoreIncorrectPins:    false,
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/break_in_allow_list_address/1/", mock.AnythingOfType("*config.BreakInAllowListAddress")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*BreakInAllowListAddress)
+	client.On("GetJSON", t.Context(), "configuration/v1/break_in_allow_list_address/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.BreakInAllowListAddress")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*BreakInAllowListAddress)
 		*result = *expectedBreakInAllowListAddress
 	})
 

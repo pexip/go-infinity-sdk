@@ -9,6 +9,7 @@ package config
 import (
 	"context"
 	"fmt"
+	"net/url"
 
 	"github.com/pexip/go-infinity-sdk/v38/types"
 )
@@ -17,15 +18,14 @@ import (
 func (s *Service) ListMjxGraphDeployments(ctx context.Context, opts *ListOptions) (*MjxGraphDeploymentListResponse, error) {
 	endpoint := "configuration/v1/mjx_graph_deployment/"
 
+	var params *url.Values
 	if opts != nil {
-		params := opts.ToURLValues()
-		if len(params) > 0 {
-			endpoint += "?" + params.Encode()
-		}
+		urlValues := opts.ToURLValues()
+		params = &urlValues
 	}
 
 	var result MjxGraphDeploymentListResponse
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, params, &result)
 	return &result, err
 }
 
@@ -34,7 +34,7 @@ func (s *Service) GetMjxGraphDeployment(ctx context.Context, id int) (*MjxGraphD
 	endpoint := fmt.Sprintf("configuration/v1/mjx_graph_deployment/%d/", id)
 
 	var result MjxGraphDeployment
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, nil, &result)
 	return &result, err
 }
 

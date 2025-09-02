@@ -15,7 +15,7 @@ func (s *Service) GetGlobalConfiguration(ctx context.Context) (*GlobalConfigurat
 	endpoint := "configuration/v1/global/1/"
 
 	var result GlobalConfiguration
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, nil, &result)
 	return &result, err
 }
 

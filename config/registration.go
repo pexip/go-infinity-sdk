@@ -15,7 +15,7 @@ func (s *Service) GetRegistration(ctx context.Context) (*Registration, error) {
 	endpoint := "configuration/v1/registration/1/"
 
 	var result Registration
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, nil, &result)
 	return &result, err
 }
 

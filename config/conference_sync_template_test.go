@@ -33,8 +33,8 @@ func TestService_ListConferenceSyncTemplates(t *testing.T) {
 						{ID: 2, Name: "secondary-template", Description: "Secondary sync template", LdapUserFilter: "(objectClass=person)", EnableAutomaticSync: false, SyncConferences: false, SyncDevices: true, SyncEndUsers: false, ServiceType: "virtual_meeting_room", CallType: "audio", AllowGuests: false},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/conference_sync_template/", mock.AnythingOfType("*config.ConferenceSyncTemplateListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*ConferenceSyncTemplateListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/conference_sync_template/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.ConferenceSyncTemplateListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*ConferenceSyncTemplateListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -54,8 +54,8 @@ func TestService_ListConferenceSyncTemplates(t *testing.T) {
 						{ID: 1, Name: "primary-template", Description: "Primary sync template", LdapUserFilter: "(objectClass=user)", EnableAutomaticSync: true, SyncConferences: true, SyncDevices: false, SyncEndUsers: true, ServiceType: "conference", CallType: "video", AllowGuests: true},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/conference_sync_template/?limit=5&name__icontains=primary", mock.AnythingOfType("*config.ConferenceSyncTemplateListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*ConferenceSyncTemplateListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/conference_sync_template/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.ConferenceSyncTemplateListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*ConferenceSyncTemplateListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -165,8 +165,8 @@ func TestService_GetConferenceSyncTemplate(t *testing.T) {
 		EndUserAdvancedOverridable:          false,
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/conference_sync_template/1/", mock.AnythingOfType("*config.ConferenceSyncTemplate")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*ConferenceSyncTemplate)
+	client.On("GetJSON", t.Context(), "configuration/v1/conference_sync_template/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.ConferenceSyncTemplate")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*ConferenceSyncTemplate)
 		*result = *expectedConferenceSyncTemplate
 	})
 

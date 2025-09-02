@@ -37,8 +37,8 @@ func TestService_ListMediaLibraryPlaylistEntries(t *testing.T) {
 						{ID: 3, EntryType: "playlist", Playlist: &playlist1, Position: 3, Playcount: 2},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/media_library_playlist_entry/", mock.AnythingOfType("*config.MediaLibraryPlaylistEntryListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*MediaLibraryPlaylistEntryListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/media_library_playlist_entry/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MediaLibraryPlaylistEntryListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*MediaLibraryPlaylistEntryListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -61,8 +61,8 @@ func TestService_ListMediaLibraryPlaylistEntries(t *testing.T) {
 						{ID: 2, EntryType: "media", Media: &media2, Position: 2, Playcount: 5},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/media_library_playlist_entry/?limit=5&name__icontains=media", mock.AnythingOfType("*config.MediaLibraryPlaylistEntryListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*MediaLibraryPlaylistEntryListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/media_library_playlist_entry/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MediaLibraryPlaylistEntryListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*MediaLibraryPlaylistEntryListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -102,8 +102,8 @@ func TestService_GetMediaLibraryPlaylistEntry(t *testing.T) {
 		Playcount: 10,
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/media_library_playlist_entry/1/", mock.AnythingOfType("*config.MediaLibraryPlaylistEntry")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*MediaLibraryPlaylistEntry)
+	client.On("GetJSON", t.Context(), "configuration/v1/media_library_playlist_entry/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MediaLibraryPlaylistEntry")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*MediaLibraryPlaylistEntry)
 		*result = *expectedMediaLibraryPlaylistEntry
 	})
 

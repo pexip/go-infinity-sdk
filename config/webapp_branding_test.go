@@ -37,8 +37,8 @@ func TestService_ListWebappBrandings(t *testing.T) {
 						{Name: "custom", Description: "Custom branding", UUID: "123e4567-e89b-12d3-a456-426614174001", WebappType: "meeting", IsDefault: false, BrandingFile: "custom.zip", LastUpdated: lastUpdated2},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/webapp_branding/", mock.AnythingOfType("*config.WebappBrandingListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*WebappBrandingListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/webapp_branding/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.WebappBrandingListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*WebappBrandingListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -60,8 +60,8 @@ func TestService_ListWebappBrandings(t *testing.T) {
 						{Name: "custom", Description: "Custom branding", UUID: "123e4567-e89b-12d3-a456-426614174001", WebappType: "meeting", IsDefault: false, BrandingFile: "custom.zip", LastUpdated: lastUpdated},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/webapp_branding/?limit=5&name__icontains=custom", mock.AnythingOfType("*config.WebappBrandingListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*WebappBrandingListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/webapp_branding/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.WebappBrandingListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*WebappBrandingListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -106,8 +106,8 @@ func TestService_GetWebappBranding(t *testing.T) {
 		ResourceURI:  "/api/admin/configuration/v1/webapp_branding/" + name + "/",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/webapp_branding/"+name+"/", mock.AnythingOfType("*config.WebappBranding")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*WebappBranding)
+	client.On("GetJSON", t.Context(), "configuration/v1/webapp_branding/"+name+"/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.WebappBranding")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*WebappBranding)
 		*result = *expectedWebappBranding
 	})
 

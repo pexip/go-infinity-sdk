@@ -38,8 +38,8 @@ func TestService_ListCloudOverflowLocations(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/cloud_overflow_location/", mock.AnythingOfType("*status.CloudOverflowLocationListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*CloudOverflowLocationListResponse)
+	client.On("GetJSON", t.Context(), "status/v1/cloud_overflow_location/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.CloudOverflowLocationListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*CloudOverflowLocationListResponse)
 		*result = *expectedResponse
 	})
 
@@ -88,10 +88,8 @@ func TestService_ListCloudOverflowLocations_WithOptions(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), mock.MatchedBy(func(endpoint string) bool {
-		return endpoint != "status/v1/cloud_overflow_location/"
-	}), mock.AnythingOfType("*status.CloudOverflowLocationListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*CloudOverflowLocationListResponse)
+	client.On("GetJSON", t.Context(), "status/v1/cloud_overflow_location/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.CloudOverflowLocationListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*CloudOverflowLocationListResponse)
 		*result = *expectedResponse
 	})
 
@@ -122,8 +120,8 @@ func TestService_GetCloudOverflowLocation(t *testing.T) {
 		SystemLocationID: 103,
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/cloud_overflow_location/1/", mock.AnythingOfType("*status.CloudOverflowLocation")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*CloudOverflowLocation)
+	client.On("GetJSON", t.Context(), "status/v1/cloud_overflow_location/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.CloudOverflowLocation")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*CloudOverflowLocation)
 		*result = *expectedLocation
 	})
 

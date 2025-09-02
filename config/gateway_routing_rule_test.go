@@ -35,8 +35,8 @@ func TestService_ListGatewayRoutingRules(t *testing.T) {
 						{ID: 2, Name: "secondary-rule", Description: "Secondary routing rule", Priority: 200, Enable: false, MatchString: "test@.*", MatchStringFull: true, CalledDeviceType: "internal", OutgoingProtocol: "h323", CallType: "audio", MatchIncomingCalls: false, MatchOutgoingCalls: true, MatchIncomingH323: true, TreatAsTrusted: true},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/gateway_routing_rule/", mock.AnythingOfType("*config.GatewayRoutingRuleListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*GatewayRoutingRuleListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/gateway_routing_rule/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.GatewayRoutingRuleListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*GatewayRoutingRuleListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -58,8 +58,8 @@ func TestService_ListGatewayRoutingRules(t *testing.T) {
 						{ID: 1, Name: "primary-rule", Description: "Primary routing rule", Priority: 100, Enable: true, MatchString: ".*", MatchStringFull: false, CalledDeviceType: "external", OutgoingProtocol: "sip", CallType: "video", MatchIncomingCalls: true, MatchOutgoingCalls: false, MatchIncomingSIP: true, SIPProxy: &sipProxy, OutgoingLocation: &location, TreatAsTrusted: false},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/gateway_routing_rule/?limit=5&name__icontains=primary", mock.AnythingOfType("*config.GatewayRoutingRuleListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*GatewayRoutingRuleListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/gateway_routing_rule/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.GatewayRoutingRuleListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*GatewayRoutingRuleListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -133,8 +133,8 @@ func TestService_GetGatewayRoutingRule(t *testing.T) {
 		DisabledCodecs:                []string{"h264", "vp8"},
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/gateway_routing_rule/1/", mock.AnythingOfType("*config.GatewayRoutingRule")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*GatewayRoutingRule)
+	client.On("GetJSON", t.Context(), "configuration/v1/gateway_routing_rule/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.GatewayRoutingRule")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*GatewayRoutingRule)
 		*result = *expectedGatewayRoutingRule
 	})
 

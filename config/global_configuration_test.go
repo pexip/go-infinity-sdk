@@ -36,8 +36,8 @@ func TestService_GetGlobalConfiguration(t *testing.T) {
 		AdministratorEmail:     "admin@example.com",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/global/1/", mock.AnythingOfType("*config.GlobalConfiguration")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*GlobalConfiguration)
+	client.On("GetJSON", t.Context(), "configuration/v1/global/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.GlobalConfiguration")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*GlobalConfiguration)
 		*result = *expectedConfig
 	})
 

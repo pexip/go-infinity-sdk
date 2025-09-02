@@ -15,15 +15,8 @@ import (
 func (s *Service) ListRegistrationAliases(ctx context.Context, opts *ListOptions) (*RegistrationAliasListResponse, error) {
 	endpoint := "status/v1/registration_alias/"
 
-	if opts != nil {
-		params := opts.ToURLValues()
-		if len(params) > 0 {
-			endpoint += "?" + params.Encode()
-		}
-	}
-
 	var result RegistrationAliasListResponse
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.listEndpoint(ctx, endpoint, opts, &result)
 	return &result, err
 }
 
@@ -32,6 +25,6 @@ func (s *Service) GetRegistrationAlias(ctx context.Context, id int) (*Registrati
 	endpoint := fmt.Sprintf("status/v1/registration_alias/%d/", id)
 
 	var result RegistrationAlias
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, nil, &result)
 	return &result, err
 }

@@ -35,8 +35,8 @@ func TestService_ListRecurringConferences(t *testing.T) {
 						{ID: 2, Conference: "monthly-review", CurrentIndex: 2, EWSItemID: "ews-id-2", IsDepleted: false, Subject: "Monthly Review", ScheduledAlias: &scheduledAlias2},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/recurring_conference/", mock.AnythingOfType("*config.RecurringConferenceListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*RecurringConferenceListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/recurring_conference/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.RecurringConferenceListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*RecurringConferenceListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -57,8 +57,8 @@ func TestService_ListRecurringConferences(t *testing.T) {
 						{ID: 1, Conference: "weekly-standup", CurrentIndex: 5, EWSItemID: "ews-id-1", IsDepleted: false, Subject: "Weekly Standup", ScheduledAlias: &scheduledAlias},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/recurring_conference/?limit=5&name__icontains=weekly", mock.AnythingOfType("*config.RecurringConferenceListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*RecurringConferenceListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/recurring_conference/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.RecurringConferenceListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*RecurringConferenceListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -100,8 +100,8 @@ func TestService_GetRecurringConference(t *testing.T) {
 		ScheduledAlias: &scheduledAlias,
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/recurring_conference/1/", mock.AnythingOfType("*config.RecurringConference")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*RecurringConference)
+	client.On("GetJSON", t.Context(), "configuration/v1/recurring_conference/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.RecurringConference")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*RecurringConference)
 		*result = *expectedRecurringConference
 	})
 

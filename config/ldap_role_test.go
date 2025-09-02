@@ -48,8 +48,8 @@ func TestService_ListLdapRoles(t *testing.T) {
 						},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/ldap_role/", mock.AnythingOfType("*config.LdapRoleListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*LdapRoleListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/ldap_role/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.LdapRoleListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*LdapRoleListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -77,8 +77,8 @@ func TestService_ListLdapRoles(t *testing.T) {
 						},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/ldap_role/?limit=5&name__icontains=admin", mock.AnythingOfType("*config.LdapRoleListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*LdapRoleListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/ldap_role/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.LdapRoleListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*LdapRoleListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -120,8 +120,8 @@ func TestService_GetLdapRole(t *testing.T) {
 		ResourceURI: "/api/admin/configuration/v1/ldap_role/1/",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/ldap_role/1/", mock.AnythingOfType("*config.LdapRole")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*LdapRole)
+	client.On("GetJSON", t.Context(), "configuration/v1/ldap_role/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.LdapRole")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*LdapRole)
 		*result = *expectedRole
 	})
 

@@ -33,8 +33,8 @@ func TestService_ListSnmpNetworkManagementSystems(t *testing.T) {
 						{ID: 2, Name: "backup-nms", Description: "Backup network management system", Address: "nms2.example.com", Port: 162, SnmpTrapCommunity: "private"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/snmp_network_management_system/", mock.AnythingOfType("*config.SnmpNetworkManagementSystemListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*SnmpNetworkManagementSystemListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/snmp_network_management_system/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.SnmpNetworkManagementSystemListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*SnmpNetworkManagementSystemListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -54,8 +54,8 @@ func TestService_ListSnmpNetworkManagementSystems(t *testing.T) {
 						{ID: 1, Name: "primary-nms", Description: "Primary network management system", Address: "nms1.example.com", Port: 162, SnmpTrapCommunity: "public"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/snmp_network_management_system/?limit=5&name__icontains=primary", mock.AnythingOfType("*config.SnmpNetworkManagementSystemListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*SnmpNetworkManagementSystemListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/snmp_network_management_system/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.SnmpNetworkManagementSystemListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*SnmpNetworkManagementSystemListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -95,8 +95,8 @@ func TestService_GetSnmpNetworkManagementSystem(t *testing.T) {
 		SnmpTrapCommunity: "test-community",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/snmp_network_management_system/1/", mock.AnythingOfType("*config.SnmpNetworkManagementSystem")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*SnmpNetworkManagementSystem)
+	client.On("GetJSON", t.Context(), "configuration/v1/snmp_network_management_system/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.SnmpNetworkManagementSystem")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*SnmpNetworkManagementSystem)
 		*result = *expectedSnmpNMS
 	})
 

@@ -58,8 +58,8 @@ func TestService_ListWorkerVMStatusEvents(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", context.Background(), "history/v1/workervm_status_event/", mock.AnythingOfType("*history.WorkerVMStatusEventListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*WorkerVMStatusEventListResponse)
+	client.On("GetJSON", context.Background(), "history/v1/workervm_status_event/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.WorkerVMStatusEventListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*WorkerVMStatusEventListResponse)
 		*result = *expectedResponse
 	})
 
@@ -98,8 +98,8 @@ func TestService_GetWorkerVMStatusEvent(t *testing.T) {
 		ResourceURI:                       "/api/admin/history/v1/workervm_status_event/1/",
 	}
 
-	client.On("GetJSON", context.Background(), "history/v1/workervm_status_event/1/", mock.AnythingOfType("*history.WorkerVMStatusEvent")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*WorkerVMStatusEvent)
+	client.On("GetJSON", context.Background(), "history/v1/workervm_status_event/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.WorkerVMStatusEvent")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*WorkerVMStatusEvent)
 		*result = *expectedEvent
 	})
 
@@ -149,10 +149,8 @@ func TestService_ListWorkerVMStatusEvents_WithOptions(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", context.Background(), mock.MatchedBy(func(endpoint string) bool {
-		return endpoint != "history/v1/workervm_status_event/"
-	}), mock.AnythingOfType("*history.WorkerVMStatusEventListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*WorkerVMStatusEventListResponse)
+	client.On("GetJSON", context.Background(), "history/v1/workervm_status_event/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.WorkerVMStatusEventListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*WorkerVMStatusEventListResponse)
 		*result = *expectedResponse
 	})
 
@@ -169,7 +167,7 @@ func TestService_ListWorkerVMStatusEvents_Error(t *testing.T) {
 	client := interfaces.NewHTTPClientMock()
 	service := New(client)
 
-	client.On("GetJSON", context.Background(), "history/v1/workervm_status_event/", mock.AnythingOfType("*history.WorkerVMStatusEventListResponse")).Return(errors.New("server error"))
+	client.On("GetJSON", context.Background(), "history/v1/workervm_status_event/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.WorkerVMStatusEventListResponse")).Return(errors.New("server error"))
 
 	_, err := service.ListWorkerVMStatusEvents(context.Background(), nil)
 	assert.Error(t, err)
@@ -182,7 +180,7 @@ func TestService_GetWorkerVMStatusEvent_NotFound(t *testing.T) {
 	client := interfaces.NewHTTPClientMock()
 	service := New(client)
 
-	client.On("GetJSON", context.Background(), "history/v1/workervm_status_event/999/", mock.AnythingOfType("*history.WorkerVMStatusEvent")).Return(errors.New("worker VM status event not found"))
+	client.On("GetJSON", context.Background(), "history/v1/workervm_status_event/999/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.WorkerVMStatusEvent")).Return(errors.New("worker VM status event not found"))
 
 	_, err := service.GetWorkerVMStatusEvent(context.Background(), 999)
 	assert.Error(t, err)

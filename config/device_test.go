@@ -33,8 +33,8 @@ func TestService_ListDevices(t *testing.T) {
 						{ID: 2, Alias: "device2", Description: "Test device 2", EnableH323: true},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/device/", mock.AnythingOfType("*config.DeviceListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*DeviceListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/device/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.DeviceListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*DeviceListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -54,8 +54,8 @@ func TestService_ListDevices(t *testing.T) {
 						{ID: 1, Alias: "device1", Description: "Test device 1", EnableSIP: true},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/device/?limit=5&name__icontains=device1", mock.AnythingOfType("*config.DeviceListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*DeviceListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/device/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.DeviceListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*DeviceListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -101,8 +101,8 @@ func TestService_GetDevice(t *testing.T) {
 		Tag:                         "test-tag",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/device/1/", mock.AnythingOfType("*config.Device")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*Device)
+	client.On("GetJSON", t.Context(), "configuration/v1/device/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.Device")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*Device)
 		*result = *expectedDevice
 	})
 

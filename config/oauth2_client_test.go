@@ -35,8 +35,8 @@ func TestService_ListOAuth2Clients(t *testing.T) {
 						{ClientID: "client-2", ClientName: "Secondary OAuth2 Client", Role: "user", PrivateKeyJWT: &privateKeyJWT2},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/oauth2_client/", mock.AnythingOfType("*config.OAuth2ClientListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*OAuth2ClientListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/oauth2_client/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.OAuth2ClientListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*OAuth2ClientListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -57,8 +57,8 @@ func TestService_ListOAuth2Clients(t *testing.T) {
 						{ClientID: "client-1", ClientName: "Primary OAuth2 Client", Role: "admin", PrivateKeyJWT: &privateKeyJWT},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/oauth2_client/?limit=5&name__icontains=Primary", mock.AnythingOfType("*config.OAuth2ClientListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*OAuth2ClientListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/oauth2_client/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.OAuth2ClientListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*OAuth2ClientListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -97,8 +97,8 @@ func TestService_GetOAuth2Client(t *testing.T) {
 		PrivateKeyJWT: &privateKeyJWT,
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/oauth2_client/test-client-id/", mock.AnythingOfType("*config.OAuth2Client")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*OAuth2Client)
+	client.On("GetJSON", t.Context(), "configuration/v1/oauth2_client/test-client-id/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.OAuth2Client")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*OAuth2Client)
 		*result = *expectedOAuth2Client
 	})
 

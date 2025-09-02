@@ -33,8 +33,8 @@ func TestService_ListNTPServers(t *testing.T) {
 						{ID: 2, Address: "time.google.com", Description: "Google Time"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/ntp_server/", mock.AnythingOfType("*config.NTPServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*NTPServerListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/ntp_server/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.NTPServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*NTPServerListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -55,8 +55,8 @@ func TestService_ListNTPServers(t *testing.T) {
 						{ID: 2, Address: "time.google.com", Description: "Google Time"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/ntp_server/?limit=3&name__icontains=google&offset=1", mock.AnythingOfType("*config.NTPServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*NTPServerListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/ntp_server/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.NTPServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*NTPServerListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -96,8 +96,8 @@ func TestService_GetNTPServer(t *testing.T) {
 		KeyID:       &keyID,
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/ntp_server/1/", mock.AnythingOfType("*config.NTPServer")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*NTPServer)
+	client.On("GetJSON", t.Context(), "configuration/v1/ntp_server/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.NTPServer")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*NTPServer)
 		*result = *expectedServer
 	})
 

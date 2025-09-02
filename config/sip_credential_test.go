@@ -33,8 +33,8 @@ func TestService_ListSIPCredentials(t *testing.T) {
 						{ID: 2, Realm: "test.com", Username: "user2", Password: "password2"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/sip_credential/", mock.AnythingOfType("*config.SIPCredentialListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*SIPCredentialListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/sip_credential/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.SIPCredentialListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*SIPCredentialListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -54,8 +54,8 @@ func TestService_ListSIPCredentials(t *testing.T) {
 						{ID: 1, Realm: "example.com", Username: "user1", Password: "password1"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/sip_credential/?limit=5&name__icontains=user1", mock.AnythingOfType("*config.SIPCredentialListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*SIPCredentialListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/sip_credential/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.SIPCredentialListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*SIPCredentialListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -93,8 +93,8 @@ func TestService_GetSIPCredential(t *testing.T) {
 		Password: "testpassword",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/sip_credential/1/", mock.AnythingOfType("*config.SIPCredential")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*SIPCredential)
+	client.On("GetJSON", t.Context(), "configuration/v1/sip_credential/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.SIPCredential")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*SIPCredential)
 		*result = *expectedSIPCredential
 	})
 

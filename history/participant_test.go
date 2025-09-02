@@ -33,8 +33,8 @@ func TestService_ListParticipants(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), "history/v1/participant/", mock.AnythingOfType("*history.ParticipantListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*ParticipantListResponse)
+	client.On("GetJSON", t.Context(), "history/v1/participant/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.ParticipantListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*ParticipantListResponse)
 		*result = *expectedResponse
 	})
 
@@ -59,8 +59,8 @@ func TestService_GetParticipant(t *testing.T) {
 		DisconnectReason: "normal",
 	}
 
-	client.On("GetJSON", t.Context(), "history/v1/participant/1/", mock.AnythingOfType("*history.Participant")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*Participant)
+	client.On("GetJSON", t.Context(), "history/v1/participant/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.Participant")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*Participant)
 		*result = *expectedParticipant
 	})
 
@@ -94,10 +94,8 @@ func TestService_ListParticipantsByConference(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), mock.MatchedBy(func(endpoint string) bool {
-		return endpoint != "" && endpoint != "history/v1/participant/"
-	}), mock.AnythingOfType("*history.ParticipantListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*ParticipantListResponse)
+	client.On("GetJSON", t.Context(), "history/v1/participant/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.ParticipantListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*ParticipantListResponse)
 		*result = *expectedResponse
 	})
 
@@ -141,10 +139,8 @@ func TestService_ListParticipants_WithOptions(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), mock.MatchedBy(func(endpoint string) bool {
-		return endpoint != "history/v1/participant/"
-	}), mock.AnythingOfType("*history.ParticipantListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*ParticipantListResponse)
+	client.On("GetJSON", t.Context(), "history/v1/participant/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.ParticipantListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*ParticipantListResponse)
 		*result = *expectedResponse
 	})
 
@@ -185,10 +181,8 @@ func TestService_ListParticipantsByConference_WithOptions(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), mock.MatchedBy(func(endpoint string) bool {
-		return endpoint != "history/v1/participant/"
-	}), mock.AnythingOfType("*history.ParticipantListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*ParticipantListResponse)
+	client.On("GetJSON", t.Context(), "history/v1/participant/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.ParticipantListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*ParticipantListResponse)
 		*result = *expectedResponse
 	})
 

@@ -60,8 +60,8 @@ func TestService_ListIdentityProviders(t *testing.T) {
 						},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/identity_provider/", mock.AnythingOfType("*config.IdentityProviderListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*IdentityProviderListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/identity_provider/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.IdentityProviderListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*IdentityProviderListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -94,8 +94,8 @@ func TestService_ListIdentityProviders(t *testing.T) {
 						},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/identity_provider/?limit=5&name__icontains=saml", mock.AnythingOfType("*config.IdentityProviderListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*IdentityProviderListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/identity_provider/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.IdentityProviderListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*IdentityProviderListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -150,8 +150,8 @@ func TestService_GetIdentityProvider(t *testing.T) {
 		ResourceURI:                         "/api/admin/configuration/v1/identity_provider/1/",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/identity_provider/1/", mock.AnythingOfType("*config.IdentityProvider")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*IdentityProvider)
+	client.On("GetJSON", t.Context(), "configuration/v1/identity_provider/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.IdentityProvider")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*IdentityProvider)
 		*result = *expectedProvider
 	})
 

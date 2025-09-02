@@ -52,8 +52,8 @@ func TestService_ListBackplanes(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", context.Background(), "history/v1/backplane/", mock.AnythingOfType("*history.BackplaneListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*BackplaneListResponse)
+	client.On("GetJSON", context.Background(), "history/v1/backplane/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.BackplaneListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*BackplaneListResponse)
 		*result = *expectedResponse
 	})
 
@@ -87,8 +87,8 @@ func TestService_GetBackplane(t *testing.T) {
 		ResourceURI:          "/api/admin/history/v1/backplane/test-backplane-1/",
 	}
 
-	client.On("GetJSON", context.Background(), "history/v1/backplane/test-backplane-1/", mock.AnythingOfType("*history.Backplane")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*Backplane)
+	client.On("GetJSON", context.Background(), "history/v1/backplane/test-backplane-1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.Backplane")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*Backplane)
 		*result = *expectedBackplane
 	})
 
@@ -132,10 +132,8 @@ func TestService_ListBackplanes_WithOptions(t *testing.T) {
 		Objects: []Backplane{},
 	}
 
-	client.On("GetJSON", context.Background(), mock.MatchedBy(func(endpoint string) bool {
-		return endpoint != "history/v1/backplane/"
-	}), mock.AnythingOfType("*history.BackplaneListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*BackplaneListResponse)
+	client.On("GetJSON", context.Background(), "history/v1/backplane/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.BackplaneListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*BackplaneListResponse)
 		*result = *expectedResponse
 	})
 
@@ -151,7 +149,7 @@ func TestService_ListBackplanes_Error(t *testing.T) {
 	client := interfaces.NewHTTPClientMock()
 	service := New(client)
 
-	client.On("GetJSON", context.Background(), "history/v1/backplane/", mock.AnythingOfType("*history.BackplaneListResponse")).Return(errors.New("server error"))
+	client.On("GetJSON", context.Background(), "history/v1/backplane/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.BackplaneListResponse")).Return(errors.New("server error"))
 
 	_, err := service.ListBackplanes(context.Background(), nil)
 	assert.Error(t, err)
@@ -164,7 +162,7 @@ func TestService_GetBackplane_NotFound(t *testing.T) {
 	client := interfaces.NewHTTPClientMock()
 	service := New(client)
 
-	client.On("GetJSON", context.Background(), "history/v1/backplane/nonexistent/", mock.AnythingOfType("*history.Backplane")).Return(errors.New("backplane not found"))
+	client.On("GetJSON", context.Background(), "history/v1/backplane/nonexistent/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.Backplane")).Return(errors.New("backplane not found"))
 
 	_, err := service.GetBackplane(context.Background(), "nonexistent")
 	assert.Error(t, err)

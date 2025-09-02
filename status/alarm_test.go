@@ -40,8 +40,8 @@ func TestService_ListAlarms(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/alarm/", mock.AnythingOfType("*status.AlarmListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*AlarmListResponse)
+	client.On("GetJSON", t.Context(), "status/v1/alarm/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.AlarmListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*AlarmListResponse)
 		*result = *expectedResponse
 	})
 
@@ -77,10 +77,8 @@ func TestService_ListAlarms_WithOptions(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), mock.MatchedBy(func(endpoint string) bool {
-		return endpoint != "status/v1/alarm/"
-	}), mock.AnythingOfType("*status.AlarmListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*AlarmListResponse)
+	client.On("GetJSON", t.Context(), "status/v1/alarm/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.AlarmListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*AlarmListResponse)
 		*result = *expectedResponse
 	})
 
@@ -105,8 +103,8 @@ func TestService_GetAlarm(t *testing.T) {
 		TimeRaised: &util.InfinityTime{Time: timeRaised},
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/alarm/1/", mock.AnythingOfType("*status.Alarm")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*Alarm)
+	client.On("GetJSON", t.Context(), "status/v1/alarm/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.Alarm")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*Alarm)
 		*result = *expectedAlarm
 	})
 

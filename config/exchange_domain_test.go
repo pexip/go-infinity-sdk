@@ -33,8 +33,8 @@ func TestService_ListExchangeDomains(t *testing.T) {
 						{ID: 2, Domain: "subdomain.example.com", ExchangeConnector: "/api/admin/configuration/v1/exchange_connector/2/"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/exchange_domain/", mock.AnythingOfType("*config.ExchangeDomainListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*ExchangeDomainListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/exchange_domain/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.ExchangeDomainListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*ExchangeDomainListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -54,8 +54,8 @@ func TestService_ListExchangeDomains(t *testing.T) {
 						{ID: 1, Domain: "example.com", ExchangeConnector: "/api/admin/configuration/v1/exchange_connector/1/"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/exchange_domain/?limit=5&name__icontains=example", mock.AnythingOfType("*config.ExchangeDomainListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*ExchangeDomainListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/exchange_domain/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.ExchangeDomainListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*ExchangeDomainListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -92,8 +92,8 @@ func TestService_GetExchangeDomain(t *testing.T) {
 		ExchangeConnector: "/api/admin/configuration/v1/exchange_connector/1/",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/exchange_domain/1/", mock.AnythingOfType("*config.ExchangeDomain")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*ExchangeDomain)
+	client.On("GetJSON", t.Context(), "configuration/v1/exchange_domain/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.ExchangeDomain")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*ExchangeDomain)
 		*result = *expectedExchangeDomain
 	})
 

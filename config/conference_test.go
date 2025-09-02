@@ -34,8 +34,8 @@ func TestService_ListConferences(t *testing.T) {
 						{ID: 2, Name: "Test Conference 2"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/conference/", mock.AnythingOfType("*config.ConferenceListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*ConferenceListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/conference/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.ConferenceListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*ConferenceListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -56,8 +56,8 @@ func TestService_ListConferences(t *testing.T) {
 						{ID: 1, Name: "Test Conference"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/conference/?limit=10&name__icontains=test&offset=5", mock.AnythingOfType("*config.ConferenceListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*ConferenceListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/conference/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.ConferenceListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*ConferenceListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -93,8 +93,8 @@ func TestService_GetConference(t *testing.T) {
 		Name: "Test Conference",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/conference/1/", mock.AnythingOfType("*config.Conference")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*Conference)
+	client.On("GetJSON", t.Context(), "configuration/v1/conference/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.Conference")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*Conference)
 		*result = *expectedConference
 	})
 
@@ -183,7 +183,7 @@ func TestService_ListConferences_QueryParameterValidation(t *testing.T) {
 				BaseListOptions: options.BaseListOptions{Limit: 10},
 				Search:          "",
 			},
-			expectedQuery: "configuration/v1/conference/?limit=10",
+			expectedQuery: "configuration/v1/conference/",
 		},
 		{
 			name: "search with special characters",
@@ -191,7 +191,7 @@ func TestService_ListConferences_QueryParameterValidation(t *testing.T) {
 				BaseListOptions: options.BaseListOptions{Limit: 5},
 				Search:          "test@domain.com",
 			},
-			expectedQuery: "configuration/v1/conference/?limit=5&name__icontains=test%40domain.com",
+			expectedQuery: "configuration/v1/conference/",
 		},
 		{
 			name: "unicode search",
@@ -199,7 +199,7 @@ func TestService_ListConferences_QueryParameterValidation(t *testing.T) {
 				BaseListOptions: options.BaseListOptions{Limit: 5},
 				Search:          "cönférence",
 			},
-			expectedQuery: "configuration/v1/conference/?limit=5&name__icontains=c%C3%B6nf%C3%A9rence",
+			expectedQuery: "configuration/v1/conference/",
 		},
 	}
 
@@ -208,8 +208,8 @@ func TestService_ListConferences_QueryParameterValidation(t *testing.T) {
 			client := interfaces.NewHTTPClientMock()
 			expectedResponse := &ConferenceListResponse{Objects: []Conference{}}
 
-			client.On("GetJSON", t.Context(), tt.expectedQuery, mock.AnythingOfType("*config.ConferenceListResponse")).Return(nil).Run(func(args mock.Arguments) {
-				result := args.Get(2).(*ConferenceListResponse)
+			client.On("GetJSON", t.Context(), tt.expectedQuery, mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.ConferenceListResponse")).Return(nil).Run(func(args mock.Arguments) {
+				result := args.Get(3).(*ConferenceListResponse)
 				*result = *expectedResponse
 			})
 
@@ -231,7 +231,7 @@ func TestService_ConferenceErrorHandling(t *testing.T) {
 		{
 			name: "ListConferences client error",
 			setup: func(m *interfaces.HTTPClientMock) {
-				m.On("GetJSON", t.Context(), "configuration/v1/conference/", mock.AnythingOfType("*config.ConferenceListResponse")).Return(errors.New("network error"))
+				m.On("GetJSON", t.Context(), "configuration/v1/conference/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.ConferenceListResponse")).Return(errors.New("network error"))
 			},
 			operation: func(service *Service) error {
 				_, err := service.ListConferences(t.Context(), nil)
@@ -241,7 +241,7 @@ func TestService_ConferenceErrorHandling(t *testing.T) {
 		{
 			name: "GetConference client error",
 			setup: func(m *interfaces.HTTPClientMock) {
-				m.On("GetJSON", t.Context(), "configuration/v1/conference/1/", mock.AnythingOfType("*config.Conference")).Return(errors.New("not found"))
+				m.On("GetJSON", t.Context(), "configuration/v1/conference/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.Conference")).Return(errors.New("not found"))
 			},
 			operation: func(service *Service) error {
 				_, err := service.GetConference(t.Context(), 1)

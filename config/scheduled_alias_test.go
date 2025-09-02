@@ -40,8 +40,8 @@ func TestService_ListScheduledAliases(t *testing.T) {
 						{ID: 2, Alias: "meeting.room2", AliasNumber: 1002, NumericAlias: "1002", UUID: "uuid-2", ExchangeConnector: "exchange2", IsUsed: false, EWSItemUID: &ewsItemUID2, ConferenceDeletionTime: &deletionTime},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/scheduled_alias/", mock.AnythingOfType("*config.ScheduledAliasListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*ScheduledAliasListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/scheduled_alias/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.ScheduledAliasListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*ScheduledAliasListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -64,8 +64,8 @@ func TestService_ListScheduledAliases(t *testing.T) {
 						{ID: 1, Alias: "meeting.room1", AliasNumber: 1001, NumericAlias: "1001", UUID: "uuid-1", ExchangeConnector: "exchange1", IsUsed: true, EWSItemUID: &ewsItemUID, CreationTime: creationTime},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/scheduled_alias/?limit=5&name__icontains=room1", mock.AnythingOfType("*config.ScheduledAliasListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*ScheduledAliasListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/scheduled_alias/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.ScheduledAliasListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*ScheduledAliasListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -113,8 +113,8 @@ func TestService_GetScheduledAlias(t *testing.T) {
 		ConferenceDeletionTime: &deletionTime,
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/scheduled_alias/1/", mock.AnythingOfType("*config.ScheduledAlias")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*ScheduledAlias)
+	client.On("GetJSON", t.Context(), "configuration/v1/scheduled_alias/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.ScheduledAlias")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*ScheduledAlias)
 		*result = *expectedScheduledAlias
 	})
 

@@ -35,8 +35,8 @@ func TestService_ListHTTPProxies(t *testing.T) {
 						{ID: 2, Name: "backup-proxy", Address: "backup.example.com", Port: &port2, Username: "user2", Password: "pass2", Protocol: "https"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/http_proxy/", mock.AnythingOfType("*config.HTTPProxyListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*HTTPProxyListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/http_proxy/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.HTTPProxyListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*HTTPProxyListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -57,8 +57,8 @@ func TestService_ListHTTPProxies(t *testing.T) {
 						{ID: 1, Name: "primary-proxy", Address: "proxy.example.com", Port: &port, Username: "user1", Password: "pass1", Protocol: "http"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/http_proxy/?limit=5&name__icontains=primary", mock.AnythingOfType("*config.HTTPProxyListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*HTTPProxyListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/http_proxy/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.HTTPProxyListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*HTTPProxyListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -101,8 +101,8 @@ func TestService_GetHTTPProxy(t *testing.T) {
 		ResourceURI: "/api/admin/configuration/v1/http_proxy/1/",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/http_proxy/1/", mock.AnythingOfType("*config.HTTPProxy")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*HTTPProxy)
+	client.On("GetJSON", t.Context(), "configuration/v1/http_proxy/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.HTTPProxy")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*HTTPProxy)
 		*result = *expectedProxy
 	})
 

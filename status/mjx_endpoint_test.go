@@ -50,8 +50,8 @@ func TestService_ListMJXEndpoints(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/mjx_endpoint/", mock.AnythingOfType("*status.MJXEndpointListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*MJXEndpointListResponse)
+	client.On("GetJSON", t.Context(), "status/v1/mjx_endpoint/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.MJXEndpointListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*MJXEndpointListResponse)
 		*result = *expectedResponse
 	})
 
@@ -96,8 +96,8 @@ func TestService_GetMJXEndpoint(t *testing.T) {
 		RoomEmail:          "room-primary@example.com",
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/mjx_endpoint/1/", mock.AnythingOfType("*status.MJXEndpoint")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*MJXEndpoint)
+	client.On("GetJSON", t.Context(), "status/v1/mjx_endpoint/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.MJXEndpoint")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*MJXEndpoint)
 		*result = *expectedEndpoint
 	})
 
@@ -143,10 +143,8 @@ func TestService_ListMJXEndpoints_WithOptions(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), mock.MatchedBy(func(endpoint string) bool {
-		return endpoint != "status/v1/mjx_endpoint/"
-	}), mock.AnythingOfType("*status.MJXEndpointListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*MJXEndpointListResponse)
+	client.On("GetJSON", t.Context(), "status/v1/mjx_endpoint/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.MJXEndpointListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*MJXEndpointListResponse)
 		*result = *expectedResponse
 	})
 

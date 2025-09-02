@@ -15,7 +15,7 @@ func (s *Service) GetAutobackup(ctx context.Context) (*Autobackup, error) {
 	endpoint := "configuration/v1/autobackup/1/"
 
 	var result Autobackup
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, nil, &result)
 	return &result, err
 }
 

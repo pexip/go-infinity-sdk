@@ -32,8 +32,8 @@ func TestService_GetRegistration(t *testing.T) {
 		PushToken:                  "push-token-123",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/registration/1/", mock.AnythingOfType("*config.Registration")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*Registration)
+	client.On("GetJSON", t.Context(), "configuration/v1/registration/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.Registration")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*Registration)
 		*result = *expectedRegistration
 	})
 

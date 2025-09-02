@@ -80,8 +80,8 @@ func TestService_ListPermissions(t *testing.T) {
 						},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/permission/", mock.AnythingOfType("*config.PermissionListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*PermissionListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/permission/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.PermissionListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*PermissionListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -120,8 +120,8 @@ func TestService_ListPermissions(t *testing.T) {
 						},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/permission/?limit=5&name__icontains=conference", mock.AnythingOfType("*config.PermissionListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*PermissionListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/permission/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.PermissionListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*PermissionListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -159,8 +159,8 @@ func TestService_GetPermission(t *testing.T) {
 		Codename: "add_conference",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/permission/1/", mock.AnythingOfType("*config.Permission")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*Permission)
+	client.On("GetJSON", t.Context(), "configuration/v1/permission/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.Permission")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*Permission)
 		*result = *expectedPermission
 	})
 

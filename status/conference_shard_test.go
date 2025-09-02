@@ -59,8 +59,8 @@ func TestService_ListConferenceShards(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/conference_shard/", mock.AnythingOfType("*status.ConferenceShardListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*ConferenceShardListResponse)
+	client.On("GetJSON", t.Context(), "status/v1/conference_shard/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.ConferenceShardListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*ConferenceShardListResponse)
 		*result = *expectedResponse
 	})
 
@@ -98,8 +98,8 @@ func TestService_GetConferenceShard(t *testing.T) {
 		TranscodingEnabled: true,
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/conference_shard/shard-primary/", mock.AnythingOfType("*status.ConferenceShard")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*ConferenceShard)
+	client.On("GetJSON", t.Context(), "status/v1/conference_shard/shard-primary/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.ConferenceShard")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*ConferenceShard)
 		*result = *expectedShard
 	})
 
@@ -157,10 +157,8 @@ func TestService_ListConferenceShards_WithOptions(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), mock.MatchedBy(func(endpoint string) bool {
-		return endpoint != "status/v1/conference_shard/"
-	}), mock.AnythingOfType("*status.ConferenceShardListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*ConferenceShardListResponse)
+	client.On("GetJSON", t.Context(), "status/v1/conference_shard/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.ConferenceShardListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*ConferenceShardListResponse)
 		*result = *expectedResponse
 	})
 

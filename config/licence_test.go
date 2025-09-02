@@ -33,8 +33,8 @@ func TestService_ListLicences(t *testing.T) {
 						{FulfillmentID: "67890", ProductID: "pexip-vmr", Status: "active", Concurrent: 50, Activatable: 10},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/licence/", mock.AnythingOfType("*config.LicenceListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*LicenceListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/licence/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.LicenceListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*LicenceListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -54,8 +54,8 @@ func TestService_ListLicences(t *testing.T) {
 						{FulfillmentID: "12345", ProductID: "pexip-infinity", Status: "active", Concurrent: 100, Activatable: 25},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/licence/?limit=5&name__icontains=Infinity", mock.AnythingOfType("*config.LicenceListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*LicenceListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/licence/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.LicenceListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*LicenceListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -96,8 +96,8 @@ func TestService_GetLicence(t *testing.T) {
 		ResourceURI:    "/api/admin/configuration/v1/licence/test-12345/",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/licence/test-12345/", mock.AnythingOfType("*config.Licence")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*Licence)
+	client.On("GetJSON", t.Context(), "configuration/v1/licence/test-12345/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.Licence")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*Licence)
 		*result = *expectedLicence
 	})
 

@@ -42,8 +42,8 @@ func TestService_ListTeamsNodes(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/teamsnode/", mock.AnythingOfType("*status.TeamsNodeListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*TeamsNodeListResponse)
+	client.On("GetJSON", t.Context(), "status/v1/teamsnode/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.TeamsNodeListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*TeamsNodeListResponse)
 		*result = *expectedResponse
 	})
 
@@ -80,8 +80,8 @@ func TestService_GetTeamsNode(t *testing.T) {
 		HeartbeatTime: &util.InfinityTime{Time: lastContact},
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/teamsnode/1/", mock.AnythingOfType("*status.TeamsNode")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*TeamsNode)
+	client.On("GetJSON", t.Context(), "status/v1/teamsnode/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.TeamsNode")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*TeamsNode)
 		*result = *expectedNode
 	})
 
@@ -121,10 +121,8 @@ func TestService_ListTeamsNodes_WithOptions(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), mock.MatchedBy(func(endpoint string) bool {
-		return endpoint != "status/v1/teamsnode/"
-	}), mock.AnythingOfType("*status.TeamsNodeListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*TeamsNodeListResponse)
+	client.On("GetJSON", t.Context(), "status/v1/teamsnode/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.TeamsNodeListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*TeamsNodeListResponse)
 		*result = *expectedResponse
 	})
 

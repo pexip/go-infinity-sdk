@@ -9,6 +9,7 @@ package config
 import (
 	"context"
 	"fmt"
+	"net/url"
 
 	"github.com/pexip/go-infinity-sdk/v38/types"
 )
@@ -17,15 +18,14 @@ import (
 func (s *Service) ListSnmpNetworkManagementSystems(ctx context.Context, opts *ListOptions) (*SnmpNetworkManagementSystemListResponse, error) {
 	endpoint := "configuration/v1/snmp_network_management_system/"
 
+	var params *url.Values
 	if opts != nil {
-		params := opts.ToURLValues()
-		if len(params) > 0 {
-			endpoint += "?" + params.Encode()
-		}
+		urlValues := opts.ToURLValues()
+		params = &urlValues
 	}
 
 	var result SnmpNetworkManagementSystemListResponse
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, params, &result)
 	return &result, err
 }
 
@@ -34,7 +34,7 @@ func (s *Service) GetSnmpNetworkManagementSystem(ctx context.Context, id int) (*
 	endpoint := fmt.Sprintf("configuration/v1/snmp_network_management_system/%d/", id)
 
 	var result SnmpNetworkManagementSystem
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, nil, &result)
 	return &result, err
 }
 

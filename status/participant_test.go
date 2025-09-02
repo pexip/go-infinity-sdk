@@ -121,8 +121,8 @@ func TestService_ListParticipants(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/participant/", mock.AnythingOfType("*status.ParticipantListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*ParticipantListResponse)
+	client.On("GetJSON", t.Context(), "status/v1/participant/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.ParticipantListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*ParticipantListResponse)
 		*result = *expectedResponse
 	})
 
@@ -201,10 +201,8 @@ func TestService_ListParticipants_WithOptions(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), mock.MatchedBy(func(endpoint string) bool {
-		return endpoint != "status/v1/participant/"
-	}), mock.AnythingOfType("*status.ParticipantListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*ParticipantListResponse)
+	client.On("GetJSON", t.Context(), "status/v1/participant/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.ParticipantListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*ParticipantListResponse)
 		*result = *expectedResponse
 	})
 
@@ -269,8 +267,8 @@ func TestService_GetParticipant(t *testing.T) {
 		Vendor:                  "Mozilla/5.0",
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/participant/participant-1/", mock.AnythingOfType("*status.Participant")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*Participant)
+	client.On("GetJSON", t.Context(), "status/v1/participant/participant-1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.Participant")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*Participant)
 		*result = *expectedParticipant
 	})
 

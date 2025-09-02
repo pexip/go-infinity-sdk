@@ -33,8 +33,8 @@ func TestService_ListSTUNServers(t *testing.T) {
 						{ID: 2, Name: "backup-stun", Description: "Backup STUN server", Address: "stun-backup.example.com", Port: 3478},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/stun_server/", mock.AnythingOfType("*config.STUNServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*STUNServerListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/stun_server/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.STUNServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*STUNServerListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -54,8 +54,8 @@ func TestService_ListSTUNServers(t *testing.T) {
 						{ID: 1, Name: "primary-stun", Description: "Primary STUN server", Address: "stun.example.com", Port: 3478},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/stun_server/?limit=5&name__icontains=primary", mock.AnythingOfType("*config.STUNServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*STUNServerListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/stun_server/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.STUNServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*STUNServerListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -95,8 +95,8 @@ func TestService_GetSTUNServer(t *testing.T) {
 		ResourceURI: "/api/admin/configuration/v1/stun_server/1/",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/stun_server/1/", mock.AnythingOfType("*config.STUNServer")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*STUNServer)
+	client.On("GetJSON", t.Context(), "configuration/v1/stun_server/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.STUNServer")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*STUNServer)
 		*result = *expectedSTUNServer
 	})
 

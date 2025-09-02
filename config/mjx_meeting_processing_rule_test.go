@@ -64,8 +64,8 @@ func TestService_ListMjxMeetingProcessingRules(t *testing.T) {
 						},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/mjx_meeting_processing_rule/", mock.AnythingOfType("*config.MjxMeetingProcessingRuleListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*MjxMeetingProcessingRuleListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/mjx_meeting_processing_rule/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MjxMeetingProcessingRuleListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*MjxMeetingProcessingRuleListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -94,8 +94,8 @@ func TestService_ListMjxMeetingProcessingRules(t *testing.T) {
 						},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/mjx_meeting_processing_rule/?limit=5&name__icontains=primary", mock.AnythingOfType("*config.MjxMeetingProcessingRuleListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*MjxMeetingProcessingRuleListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/mjx_meeting_processing_rule/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MjxMeetingProcessingRuleListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*MjxMeetingProcessingRuleListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -145,8 +145,8 @@ func TestService_GetMjxMeetingProcessingRule(t *testing.T) {
 		DefaultProcessingEnabled: true,
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/mjx_meeting_processing_rule/1/", mock.AnythingOfType("*config.MjxMeetingProcessingRule")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*MjxMeetingProcessingRule)
+	client.On("GetJSON", t.Context(), "configuration/v1/mjx_meeting_processing_rule/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MjxMeetingProcessingRule")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*MjxMeetingProcessingRule)
 		*result = *expectedRule
 	})
 

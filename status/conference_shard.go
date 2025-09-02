@@ -15,15 +15,8 @@ import (
 func (s *Service) ListConferenceShards(ctx context.Context, opts *ListOptions) (*ConferenceShardListResponse, error) {
 	endpoint := "status/v1/conference_shard/"
 
-	if opts != nil {
-		params := opts.ToURLValues()
-		if len(params) > 0 {
-			endpoint += "?" + params.Encode()
-		}
-	}
-
 	var result ConferenceShardListResponse
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.listEndpoint(ctx, endpoint, opts, &result)
 	return &result, err
 }
 
@@ -32,6 +25,6 @@ func (s *Service) GetConferenceShard(ctx context.Context, id string) (*Conferenc
 	endpoint := fmt.Sprintf("status/v1/conference_shard/%s/", id)
 
 	var result ConferenceShard
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, nil, &result)
 	return &result, err
 }

@@ -48,8 +48,8 @@ func TestService_ListIdentityProviderGroups(t *testing.T) {
 						},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/identity_provider_group/", mock.AnythingOfType("*config.IdentityProviderGroupListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*IdentityProviderGroupListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/identity_provider_group/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.IdentityProviderGroupListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*IdentityProviderGroupListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -77,8 +77,8 @@ func TestService_ListIdentityProviderGroups(t *testing.T) {
 						},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/identity_provider_group/?limit=5&name__icontains=admin", mock.AnythingOfType("*config.IdentityProviderGroupListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*IdentityProviderGroupListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/identity_provider_group/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.IdentityProviderGroupListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*IdentityProviderGroupListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -120,8 +120,8 @@ func TestService_GetIdentityProviderGroup(t *testing.T) {
 		ResourceURI: "/api/admin/configuration/v1/identity_provider_group/1/",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/identity_provider_group/1/", mock.AnythingOfType("*config.IdentityProviderGroup")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*IdentityProviderGroup)
+	client.On("GetJSON", t.Context(), "configuration/v1/identity_provider_group/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.IdentityProviderGroup")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*IdentityProviderGroup)
 		*result = *expectedGroup
 	})
 

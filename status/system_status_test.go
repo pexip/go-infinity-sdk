@@ -30,8 +30,8 @@ func TestService_GetSystemStatus(t *testing.T) {
 		CPULoad:     25.5,
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/system_status/", mock.AnythingOfType("*status.SystemStatus")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*SystemStatus)
+	client.On("GetJSON", t.Context(), "status/v1/system_status/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.SystemStatus")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*SystemStatus)
 		*result = *expectedStatus
 	})
 

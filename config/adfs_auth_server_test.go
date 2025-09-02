@@ -33,8 +33,8 @@ func TestService_ListADFSAuthServers(t *testing.T) {
 						{ID: 2, Name: "backup-adfs", Description: "Backup ADFS server", ClientID: "client2", FederationServiceName: "fs2.example.com", FederationServiceIdentifier: "http://fs2.example.com/adfs/services/trust", RelyingPartyTrustIdentifierURL: "https://backup.example.com/"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/adfs_auth_server/", mock.AnythingOfType("*config.ADFSAuthServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*ADFSAuthServerListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/adfs_auth_server/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.ADFSAuthServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*ADFSAuthServerListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -54,8 +54,8 @@ func TestService_ListADFSAuthServers(t *testing.T) {
 						{ID: 1, Name: "primary-adfs", Description: "Primary ADFS server", ClientID: "client1", FederationServiceName: "fs.example.com", FederationServiceIdentifier: "http://fs.example.com/adfs/services/trust", RelyingPartyTrustIdentifierURL: "https://example.com/"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/adfs_auth_server/?limit=5&name__icontains=primary", mock.AnythingOfType("*config.ADFSAuthServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*ADFSAuthServerListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/adfs_auth_server/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.ADFSAuthServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*ADFSAuthServerListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -96,8 +96,8 @@ func TestService_GetADFSAuthServer(t *testing.T) {
 		RelyingPartyTrustIdentifierURL: "https://example.com/",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/adfs_auth_server/1/", mock.AnythingOfType("*config.ADFSAuthServer")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*ADFSAuthServer)
+	client.On("GetJSON", t.Context(), "configuration/v1/adfs_auth_server/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.ADFSAuthServer")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*ADFSAuthServer)
 		*result = *expectedADFSAuthServer
 	})
 

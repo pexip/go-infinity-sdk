@@ -70,8 +70,8 @@ func TestService_ListCloudNodes(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/cloud_node/", mock.AnythingOfType("*status.CloudNodeListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*CloudNodeListResponse)
+	client.On("GetJSON", t.Context(), "status/v1/cloud_node/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.CloudNodeListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*CloudNodeListResponse)
 		*result = *expectedResponse
 	})
 
@@ -123,8 +123,8 @@ func TestService_GetCloudNode(t *testing.T) {
 		WorkerVMConfigurationName:         strPtr("worker-vm-primary"),
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/cloud_node/i-1234567890abcdef0/", mock.AnythingOfType("*status.CloudNode")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*CloudNode)
+	client.On("GetJSON", t.Context(), "status/v1/cloud_node/i-1234567890abcdef0/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.CloudNode")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*CloudNode)
 		*result = *expectedNode
 	})
 
@@ -181,10 +181,8 @@ func TestService_ListCloudNodes_WithOptions(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), mock.MatchedBy(func(endpoint string) bool {
-		return endpoint != "status/v1/cloud_node/"
-	}), mock.AnythingOfType("*status.CloudNodeListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*CloudNodeListResponse)
+	client.On("GetJSON", t.Context(), "status/v1/cloud_node/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.CloudNodeListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*CloudNodeListResponse)
 		*result = *expectedResponse
 	})
 

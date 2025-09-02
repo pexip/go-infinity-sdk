@@ -15,15 +15,8 @@ import (
 func (s *Service) ListTeamsNodes(ctx context.Context, opts *ListOptions) (*TeamsNodeListResponse, error) {
 	endpoint := "status/v1/teamsnode/"
 
-	if opts != nil {
-		params := opts.ToURLValues()
-		if len(params) > 0 {
-			endpoint += "?" + params.Encode()
-		}
-	}
-
 	var result TeamsNodeListResponse
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.listEndpoint(ctx, endpoint, opts, &result)
 	return &result, err
 }
 
@@ -32,6 +25,6 @@ func (s *Service) GetTeamsNode(ctx context.Context, id int) (*TeamsNode, error) 
 	endpoint := fmt.Sprintf("status/v1/teamsnode/%d/", id)
 
 	var result TeamsNode
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, nil, &result)
 	return &result, err
 }

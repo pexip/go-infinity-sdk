@@ -86,8 +86,8 @@ func TestService_ListMjxIntegrations(t *testing.T) {
 						},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/mjx_integration/", mock.AnythingOfType("*config.MjxIntegrationListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*MjxIntegrationListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/mjx_integration/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MjxIntegrationListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*MjxIntegrationListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -116,8 +116,8 @@ func TestService_ListMjxIntegrations(t *testing.T) {
 						},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/mjx_integration/?limit=5&name__icontains=primary", mock.AnythingOfType("*config.MjxIntegrationListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*MjxIntegrationListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/mjx_integration/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MjxIntegrationListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*MjxIntegrationListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -187,8 +187,8 @@ func TestService_GetMjxIntegration(t *testing.T) {
 		EndpointGroups:              []string{"/api/admin/configuration/v1/mjx_endpoint_group/1/", "/api/admin/configuration/v1/mjx_endpoint_group/2/"},
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/mjx_integration/1/", mock.AnythingOfType("*config.MjxIntegration")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*MjxIntegration)
+	client.On("GetJSON", t.Context(), "configuration/v1/mjx_integration/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MjxIntegration")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*MjxIntegration)
 		*result = *expectedIntegration
 	})
 

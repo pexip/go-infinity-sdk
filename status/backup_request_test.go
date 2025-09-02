@@ -43,8 +43,8 @@ func TestService_ListBackupRequests(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/backup_request/", mock.AnythingOfType("*status.BackupRequestListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*BackupRequestListResponse)
+	client.On("GetJSON", t.Context(), "status/v1/backup_request/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.BackupRequestListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*BackupRequestListResponse)
 		*result = *expectedResponse
 	})
 
@@ -82,8 +82,8 @@ func TestService_GetBackupRequest(t *testing.T) {
 		State:       "completed",
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/backup_request/1/", mock.AnythingOfType("*status.BackupRequest")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*BackupRequest)
+	client.On("GetJSON", t.Context(), "status/v1/backup_request/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.BackupRequest")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*BackupRequest)
 		*result = *expectedRequest
 	})
 
@@ -130,10 +130,8 @@ func TestService_ListBackupRequests_WithOptions(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), mock.MatchedBy(func(endpoint string) bool {
-		return endpoint != "status/v1/backup_request/"
-	}), mock.AnythingOfType("*status.BackupRequestListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*BackupRequestListResponse)
+	client.On("GetJSON", t.Context(), "status/v1/backup_request/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.BackupRequestListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*BackupRequestListResponse)
 		*result = *expectedResponse
 	})
 

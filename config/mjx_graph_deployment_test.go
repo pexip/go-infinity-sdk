@@ -53,8 +53,8 @@ func TestService_ListMjxGraphDeployments(t *testing.T) {
 						},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/mjx_graph_deployment/", mock.AnythingOfType("*config.MjxGraphDeploymentListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*MjxGraphDeploymentListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/mjx_graph_deployment/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MjxGraphDeploymentListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*MjxGraphDeploymentListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -83,8 +83,8 @@ func TestService_ListMjxGraphDeployments(t *testing.T) {
 						},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/mjx_graph_deployment/?limit=5&name__icontains=primary", mock.AnythingOfType("*config.MjxGraphDeploymentListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*MjxGraphDeploymentListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/mjx_graph_deployment/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MjxGraphDeploymentListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*MjxGraphDeploymentListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -132,8 +132,8 @@ func TestService_GetMjxGraphDeployment(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/mjx_graph_deployment/1/", mock.AnythingOfType("*config.MjxGraphDeployment")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*MjxGraphDeployment)
+	client.On("GetJSON", t.Context(), "configuration/v1/mjx_graph_deployment/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MjxGraphDeployment")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*MjxGraphDeployment)
 		*result = *expectedDeployment
 	})
 

@@ -38,8 +38,8 @@ func TestService_ListWorkerVMs(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/worker_vm/", mock.AnythingOfType("*status.WorkerVMListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*WorkerVMListResponse)
+	client.On("GetJSON", t.Context(), "status/v1/worker_vm/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.WorkerVMListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*WorkerVMListResponse)
 		*result = *expectedResponse
 	})
 
@@ -74,10 +74,8 @@ func TestService_ListWorkerVMs_WithOptions(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), mock.MatchedBy(func(endpoint string) bool {
-		return endpoint != "status/v1/worker_vm/"
-	}), mock.AnythingOfType("*status.WorkerVMListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*WorkerVMListResponse)
+	client.On("GetJSON", t.Context(), "status/v1/worker_vm/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.WorkerVMListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*WorkerVMListResponse)
 		*result = *expectedResponse
 	})
 
@@ -101,8 +99,8 @@ func TestService_GetWorkerVM(t *testing.T) {
 		UpgradeStatus:  "IDLE",
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/worker_vm/1/", mock.AnythingOfType("*status.WorkerVM")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*WorkerVM)
+	client.On("GetJSON", t.Context(), "status/v1/worker_vm/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.WorkerVM")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*WorkerVM)
 		*result = *expectedWorkerVM
 	})
 

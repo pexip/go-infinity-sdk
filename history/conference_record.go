@@ -15,15 +15,8 @@ import (
 func (s *Service) ListConferenceRecords(ctx context.Context, opts *ListOptions) (*ConferenceRecordListResponse, error) {
 	endpoint := "history/v1/conference/"
 
-	if opts != nil {
-		params := opts.ToURLValues()
-		if len(params) > 0 {
-			endpoint += "?" + params.Encode()
-		}
-	}
-
 	var result ConferenceRecordListResponse
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.listEndpoint(ctx, endpoint, opts, &result)
 	return &result, err
 }
 
@@ -32,6 +25,6 @@ func (s *Service) GetConferenceRecord(ctx context.Context, id int) (*ConferenceR
 	endpoint := fmt.Sprintf("history/v1/conference/%d/", id)
 
 	var result ConferenceRecord
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, nil, &result)
 	return &result, err
 }

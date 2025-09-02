@@ -15,15 +15,8 @@ import (
 func (s *Service) ListWorkerVMs(ctx context.Context, opts *ListOptions) (*WorkerVMListResponse, error) {
 	endpoint := "status/v1/worker_vm/"
 
-	if opts != nil {
-		params := opts.ToURLValues()
-		if len(params) > 0 {
-			endpoint += "?" + params.Encode()
-		}
-	}
-
 	var result WorkerVMListResponse
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.listEndpoint(ctx, endpoint, opts, &result)
 	return &result, err
 }
 
@@ -32,6 +25,6 @@ func (s *Service) GetWorkerVM(ctx context.Context, id int) (*WorkerVM, error) {
 	endpoint := fmt.Sprintf("status/v1/worker_vm/%d/", id)
 
 	var result WorkerVM
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, nil, &result)
 	return &result, err
 }

@@ -9,6 +9,7 @@ package config
 import (
 	"context"
 	"fmt"
+	"net/url"
 
 	"github.com/pexip/go-infinity-sdk/v38/types"
 )
@@ -17,15 +18,14 @@ import (
 func (s *Service) ListMediaLibraryPlaylistEntries(ctx context.Context, opts *ListOptions) (*MediaLibraryPlaylistEntryListResponse, error) {
 	endpoint := "configuration/v1/media_library_playlist_entry/"
 
+	var params *url.Values
 	if opts != nil {
-		params := opts.ToURLValues()
-		if len(params) > 0 {
-			endpoint += "?" + params.Encode()
-		}
+		urlValues := opts.ToURLValues()
+		params = &urlValues
 	}
 
 	var result MediaLibraryPlaylistEntryListResponse
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, params, &result)
 	return &result, err
 }
 
@@ -34,7 +34,7 @@ func (s *Service) GetMediaLibraryPlaylistEntry(ctx context.Context, id int) (*Me
 	endpoint := fmt.Sprintf("configuration/v1/media_library_playlist_entry/%d/", id)
 
 	var result MediaLibraryPlaylistEntry
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, nil, &result)
 	return &result, err
 }
 

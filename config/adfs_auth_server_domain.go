@@ -9,6 +9,7 @@ package config
 import (
 	"context"
 	"fmt"
+	"net/url"
 
 	"github.com/pexip/go-infinity-sdk/v38/types"
 )
@@ -17,15 +18,14 @@ import (
 func (s *Service) ListADFSAuthServerDomains(ctx context.Context, opts *ListOptions) (*ADFSAuthServerDomainListResponse, error) {
 	endpoint := "configuration/v1/adfs_auth_server_domain/"
 
+	var params *url.Values
 	if opts != nil {
-		params := opts.ToURLValues()
-		if len(params) > 0 {
-			endpoint += "?" + params.Encode()
-		}
+		urlValues := opts.ToURLValues()
+		params = &urlValues
 	}
 
 	var result ADFSAuthServerDomainListResponse
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, params, &result)
 	return &result, err
 }
 
@@ -34,7 +34,7 @@ func (s *Service) GetADFSAuthServerDomain(ctx context.Context, id int) (*ADFSAut
 	endpoint := fmt.Sprintf("configuration/v1/adfs_auth_server_domain/%d/", id)
 
 	var result ADFSAuthServerDomain
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, nil, &result)
 	return &result, err
 }
 

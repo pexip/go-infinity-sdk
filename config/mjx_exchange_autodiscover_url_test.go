@@ -34,8 +34,8 @@ func TestService_ListMjxExchangeAutodiscoverURLs(t *testing.T) {
 						{ID: 2, Name: "backup-autodiscover", Description: "Backup Exchange autodiscover URL", URL: "https://backup.example.com/autodiscover/autodiscover.xml", ExchangeDeployment: &exchangeDeployment},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/mjx_exchange_autodiscover_url/", mock.AnythingOfType("*config.MjxExchangeAutodiscoverURLListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*MjxExchangeAutodiscoverURLListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/mjx_exchange_autodiscover_url/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MjxExchangeAutodiscoverURLListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*MjxExchangeAutodiscoverURLListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -56,8 +56,8 @@ func TestService_ListMjxExchangeAutodiscoverURLs(t *testing.T) {
 						{ID: 1, Name: "primary-autodiscover", Description: "Primary Exchange autodiscover URL", URL: "https://autodiscover.example.com/autodiscover/autodiscover.xml", ExchangeDeployment: &exchangeDeployment},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/mjx_exchange_autodiscover_url/?limit=5&name__icontains=primary", mock.AnythingOfType("*config.MjxExchangeAutodiscoverURLListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*MjxExchangeAutodiscoverURLListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/mjx_exchange_autodiscover_url/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MjxExchangeAutodiscoverURLListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*MjxExchangeAutodiscoverURLListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -98,8 +98,8 @@ func TestService_GetMjxExchangeAutodiscoverURL(t *testing.T) {
 		ExchangeDeployment: &exchangeDeployment,
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/mjx_exchange_autodiscover_url/1/", mock.AnythingOfType("*config.MjxExchangeAutodiscoverURL")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*MjxExchangeAutodiscoverURL)
+	client.On("GetJSON", t.Context(), "configuration/v1/mjx_exchange_autodiscover_url/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MjxExchangeAutodiscoverURL")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*MjxExchangeAutodiscoverURL)
 		*result = *expectedURL
 	})
 

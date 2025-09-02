@@ -10,6 +10,9 @@
 package history
 
 import (
+	"context"
+	"net/url"
+
 	"github.com/pexip/go-infinity-sdk/v38/interfaces"
 )
 
@@ -23,4 +26,12 @@ func New(client interfaces.HTTPClient) *Service {
 	return &Service{
 		client: client,
 	}
+}
+
+func (s *Service) listEndpoint(ctx context.Context, endpoint string, opts *ListOptions, result interface{}) error {
+	var params url.Values
+	if opts != nil {
+		params = opts.ToURLValues()
+	}
+	return s.client.GetJSON(ctx, endpoint, &params, result)
 }

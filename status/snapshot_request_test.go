@@ -35,8 +35,8 @@ func TestService_ListSnapshotRequests(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/snapshot_request/", mock.AnythingOfType("*status.SnapshotRequestListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*SnapshotRequestListResponse)
+	client.On("GetJSON", t.Context(), "status/v1/snapshot_request/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.SnapshotRequestListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*SnapshotRequestListResponse)
 		*result = *expectedResponse
 	})
 
@@ -78,10 +78,8 @@ func TestService_ListSnapshotRequests_WithOptions(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), mock.MatchedBy(func(endpoint string) bool {
-		return endpoint != "status/v1/snapshot_request/"
-	}), mock.AnythingOfType("*status.SnapshotRequestListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*SnapshotRequestListResponse)
+	client.On("GetJSON", t.Context(), "status/v1/snapshot_request/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.SnapshotRequestListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*SnapshotRequestListResponse)
 		*result = *expectedResponse
 	})
 
@@ -111,8 +109,8 @@ func TestService_GetSnapshotRequest(t *testing.T) {
 		UpdatedAt:   &util.InfinityTime{Time: updated},
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/snapshot_request/1/", mock.AnythingOfType("*status.SnapshotRequest")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*SnapshotRequest)
+	client.On("GetJSON", t.Context(), "status/v1/snapshot_request/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.SnapshotRequest")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*SnapshotRequest)
 		*result = *expectedRequest
 	})
 

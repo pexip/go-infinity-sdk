@@ -33,8 +33,8 @@ func TestService_ListMediaLibraryPlaylists(t *testing.T) {
 						{ID: 2, Name: "hold-music-playlist", Description: "Music on hold collection", Loop: true, Shuffle: true, PlaylistEntries: []string{"/api/admin/configuration/v1/media_library_playlist_entry/3/", "/api/admin/configuration/v1/media_library_playlist_entry/4/"}},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/media_library_playlist/", mock.AnythingOfType("*config.MediaLibraryPlaylistListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*MediaLibraryPlaylistListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/media_library_playlist/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MediaLibraryPlaylistListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*MediaLibraryPlaylistListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -54,8 +54,8 @@ func TestService_ListMediaLibraryPlaylists(t *testing.T) {
 						{ID: 1, Name: "welcome-playlist", Description: "Welcome and onboarding videos", Loop: true, Shuffle: false, PlaylistEntries: []string{"/api/admin/configuration/v1/media_library_playlist_entry/1/", "/api/admin/configuration/v1/media_library_playlist_entry/2/"}},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/media_library_playlist/?limit=5&name__icontains=welcome", mock.AnythingOfType("*config.MediaLibraryPlaylistListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*MediaLibraryPlaylistListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/media_library_playlist/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MediaLibraryPlaylistListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*MediaLibraryPlaylistListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -99,8 +99,8 @@ func TestService_GetMediaLibraryPlaylist(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/media_library_playlist/1/", mock.AnythingOfType("*config.MediaLibraryPlaylist")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*MediaLibraryPlaylist)
+	client.On("GetJSON", t.Context(), "configuration/v1/media_library_playlist/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MediaLibraryPlaylist")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*MediaLibraryPlaylist)
 		*result = *expectedMediaLibraryPlaylist
 	})
 

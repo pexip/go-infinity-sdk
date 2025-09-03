@@ -34,8 +34,8 @@ func TestService_ListH323Gatekeepers(t *testing.T) {
 						{ID: 2, Name: "backup-gk", Description: "Backup H.323 gatekeeper", Address: "backup-gk.example.com", Port: &port},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/h323_gatekeeper/", mock.AnythingOfType("*config.H323GatekeeperListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*H323GatekeeperListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/h323_gatekeeper/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.H323GatekeeperListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*H323GatekeeperListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -56,8 +56,8 @@ func TestService_ListH323Gatekeepers(t *testing.T) {
 						{ID: 1, Name: "primary-gk", Description: "Primary H.323 gatekeeper", Address: "gk.example.com", Port: &port},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/h323_gatekeeper/?limit=5&name__icontains=primary", mock.AnythingOfType("*config.H323GatekeeperListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*H323GatekeeperListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/h323_gatekeeper/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.H323GatekeeperListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*H323GatekeeperListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -97,8 +97,8 @@ func TestService_GetH323Gatekeeper(t *testing.T) {
 		Port:        &port,
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/h323_gatekeeper/1/", mock.AnythingOfType("*config.H323Gatekeeper")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*H323Gatekeeper)
+	client.On("GetJSON", t.Context(), "configuration/v1/h323_gatekeeper/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.H323Gatekeeper")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*H323Gatekeeper)
 		*result = *expectedGatekeeper
 	})
 

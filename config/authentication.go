@@ -15,7 +15,7 @@ func (s *Service) GetAuthentication(ctx context.Context) (*Authentication, error
 	endpoint := "configuration/v1/authentication/1/"
 
 	var result Authentication
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, nil, &result)
 	return &result, err
 }
 

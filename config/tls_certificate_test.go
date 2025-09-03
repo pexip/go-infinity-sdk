@@ -38,8 +38,8 @@ func TestService_ListTLSCertificates(t *testing.T) {
 						{ID: 2, Certificate: "-----BEGIN CERTIFICATE-----\nMIIC...", PrivateKey: "-----BEGIN PRIVATE KEY-----\nMIIF...", Nodes: []string{"conferencing"}, StartDate: startDate1, EndDate: endDate1, SubjectName: "CN=meeting.example.com"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/tls_certificate/", mock.AnythingOfType("*config.TLSCertificateListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*TLSCertificateListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/tls_certificate/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.TLSCertificateListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*TLSCertificateListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -63,8 +63,8 @@ func TestService_ListTLSCertificates(t *testing.T) {
 						{ID: 1, Certificate: "-----BEGIN CERTIFICATE-----\nMIIB...", PrivateKey: "-----BEGIN PRIVATE KEY-----\nMIIE...", Nodes: []string{"management"}, StartDate: startDate, EndDate: endDate, SubjectName: "CN=example.com", KeyID: &keyID},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/tls_certificate/?limit=5&name__icontains=example.com", mock.AnythingOfType("*config.TLSCertificateListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*TLSCertificateListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/tls_certificate/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.TLSCertificateListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*TLSCertificateListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -120,8 +120,8 @@ func TestService_GetTLSCertificate(t *testing.T) {
 		ResourceURI:          "/api/admin/configuration/v1/tls_certificate/1/",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/tls_certificate/1/", mock.AnythingOfType("*config.TLSCertificate")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*TLSCertificate)
+	client.On("GetJSON", t.Context(), "configuration/v1/tls_certificate/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.TLSCertificate")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*TLSCertificate)
 		*result = *expectedTLSCertificate
 	})
 

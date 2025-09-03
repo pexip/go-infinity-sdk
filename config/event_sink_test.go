@@ -35,8 +35,8 @@ func TestService_ListEventSinks(t *testing.T) {
 						{ID: 2, Name: "secondary-sink", Description: &desc2, URL: "https://backup.example.com/events", BulkSupport: false, VerifyTLSCertificate: true, Version: 2},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/event_sink/", mock.AnythingOfType("*config.EventSinkListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*EventSinkListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/event_sink/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.EventSinkListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*EventSinkListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -57,8 +57,8 @@ func TestService_ListEventSinks(t *testing.T) {
 						{ID: 1, Name: "primary-sink", Description: &desc, URL: "https://events.example.com/webhook", BulkSupport: true, VerifyTLSCertificate: true, Version: 2},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/event_sink/?limit=5&name__icontains=primary", mock.AnythingOfType("*config.EventSinkListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*EventSinkListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/event_sink/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.EventSinkListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*EventSinkListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -105,8 +105,8 @@ func TestService_GetEventSink(t *testing.T) {
 		Version:              2,
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/event_sink/1/", mock.AnythingOfType("*config.EventSink")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*EventSink)
+	client.On("GetJSON", t.Context(), "configuration/v1/event_sink/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.EventSink")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*EventSink)
 		*result = *expectedEventSink
 	})
 

@@ -33,8 +33,8 @@ func TestService_ListMediaLibraryEntries(t *testing.T) {
 						{ID: 2, Name: "hold-music", Description: "Music on hold", UUID: "123e4567-e89b-12d3-a456-426614174001", FileName: "hold.mp3", MediaType: "audio", MediaFormat: "audio/mpeg", MediaSize: 512000, MediaFile: "/media/hold.mp3"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/media_library_entry/", mock.AnythingOfType("*config.MediaLibraryEntryListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*MediaLibraryEntryListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/media_library_entry/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MediaLibraryEntryListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*MediaLibraryEntryListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -54,8 +54,8 @@ func TestService_ListMediaLibraryEntries(t *testing.T) {
 						{ID: 1, Name: "welcome-video", Description: "Welcome video for conferences", UUID: "123e4567-e89b-12d3-a456-426614174000", FileName: "welcome.mp4", MediaType: "video", MediaFormat: "video/mp4", MediaSize: 1048576, MediaFile: "/media/welcome.mp4"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/media_library_entry/?limit=5&name__icontains=welcome", mock.AnythingOfType("*config.MediaLibraryEntryListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*MediaLibraryEntryListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/media_library_entry/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MediaLibraryEntryListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*MediaLibraryEntryListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -98,8 +98,8 @@ func TestService_GetMediaLibraryEntry(t *testing.T) {
 		MediaFile:   "/media/test.mp4",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/media_library_entry/1/", mock.AnythingOfType("*config.MediaLibraryEntry")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*MediaLibraryEntry)
+	client.On("GetJSON", t.Context(), "configuration/v1/media_library_entry/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MediaLibraryEntry")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*MediaLibraryEntry)
 		*result = *expectedMediaLibraryEntry
 	})
 

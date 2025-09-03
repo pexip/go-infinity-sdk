@@ -9,6 +9,7 @@ package config
 import (
 	"context"
 	"fmt"
+	"net/url"
 
 	"github.com/pexip/go-infinity-sdk/v38/types"
 )
@@ -17,15 +18,14 @@ import (
 func (s *Service) ListGatewayRoutingRules(ctx context.Context, opts *ListOptions) (*GatewayRoutingRuleListResponse, error) {
 	endpoint := "configuration/v1/gateway_routing_rule/"
 
+	var params *url.Values
 	if opts != nil {
-		params := opts.ToURLValues()
-		if len(params) > 0 {
-			endpoint += "?" + params.Encode()
-		}
+		urlValues := opts.ToURLValues()
+		params = &urlValues
 	}
 
 	var result GatewayRoutingRuleListResponse
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, params, &result)
 	return &result, err
 }
 
@@ -34,7 +34,7 @@ func (s *Service) GetGatewayRoutingRule(ctx context.Context, id int) (*GatewayRo
 	endpoint := fmt.Sprintf("configuration/v1/gateway_routing_rule/%d/", id)
 
 	var result GatewayRoutingRule
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, nil, &result)
 	return &result, err
 }
 

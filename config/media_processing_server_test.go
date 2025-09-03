@@ -35,8 +35,8 @@ func TestService_ListMediaProcessingServers(t *testing.T) {
 						{ID: 2, FQDN: "media2.example.com", AppID: &appID2, PublicJWTKey: "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA...\n-----END PUBLIC KEY-----"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/media_processing_server/", mock.AnythingOfType("*config.MediaProcessingServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*MediaProcessingServerListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/media_processing_server/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MediaProcessingServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*MediaProcessingServerListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -57,8 +57,8 @@ func TestService_ListMediaProcessingServers(t *testing.T) {
 						{ID: 1, FQDN: "media1.example.com", AppID: &appID, PublicJWTKey: "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA...\n-----END PUBLIC KEY-----"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/media_processing_server/?limit=5&name__icontains=media1", mock.AnythingOfType("*config.MediaProcessingServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*MediaProcessingServerListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/media_processing_server/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MediaProcessingServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*MediaProcessingServerListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -97,8 +97,8 @@ func TestService_GetMediaProcessingServer(t *testing.T) {
 		PublicJWTKey: "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtest...\n-----END PUBLIC KEY-----",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/media_processing_server/1/", mock.AnythingOfType("*config.MediaProcessingServer")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*MediaProcessingServer)
+	client.On("GetJSON", t.Context(), "configuration/v1/media_processing_server/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MediaProcessingServer")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*MediaProcessingServer)
 		*result = *expectedMediaProcessingServer
 	})
 

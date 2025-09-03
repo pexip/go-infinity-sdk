@@ -35,8 +35,8 @@ func TestService_ListTURNServers(t *testing.T) {
 						{ID: 2, Name: "secure-turn", Description: "Secure TURN server", Address: "turns.example.com", Port: &port2, SecretKey: "secret123", ServerType: "external", TransportType: "tls"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/turn_server/", mock.AnythingOfType("*config.TURNServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*TURNServerListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/turn_server/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.TURNServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*TURNServerListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -57,8 +57,8 @@ func TestService_ListTURNServers(t *testing.T) {
 						{ID: 1, Name: "primary-turn", Description: "Primary TURN server", Address: "turn.example.com", Port: &port, Username: "turnuser", ServerType: "external", TransportType: "udp"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/turn_server/?limit=5&name__icontains=primary", mock.AnythingOfType("*config.TURNServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*TURNServerListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/turn_server/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.TURNServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*TURNServerListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -104,8 +104,8 @@ func TestService_GetTURNServer(t *testing.T) {
 		ResourceURI:   "/api/admin/configuration/v1/turn_server/1/",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/turn_server/1/", mock.AnythingOfType("*config.TURNServer")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*TURNServer)
+	client.On("GetJSON", t.Context(), "configuration/v1/turn_server/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.TURNServer")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*TURNServer)
 		*result = *expectedTURNServer
 	})
 

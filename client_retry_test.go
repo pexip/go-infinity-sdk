@@ -203,7 +203,7 @@ func TestClient_RetryOnServerError(t *testing.T) {
 	require.NoError(t, err)
 
 	var result map[string]interface{}
-	err = client.GetJSON(context.Background(), "test", &result)
+	err = client.GetJSON(context.Background(), "test", nil, &result)
 
 	assert.NoError(t, err)
 	assert.Equal(t, "success", result["status"])
@@ -232,7 +232,7 @@ func TestClient_RetryOnNetworkError(t *testing.T) {
 	require.NoError(t, err)
 
 	var result map[string]interface{}
-	err = client.GetJSON(context.Background(), "test", &result)
+	err = client.GetJSON(context.Background(), "test", nil, &result)
 
 	// Should fail after exhausting retries
 	assert.Error(t, err)
@@ -261,7 +261,7 @@ func TestClient_NoRetryOnClientError(t *testing.T) {
 	require.NoError(t, err)
 
 	var result map[string]interface{}
-	err = client.GetJSON(context.Background(), "test", &result)
+	err = client.GetJSON(context.Background(), "test", nil, &result)
 
 	assert.Error(t, err)
 	assert.Equal(t, 1, attemptCount) // Should only try once
@@ -288,7 +288,7 @@ func TestClient_RetryExhaustion(t *testing.T) {
 	require.NoError(t, err)
 
 	var result map[string]interface{}
-	err = client.GetJSON(context.Background(), "test", &result)
+	err = client.GetJSON(context.Background(), "test", nil, &result)
 
 	assert.Error(t, err)
 	assert.Equal(t, 3, attemptCount) // Should try 3 times total (1 initial + 2 retries)
@@ -318,7 +318,7 @@ func TestClient_ContextCancellation(t *testing.T) {
 	defer cancel()
 
 	var result map[string]interface{}
-	err = client.GetJSON(ctx, "test", &result)
+	err = client.GetJSON(ctx, "test", nil, &result)
 
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "context deadline exceeded")
@@ -339,7 +339,7 @@ func TestClient_WithNoRetries(t *testing.T) {
 	require.NoError(t, err)
 
 	var result map[string]interface{}
-	err = client.GetJSON(context.Background(), "test", &result)
+	err = client.GetJSON(context.Background(), "test", nil, &result)
 
 	assert.Error(t, err)
 	assert.Equal(t, 1, attemptCount) // Should only try once
@@ -360,7 +360,7 @@ func TestClient_WithMaxRetries(t *testing.T) {
 	require.NoError(t, err)
 
 	var result map[string]interface{}
-	err = client.GetJSON(context.Background(), "test", &result)
+	err = client.GetJSON(context.Background(), "test", nil, &result)
 
 	assert.Error(t, err)
 	assert.Equal(t, 2, attemptCount) // Should try 2 times total (1 initial + 1 retry)
@@ -550,7 +550,7 @@ func TestClient_RetryWithContextCancellationDuringBackoff(t *testing.T) {
 	defer cancel()
 
 	var result map[string]interface{}
-	err = client.GetJSON(ctx, "test", &result)
+	err = client.GetJSON(ctx, "test", nil, &result)
 
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "context deadline exceeded")

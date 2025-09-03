@@ -35,8 +35,8 @@ func TestService_ListSystemBackups(t *testing.T) {
 						{Filename: "backup-20231202.tar.gz", Date: date2, Build: "28.0.0.1235", Version: "28.0.0", Size: 2097152},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/system_backup/", mock.AnythingOfType("*config.SystemBackupListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*SystemBackupListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/system_backup/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.SystemBackupListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*SystemBackupListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -57,8 +57,8 @@ func TestService_ListSystemBackups(t *testing.T) {
 						{Filename: "backup-20231201.tar.gz", Date: date, Build: "27.4.1.1234", Version: "27.4.1", Size: 1048576},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/system_backup/?limit=5&name__icontains=20231201", mock.AnythingOfType("*config.SystemBackupListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*SystemBackupListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/system_backup/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.SystemBackupListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*SystemBackupListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -101,8 +101,8 @@ func TestService_GetSystemBackup(t *testing.T) {
 		ResourceURI: "/api/admin/configuration/v1/system_backup/" + filename + "/",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/system_backup/"+filename+"/", mock.AnythingOfType("*config.SystemBackup")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*SystemBackup)
+	client.On("GetJSON", t.Context(), "configuration/v1/system_backup/"+filename+"/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.SystemBackup")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*SystemBackup)
 		*result = *expectedSystemBackup
 	})
 

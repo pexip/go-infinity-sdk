@@ -32,8 +32,8 @@ func TestService_ListSoftwareBundleRevisions(t *testing.T) {
 						{ID: 2, BundleType: "conferencing", Core: false, Revision: "v28.0.0", Version: "28.0.0"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/software_bundle_revision/", mock.AnythingOfType("*config.SoftwareBundleRevisionListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*SoftwareBundleRevisionListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/software_bundle_revision/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.SoftwareBundleRevisionListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*SoftwareBundleRevisionListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -53,8 +53,8 @@ func TestService_ListSoftwareBundleRevisions(t *testing.T) {
 						{ID: 1, BundleType: "core", Core: true, Revision: "v27.4.1", Version: "27.4.1"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/software_bundle_revision/?limit=5&name__icontains=v27", mock.AnythingOfType("*config.SoftwareBundleRevisionListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*SoftwareBundleRevisionListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/software_bundle_revision/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.SoftwareBundleRevisionListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*SoftwareBundleRevisionListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -94,8 +94,8 @@ func TestService_GetSoftwareBundleRevision(t *testing.T) {
 		ResourceURI: "/api/admin/configuration/v1/software_bundle_revision/1/",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/software_bundle_revision/1/", mock.AnythingOfType("*config.SoftwareBundleRevision")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*SoftwareBundleRevision)
+	client.On("GetJSON", t.Context(), "configuration/v1/software_bundle_revision/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.SoftwareBundleRevision")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*SoftwareBundleRevision)
 		*result = *expectedSoftwareBundleRevision
 	})
 

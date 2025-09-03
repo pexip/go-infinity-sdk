@@ -61,8 +61,8 @@ func TestService_ListBackplaneMediaStreams(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", context.Background(), "history/v1/backplane_media_stream/", mock.AnythingOfType("*history.BackplaneMediaStreamListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*BackplaneMediaStreamListResponse)
+	client.On("GetJSON", context.Background(), "history/v1/backplane_media_stream/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.BackplaneMediaStreamListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*BackplaneMediaStreamListResponse)
 		*result = *expectedResponse
 	})
 
@@ -102,8 +102,8 @@ func TestService_GetBackplaneMediaStream(t *testing.T) {
 		ResourceURI:       "/api/admin/history/v1/backplane_media_stream/1/",
 	}
 
-	client.On("GetJSON", context.Background(), "history/v1/backplane_media_stream/1/", mock.AnythingOfType("*history.BackplaneMediaStream")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*BackplaneMediaStream)
+	client.On("GetJSON", context.Background(), "history/v1/backplane_media_stream/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.BackplaneMediaStream")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*BackplaneMediaStream)
 		*result = *expectedStream
 	})
 
@@ -143,10 +143,8 @@ func TestService_ListBackplaneMediaStreamsByBackplane(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", context.Background(), mock.MatchedBy(func(endpoint string) bool {
-		return endpoint != "history/v1/backplane_media_stream/"
-	}), mock.AnythingOfType("*history.BackplaneMediaStreamListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*BackplaneMediaStreamListResponse)
+	client.On("GetJSON", context.Background(), "history/v1/backplane_media_stream/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.BackplaneMediaStreamListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*BackplaneMediaStreamListResponse)
 		*result = *expectedResponse
 	})
 
@@ -190,10 +188,8 @@ func TestService_ListBackplaneMediaStreams_WithOptions(t *testing.T) {
 		Objects: []BackplaneMediaStream{},
 	}
 
-	client.On("GetJSON", context.Background(), mock.MatchedBy(func(endpoint string) bool {
-		return endpoint != "history/v1/backplane_media_stream/"
-	}), mock.AnythingOfType("*history.BackplaneMediaStreamListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*BackplaneMediaStreamListResponse)
+	client.On("GetJSON", context.Background(), "history/v1/backplane_media_stream/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.BackplaneMediaStreamListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*BackplaneMediaStreamListResponse)
 		*result = *expectedResponse
 	})
 
@@ -240,10 +236,8 @@ func TestService_ListBackplaneMediaStreamsByBackplane_WithOptions(t *testing.T) 
 		},
 	}
 
-	client.On("GetJSON", context.Background(), mock.MatchedBy(func(endpoint string) bool {
-		return endpoint != "history/v1/backplane_media_stream/"
-	}), mock.AnythingOfType("*history.BackplaneMediaStreamListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*BackplaneMediaStreamListResponse)
+	client.On("GetJSON", context.Background(), "history/v1/backplane_media_stream/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.BackplaneMediaStreamListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*BackplaneMediaStreamListResponse)
 		*result = *expectedResponse
 	})
 
@@ -259,7 +253,7 @@ func TestService_ListBackplaneMediaStreams_Error(t *testing.T) {
 	client := interfaces.NewHTTPClientMock()
 	service := New(client)
 
-	client.On("GetJSON", context.Background(), "history/v1/backplane_media_stream/", mock.AnythingOfType("*history.BackplaneMediaStreamListResponse")).Return(errors.New("server error"))
+	client.On("GetJSON", context.Background(), "history/v1/backplane_media_stream/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.BackplaneMediaStreamListResponse")).Return(errors.New("server error"))
 
 	_, err := service.ListBackplaneMediaStreams(context.Background(), nil)
 	assert.Error(t, err)
@@ -272,9 +266,7 @@ func TestService_ListBackplaneMediaStreamsByBackplane_Error(t *testing.T) {
 	client := interfaces.NewHTTPClientMock()
 	service := New(client)
 
-	client.On("GetJSON", context.Background(), mock.MatchedBy(func(endpoint string) bool {
-		return endpoint != "history/v1/backplane_media_stream/"
-	}), mock.AnythingOfType("*history.BackplaneMediaStreamListResponse")).Return(errors.New("server error"))
+	client.On("GetJSON", context.Background(), "history/v1/backplane_media_stream/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.BackplaneMediaStreamListResponse")).Return(errors.New("server error"))
 
 	_, err := service.ListBackplaneMediaStreamsByBackplane(context.Background(), "backplane-error", nil)
 	assert.Error(t, err)
@@ -287,7 +279,7 @@ func TestService_GetBackplaneMediaStream_NotFound(t *testing.T) {
 	client := interfaces.NewHTTPClientMock()
 	service := New(client)
 
-	client.On("GetJSON", context.Background(), "history/v1/backplane_media_stream/999/", mock.AnythingOfType("*history.BackplaneMediaStream")).Return(errors.New("backplane media stream not found"))
+	client.On("GetJSON", context.Background(), "history/v1/backplane_media_stream/999/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.BackplaneMediaStream")).Return(errors.New("backplane media stream not found"))
 
 	_, err := service.GetBackplaneMediaStream(context.Background(), 999)
 	assert.Error(t, err)

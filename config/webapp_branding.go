@@ -8,6 +8,7 @@ package config
 
 import (
 	"context"
+	"net/url"
 
 	"github.com/pexip/go-infinity-sdk/v38/types"
 )
@@ -16,15 +17,14 @@ import (
 func (s *Service) ListWebappBrandings(ctx context.Context, opts *ListOptions) (*WebappBrandingListResponse, error) {
 	endpoint := "configuration/v1/webapp_branding/"
 
+	var params *url.Values
 	if opts != nil {
-		params := opts.ToURLValues()
-		if len(params) > 0 {
-			endpoint += "?" + params.Encode()
-		}
+		urlValues := opts.ToURLValues()
+		params = &urlValues
 	}
 
 	var result WebappBrandingListResponse
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, params, &result)
 	return &result, err
 }
 
@@ -33,7 +33,7 @@ func (s *Service) GetWebappBranding(ctx context.Context, name string) (*WebappBr
 	endpoint := "configuration/v1/webapp_branding/" + name + "/"
 
 	var result WebappBranding
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, nil, &result)
 	return &result, err
 }
 

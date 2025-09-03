@@ -33,8 +33,8 @@ func TestService_ListAzureTenants(t *testing.T) {
 						{ID: 2, Name: "secondary-tenant", Description: "Secondary Teams tenant", TenantID: "87654321-4321-4321-4321-cba987654321"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/azure_tenant/", mock.AnythingOfType("*config.AzureTenantListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*AzureTenantListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/azure_tenant/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.AzureTenantListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*AzureTenantListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -54,8 +54,8 @@ func TestService_ListAzureTenants(t *testing.T) {
 						{ID: 1, Name: "primary-tenant", Description: "Primary Teams tenant", TenantID: "12345678-1234-1234-1234-123456789abc"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/azure_tenant/?limit=5&name__icontains=primary", mock.AnythingOfType("*config.AzureTenantListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*AzureTenantListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/azure_tenant/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.AzureTenantListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*AzureTenantListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -93,8 +93,8 @@ func TestService_GetAzureTenant(t *testing.T) {
 		TenantID:    "12345678-1234-1234-1234-123456789abc",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/azure_tenant/1/", mock.AnythingOfType("*config.AzureTenant")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*AzureTenant)
+	client.On("GetJSON", t.Context(), "configuration/v1/azure_tenant/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.AzureTenant")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*AzureTenant)
 		*result = *expectedAzureTenant
 	})
 

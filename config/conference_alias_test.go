@@ -35,8 +35,8 @@ func TestService_ListConferenceAliases(t *testing.T) {
 						{ID: 2, Alias: "another-alias", Conference: "/api/admin/configuration/v1/conference/2/"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/conference_alias/", mock.AnythingOfType("*config.ConferenceAliasListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*ConferenceAliasListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/conference_alias/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.ConferenceAliasListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*ConferenceAliasListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -57,8 +57,8 @@ func TestService_ListConferenceAliases(t *testing.T) {
 						{ID: 1, Alias: "test-alias", Conference: "/api/admin/configuration/v1/conference/1/"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/conference_alias/?limit=5&name__icontains=test&offset=10", mock.AnythingOfType("*config.ConferenceAliasListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*ConferenceAliasListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/conference_alias/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.ConferenceAliasListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*ConferenceAliasListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -97,8 +97,8 @@ func TestService_GetConferenceAlias(t *testing.T) {
 		CreationTime: util.InfinityTime{Time: time.Now()},
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/conference_alias/1/", mock.AnythingOfType("*config.ConferenceAlias")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*ConferenceAlias)
+	client.On("GetJSON", t.Context(), "configuration/v1/conference_alias/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.ConferenceAlias")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*ConferenceAlias)
 		*result = *expectedAlias
 	})
 

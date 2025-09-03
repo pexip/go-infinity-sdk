@@ -9,6 +9,7 @@ package config
 import (
 	"context"
 	"fmt"
+	"net/url"
 
 	"github.com/pexip/go-infinity-sdk/v38/types"
 )
@@ -17,15 +18,14 @@ import (
 func (s *Service) ListIdentityProviderAttributes(ctx context.Context, opts *ListOptions) (*IdentityProviderAttributeListResponse, error) {
 	endpoint := "configuration/v1/identity_provider_attribute/"
 
+	var params *url.Values
 	if opts != nil {
-		params := opts.ToURLValues()
-		if len(params) > 0 {
-			endpoint += "?" + params.Encode()
-		}
+		urlValues := opts.ToURLValues()
+		params = &urlValues
 	}
 
 	var result IdentityProviderAttributeListResponse
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, params, &result)
 	return &result, err
 }
 
@@ -34,7 +34,7 @@ func (s *Service) GetIdentityProviderAttribute(ctx context.Context, id int) (*Id
 	endpoint := fmt.Sprintf("configuration/v1/identity_provider_attribute/%d/", id)
 
 	var result IdentityProviderAttribute
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, nil, &result)
 	return &result, err
 }
 

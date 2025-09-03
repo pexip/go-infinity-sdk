@@ -8,21 +8,21 @@ package config
 
 import (
 	"context"
+	"net/url"
 )
 
 // ListSystemBackups retrieves a list of system backups (read-only)
 func (s *Service) ListSystemBackups(ctx context.Context, opts *ListOptions) (*SystemBackupListResponse, error) {
 	endpoint := "configuration/v1/system_backup/"
 
+	var params *url.Values
 	if opts != nil {
-		params := opts.ToURLValues()
-		if len(params) > 0 {
-			endpoint += "?" + params.Encode()
-		}
+		urlValues := opts.ToURLValues()
+		params = &urlValues
 	}
 
 	var result SystemBackupListResponse
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, params, &result)
 	return &result, err
 }
 
@@ -31,7 +31,7 @@ func (s *Service) GetSystemBackup(ctx context.Context, filename string) (*System
 	endpoint := "configuration/v1/system_backup/" + filename + "/"
 
 	var result SystemBackup
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, nil, &result)
 	return &result, err
 }
 

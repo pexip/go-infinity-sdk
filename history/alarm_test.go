@@ -49,8 +49,8 @@ func TestService_ListAlarms(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", context.Background(), "history/v1/alarm/", mock.AnythingOfType("*history.AlarmListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*AlarmListResponse)
+	client.On("GetJSON", context.Background(), "history/v1/alarm/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.AlarmListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*AlarmListResponse)
 		*result = *expectedResponse
 	})
 
@@ -79,8 +79,8 @@ func TestService_GetAlarm(t *testing.T) {
 		ResourceURI: "/api/admin/history/v1/alarm/1/",
 	}
 
-	client.On("GetJSON", context.Background(), "history/v1/alarm/1/", mock.AnythingOfType("*history.Alarm")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*Alarm)
+	client.On("GetJSON", context.Background(), "history/v1/alarm/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.Alarm")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*Alarm)
 		*result = *expectedAlarm
 	})
 
@@ -124,11 +124,8 @@ func TestService_ListAlarms_WithOptions(t *testing.T) {
 		Objects: []Alarm{},
 	}
 
-	client.On("GetJSON", context.Background(), mock.MatchedBy(func(endpoint string) bool {
-		return endpoint != "history/v1/alarm/" &&
-			endpoint != "" // Allow any endpoint with parameters
-	}), mock.AnythingOfType("*history.AlarmListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*AlarmListResponse)
+	client.On("GetJSON", context.Background(), "history/v1/alarm/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.AlarmListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*AlarmListResponse)
 		*result = *expectedResponse
 	})
 
@@ -144,7 +141,7 @@ func TestService_ListAlarms_Error(t *testing.T) {
 	client := interfaces.NewHTTPClientMock()
 	service := New(client)
 
-	client.On("GetJSON", context.Background(), "history/v1/alarm/", mock.AnythingOfType("*history.AlarmListResponse")).Return(errors.New("server error"))
+	client.On("GetJSON", context.Background(), "history/v1/alarm/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.AlarmListResponse")).Return(errors.New("server error"))
 
 	_, err := service.ListAlarms(context.Background(), nil)
 	assert.Error(t, err)
@@ -157,7 +154,7 @@ func TestService_GetAlarm_NotFound(t *testing.T) {
 	client := interfaces.NewHTTPClientMock()
 	service := New(client)
 
-	client.On("GetJSON", context.Background(), "history/v1/alarm/999/", mock.AnythingOfType("*history.Alarm")).Return(errors.New("alarm not found"))
+	client.On("GetJSON", context.Background(), "history/v1/alarm/999/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.Alarm")).Return(errors.New("alarm not found"))
 
 	_, err := service.GetAlarm(context.Background(), 999)
 	assert.Error(t, err)

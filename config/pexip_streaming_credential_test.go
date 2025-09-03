@@ -41,8 +41,8 @@ func TestService_ListPexipStreamingCredentials(t *testing.T) {
 						},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/pexip_streaming_credential/", mock.AnythingOfType("*config.PexipStreamingCredentialListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*PexipStreamingCredentialListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/pexip_streaming_credential/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.PexipStreamingCredentialListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*PexipStreamingCredentialListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -66,8 +66,8 @@ func TestService_ListPexipStreamingCredentials(t *testing.T) {
 						},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/pexip_streaming_credential/?limit=5&name__icontains=primary", mock.AnythingOfType("*config.PexipStreamingCredentialListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*PexipStreamingCredentialListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/pexip_streaming_credential/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.PexipStreamingCredentialListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*PexipStreamingCredentialListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -105,8 +105,8 @@ func TestService_GetPexipStreamingCredential(t *testing.T) {
 		PublicKey: "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxyz1lCKE8rMQS7MdJvzz\nGtx3Ip8K7OqN9ZKF2eODJzCq3ZOD4oBnVtJOv3V8XqOWLm8HRgfEKVkZtQz2pMJ3\nJ5dT4V6L9QxzB7wX8oGjWzF9QyX8LmN2VfZpJzOKvQyF6qRz3tJ9QyNkD8G7X2Lf\nL8QV9rOq3ZdFG7wX2qVzPyGjNkT4V9LrOz3QyF8V2Lm3J9ZFq7wXzGjNkL8Vr2Qy\nF9LmOz3V7wXGjN4T8V2Lm3QyF9ZrOzVf7wXGjNkT8V2LmQyF9ZOz3V7wGjN4TLmQ\nyVZrOz3F7wXGjNkT8V2LmQyFZOzV7wXGjN4TLmQyVZOzF7wGjNkTLmQyVZF7wGjN\nQIDAQAB\n-----END PUBLIC KEY-----",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/pexip_streaming_credential/1/", mock.AnythingOfType("*config.PexipStreamingCredential")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*PexipStreamingCredential)
+	client.On("GetJSON", t.Context(), "configuration/v1/pexip_streaming_credential/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.PexipStreamingCredential")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*PexipStreamingCredential)
 		*result = *expectedCredential
 	})
 

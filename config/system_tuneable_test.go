@@ -33,8 +33,8 @@ func TestService_ListSystemTuneables(t *testing.T) {
 						{ID: 2, Name: "timeout_interval", Setting: "30"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/system_tuneable/", mock.AnythingOfType("*config.SystemTuneableListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*SystemTuneableListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/system_tuneable/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.SystemTuneableListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*SystemTuneableListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -54,8 +54,8 @@ func TestService_ListSystemTuneables(t *testing.T) {
 						{ID: 1, Name: "max_connections", Setting: "1000"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/system_tuneable/?limit=5&name__icontains=max", mock.AnythingOfType("*config.SystemTuneableListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*SystemTuneableListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/system_tuneable/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.SystemTuneableListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*SystemTuneableListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -93,8 +93,8 @@ func TestService_GetSystemTuneable(t *testing.T) {
 		ResourceURI: "/api/admin/configuration/v1/system_tuneable/1/",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/system_tuneable/1/", mock.AnythingOfType("*config.SystemTuneable")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*SystemTuneable)
+	client.On("GetJSON", t.Context(), "configuration/v1/system_tuneable/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.SystemTuneable")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*SystemTuneable)
 		*result = *expectedSystemTuneable
 	})
 

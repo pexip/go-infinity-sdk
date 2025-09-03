@@ -36,8 +36,8 @@ func TestService_ListWebappAliases(t *testing.T) {
 						{ID: 2, Slug: "admin", Description: "Admin interface", WebappType: "admin", IsEnabled: true, Bundle: &bundle1},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/webapp_alias/", mock.AnythingOfType("*config.WebappAliasListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*WebappAliasListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/webapp_alias/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.WebappAliasListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*WebappAliasListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -60,8 +60,8 @@ func TestService_ListWebappAliases(t *testing.T) {
 						{ID: 1, Slug: "meeting", Description: "Main meeting interface", WebappType: "meeting", IsEnabled: true, Bundle: &bundle, Branding: &branding},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/webapp_alias/?limit=5&name__icontains=meeting", mock.AnythingOfType("*config.WebappAliasListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*WebappAliasListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/webapp_alias/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.WebappAliasListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*WebappAliasListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -106,8 +106,8 @@ func TestService_GetWebappAlias(t *testing.T) {
 		ResourceURI: "/api/admin/configuration/v1/webapp_alias/1/",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/webapp_alias/1/", mock.AnythingOfType("*config.WebappAlias")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*WebappAlias)
+	client.On("GetJSON", t.Context(), "configuration/v1/webapp_alias/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.WebappAlias")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*WebappAlias)
 		*result = *expectedWebappAlias
 	})
 

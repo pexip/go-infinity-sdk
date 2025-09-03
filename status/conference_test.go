@@ -31,8 +31,8 @@ func TestService_ListConferences(t *testing.T) {
 						{ID: "2", Name: "Test Conference 2", IsStarted: false, ServiceType: "conference"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "status/v1/conference/", mock.AnythingOfType("*status.ConferenceListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*ConferenceListResponse)
+				m.On("GetJSON", t.Context(), "status/v1/conference/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.ConferenceListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*ConferenceListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -50,8 +50,8 @@ func TestService_ListConferences(t *testing.T) {
 						{ID: "3", Name: "Test Conference 3", IsStarted: true, ServiceType: "conference"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "status/v1/conference/?limit=5&offset=10", mock.AnythingOfType("*status.ConferenceListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*ConferenceListResponse)
+				m.On("GetJSON", t.Context(), "status/v1/conference/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.ConferenceListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*ConferenceListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -89,8 +89,8 @@ func TestService_GetConference(t *testing.T) {
 		IsStarted:   true,
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/conference/1/", mock.AnythingOfType("*status.ConferenceStatus")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*ConferenceStatus)
+	client.On("GetJSON", t.Context(), "status/v1/conference/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.ConferenceStatus")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*ConferenceStatus)
 		*result = *expectedConference
 	})
 

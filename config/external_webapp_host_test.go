@@ -33,8 +33,8 @@ func TestService_ListExternalWebappHosts(t *testing.T) {
 						{ID: 2, Address: "webapp2.example.com"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/external_webapp_host/", mock.AnythingOfType("*config.ExternalWebappHostListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*ExternalWebappHostListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/external_webapp_host/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.ExternalWebappHostListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*ExternalWebappHostListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -54,8 +54,8 @@ func TestService_ListExternalWebappHosts(t *testing.T) {
 						{ID: 1, Address: "webapp1.example.com"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/external_webapp_host/?limit=5&name__icontains=webapp1", mock.AnythingOfType("*config.ExternalWebappHostListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*ExternalWebappHostListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/external_webapp_host/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.ExternalWebappHostListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*ExternalWebappHostListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -91,8 +91,8 @@ func TestService_GetExternalWebappHost(t *testing.T) {
 		Address: "test-webapp.example.com",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/external_webapp_host/1/", mock.AnythingOfType("*config.ExternalWebappHost")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*ExternalWebappHost)
+	client.On("GetJSON", t.Context(), "configuration/v1/external_webapp_host/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.ExternalWebappHost")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*ExternalWebappHost)
 		*result = *expectedExternalWebappHost
 	})
 

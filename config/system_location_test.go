@@ -33,8 +33,8 @@ func TestService_ListSystemLocations(t *testing.T) {
 						{ID: 2, Name: "Location 2", Description: "Second location"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/system_location/", mock.AnythingOfType("*config.SystemLocationListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*SystemLocationListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/system_location/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.SystemLocationListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*SystemLocationListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -55,8 +55,8 @@ func TestService_ListSystemLocations(t *testing.T) {
 						{ID: 1, Name: "Test Location", Description: "Test system location"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/system_location/?limit=3&name__icontains=location&offset=6", mock.AnythingOfType("*config.SystemLocationListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*SystemLocationListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/system_location/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.SystemLocationListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*SystemLocationListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -94,8 +94,8 @@ func TestService_GetSystemLocation(t *testing.T) {
 		MTU:         1500,
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/system_location/1/", mock.AnythingOfType("*config.SystemLocation")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*SystemLocation)
+	client.On("GetJSON", t.Context(), "configuration/v1/system_location/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.SystemLocation")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*SystemLocation)
 		*result = *expectedLocation
 	})
 

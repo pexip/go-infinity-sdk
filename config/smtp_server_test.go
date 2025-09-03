@@ -33,8 +33,8 @@ func TestService_ListSMTPServers(t *testing.T) {
 						{ID: 2, Name: "backup-smtp", Description: "Backup SMTP server", Address: "backup-smtp.example.com", Port: 25, ConnectionSecurity: "NONE", FromEmailAddress: "noreply@example.com"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/smtp_server/", mock.AnythingOfType("*config.SMTPServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*SMTPServerListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/smtp_server/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.SMTPServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*SMTPServerListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -54,8 +54,8 @@ func TestService_ListSMTPServers(t *testing.T) {
 						{ID: 1, Name: "primary-smtp", Description: "Primary SMTP server", Address: "smtp.example.com", Port: 587, ConnectionSecurity: "STARTTLS", FromEmailAddress: "noreply@example.com"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/smtp_server/?limit=5&name__icontains=primary", mock.AnythingOfType("*config.SMTPServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*SMTPServerListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/smtp_server/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.SMTPServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*SMTPServerListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -98,8 +98,8 @@ func TestService_GetSMTPServer(t *testing.T) {
 		ConnectionSecurity: "STARTTLS",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/smtp_server/1/", mock.AnythingOfType("*config.SMTPServer")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*SMTPServer)
+	client.On("GetJSON", t.Context(), "configuration/v1/smtp_server/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.SMTPServer")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*SMTPServer)
 		*result = *expectedSMTPServer
 	})
 

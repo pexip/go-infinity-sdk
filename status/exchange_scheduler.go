@@ -15,15 +15,8 @@ import (
 func (s *Service) ListExchangeSchedulers(ctx context.Context, opts *ListOptions) (*ExchangeSchedulerListResponse, error) {
 	endpoint := "status/v1/exchange_scheduler/"
 
-	if opts != nil {
-		params := opts.ToURLValues()
-		if len(params) > 0 {
-			endpoint += "?" + params.Encode()
-		}
-	}
-
 	var result ExchangeSchedulerListResponse
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.listEndpoint(ctx, endpoint, opts, &result)
 	return &result, err
 }
 
@@ -32,6 +25,6 @@ func (s *Service) GetExchangeScheduler(ctx context.Context, id int) (*ExchangeSc
 	endpoint := fmt.Sprintf("status/v1/exchange_scheduler/%d/", id)
 
 	var result ExchangeScheduler
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, nil, &result)
 	return &result, err
 }

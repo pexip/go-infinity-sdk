@@ -34,8 +34,8 @@ func TestService_ListLicenceRequests(t *testing.T) {
 						{SequenceNumber: "REQ-002", Reference: "Upgrade License Request", Actions: "UPGRADE", GenerationTime: "2023-01-02T00:00:00Z", Status: "COMPLETED", ResponseXML: nil},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/licence_request/", mock.AnythingOfType("*config.LicenceRequestListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*LicenceRequestListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/licence_request/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.LicenceRequestListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*LicenceRequestListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -56,8 +56,8 @@ func TestService_ListLicenceRequests(t *testing.T) {
 						{SequenceNumber: "REQ-001", Reference: "Annual License Request", Actions: "ISSUE", GenerationTime: "2023-01-01T00:00:00Z", Status: "PENDING", ResponseXML: &responseXML},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/licence_request/?limit=5&name__icontains=Annual", mock.AnythingOfType("*config.LicenceRequestListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*LicenceRequestListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/licence_request/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.LicenceRequestListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*LicenceRequestListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -98,8 +98,8 @@ func TestService_GetLicenceRequest(t *testing.T) {
 		ResponseXML:    &responseXML,
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/licence_request/REQ-123/", mock.AnythingOfType("*config.LicenceRequest")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*LicenceRequest)
+	client.On("GetJSON", t.Context(), "configuration/v1/licence_request/REQ-123/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.LicenceRequest")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*LicenceRequest)
 		*result = *expectedLicenceRequest
 	})
 

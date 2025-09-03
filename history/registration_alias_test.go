@@ -51,8 +51,8 @@ func TestService_ListRegistrationAliases(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", context.Background(), "history/v1/registration_alias/", mock.AnythingOfType("*history.RegistrationAliasListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*RegistrationAliasListResponse)
+	client.On("GetJSON", context.Background(), "history/v1/registration_alias/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.RegistrationAliasListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*RegistrationAliasListResponse)
 		*result = *expectedResponse
 	})
 
@@ -84,8 +84,8 @@ func TestService_GetRegistrationAlias(t *testing.T) {
 		ResourceURI:    "/api/admin/history/v1/registration_alias/1/",
 	}
 
-	client.On("GetJSON", context.Background(), "history/v1/registration_alias/1/", mock.AnythingOfType("*history.RegistrationAlias")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*RegistrationAlias)
+	client.On("GetJSON", context.Background(), "history/v1/registration_alias/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.RegistrationAlias")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*RegistrationAlias)
 		*result = *expectedAlias
 	})
 
@@ -135,10 +135,8 @@ func TestService_ListRegistrationAliases_WithOptions(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", context.Background(), mock.MatchedBy(func(endpoint string) bool {
-		return endpoint != "history/v1/registration_alias/"
-	}), mock.AnythingOfType("*history.RegistrationAliasListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*RegistrationAliasListResponse)
+	client.On("GetJSON", context.Background(), "history/v1/registration_alias/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.RegistrationAliasListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*RegistrationAliasListResponse)
 		*result = *expectedResponse
 	})
 
@@ -155,7 +153,7 @@ func TestService_ListRegistrationAliases_Error(t *testing.T) {
 	client := interfaces.NewHTTPClientMock()
 	service := New(client)
 
-	client.On("GetJSON", context.Background(), "history/v1/registration_alias/", mock.AnythingOfType("*history.RegistrationAliasListResponse")).Return(errors.New("server error"))
+	client.On("GetJSON", context.Background(), "history/v1/registration_alias/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.RegistrationAliasListResponse")).Return(errors.New("server error"))
 
 	_, err := service.ListRegistrationAliases(context.Background(), nil)
 	assert.Error(t, err)
@@ -168,7 +166,7 @@ func TestService_GetRegistrationAlias_NotFound(t *testing.T) {
 	client := interfaces.NewHTTPClientMock()
 	service := New(client)
 
-	client.On("GetJSON", context.Background(), "history/v1/registration_alias/999/", mock.AnythingOfType("*history.RegistrationAlias")).Return(errors.New("registration alias not found"))
+	client.On("GetJSON", context.Background(), "history/v1/registration_alias/999/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.RegistrationAlias")).Return(errors.New("registration alias not found"))
 
 	_, err := service.GetRegistrationAlias(context.Background(), 999)
 	assert.Error(t, err)

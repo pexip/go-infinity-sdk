@@ -33,8 +33,8 @@ func TestService_ListUserGroups(t *testing.T) {
 						{ID: 2, Name: "users", Description: "Regular users", Users: []string{"/api/admin/configuration/v1/end_user/3/"}, UserGroupEntityMappings: []string{}},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/user_group/", mock.AnythingOfType("*config.UserGroupListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*UserGroupListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/user_group/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.UserGroupListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*UserGroupListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -54,8 +54,8 @@ func TestService_ListUserGroups(t *testing.T) {
 						{ID: 1, Name: "administrators", Description: "System administrators", Users: []string{"/api/admin/configuration/v1/end_user/1/", "/api/admin/configuration/v1/end_user/2/"}, UserGroupEntityMappings: []string{"/api/admin/configuration/v1/user_group_entity_mapping/1/"}},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/user_group/?limit=5&name__icontains=admin", mock.AnythingOfType("*config.UserGroupListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*UserGroupListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/user_group/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.UserGroupListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*UserGroupListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -95,8 +95,8 @@ func TestService_GetUserGroup(t *testing.T) {
 		ResourceURI:             "/api/admin/configuration/v1/user_group/1/",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/user_group/1/", mock.AnythingOfType("*config.UserGroup")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*UserGroup)
+	client.On("GetJSON", t.Context(), "configuration/v1/user_group/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.UserGroup")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*UserGroup)
 		*result = *expectedUserGroup
 	})
 

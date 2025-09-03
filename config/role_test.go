@@ -33,8 +33,8 @@ func TestService_ListRoles(t *testing.T) {
 						{ID: 2, Name: "user", Permissions: []string{"basic_access"}},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/role/", mock.AnythingOfType("*config.RoleListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*RoleListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/role/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.RoleListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*RoleListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -54,8 +54,8 @@ func TestService_ListRoles(t *testing.T) {
 						{ID: 1, Name: "admin", Permissions: []string{"admin", "user_management"}},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/role/?limit=5&name__icontains=admin", mock.AnythingOfType("*config.RoleListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*RoleListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/role/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.RoleListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*RoleListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -93,8 +93,8 @@ func TestService_GetRole(t *testing.T) {
 		ResourceURI: "/api/admin/configuration/v1/role/1/",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/role/1/", mock.AnythingOfType("*config.Role")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*Role)
+	client.On("GetJSON", t.Context(), "configuration/v1/role/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.Role")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*Role)
 		*result = *expectedRole
 	})
 

@@ -8,6 +8,7 @@ package interfaces
 
 import (
 	"context"
+	"net/url"
 
 	"github.com/pexip/go-infinity-sdk/v38/types"
 	"github.com/stretchr/testify/mock"
@@ -19,8 +20,8 @@ type HTTPClientMock struct {
 }
 
 // GetJSON performs a GET request and unmarshals the JSON response
-func (m *HTTPClientMock) GetJSON(ctx context.Context, endpoint string, result interface{}) error {
-	args := m.Called(ctx, endpoint, result)
+func (m *HTTPClientMock) GetJSON(ctx context.Context, endpoint string, queryParams *url.Values, result interface{}) error {
+	args := m.Called(ctx, endpoint, queryParams, result)
 	return args.Error(0)
 }
 

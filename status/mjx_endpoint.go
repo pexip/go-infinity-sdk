@@ -15,15 +15,8 @@ import (
 func (s *Service) ListMJXEndpoints(ctx context.Context, opts *ListOptions) (*MJXEndpointListResponse, error) {
 	endpoint := "status/v1/mjx_endpoint/"
 
-	if opts != nil {
-		params := opts.ToURLValues()
-		if len(params) > 0 {
-			endpoint += "?" + params.Encode()
-		}
-	}
-
 	var result MJXEndpointListResponse
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.listEndpoint(ctx, endpoint, opts, &result)
 	return &result, err
 }
 
@@ -32,6 +25,6 @@ func (s *Service) GetMJXEndpoint(ctx context.Context, id int) (*MJXEndpoint, err
 	endpoint := fmt.Sprintf("status/v1/mjx_endpoint/%d/", id)
 
 	var result MJXEndpoint
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, nil, &result)
 	return &result, err
 }

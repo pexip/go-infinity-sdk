@@ -35,8 +35,8 @@ func TestService_ListManagementVMs(t *testing.T) {
 						{ID: 2, Name: "mgmt-vm-02", Description: "Secondary management VM", Address: "192.168.1.11", Netmask: "255.255.255.0", Gateway: "192.168.1.1", Hostname: "mgmt02", Domain: "example.com", MTU: 1500, EnableSSH: "disabled", SNMPMode: "disabled", Primary: false, Initializing: false},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/management_vm/", mock.AnythingOfType("*config.ManagementVMListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*ManagementVMListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/management_vm/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.ManagementVMListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*ManagementVMListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -58,8 +58,8 @@ func TestService_ListManagementVMs(t *testing.T) {
 						{ID: 1, Name: "mgmt-vm-01", Description: "Primary management VM", Address: "192.168.1.10", Netmask: "255.255.255.0", Gateway: "192.168.1.1", Hostname: "mgmt01", Domain: "example.com", MTU: 1500, IPV6Address: &ipv6Address, StaticNATAddress: &natAddress, EnableSSH: "enabled", SNMPMode: "v2c", Primary: true, Initializing: false},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/management_vm/?limit=5&name__icontains=primary", mock.AnythingOfType("*config.ManagementVMListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*ManagementVMListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/management_vm/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.ManagementVMListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*ManagementVMListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -132,8 +132,8 @@ func TestService_GetManagementVM(t *testing.T) {
 		Initializing:               false,
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/management_vm/1/", mock.AnythingOfType("*config.ManagementVM")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*ManagementVM)
+	client.On("GetJSON", t.Context(), "configuration/v1/management_vm/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.ManagementVM")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*ManagementVM)
 		*result = *expectedManagementVM
 	})
 

@@ -55,8 +55,8 @@ func TestService_ListConferenceSyncs(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/conference_sync/", mock.AnythingOfType("*status.ConferenceSyncListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*ConferenceSyncListResponse)
+	client.On("GetJSON", t.Context(), "status/v1/conference_sync/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.ConferenceSyncListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*ConferenceSyncListResponse)
 		*result = *expectedResponse
 	})
 
@@ -114,10 +114,8 @@ func TestService_ListConferenceSyncs_WithOptions(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), mock.MatchedBy(func(endpoint string) bool {
-		return endpoint != "status/v1/conference_sync/"
-	}), mock.AnythingOfType("*status.ConferenceSyncListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*ConferenceSyncListResponse)
+	client.On("GetJSON", t.Context(), "status/v1/conference_sync/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.ConferenceSyncListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*ConferenceSyncListResponse)
 		*result = *expectedResponse
 	})
 
@@ -158,8 +156,8 @@ func TestService_GetConferenceSync(t *testing.T) {
 		VMRsUpdated:              0,
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/conference_sync/1/", mock.AnythingOfType("*status.ConferenceSync")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*ConferenceSync)
+	client.On("GetJSON", t.Context(), "status/v1/conference_sync/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.ConferenceSync")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*ConferenceSync)
 		*result = *expectedSync
 	})
 

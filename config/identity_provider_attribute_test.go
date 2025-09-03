@@ -33,8 +33,8 @@ func TestService_ListIdentityProviderAttributes(t *testing.T) {
 						{ID: 2, Name: "email", Description: "User email address attribute"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/identity_provider_attribute/", mock.AnythingOfType("*config.IdentityProviderAttributeListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*IdentityProviderAttributeListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/identity_provider_attribute/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.IdentityProviderAttributeListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*IdentityProviderAttributeListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -54,8 +54,8 @@ func TestService_ListIdentityProviderAttributes(t *testing.T) {
 						{ID: 2, Name: "email", Description: "User email address attribute"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/identity_provider_attribute/?limit=5&name__icontains=email", mock.AnythingOfType("*config.IdentityProviderAttributeListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*IdentityProviderAttributeListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/identity_provider_attribute/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.IdentityProviderAttributeListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*IdentityProviderAttributeListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -93,8 +93,8 @@ func TestService_GetIdentityProviderAttribute(t *testing.T) {
 		ResourceURI: "/api/admin/configuration/v1/identity_provider_attribute/1/",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/identity_provider_attribute/1/", mock.AnythingOfType("*config.IdentityProviderAttribute")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*IdentityProviderAttribute)
+	client.On("GetJSON", t.Context(), "configuration/v1/identity_provider_attribute/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.IdentityProviderAttribute")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*IdentityProviderAttribute)
 		*result = *expectedAttribute
 	})
 

@@ -33,8 +33,8 @@ func TestService_ListAutomaticParticipants(t *testing.T) {
 						{ID: 2, Alias: "auto-participant-2", Description: "Secondary participant", Conference: "/api/admin/configuration/v1/conference/2/", Protocol: "h323", CallType: "audio", Role: "guest", KeepConferenceAlive: "keep_conference_alive_if_multiple", Routing: "routing_rule", Streaming: true},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/automatic_participant/", mock.AnythingOfType("*config.AutomaticParticipantListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*AutomaticParticipantListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/automatic_participant/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.AutomaticParticipantListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*AutomaticParticipantListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -54,8 +54,8 @@ func TestService_ListAutomaticParticipants(t *testing.T) {
 						{ID: 1, Alias: "auto-participant-1", Description: "Primary participant", Conference: "/api/admin/configuration/v1/conference/1/", Protocol: "sip", CallType: "video", Role: "chair", KeepConferenceAlive: "keep_conference_alive_never", Routing: "routing_rule", Streaming: false},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/automatic_participant/?limit=5&name__icontains=primary", mock.AnythingOfType("*config.AutomaticParticipantListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*AutomaticParticipantListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/automatic_participant/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.AutomaticParticipantListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*AutomaticParticipantListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -104,8 +104,8 @@ func TestService_GetAutomaticParticipant(t *testing.T) {
 		PresentationURL:     "https://example.com/presentation.pdf",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/automatic_participant/1/", mock.AnythingOfType("*config.AutomaticParticipant")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*AutomaticParticipant)
+	client.On("GetJSON", t.Context(), "configuration/v1/automatic_participant/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.AutomaticParticipant")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*AutomaticParticipant)
 		*result = *expectedAutomaticParticipant
 	})
 

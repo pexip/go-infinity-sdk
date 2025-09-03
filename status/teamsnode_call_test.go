@@ -34,8 +34,8 @@ func TestService_ListTeamsNodeCalls(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/teamsnode_call/", mock.AnythingOfType("*status.TeamsNodeCallListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*TeamsNodeCallListResponse)
+	client.On("GetJSON", t.Context(), "status/v1/teamsnode_call/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.TeamsNodeCallListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*TeamsNodeCallListResponse)
 		*result = *expectedResponse
 	})
 
@@ -72,10 +72,8 @@ func TestService_ListTeamsNodeCalls_WithOptions(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), mock.MatchedBy(func(endpoint string) bool {
-		return endpoint != "status/v1/teamsnode_call/"
-	}), mock.AnythingOfType("*status.TeamsNodeCallListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*TeamsNodeCallListResponse)
+	client.On("GetJSON", t.Context(), "status/v1/teamsnode_call/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.TeamsNodeCallListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*TeamsNodeCallListResponse)
 		*result = *expectedResponse
 	})
 
@@ -101,8 +99,8 @@ func TestService_GetTeamsNodeCall(t *testing.T) {
 		// Only fields present in the struct are set
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/teamsnode_call/call-456/", mock.AnythingOfType("*status.TeamsNodeCall")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*TeamsNodeCall)
+	client.On("GetJSON", t.Context(), "status/v1/teamsnode_call/call-456/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.TeamsNodeCall")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*TeamsNodeCall)
 		*result = *expectedCall
 	})
 

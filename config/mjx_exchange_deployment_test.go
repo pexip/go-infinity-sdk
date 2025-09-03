@@ -63,8 +63,8 @@ func TestService_ListMjxExchangeDeployments(t *testing.T) {
 						},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/mjx_exchange_deployment/", mock.AnythingOfType("*config.MjxExchangeDeploymentListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*MjxExchangeDeploymentListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/mjx_exchange_deployment/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MjxExchangeDeploymentListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*MjxExchangeDeploymentListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -92,8 +92,8 @@ func TestService_ListMjxExchangeDeployments(t *testing.T) {
 						},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/mjx_exchange_deployment/?limit=5&name__icontains=primary", mock.AnythingOfType("*config.MjxExchangeDeploymentListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*MjxExchangeDeploymentListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/mjx_exchange_deployment/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MjxExchangeDeploymentListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*MjxExchangeDeploymentListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -154,8 +154,8 @@ func TestService_GetMjxExchangeDeployment(t *testing.T) {
 		MjxIntegrations:                []string{"/api/admin/configuration/v1/mjx_integration/1/"},
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/mjx_exchange_deployment/1/", mock.AnythingOfType("*config.MjxExchangeDeployment")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*MjxExchangeDeployment)
+	client.On("GetJSON", t.Context(), "configuration/v1/mjx_exchange_deployment/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MjxExchangeDeployment")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*MjxExchangeDeployment)
 		*result = *expectedDeployment
 	})
 

@@ -33,8 +33,8 @@ func TestService_ListPolicyServers(t *testing.T) {
 						{ID: 2, Name: "policy-server2", Description: "Secondary policy server", URL: "https://policy2.example.com", EnableDirectoryLookup: true, EnableAvatarLookup: true},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/policy_server/", mock.AnythingOfType("*config.PolicyServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*PolicyServerListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/policy_server/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.PolicyServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*PolicyServerListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -54,8 +54,8 @@ func TestService_ListPolicyServers(t *testing.T) {
 						{ID: 1, Name: "policy-server1", Description: "Primary policy server", URL: "https://policy.example.com", EnableServiceLookup: true, EnableParticipantLookup: true},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/policy_server/?limit=5&name__icontains=policy-server1", mock.AnythingOfType("*config.PolicyServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*PolicyServerListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/policy_server/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.PolicyServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*PolicyServerListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -108,8 +108,8 @@ func TestService_GetPolicyServer(t *testing.T) {
 		PreferLocalAvatarConfiguration:      true,
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/policy_server/1/", mock.AnythingOfType("*config.PolicyServer")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*PolicyServer)
+	client.On("GetJSON", t.Context(), "configuration/v1/policy_server/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.PolicyServer")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*PolicyServer)
 		*result = *expectedPolicyServer
 	})
 

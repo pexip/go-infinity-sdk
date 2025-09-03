@@ -35,8 +35,8 @@ func TestService_ListGoogleAuthServers(t *testing.T) {
 						{ID: 2, Name: "backup-google-auth", Description: "Backup Google OAuth server", ApplicationType: "web", ClientID: &clientID2, ClientSecret: "secret2"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/google_auth_server/", mock.AnythingOfType("*config.GoogleAuthServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*GoogleAuthServerListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/google_auth_server/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.GoogleAuthServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*GoogleAuthServerListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -57,8 +57,8 @@ func TestService_ListGoogleAuthServers(t *testing.T) {
 						{ID: 1, Name: "primary-google-auth", Description: "Primary Google OAuth server", ApplicationType: "web", ClientID: &clientID, ClientSecret: "secret1"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/google_auth_server/?limit=5&name__icontains=primary", mock.AnythingOfType("*config.GoogleAuthServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*GoogleAuthServerListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/google_auth_server/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.GoogleAuthServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*GoogleAuthServerListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -100,8 +100,8 @@ func TestService_GetGoogleAuthServer(t *testing.T) {
 		ResourceURI:     "/api/admin/configuration/v1/google_auth_server/1/",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/google_auth_server/1/", mock.AnythingOfType("*config.GoogleAuthServer")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*GoogleAuthServer)
+	client.On("GetJSON", t.Context(), "configuration/v1/google_auth_server/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.GoogleAuthServer")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*GoogleAuthServer)
 		*result = *expectedServer
 	})
 

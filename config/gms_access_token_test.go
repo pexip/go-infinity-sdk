@@ -33,8 +33,8 @@ func TestService_ListGMSAccessTokens(t *testing.T) {
 						{ID: 2, Name: "secondary-gms-token", Token: "token2"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/gms_access_token/", mock.AnythingOfType("*config.GMSAccessTokenListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*GMSAccessTokenListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/gms_access_token/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.GMSAccessTokenListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*GMSAccessTokenListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -54,8 +54,8 @@ func TestService_ListGMSAccessTokens(t *testing.T) {
 						{ID: 1, Name: "primary-gms-token", Token: "token1"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/gms_access_token/?limit=5&name__icontains=primary", mock.AnythingOfType("*config.GMSAccessTokenListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*GMSAccessTokenListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/gms_access_token/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.GMSAccessTokenListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*GMSAccessTokenListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -92,8 +92,8 @@ func TestService_GetGMSAccessToken(t *testing.T) {
 		Token: "test-token-value",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/gms_access_token/1/", mock.AnythingOfType("*config.GMSAccessToken")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*GMSAccessToken)
+	client.On("GetJSON", t.Context(), "configuration/v1/gms_access_token/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.GMSAccessToken")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*GMSAccessToken)
 		*result = *expectedGMSAccessToken
 	})
 

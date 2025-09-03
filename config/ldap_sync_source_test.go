@@ -33,8 +33,8 @@ func TestService_ListLdapSyncSources(t *testing.T) {
 						{ID: 2, Name: "secondary-ldap", Description: "Secondary LDAP sync source", LdapServer: "ldap2.example.com", LdapBaseDN: "dc=example,dc=com", LdapBindUsername: "cn=admin,dc=example,dc=com", LdapUseGlobalCatalog: true, LdapPermitNoTLS: true},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/ldap_sync_source/", mock.AnythingOfType("*config.LdapSyncSourceListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*LdapSyncSourceListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/ldap_sync_source/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.LdapSyncSourceListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*LdapSyncSourceListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -54,8 +54,8 @@ func TestService_ListLdapSyncSources(t *testing.T) {
 						{ID: 1, Name: "primary-ldap", Description: "Primary LDAP sync source", LdapServer: "ldap.example.com", LdapBaseDN: "dc=example,dc=com", LdapBindUsername: "cn=admin,dc=example,dc=com", LdapUseGlobalCatalog: false, LdapPermitNoTLS: false},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/ldap_sync_source/?limit=5&name__icontains=primary", mock.AnythingOfType("*config.LdapSyncSourceListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*LdapSyncSourceListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/ldap_sync_source/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.LdapSyncSourceListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*LdapSyncSourceListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -98,8 +98,8 @@ func TestService_GetLdapSyncSource(t *testing.T) {
 		LdapPermitNoTLS:      false,
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/ldap_sync_source/1/", mock.AnythingOfType("*config.LdapSyncSource")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*LdapSyncSource)
+	client.On("GetJSON", t.Context(), "configuration/v1/ldap_sync_source/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.LdapSyncSource")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*LdapSyncSource)
 		*result = *expectedLdapSyncSource
 	})
 

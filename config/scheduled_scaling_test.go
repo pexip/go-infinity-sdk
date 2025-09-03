@@ -38,8 +38,8 @@ func TestService_ListScheduledScalings(t *testing.T) {
 						{ID: 2, PolicyName: "peak-hours", PolicyType: "daily", ResourceIdentifier: "media-nodes", Enabled: true, InstancesToAdd: 3, MinutesInAdvance: 15, LocalTimezone: "America/New_York", StartDate: "2023-10-02", TimeFrom: "08:00", TimeTo: "18:00", Mon: true, Tue: true, Wed: true, Thu: true, Fri: true, Sat: true, Sun: true, Updated: &updated2},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/scheduled_scaling/", mock.AnythingOfType("*config.ScheduledScalingListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*ScheduledScalingListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/scheduled_scaling/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.ScheduledScalingListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*ScheduledScalingListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -61,8 +61,8 @@ func TestService_ListScheduledScalings(t *testing.T) {
 						{ID: 1, PolicyName: "weekend-scaling", PolicyType: "weekly", ResourceIdentifier: "conferencing-nodes", Enabled: true, InstancesToAdd: 5, MinutesInAdvance: 30, LocalTimezone: "UTC", StartDate: "2023-10-01", TimeFrom: "09:00", TimeTo: "17:00", Mon: true, Tue: true, Wed: true, Thu: true, Fri: true, Sat: false, Sun: false, Updated: &updated},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/scheduled_scaling/?limit=5&name__icontains=weekend", mock.AnythingOfType("*config.ScheduledScalingListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*ScheduledScalingListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/scheduled_scaling/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.ScheduledScalingListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*ScheduledScalingListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -117,8 +117,8 @@ func TestService_GetScheduledScaling(t *testing.T) {
 		Updated:            &updated,
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/scheduled_scaling/1/", mock.AnythingOfType("*config.ScheduledScaling")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*ScheduledScaling)
+	client.On("GetJSON", t.Context(), "configuration/v1/scheduled_scaling/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.ScheduledScaling")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*ScheduledScaling)
 		*result = *expectedScheduledScaling
 	})
 

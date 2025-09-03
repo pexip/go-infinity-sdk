@@ -38,7 +38,7 @@ func BenchmarkClient_SuccessfulRequestNoRetry(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		var result map[string]interface{}
-		err := client.GetJSON(context.Background(), "test", &result)
+		err := client.GetJSON(context.Background(), "test", nil, &result)
 		if err != nil {
 			b.Fatal(err)
 		}
@@ -75,7 +75,7 @@ func BenchmarkClient_SuccessfulRequestAfterRetries(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		var result map[string]interface{}
-		err := client.GetJSON(context.Background(), "test", &result)
+		err := client.GetJSON(context.Background(), "test", nil, &result)
 		if err != nil {
 			b.Fatal(err)
 		}

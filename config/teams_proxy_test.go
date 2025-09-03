@@ -38,8 +38,8 @@ func TestService_ListTeamsProxies(t *testing.T) {
 						{ID: 2, Name: "backup-teams-proxy", Description: "Backup Teams proxy", Address: "teams-proxy-backup.example.com", Port: 8443, AzureTenant: "tenant2", MinNumberOfInstances: 1, NotificationsEnabled: false},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/teams_proxy/", mock.AnythingOfType("*config.TeamsProxyListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*TeamsProxyListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/teams_proxy/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.TeamsProxyListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*TeamsProxyListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -63,8 +63,8 @@ func TestService_ListTeamsProxies(t *testing.T) {
 						{ID: 1, Name: "primary-teams-proxy", Description: "Primary Teams proxy", Address: "teams-proxy.example.com", Port: 8443, AzureTenant: "tenant1", EventhubID: &eventhubID, MinNumberOfInstances: 2, NotificationsEnabled: true, NotificationsQueue: &notificationsQueue, Updated: updated},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/teams_proxy/?limit=5&name__icontains=primary", mock.AnythingOfType("*config.TeamsProxyListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*TeamsProxyListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/teams_proxy/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.TeamsProxyListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*TeamsProxyListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -114,8 +114,8 @@ func TestService_GetTeamsProxy(t *testing.T) {
 		ResourceURI:          "/api/admin/configuration/v1/teams_proxy/1/",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/teams_proxy/1/", mock.AnythingOfType("*config.TeamsProxy")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*TeamsProxy)
+	client.On("GetJSON", t.Context(), "configuration/v1/teams_proxy/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.TeamsProxy")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*TeamsProxy)
 		*result = *expectedTeamsProxy
 	})
 

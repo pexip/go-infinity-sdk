@@ -15,15 +15,8 @@ import (
 func (s *Service) ListMJXMeetings(ctx context.Context, opts *ListOptions) (*MJXMeetingListResponse, error) {
 	endpoint := "status/v1/mjx_meeting/"
 
-	if opts != nil {
-		params := opts.ToURLValues()
-		if len(params) > 0 {
-			endpoint += "?" + params.Encode()
-		}
-	}
-
 	var result MJXMeetingListResponse
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.listEndpoint(ctx, endpoint, opts, &result)
 	return &result, err
 }
 
@@ -32,6 +25,6 @@ func (s *Service) GetMJXMeeting(ctx context.Context, id string) (*MJXMeeting, er
 	endpoint := fmt.Sprintf("status/v1/mjx_meeting/%s/", id)
 
 	var result MJXMeeting
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, nil, &result)
 	return &result, err
 }

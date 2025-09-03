@@ -34,8 +34,8 @@ func TestService_ListSoftwareBundles(t *testing.T) {
 						{ID: 2, BundleType: "conferencing", SelectedRevision: &revision2},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/software_bundle/", mock.AnythingOfType("*config.SoftwareBundleListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*SoftwareBundleListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/software_bundle/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.SoftwareBundleListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*SoftwareBundleListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -56,8 +56,8 @@ func TestService_ListSoftwareBundles(t *testing.T) {
 						{ID: 1, BundleType: "core", SelectedRevision: &revision},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/software_bundle/?limit=5&name__icontains=core", mock.AnythingOfType("*config.SoftwareBundleListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*SoftwareBundleListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/software_bundle/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.SoftwareBundleListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*SoftwareBundleListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -96,8 +96,8 @@ func TestService_GetSoftwareBundle(t *testing.T) {
 		ResourceURI:      "/api/admin/configuration/v1/software_bundle/1/",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/software_bundle/1/", mock.AnythingOfType("*config.SoftwareBundle")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*SoftwareBundle)
+	client.On("GetJSON", t.Context(), "configuration/v1/software_bundle/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.SoftwareBundle")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*SoftwareBundle)
 		*result = *expectedSoftwareBundle
 	})
 

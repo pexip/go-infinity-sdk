@@ -33,8 +33,8 @@ func TestService_ListCACertificates(t *testing.T) {
 						{ID: 2, Certificate: "-----BEGIN CERTIFICATE-----\nMIICertificate2\n-----END CERTIFICATE-----", TrustedIntermediate: false, SubjectName: "CN=Root CA 2", IssuerName: "CN=Root CA 2"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/ca_certificate/", mock.AnythingOfType("*config.CACertificateListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*CACertificateListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/ca_certificate/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.CACertificateListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*CACertificateListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -54,8 +54,8 @@ func TestService_ListCACertificates(t *testing.T) {
 						{ID: 1, Certificate: "-----BEGIN CERTIFICATE-----\nMIICertificate1\n-----END CERTIFICATE-----", TrustedIntermediate: true, SubjectName: "CN=Root CA 1", IssuerName: "CN=Root CA 1"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/ca_certificate/?limit=5&name__icontains=RootCA", mock.AnythingOfType("*config.CACertificateListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*CACertificateListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/ca_certificate/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.CACertificateListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*CACertificateListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -104,8 +104,8 @@ func TestService_GetCACertificate(t *testing.T) {
 		Text:                "Certificate details...",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/ca_certificate/1/", mock.AnythingOfType("*config.CACertificate")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*CACertificate)
+	client.On("GetJSON", t.Context(), "configuration/v1/ca_certificate/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.CACertificate")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*CACertificate)
 		*result = *expectedCACertificate
 	})
 

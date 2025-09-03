@@ -35,8 +35,8 @@ func TestService_ListSIPProxies(t *testing.T) {
 						{ID: 2, Name: "secondary-proxy", Description: "Secondary SIP proxy", Address: "sip2.example.com", Port: &port2, Transport: "TCP"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/sip_proxy/", mock.AnythingOfType("*config.SIPProxyListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*SIPProxyListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/sip_proxy/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.SIPProxyListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*SIPProxyListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -57,8 +57,8 @@ func TestService_ListSIPProxies(t *testing.T) {
 						{ID: 1, Name: "primary-proxy", Description: "Primary SIP proxy", Address: "sip1.example.com", Port: &port, Transport: "UDP"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/sip_proxy/?limit=5&name__icontains=primary", mock.AnythingOfType("*config.SIPProxyListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*SIPProxyListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/sip_proxy/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.SIPProxyListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*SIPProxyListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -99,8 +99,8 @@ func TestService_GetSIPProxy(t *testing.T) {
 		Transport:   "TLS",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/sip_proxy/1/", mock.AnythingOfType("*config.SIPProxy")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*SIPProxy)
+	client.On("GetJSON", t.Context(), "configuration/v1/sip_proxy/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.SIPProxy")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*SIPProxy)
 		*result = *expectedSIPProxy
 	})
 

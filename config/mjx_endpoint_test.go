@@ -45,8 +45,8 @@ func TestService_ListMjxEndpoints(t *testing.T) {
 						{ID: 2, Name: "conf-room-02", Description: "Conference Room 02", EndpointType: "poly", RoomResourceEmail: "room02@example.com", MjxEndpointGroup: &group2, APIAddress: &apiAddress2, UseHTTPS: "no", VerifyCert: "no", PolyRaiseAlarmsForThisEndpoint: false},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/mjx_endpoint/", mock.AnythingOfType("*config.MjxEndpointListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*MjxEndpointListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/mjx_endpoint/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MjxEndpointListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*MjxEndpointListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -73,8 +73,8 @@ func TestService_ListMjxEndpoints(t *testing.T) {
 						{ID: 1, Name: "conf-room-01", Description: "Conference Room 01", EndpointType: "cisco", RoomResourceEmail: "room01@example.com", MjxEndpointGroup: &group, APIAddress: &apiAddress, APIPort: &apiPort, APIUsername: &apiUsername, APIPassword: &apiPassword, UseHTTPS: "yes", VerifyCert: "yes", PolyRaiseAlarmsForThisEndpoint: true, WebexDeviceID: &webexDeviceID},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/mjx_endpoint/?limit=5&name__icontains=conf-room-01", mock.AnythingOfType("*config.MjxEndpointListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*MjxEndpointListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/mjx_endpoint/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MjxEndpointListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*MjxEndpointListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -133,8 +133,8 @@ func TestService_GetMjxEndpoint(t *testing.T) {
 		WebexDeviceID:                  &webexDeviceID,
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/mjx_endpoint/1/", mock.AnythingOfType("*config.MjxEndpoint")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*MjxEndpoint)
+	client.On("GetJSON", t.Context(), "configuration/v1/mjx_endpoint/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MjxEndpoint")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*MjxEndpoint)
 		*result = *expectedMjxEndpoint
 	})
 

@@ -46,8 +46,8 @@ func TestService_GetSystemSyncpoint(t *testing.T) {
 		ResourceURI:  "/api/admin/configuration/v1/system_syncpoint/1/",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/system_syncpoint/1/", mock.AnythingOfType("*config.SystemSyncpoint")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*SystemSyncpoint)
+	client.On("GetJSON", t.Context(), "configuration/v1/system_syncpoint/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.SystemSyncpoint")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*SystemSyncpoint)
 		*result = *expectedSystemSyncpoint
 	})
 

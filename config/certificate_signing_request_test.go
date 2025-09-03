@@ -37,8 +37,8 @@ func TestService_ListCertificateSigningRequests(t *testing.T) {
 						{ID: 2, SubjectName: "CN=test.example.com", DN: "CN=test.example.com,O=Test Org,C=US", PrivateKeyType: "rsa_4096", PrivateKey: &privateKey2, AdCompatible: true, TLSCertificate: &tlsCert2, CSR: "-----BEGIN CERTIFICATE REQUEST-----\nMIICSR2\n-----END CERTIFICATE REQUEST-----"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/certificate_signing_request/", mock.AnythingOfType("*config.CertificateSigningRequestListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*CertificateSigningRequestListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/certificate_signing_request/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.CertificateSigningRequestListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*CertificateSigningRequestListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -60,8 +60,8 @@ func TestService_ListCertificateSigningRequests(t *testing.T) {
 						{ID: 1, SubjectName: "CN=example.com", DN: "CN=example.com,O=Test Org,C=US", PrivateKeyType: "rsa_2048", PrivateKey: &privateKey, AdCompatible: false, TLSCertificate: &tlsCert, CSR: "-----BEGIN CERTIFICATE REQUEST-----\nMIICSR1\n-----END CERTIFICATE REQUEST-----"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/certificate_signing_request/?limit=5&name__icontains=example.com", mock.AnythingOfType("*config.CertificateSigningRequestListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*CertificateSigningRequestListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/certificate_signing_request/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.CertificateSigningRequestListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*CertificateSigningRequestListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -108,8 +108,8 @@ func TestService_GetCertificateSigningRequest(t *testing.T) {
 		Certificate:               "-----BEGIN CERTIFICATE-----\nMIITestCertificate\n-----END CERTIFICATE-----",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/certificate_signing_request/1/", mock.AnythingOfType("*config.CertificateSigningRequest")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*CertificateSigningRequest)
+	client.On("GetJSON", t.Context(), "configuration/v1/certificate_signing_request/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.CertificateSigningRequest")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*CertificateSigningRequest)
 		*result = *expectedCertificateSigningRequest
 	})
 

@@ -10,6 +10,7 @@ package interfaces
 
 import (
 	"context"
+	"net/url"
 
 	"github.com/pexip/go-infinity-sdk/v38/types"
 )
@@ -18,7 +19,7 @@ import (
 // This interface allows for dependency injection and testing without import cycles.
 type HTTPClient interface {
 	// GetJSON performs a GET request and unmarshals the JSON response
-	GetJSON(ctx context.Context, endpoint string, result interface{}) error
+	GetJSON(ctx context.Context, endpoint string, queryParams *url.Values, result interface{}) error
 
 	// PostJSON performs a POST request with JSON body and unmarshals the JSON response
 	PostJSON(ctx context.Context, endpoint string, body interface{}, result interface{}) error

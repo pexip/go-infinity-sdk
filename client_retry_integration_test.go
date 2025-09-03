@@ -61,7 +61,7 @@ func TestRetryIntegration(t *testing.T) {
 		atomic.StoreInt64(&callCount, 0) // Reset counter
 
 		var result map[string]interface{}
-		err := client.GetJSON(context.Background(), "test", &result)
+		err := client.GetJSON(context.Background(), "test", nil, &result)
 
 		assert.NoError(t, err)
 		assert.Equal(t, "success", result["status"])
@@ -94,7 +94,7 @@ func TestRetryIntegration(t *testing.T) {
 		require.NoError(t, err)
 
 		var result map[string]interface{}
-		err = badClient.GetJSON(context.Background(), "test", &result)
+		err = badClient.GetJSON(context.Background(), "test", nil, &result)
 
 		assert.Error(t, err)
 		assert.Equal(t, int64(1), atomic.LoadInt64(&callCount)) // Should only try once
@@ -126,7 +126,7 @@ func TestRetryBackoffTiming(t *testing.T) {
 
 	start := time.Now()
 	var result map[string]interface{}
-	err = client.GetJSON(context.Background(), "test", &result)
+	err = client.GetJSON(context.Background(), "test", nil, &result)
 
 	assert.Error(t, err)
 	assert.Len(t, callTimes, 4) // 1 initial + 3 retries

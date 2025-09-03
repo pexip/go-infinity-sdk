@@ -15,15 +15,8 @@ import (
 func (s *Service) ListSnapshotRequests(ctx context.Context, opts *ListOptions) (*SnapshotRequestListResponse, error) {
 	endpoint := "status/v1/snapshot_request/"
 
-	if opts != nil {
-		params := opts.ToURLValues()
-		if len(params) > 0 {
-			endpoint += "?" + params.Encode()
-		}
-	}
-
 	var result SnapshotRequestListResponse
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.listEndpoint(ctx, endpoint, opts, &result)
 	return &result, err
 }
 
@@ -32,6 +25,6 @@ func (s *Service) GetSnapshotRequest(ctx context.Context, id int) (*SnapshotRequ
 	endpoint := fmt.Sprintf("status/v1/snapshot_request/%d/", id)
 
 	var result SnapshotRequest
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, nil, &result)
 	return &result, err
 }

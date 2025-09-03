@@ -554,7 +554,7 @@ func TestGetJSON(t *testing.T) {
 	require.NoError(t, err)
 
 	var result map[string]interface{}
-	err = client.GetJSON(t.Context(), "test", &result)
+	err = client.GetJSON(t.Context(), "test", nil, &result)
 
 	assert.NoError(t, err)
 	assert.Equal(t, float64(1), result["id"])

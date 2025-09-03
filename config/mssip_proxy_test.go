@@ -49,8 +49,8 @@ func TestService_ListMSSIPProxies(t *testing.T) {
 						},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/mssip_proxy/", mock.AnythingOfType("*config.MSSIPProxyListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*MSSIPProxyListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/mssip_proxy/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MSSIPProxyListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*MSSIPProxyListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -78,8 +78,8 @@ func TestService_ListMSSIPProxies(t *testing.T) {
 						},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/mssip_proxy/?limit=5&name__icontains=primary", mock.AnythingOfType("*config.MSSIPProxyListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*MSSIPProxyListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/mssip_proxy/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MSSIPProxyListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*MSSIPProxyListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -121,8 +121,8 @@ func TestService_GetMSSIPProxy(t *testing.T) {
 		Transport:   "tcp",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/mssip_proxy/1/", mock.AnythingOfType("*config.MSSIPProxy")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*MSSIPProxy)
+	client.On("GetJSON", t.Context(), "configuration/v1/mssip_proxy/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MSSIPProxy")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*MSSIPProxy)
 		*result = *expectedProxy
 	})
 

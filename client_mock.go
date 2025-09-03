@@ -8,6 +8,8 @@ package infinity
 
 import (
 	"context"
+	"net/url"
+
 	"github.com/pexip/go-infinity-sdk/v38/command"
 	"github.com/pexip/go-infinity-sdk/v38/config"
 	"github.com/pexip/go-infinity-sdk/v38/history"
@@ -57,8 +59,8 @@ func (client *ClientMock) Command() *command.Service {
 }
 
 // GetJSON mocks the GetJSON method
-func (m *ClientMock) GetJSON(ctx context.Context, endpoint string, result interface{}) error {
-	args := m.Called(ctx, endpoint, result)
+func (m *ClientMock) GetJSON(ctx context.Context, endpoint string, queryParams *url.Values, result interface{}) error {
+	args := m.Called(ctx, endpoint, queryParams, result)
 	return args.Error(0)
 }
 

@@ -44,8 +44,8 @@ func TestService_ListManagementVMs(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/management_vm/", mock.AnythingOfType("*status.ManagementVMListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*ManagementVMListResponse)
+	client.On("GetJSON", t.Context(), "status/v1/management_vm/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.ManagementVMListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*ManagementVMListResponse)
 		*result = *expectedResponse
 	})
 
@@ -79,8 +79,8 @@ func TestService_GetManagementVM(t *testing.T) {
 		ResourceURI:          "/api/admin/status/v1/management_vm/1/",
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/management_vm/1/", mock.AnythingOfType("*status.ManagementVM")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*ManagementVM)
+	client.On("GetJSON", t.Context(), "status/v1/management_vm/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.ManagementVM")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*ManagementVM)
 		*result = *expectedVM
 	})
 
@@ -117,10 +117,8 @@ func TestService_ListManagementVMs_WithOptions(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), mock.MatchedBy(func(endpoint string) bool {
-		return endpoint != "status/v1/management_vm/"
-	}), mock.AnythingOfType("*status.ManagementVMListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*ManagementVMListResponse)
+	client.On("GetJSON", t.Context(), "status/v1/management_vm/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.ManagementVMListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*ManagementVMListResponse)
 		*result = *expectedResponse
 	})
 

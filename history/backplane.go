@@ -15,15 +15,8 @@ import (
 func (s *Service) ListBackplanes(ctx context.Context, opts *ListOptions) (*BackplaneListResponse, error) {
 	endpoint := "history/v1/backplane/"
 
-	if opts != nil {
-		params := opts.ToURLValues()
-		if len(params) > 0 {
-			endpoint += "?" + params.Encode()
-		}
-	}
-
 	var result BackplaneListResponse
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.listEndpoint(ctx, endpoint, opts, &result)
 	return &result, err
 }
 
@@ -32,6 +25,6 @@ func (s *Service) GetBackplane(ctx context.Context, id string) (*Backplane, erro
 	endpoint := fmt.Sprintf("history/v1/backplane/%s/", id)
 
 	var result Backplane
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, nil, &result)
 	return &result, err
 }

@@ -38,8 +38,8 @@ func TestService_ListBackplanes(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/backplane/", mock.AnythingOfType("*status.BackplaneListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*BackplaneListResponse)
+	client.On("GetJSON", t.Context(), "status/v1/backplane/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.BackplaneListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*BackplaneListResponse)
 		*result = *expectedResponse
 	})
 
@@ -73,8 +73,8 @@ func TestService_GetBackplane(t *testing.T) {
 		ResourceURI:          "/api/admin/status/v1/backplane/backplane-1/",
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/backplane/backplane-1/", mock.AnythingOfType("*status.Backplane")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*Backplane)
+	client.On("GetJSON", t.Context(), "status/v1/backplane/backplane-1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.Backplane")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*Backplane)
 		*result = *expectedBackplane
 	})
 
@@ -106,10 +106,8 @@ func TestService_ListBackplanes_WithOptions(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), mock.MatchedBy(func(endpoint string) bool {
-		return endpoint != "status/v1/backplane/"
-	}), mock.AnythingOfType("*status.BackplaneListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*BackplaneListResponse)
+	client.On("GetJSON", t.Context(), "status/v1/backplane/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.BackplaneListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*BackplaneListResponse)
 		*result = *expectedResponse
 	})
 

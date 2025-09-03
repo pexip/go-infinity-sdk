@@ -33,8 +33,8 @@ func TestService_ListRoleMappings(t *testing.T) {
 						{ID: 2, Name: "user-mapping", Source: "ldap", Value: "CN=Users,OU=Groups,DC=example,DC=com", Roles: []string{"user"}},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/role_mapping/", mock.AnythingOfType("*config.RoleMappingListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*RoleMappingListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/role_mapping/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.RoleMappingListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*RoleMappingListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -54,8 +54,8 @@ func TestService_ListRoleMappings(t *testing.T) {
 						{ID: 1, Name: "admin-mapping", Source: "ldap", Value: "CN=Administrators,OU=Groups,DC=example,DC=com", Roles: []string{"admin", "user"}},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/role_mapping/?limit=5&name__icontains=admin", mock.AnythingOfType("*config.RoleMappingListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*RoleMappingListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/role_mapping/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.RoleMappingListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*RoleMappingListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -94,8 +94,8 @@ func TestService_GetRoleMapping(t *testing.T) {
 		Roles:  []string{"admin", "user", "moderator"},
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/role_mapping/1/", mock.AnythingOfType("*config.RoleMapping")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*RoleMapping)
+	client.On("GetJSON", t.Context(), "configuration/v1/role_mapping/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.RoleMapping")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*RoleMapping)
 		*result = *expectedRoleMapping
 	})
 

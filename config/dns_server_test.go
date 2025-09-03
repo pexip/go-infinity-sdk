@@ -33,8 +33,8 @@ func TestService_ListDNSServers(t *testing.T) {
 						{ID: 2, Address: "1.1.1.1", Description: "Cloudflare DNS"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/dns_server/", mock.AnythingOfType("*config.DNSServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*DNSServerListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/dns_server/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.DNSServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*DNSServerListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -54,8 +54,8 @@ func TestService_ListDNSServers(t *testing.T) {
 						{ID: 1, Address: "8.8.8.8", Description: "Google DNS"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/dns_server/?limit=5&name__icontains=google", mock.AnythingOfType("*config.DNSServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*DNSServerListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/dns_server/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.DNSServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*DNSServerListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -92,8 +92,8 @@ func TestService_GetDNSServer(t *testing.T) {
 		Description: "Google DNS Server",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/dns_server/1/", mock.AnythingOfType("*config.DNSServer")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*DNSServer)
+	client.On("GetJSON", t.Context(), "configuration/v1/dns_server/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.DNSServer")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*DNSServer)
 		*result = *expectedServer
 	})
 

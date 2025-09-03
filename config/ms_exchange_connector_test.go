@@ -110,8 +110,8 @@ func TestService_ListMsExchangeConnectors(t *testing.T) {
 						},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/ms_exchange_connector/", mock.AnythingOfType("*config.MsExchangeConnectorListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*MsExchangeConnectorListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/ms_exchange_connector/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MsExchangeConnectorListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*MsExchangeConnectorListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -145,8 +145,8 @@ func TestService_ListMsExchangeConnectors(t *testing.T) {
 						},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/ms_exchange_connector/?limit=5&name__icontains=primary", mock.AnythingOfType("*config.MsExchangeConnectorListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*MsExchangeConnectorListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/ms_exchange_connector/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MsExchangeConnectorListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*MsExchangeConnectorListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -301,8 +301,8 @@ func TestService_GetMsExchangeConnector(t *testing.T) {
 		PublicKey:                 "test-public-key",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/ms_exchange_connector/1/", mock.AnythingOfType("*config.MsExchangeConnector")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*MsExchangeConnector)
+	client.On("GetJSON", t.Context(), "configuration/v1/ms_exchange_connector/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MsExchangeConnector")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*MsExchangeConnector)
 		*result = *expectedConnector
 	})
 

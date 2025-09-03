@@ -33,8 +33,8 @@ func TestService_ListTelehealthProfiles(t *testing.T) {
 						{ID: 2, Name: "epic-profile-2", Description: "Epic Telehealth Profile 2", UUID: "123e4567-e89b-12d3-a456-426614174001", TelehealthCallDomain: "telehealth2.example.com", EpicEncryptionAlgorithm: "AES128", EpicEncryptionKeyType: "jwks"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/telehealth_profile/", mock.AnythingOfType("*config.TelehealthProfileListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*TelehealthProfileListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/telehealth_profile/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.TelehealthProfileListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*TelehealthProfileListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -54,8 +54,8 @@ func TestService_ListTelehealthProfiles(t *testing.T) {
 						{ID: 1, Name: "epic-profile-1", Description: "Epic Telehealth Profile 1", UUID: "123e4567-e89b-12d3-a456-426614174000", TelehealthCallDomain: "telehealth.example.com", EpicEncryptionAlgorithm: "AES256", EpicEncryptionKeyType: "direct"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/telehealth_profile/?limit=5&name__icontains=epic-profile-1", mock.AnythingOfType("*config.TelehealthProfileListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*TelehealthProfileListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/telehealth_profile/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.TelehealthProfileListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*TelehealthProfileListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -111,8 +111,8 @@ func TestService_GetTelehealthProfile(t *testing.T) {
 		ResourceURI:                           "/api/admin/configuration/v1/telehealth_profile/1/",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/telehealth_profile/1/", mock.AnythingOfType("*config.TelehealthProfile")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*TelehealthProfile)
+	client.On("GetJSON", t.Context(), "configuration/v1/telehealth_profile/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.TelehealthProfile")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*TelehealthProfile)
 		*result = *expectedTelehealthProfile
 	})
 

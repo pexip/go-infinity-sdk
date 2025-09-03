@@ -10,6 +10,9 @@
 package status
 
 import (
+	"context"
+	"net/url"
+
 	"github.com/pexip/go-infinity-sdk/v38/interfaces"
 	"github.com/pexip/go-infinity-sdk/v38/options"
 )
@@ -28,3 +31,11 @@ func New(client interfaces.HTTPClient) *Service {
 
 // ListOptions contains options for listing resources
 type ListOptions = options.BaseListOptions
+
+func (s *Service) listEndpoint(ctx context.Context, endpoint string, opts *ListOptions, result interface{}) error {
+	var params url.Values
+	if opts != nil {
+		params = opts.ToURLValues()
+	}
+	return s.client.GetJSON(ctx, endpoint, &params, result)
+}

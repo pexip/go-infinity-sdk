@@ -36,8 +36,8 @@ func TestService_ListSchedulingOperations(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/scheduling_operation/", mock.AnythingOfType("*status.SchedulingOperationListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*SchedulingOperationListResponse)
+	client.On("GetJSON", t.Context(), "status/v1/scheduling_operation/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.SchedulingOperationListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*SchedulingOperationListResponse)
 		*result = *expectedResponse
 	})
 
@@ -79,10 +79,8 @@ func TestService_ListSchedulingOperations_WithOptions(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), mock.MatchedBy(func(endpoint string) bool {
-		return endpoint != "status/v1/scheduling_operation/"
-	}), mock.AnythingOfType("*status.SchedulingOperationListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*SchedulingOperationListResponse)
+	client.On("GetJSON", t.Context(), "status/v1/scheduling_operation/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.SchedulingOperationListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*SchedulingOperationListResponse)
 		*result = *expectedResponse
 	})
 
@@ -115,8 +113,8 @@ func TestService_GetSchedulingOperation(t *testing.T) {
 		TransactionUUID:  "uuid-3",
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/scheduling_operation/1/", mock.AnythingOfType("*status.SchedulingOperation")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*SchedulingOperation)
+	client.On("GetJSON", t.Context(), "status/v1/scheduling_operation/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.SchedulingOperation")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*SchedulingOperation)
 		*result = *expectedOperation
 	})
 

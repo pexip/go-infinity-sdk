@@ -31,8 +31,8 @@ func TestService_GetGMSGatewayToken(t *testing.T) {
 		ResourceURI:             "/api/admin/configuration/v1/gms_gateway_token/1/",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/gms_gateway_token/1/", mock.AnythingOfType("*config.GMSGatewayToken")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*GMSGatewayToken)
+	client.On("GetJSON", t.Context(), "configuration/v1/gms_gateway_token/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.GMSGatewayToken")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*GMSGatewayToken)
 		*result = *expectedToken
 	})
 

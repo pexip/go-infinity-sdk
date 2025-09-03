@@ -33,8 +33,8 @@ func TestService_ListWorkerVMs(t *testing.T) {
 						{ID: 2, Name: "worker-2", Hostname: "worker2.example.com"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/worker_vm/", mock.AnythingOfType("*config.WorkerVMListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*WorkerVMListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/worker_vm/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.WorkerVMListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*WorkerVMListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -55,8 +55,8 @@ func TestService_ListWorkerVMs(t *testing.T) {
 						{ID: 1, Name: "test-worker", Hostname: "testworker.example.com"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/worker_vm/?limit=2&name__icontains=worker&offset=4", mock.AnythingOfType("*config.WorkerVMListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*WorkerVMListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/worker_vm/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.WorkerVMListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*WorkerVMListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -98,8 +98,8 @@ func TestService_GetWorkerVM(t *testing.T) {
 		SystemLocation: "/api/admin/configuration/v1/system_location/1/",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/worker_vm/1/", mock.AnythingOfType("*config.WorkerVM")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*WorkerVM)
+	client.On("GetJSON", t.Context(), "configuration/v1/worker_vm/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.WorkerVM")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*WorkerVM)
 		*result = *expectedVM
 	})
 

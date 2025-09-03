@@ -33,8 +33,8 @@ func TestService_ListStaticRoutes(t *testing.T) {
 						{ID: 2, Name: "route-2", Address: "172.16.0.0", Prefix: 16, Gateway: "192.168.1.1"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/static_route/", mock.AnythingOfType("*config.StaticRouteListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*StaticRouteListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/static_route/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.StaticRouteListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*StaticRouteListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -54,8 +54,8 @@ func TestService_ListStaticRoutes(t *testing.T) {
 						{ID: 1, Name: "test-route", Address: "10.0.0.0", Prefix: 24, Gateway: "192.168.1.1"},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/static_route/?limit=2&name__icontains=route", mock.AnythingOfType("*config.StaticRouteListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*StaticRouteListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/static_route/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.StaticRouteListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*StaticRouteListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -94,8 +94,8 @@ func TestService_GetStaticRoute(t *testing.T) {
 		Gateway: "192.168.1.1",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/static_route/1/", mock.AnythingOfType("*config.StaticRoute")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*StaticRoute)
+	client.On("GetJSON", t.Context(), "configuration/v1/static_route/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.StaticRoute")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*StaticRoute)
 		*result = *expectedRoute
 	})
 

@@ -48,8 +48,8 @@ func TestService_ListSystemLocations(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/system_location/", mock.AnythingOfType("*status.SystemLocationListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*SystemLocationListResponse)
+	client.On("GetJSON", t.Context(), "status/v1/system_location/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.SystemLocationListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*SystemLocationListResponse)
 		*result = *expectedResponse
 	})
 
@@ -98,8 +98,8 @@ func TestService_GetSystemLocation(t *testing.T) {
 		MediaTokensUsed: 100,
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/system_location/1/", mock.AnythingOfType("*status.SystemLocation")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*SystemLocation)
+	client.On("GetJSON", t.Context(), "status/v1/system_location/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.SystemLocation")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*SystemLocation)
 		*result = *expectedLocation
 	})
 
@@ -148,10 +148,8 @@ func TestService_ListSystemLocations_WithOptions(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), mock.MatchedBy(func(endpoint string) bool {
-		return endpoint != "status/v1/system_location/"
-	}), mock.AnythingOfType("*status.SystemLocationListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*SystemLocationListResponse)
+	client.On("GetJSON", t.Context(), "status/v1/system_location/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.SystemLocationListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*SystemLocationListResponse)
 		*result = *expectedResponse
 	})
 

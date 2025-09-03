@@ -17,15 +17,8 @@ import (
 func (s *Service) ListParticipants(ctx context.Context, opts *ListOptions) (*ParticipantListResponse, error) {
 	endpoint := "history/v1/participant/"
 
-	if opts != nil {
-		params := opts.ToURLValuesWithSearchField("display_name__icontains")
-		if len(params) > 0 {
-			endpoint += "?" + params.Encode()
-		}
-	}
-
 	var result ParticipantListResponse
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.listEndpointWithSearchField(ctx, endpoint, opts, "display_name__icontains", &result)
 	return &result, err
 }
 
@@ -34,7 +27,7 @@ func (s *Service) GetParticipant(ctx context.Context, id int) (*Participant, err
 	endpoint := fmt.Sprintf("history/v1/participant/%d/", id)
 
 	var result Participant
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, nil, &result)
 	return &result, err
 }
 
@@ -54,9 +47,7 @@ func (s *Service) ListParticipantsByConference(ctx context.Context, conferenceID
 		}
 	}
 
-	endpoint += "?" + params.Encode()
-
 	var result ParticipantListResponse
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, &params, &result)
 	return &result, err
 }

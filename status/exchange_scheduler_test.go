@@ -39,8 +39,8 @@ func TestService_ListExchangeSchedulers(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/exchange_scheduler/", mock.AnythingOfType("*status.ExchangeSchedulerListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*ExchangeSchedulerListResponse)
+	client.On("GetJSON", t.Context(), "status/v1/exchange_scheduler/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.ExchangeSchedulerListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*ExchangeSchedulerListResponse)
 		*result = *expectedResponse
 	})
 
@@ -83,10 +83,8 @@ func TestService_ListExchangeSchedulers_WithOptions(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), mock.MatchedBy(func(endpoint string) bool {
-		return endpoint != "status/v1/exchange_scheduler/"
-	}), mock.AnythingOfType("*status.ExchangeSchedulerListResponse")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*ExchangeSchedulerListResponse)
+	client.On("GetJSON", t.Context(), "status/v1/exchange_scheduler/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.ExchangeSchedulerListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*ExchangeSchedulerListResponse)
 		*result = *expectedResponse
 	})
 
@@ -112,8 +110,8 @@ func TestService_GetExchangeScheduler(t *testing.T) {
 		ResourceURI:         "/api/admin/status/v1/exchange_scheduler/1/",
 	}
 
-	client.On("GetJSON", t.Context(), "status/v1/exchange_scheduler/1/", mock.AnythingOfType("*status.ExchangeScheduler")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*ExchangeScheduler)
+	client.On("GetJSON", t.Context(), "status/v1/exchange_scheduler/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*status.ExchangeScheduler")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*ExchangeScheduler)
 		*result = *expectedScheduler
 	})
 

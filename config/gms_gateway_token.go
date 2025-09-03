@@ -15,7 +15,7 @@ func (s *Service) GetGMSGatewayToken(ctx context.Context) (*GMSGatewayToken, err
 	endpoint := "configuration/v1/gms_gateway_token/1/"
 
 	var result GMSGatewayToken
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, nil, &result)
 	return &result, err
 }
 

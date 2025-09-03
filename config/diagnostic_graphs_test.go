@@ -33,8 +33,8 @@ func TestService_ListDiagnosticGraphs(t *testing.T) {
 						{ID: 2, Title: "Memory Usage", Order: 2, Datasets: []string{"memory_used", "memory_free"}},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/diagnostic_graphs/", mock.AnythingOfType("*config.DiagnosticGraphListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*DiagnosticGraphListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/diagnostic_graphs/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.DiagnosticGraphListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*DiagnosticGraphListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -54,8 +54,8 @@ func TestService_ListDiagnosticGraphs(t *testing.T) {
 						{ID: 1, Title: "CPU Usage", Order: 1, Datasets: []string{"cpu_usage", "cpu_idle"}},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/diagnostic_graphs/?limit=5&name__icontains=CPU", mock.AnythingOfType("*config.DiagnosticGraphListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*DiagnosticGraphListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/diagnostic_graphs/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.DiagnosticGraphListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*DiagnosticGraphListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -93,8 +93,8 @@ func TestService_GetDiagnosticGraph(t *testing.T) {
 		Datasets: []string{"network_in", "network_out", "packet_loss"},
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/diagnostic_graphs/1/", mock.AnythingOfType("*config.DiagnosticGraph")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*DiagnosticGraph)
+	client.On("GetJSON", t.Context(), "configuration/v1/diagnostic_graphs/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.DiagnosticGraph")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*DiagnosticGraph)
 		*result = *expectedDiagnosticGraph
 	})
 

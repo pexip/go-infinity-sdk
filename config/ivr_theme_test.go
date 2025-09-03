@@ -57,8 +57,8 @@ func TestService_ListIVRThemes(t *testing.T) {
 						},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/ivr_theme/", mock.AnythingOfType("*config.IVRThemeListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*IVRThemeListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/ivr_theme/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.IVRThemeListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*IVRThemeListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -91,8 +91,8 @@ func TestService_ListIVRThemes(t *testing.T) {
 						},
 					},
 				}
-				m.On("GetJSON", t.Context(), "configuration/v1/ivr_theme/?limit=5&name__icontains=default", mock.AnythingOfType("*config.IVRThemeListResponse")).Return(nil).Run(func(args mock.Arguments) {
-					result := args.Get(2).(*IVRThemeListResponse)
+				m.On("GetJSON", t.Context(), "configuration/v1/ivr_theme/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.IVRThemeListResponse")).Return(nil).Run(func(args mock.Arguments) {
+					result := args.Get(3).(*IVRThemeListResponse)
 					*result = *expectedResponse
 				})
 			},
@@ -138,8 +138,8 @@ func TestService_GetIVRTheme(t *testing.T) {
 		ResourceURI:    "/api/admin/configuration/v1/ivr_theme/1/",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/ivr_theme/1/", mock.AnythingOfType("*config.IVRTheme")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(2).(*IVRTheme)
+	client.On("GetJSON", t.Context(), "configuration/v1/ivr_theme/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.IVRTheme")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*IVRTheme)
 		*result = *expectedTheme
 	})
 

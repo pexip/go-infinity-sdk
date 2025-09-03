@@ -18,21 +18,8 @@ import (
 func (s *Service) ListMediaStreams(ctx context.Context, opts *ListOptions) (*MediaStreamListResponse, error) {
 	endpoint := "history/v1/media_stream/"
 
-	if opts != nil {
-		params := opts.BaseListOptions.ToURLValues()
-		if opts.StartTime != nil {
-			params.Set("start_time__gte", opts.StartTime.Format(time.RFC3339))
-		}
-		if opts.EndTime != nil {
-			params.Set("end_time__lt", opts.EndTime.Format(time.RFC3339))
-		}
-		if len(params) > 0 {
-			endpoint += "?" + params.Encode()
-		}
-	}
-
 	var result MediaStreamListResponse
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.listEndpointWithTimeFilter(ctx, endpoint, opts, &result)
 	return &result, err
 }
 
@@ -41,7 +28,7 @@ func (s *Service) GetMediaStream(ctx context.Context, id int) (*MediaStream, err
 	endpoint := fmt.Sprintf("history/v1/media_stream/%d/", id)
 
 	var result MediaStream
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, nil, &result)
 	return &result, err
 }
 
@@ -67,9 +54,7 @@ func (s *Service) ListMediaStreamsByParticipant(ctx context.Context, participant
 		}
 	}
 
-	endpoint += "?" + params.Encode()
-
 	var result MediaStreamListResponse
-	err := s.client.GetJSON(ctx, endpoint, &result)
+	err := s.client.GetJSON(ctx, endpoint, &params, &result)
 	return &result, err
 }

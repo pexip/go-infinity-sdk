@@ -16,7 +16,8 @@ func (s *Service) ListRegistrationAliases(ctx context.Context, opts *ListOptions
 	endpoint := "history/v1/registration_alias/"
 
 	var result RegistrationAliasListResponse
-	err := s.listEndpoint(ctx, endpoint, opts, &result)
+
+	err := s.listEndpointWithSearchField(ctx, endpoint, opts, "alias__icontains", &result)
 	return &result, err
 }
 

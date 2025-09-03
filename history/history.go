@@ -12,6 +12,7 @@ package history
 import (
 	"context"
 	"net/url"
+	"time"
 
 	"github.com/pexip/go-infinity-sdk/v38/interfaces"
 )
@@ -32,6 +33,32 @@ func (s *Service) listEndpoint(ctx context.Context, endpoint string, opts *ListO
 	var params url.Values
 	if opts != nil {
 		params = opts.ToURLValues()
+	}
+	return s.client.GetJSON(ctx, endpoint, &params, result)
+}
+
+func (s *Service) listEndpointWithSearchField(ctx context.Context, endpoint string, opts *ListOptions, searchField string, result interface{}) error {
+	var params url.Values
+	if opts != nil {
+		if searchField != "" {
+			params = opts.ToURLValuesWithSearchField(searchField)
+		} else {
+			params = opts.ToURLValues()
+		}
+	}
+	return s.client.GetJSON(ctx, endpoint, &params, result)
+}
+
+func (s *Service) listEndpointWithTimeFilter(ctx context.Context, endpoint string, opts *ListOptions, result interface{}) error {
+	var params url.Values
+	if opts != nil {
+		params = opts.ToURLValues()
+		if opts.StartTime != nil {
+			params.Set("start_time__gte", opts.StartTime.Format(time.RFC3339))
+		}
+		if opts.EndTime != nil {
+			params.Set("end_time__lt", opts.EndTime.Format(time.RFC3339))
+		}
 	}
 	return s.client.GetJSON(ctx, endpoint, &params, result)
 }

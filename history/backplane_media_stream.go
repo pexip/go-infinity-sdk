@@ -18,7 +18,7 @@ func (s *Service) ListBackplaneMediaStreams(ctx context.Context, opts *ListOptio
 	endpoint := "history/v1/backplane_media_stream/"
 
 	var result BackplaneMediaStreamListResponse
-	err := s.listEndpoint(ctx, endpoint, opts, &result)
+	err := s.listEndpointWithTimeFilter(ctx, endpoint, opts, &result)
 	return &result, err
 }
 

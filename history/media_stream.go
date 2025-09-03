@@ -19,7 +19,7 @@ func (s *Service) ListMediaStreams(ctx context.Context, opts *ListOptions) (*Med
 	endpoint := "history/v1/media_stream/"
 
 	var result MediaStreamListResponse
-	err := s.listEndpoint(ctx, endpoint, opts, &result)
+	err := s.listEndpointWithTimeFilter(ctx, endpoint, opts, &result)
 	return &result, err
 }
 

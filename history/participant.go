@@ -18,7 +18,7 @@ func (s *Service) ListParticipants(ctx context.Context, opts *ListOptions) (*Par
 	endpoint := "history/v1/participant/"
 
 	var result ParticipantListResponse
-	err := s.listEndpoint(ctx, endpoint, opts, &result)
+	err := s.listEndpointWithSearchField(ctx, endpoint, opts, "display_name__icontains", &result)
 	return &result, err
 }
 

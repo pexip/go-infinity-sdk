@@ -33,7 +33,7 @@ jobs:
             exit 1
           fi
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - uses: pexip/shared-github-actions/.github/actions/release@d02e99acb8ab1e3a50fd22455dd61753327d4e33
         with:
           version: ${{ inputs.version }}

@@ -113,7 +113,6 @@ type GlobalConfiguration struct {
 	SiteBannerFg                        string       `json:"site_banner_fg,omitempty"`
 	TeamsEnablePowerpointRender         bool         `json:"teams_enable_powerpoint_render,omitempty"`
 	WaitingForChairTimeout              int          `json:"waiting_for_chair_timeout,omitempty"`
-	GlobalConferenceCreateGroups        []string     `json:"global_conference_create_groups,omitempty"`
 }
 
 // GlobalConfigurationUpdateRequest represents a request to update global configuration
@@ -124,98 +123,97 @@ type GlobalConfigurationUpdateRequest struct {
 	AzureSecret                         *string      `json:"azure_secret"`
 	AzureSubscriptionID                 *string      `json:"azure_subscription_id"`
 	AzureTenant                         *string      `json:"azure_tenant"`
-	BdpmMaxPinFailuresPerWindow         int         `json:"bdpm_max_pin_failures_per_window"`
-	BdpmMaxScanAttemptsPerWindow        int         `json:"bdpm_max_scan_attempts_per_window"`
-	BdpmPinChecksEnabled                bool        `json:"bdpm_pin_checks_enabled"`
-	BdpmScanQuarantineEnabled           bool        `json:"bdpm_scan_quarantine_enabled"`
-	BurstingEnabled                     bool        `json:"bursting_enabled"`
+	BdpmMaxPinFailuresPerWindow         int          `json:"bdpm_max_pin_failures_per_window"`
+	BdpmMaxScanAttemptsPerWindow        int          `json:"bdpm_max_scan_attempts_per_window"`
+	BdpmPinChecksEnabled                bool         `json:"bdpm_pin_checks_enabled"`
+	BdpmScanQuarantineEnabled           bool         `json:"bdpm_scan_quarantine_enabled"`
+	BurstingEnabled                     bool         `json:"bursting_enabled"`
 	BurstingMinLifetime                 *int         `json:"bursting_min_lifetime"`
 	BurstingThreshold                   *int         `json:"bursting_threshold"`
 	CloudProvider                       string       `json:"cloud_provider"`
 	ContactEmailAddress                 string       `json:"contact_email_address"`
 	ContentSecurityPolicyHeader         string       `json:"content_security_policy_header"`
-	ContentSecurityPolicyState          bool        `json:"content_security_policy_state"`
+	ContentSecurityPolicyState          bool         `json:"content_security_policy_state"`
 	CryptoMode                          string       `json:"crypto_mode"`
 	DefaultTheme                        *string      `json:"default_theme"`
 	DefaultToNewWebapp                  *bool        `json:"default_to_new_webapp"`
 	DefaultWebapp                       string       `json:"default_webapp"`
-	DefaultWebappAlias                  string      `json:"default_webapp_alias"`
+	DefaultWebappAlias                  *string      `json:"default_webapp_alias"`
 	DeploymentUUID                      string       `json:"deployment_uuid,omitempty"`
 	DisabledCodecs                      []CodecValue `json:"disabled_codecs,omitempty"`
-	EjectLastParticipantBackstopTimeout *int         `json:"eject_last_participant_backstop_timeout"`
-	EnableAnalytics                     bool        `json:"enable_analytics"`
-	EnableApplicationAPI                bool        `json:"enable_application_api"`
-	EnableBreakoutRooms                 bool        `json:"enable_breakout_rooms"`
-	EnableChat                          bool        `json:"enable_chat"`
-	EnableDenoise                       bool        `json:"enable_denoise"`
-	EnableDialout                       bool        `json:"enable_dialout"`
-	EnableDirectory                     bool        `json:"enable_directory"`
-	EnableEdgeNonMesh                   bool        `json:"enable_edge_non_mesh"`
-	EnableFecc                          bool        `json:"enable_fecc"`
-	EnableH323                          bool        `json:"enable_h323"`
-	EnableLegacyDialoutAPI              bool        `json:"enable_legacy_dialout_api"`
-	EnableLyncAutoEscalate              bool        `json:"enable_lync_auto_escalate"`
-	EnableLyncVbss                      bool        `json:"enable_lync_vbss"`
-	EnableMlvad                         bool        `json:"enable_mlvad"`
-	EnableMultiscreen                   bool        `json:"enable_multiscreen"`
-	EnablePushNotifications             bool        `json:"enable_push_notifications"`
-	EnableRTMP                          bool        `json:"enable_rtmp"`
-	EnableSIP                           bool        `json:"enable_sip"`
-	EnableSIPUDP                        bool        `json:"enable_sip_udp"`
-	EnableSoftmute                      bool        `json:"enable_softmute"`
-	EnableSSH                           bool        `json:"enable_ssh"`
-	EnableTurn443                       bool        `json:"enable_turn_443"`
-	EnableWebRTC                        bool        `json:"enable_webrtc"`
-	ErrorReportingEnabled               bool        `json:"error_reporting_enabled"`
+	EjectLastParticipantBackstopTimeout int          `json:"eject_last_participant_backstop_timeout"`
+	EnableAnalytics                     bool         `json:"enable_analytics"`
+	EnableApplicationAPI                bool         `json:"enable_application_api"`
+	EnableBreakoutRooms                 bool         `json:"enable_breakout_rooms"`
+	EnableChat                          bool         `json:"enable_chat"`
+	EnableDenoise                       bool         `json:"enable_denoise"`
+	EnableDialout                       bool         `json:"enable_dialout"`
+	EnableDirectory                     bool         `json:"enable_directory"`
+	EnableEdgeNonMesh                   bool         `json:"enable_edge_non_mesh"`
+	EnableFecc                          bool         `json:"enable_fecc"`
+	EnableH323                          bool         `json:"enable_h323"`
+	EnableLegacyDialoutAPI              bool         `json:"enable_legacy_dialout_api"`
+	EnableLyncAutoEscalate              bool         `json:"enable_lync_auto_escalate"`
+	EnableLyncVbss                      bool         `json:"enable_lync_vbss"`
+	EnableMlvad                         bool         `json:"enable_mlvad"`
+	EnableMultiscreen                   bool         `json:"enable_multiscreen"`
+	EnablePushNotifications             bool         `json:"enable_push_notifications"`
+	EnableRTMP                          bool         `json:"enable_rtmp"`
+	EnableSIP                           bool         `json:"enable_sip"`
+	EnableSIPUDP                        bool         `json:"enable_sip_udp"`
+	EnableSoftmute                      bool         `json:"enable_softmute"`
+	EnableSSH                           bool         `json:"enable_ssh"`
+	EnableTurn443                       bool         `json:"enable_turn_443"`
+	EnableWebRTC                        bool         `json:"enable_webrtc"`
+	ErrorReportingEnabled               bool         `json:"error_reporting_enabled"`
 	ErrorReportingURL                   string       `json:"error_reporting_url"`
-	EsConnectionTimeout                 int         `json:"es_connection_timeout"`
-	EsInitialRetryBackoff               int         `json:"es_initial_retry_backoff"`
-	EsMaximumDeferredPosts              int         `json:"es_maximum_deferred_posts"`
-	EsMaximumRetryBackoff               int         `json:"es_maximum_retry_backoff"`
-	EsMediaStreamsWait                  int         `json:"es_media_streams_wait"`
-	EsMetricsUpdateInterval             int         `json:"es_metrics_update_interval"`
-	EsShortTermMemoryExpiration         int         `json:"es_short_term_memory_expiration"`
-	ExternalParticipantAvatarLookup     bool        `json:"external_participant_avatar_lookup"`
+	EsConnectionTimeout                 int          `json:"es_connection_timeout"`
+	EsInitialRetryBackoff               int          `json:"es_initial_retry_backoff"`
+	EsMaximumDeferredPosts              int          `json:"es_maximum_deferred_posts"`
+	EsMaximumRetryBackoff               int          `json:"es_maximum_retry_backoff"`
+	EsMediaStreamsWait                  int          `json:"es_media_streams_wait"`
+	EsMetricsUpdateInterval             int          `json:"es_metrics_update_interval"`
+	EsShortTermMemoryExpiration         int          `json:"es_short_term_memory_expiration"`
+	ExternalParticipantAvatarLookup     bool         `json:"external_participant_avatar_lookup"`
 	GcpClientEmail                      *string      `json:"gcp_client_email"`
 	GcpPrivateKey                       *string      `json:"gcp_private_key"`
 	GcpProjectID                        *string      `json:"gcp_project_id"`
-	GuestsOnlyTimeout                   int         `json:"guests_only_timeout"`
-	LegacyAPIHTTP                       bool        `json:"legacy_api_http"`
+	GuestsOnlyTimeout                   int          `json:"guests_only_timeout"`
+	LegacyAPIHTTP                       bool         `json:"legacy_api_http"`
 	LegacyAPIUsername                   string       `json:"legacy_api_username"`
 	LegacyAPIPassword                   string       `json:"legacy_api_password"`
 	LiveCaptionsAPIGateway              string       `json:"live_captions_api_gateway"`
 	LiveCaptionsAppID                   string       `json:"live_captions_app_id"`
-	LiveCaptionsEnabled                 bool        `json:"live_captions_enabled"`
+	LiveCaptionsEnabled                 bool         `json:"live_captions_enabled"`
 	LiveCaptionsPublicJWTKey            string       `json:"live_captions_public_jwt_key"`
-	LiveCaptionsVMRDefault              bool        `json:"live_captions_vmr_default"`
-	LiveviewShowConferences             bool        `json:"liveview_show_conferences"`
+	LiveCaptionsVMRDefault              bool         `json:"live_captions_vmr_default"`
+	LiveviewShowConferences             bool         `json:"liveview_show_conferences"`
 	LocalMssipDomain                    string       `json:"local_mssip_domain"`
 	LogonBanner                         string       `json:"logon_banner"`
-	LogsMaxAge                          int         `json:"logs_max_age"`
-	ManagementQos                       int         `json:"management_qos"`
-	ManagementSessionTimeout            int         `json:"management_session_timeout"`
+	LogsMaxAge                          int          `json:"logs_max_age"`
+	ManagementQos                       *int         `json:"management_qos"`
+	ManagementSessionTimeout            int          `json:"management_session_timeout"`
 	ManagementStartPage                 string       `json:"management_start_page"`
 	MaxCallrateIn                       *int         `json:"max_callrate_in"`
 	MaxCallrateOut                      *int         `json:"max_callrate_out"`
 	MaxPixelsPerSecond                  string       `json:"max_pixels_per_second"`
-	MaxPresentationBandwidthRatio       int         `json:"max_presentation_bandwidth_ratio"`
-	MediaPortsEnd                       int         `json:"media_ports_end"`
-	MediaPortsStart                     int         `json:"media_ports_start"`
+	MaxPresentationBandwidthRatio       int          `json:"max_presentation_bandwidth_ratio"`
+	MediaPortsEnd                       int          `json:"media_ports_end"`
+	MediaPortsStart                     int          `json:"media_ports_start"`
 	OcspResponderURL                    string       `json:"ocsp_responder_url"`
 	OcspState                           string       `json:"ocsp_state"`
-	PinEntryTimeout                     int         `json:"pin_entry_timeout"`
+	PinEntryTimeout                     int          `json:"pin_entry_timeout"`
 	PssCustomerID                       string       `json:"pss_customer_id"`
-	PssEnabled                          bool        `json:"pss_enabled"`
+	PssEnabled                          bool         `json:"pss_enabled"`
 	PssGateway                          string       `json:"pss_gateway"`
 	PssToken                            string       `json:"pss_token"`
-	SessionTimeoutEnabled               bool        `json:"session_timeout_enabled"`
-	SignallingPortsEnd                  int         `json:"signalling_ports_end"`
-	SignallingPortsStart                int         `json:"signalling_ports_start"`
+	SessionTimeoutEnabled               bool         `json:"session_timeout_enabled"`
+	SignallingPortsEnd                  int          `json:"signalling_ports_end"`
+	SignallingPortsStart                int          `json:"signalling_ports_start"`
 	SipTLSCertVerifyMode                string       `json:"sip_tls_cert_verify_mode"`
 	SiteBanner                          string       `json:"site_banner"`
 	SiteBannerBg                        string       `json:"site_banner_bg"`
 	SiteBannerFg                        string       `json:"site_banner_fg"`
-	TeamsEnablePowerpointRender         bool        `json:"teams_enable_powerpoint_render"`
-	WaitingForChairTimeout              int         `json:"waiting_for_chair_timeout"`
-	GlobalConferenceCreateGroups        []string     `json:"global_conference_create_groups"`
+	TeamsEnablePowerpointRender         bool         `json:"teams_enable_powerpoint_render"`
+	WaitingForChairTimeout              int          `json:"waiting_for_chair_timeout"`
 }

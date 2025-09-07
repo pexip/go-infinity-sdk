@@ -74,7 +74,7 @@ type WorkerVMCreateRequest struct {
 	MaintenanceModeReason      string   `json:"maintenance_mode_reason,omitempty"`
 	SystemLocation             string   `json:"system_location"`
 	AlternativeFQDN            string   `json:"alternative_fqdn,omitempty"`
-	EnableDistributedDatabase  bool     `json:"enable_distributed_database,omitempty"`
+	EnableDistributedDatabase  bool     `json:"enable_distributed_database"`
 	EnableSSH                  string   `json:"enable_ssh,omitempty"`
 	IPv6Address                *string  `json:"ipv6_address,omitempty"`
 	IPv6Gateway                *string  `json:"ipv6_gateway,omitempty"`

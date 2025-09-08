@@ -136,7 +136,7 @@ type GlobalConfigurationUpdateRequest struct {
 	ContentSecurityPolicyState          bool         `json:"content_security_policy_state"`
 	CryptoMode                          string       `json:"crypto_mode"`
 	DefaultTheme                        *string      `json:"default_theme"`
-	DefaultToNewWebapp                  bool        `json:"default_to_new_webapp"`
+	DefaultToNewWebapp                  bool         `json:"default_to_new_webapp"`
 	DefaultWebapp                       string       `json:"default_webapp"`
 	DefaultWebappAlias                  *string      `json:"default_webapp_alias"`
 	DeploymentUUID                      string       `json:"deployment_uuid,omitempty"`

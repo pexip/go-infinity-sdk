@@ -29,8 +29,13 @@ func TestService_ListRoles(t *testing.T) {
 			setup: func(m *interfaces.HTTPClientMock) {
 				expectedResponse := &RoleListResponse{
 					Objects: []Role{
-						{ID: 1, Name: "admin", Permissions: []string{"admin", "user_management"}},
-						{ID: 2, Name: "user", Permissions: []string{"basic_access"}},
+						{ID: 1, Name: "admin", Permissions: []Permission{
+							{Name: "admin"},
+							{Name: "user_management"},
+						}},
+						{ID: 2, Name: "user", Permissions: []Permission{
+							{Name: "basic_access"},
+						}},
 					},
 				}
 				m.On("GetJSON", t.Context(), "configuration/v1/role/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.RoleListResponse")).Return(nil).Run(func(args mock.Arguments) {
@@ -51,7 +56,10 @@ func TestService_ListRoles(t *testing.T) {
 			setup: func(m *interfaces.HTTPClientMock) {
 				expectedResponse := &RoleListResponse{
 					Objects: []Role{
-						{ID: 1, Name: "admin", Permissions: []string{"admin", "user_management"}},
+						{ID: 1, Name: "admin", Permissions: []Permission{
+							{Name: "admin"},
+							{Name: "user_management"},
+						}},
 					},
 				}
 				m.On("GetJSON", t.Context(), "configuration/v1/role/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.RoleListResponse")).Return(nil).Run(func(args mock.Arguments) {
@@ -89,7 +97,11 @@ func TestService_GetRole(t *testing.T) {
 	expectedRole := &Role{
 		ID:          1,
 		Name:        "admin",
-		Permissions: []string{"admin", "user_management", "conference_control"},
+		Permissions: []Permission{
+			{Name: "admin"},
+			{Name: "user_management"},
+			{Name: "conference_control"},
+		},
 		ResourceURI: "/api/admin/configuration/v1/role/1/",
 	}
 
@@ -140,7 +152,11 @@ func TestService_UpdateRole(t *testing.T) {
 	expectedRole := &Role{
 		ID:          1,
 		Name:        "updated-admin",
-		Permissions: []string{"admin", "user_management", "system_control"},
+		Permissions: []Permission{
+			{Name: "admin"},
+			{Name: "user_management"},
+			{Name: "system_control"},
+		},
 		ResourceURI: "/api/admin/configuration/v1/role/1/",
 	}
 

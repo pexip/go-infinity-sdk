@@ -146,7 +146,7 @@ func TestService_UpdateCACertificate(t *testing.T) {
 	trustedIntermediate := false
 	updateRequest := &CACertificateUpdateRequest{
 		Certificate:         "-----BEGIN CERTIFICATE-----\nMIIUpdatedCertificate\n-----END CERTIFICATE-----",
-		TrustedIntermediate: &trustedIntermediate,
+		TrustedIntermediate: trustedIntermediate,
 	}
 
 	keyID := "12:34:56:78:9a:bc:de:f0"
@@ -167,7 +167,7 @@ func TestService_UpdateCACertificate(t *testing.T) {
 		Text:                "Certificate details...",
 	}
 
-	client.On("PutJSON", t.Context(), "configuration/v1/ca_certificate/1/", updateRequest, mock.AnythingOfType("*config.CACertificate")).Return(nil).Run(func(args mock.Arguments) {
+	client.On("PatchJSON", t.Context(), "configuration/v1/ca_certificate/1/", updateRequest, mock.AnythingOfType("*config.CACertificate")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(3).(*CACertificate)
 		*result = *expectedCACertificate
 	})

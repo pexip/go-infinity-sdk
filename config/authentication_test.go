@@ -100,7 +100,7 @@ func TestService_UpdateAuthentication(t *testing.T) {
 		OidcScope:                 "",
 	}
 
-	client.On("PutJSON", t.Context(), "configuration/v1/authentication/1/", updateRequest, mock.AnythingOfType("*config.Authentication")).Return(nil).Run(func(args mock.Arguments) {
+	client.On("PatchJSON", t.Context(), "configuration/v1/authentication/1/", updateRequest, mock.AnythingOfType("*config.Authentication")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(3).(*Authentication)
 		*result = *expectedAuthentication
 	})

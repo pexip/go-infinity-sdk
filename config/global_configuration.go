@@ -24,6 +24,6 @@ func (s *Service) UpdateGlobalConfiguration(ctx context.Context, req *GlobalConf
 	endpoint := "configuration/v1/global/1/"
 
 	var result GlobalConfiguration
-	err := s.client.PutJSON(ctx, endpoint, req, &result)
+	err := s.client.PatchJSON(ctx, endpoint, req, &result)
 	return &result, err
 }

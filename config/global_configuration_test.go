@@ -32,8 +32,7 @@ func TestService_GetGlobalConfiguration(t *testing.T) {
 		GuestsOnlyTimeout:      300,
 		WaitingForChairTimeout: 600,
 		EnableAnalytics:        true,
-		EnableErrorReporting:   false,
-		AdministratorEmail:     "admin@example.com",
+		ErrorReportingEnabled:  false,
 	}
 
 	client.On("GetJSON", t.Context(), "configuration/v1/global/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.GlobalConfiguration")).Return(nil).Run(func(args mock.Arguments) {
@@ -55,23 +54,21 @@ func TestService_UpdateGlobalConfiguration(t *testing.T) {
 	enableAnalytics := false
 	enableWebRTC := true
 	updateRequest := &GlobalConfigurationUpdateRequest{
-		EnableWebRTC:           &enableWebRTC,
-		EnableAnalytics:        &enableAnalytics,
-		AdministratorEmail:     "newemail@example.com",
-		GuestsOnlyTimeout:      intPtr(600),
-		WaitingForChairTimeout: intPtr(900),
+		EnableWebRTC:           enableWebRTC,
+		EnableAnalytics:        enableAnalytics,
+		GuestsOnlyTimeout:      600,
+		WaitingForChairTimeout: 900,
 	}
 
 	expectedConfig := &GlobalConfiguration{
 		ID:                     1,
 		EnableWebRTC:           true,
 		EnableAnalytics:        false,
-		AdministratorEmail:     "newemail@example.com",
 		GuestsOnlyTimeout:      600,
 		WaitingForChairTimeout: 900,
 	}
 
-	client.On("PutJSON", t.Context(), "configuration/v1/global/1/", updateRequest, mock.AnythingOfType("*config.GlobalConfiguration")).Return(nil).Run(func(args mock.Arguments) {
+	client.On("PatchJSON", t.Context(), "configuration/v1/global/1/", updateRequest, mock.AnythingOfType("*config.GlobalConfiguration")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(3).(*GlobalConfiguration)
 		*result = *expectedConfig
 	})

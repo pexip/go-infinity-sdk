@@ -32,7 +32,7 @@ func TestService_GetGlobalConfiguration(t *testing.T) {
 		GuestsOnlyTimeout:      300,
 		WaitingForChairTimeout: 600,
 		EnableAnalytics:        true,
-		ErrorReportingEnabled:   false,
+		ErrorReportingEnabled:  false,
 	}
 
 	client.On("GetJSON", t.Context(), "configuration/v1/global/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.GlobalConfiguration")).Return(nil).Run(func(args mock.Arguments) {
@@ -68,7 +68,7 @@ func TestService_UpdateGlobalConfiguration(t *testing.T) {
 		WaitingForChairTimeout: 900,
 	}
 
-	client.On("PutJSON", t.Context(), "configuration/v1/global/1/", updateRequest, mock.AnythingOfType("*config.GlobalConfiguration")).Return(nil).Run(func(args mock.Arguments) {
+	client.On("PatchJSON", t.Context(), "configuration/v1/global/1/", updateRequest, mock.AnythingOfType("*config.GlobalConfiguration")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(3).(*GlobalConfiguration)
 		*result = *expectedConfig
 	})

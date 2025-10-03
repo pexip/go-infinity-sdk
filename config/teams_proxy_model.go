@@ -29,25 +29,25 @@ type TeamsProxyCreateRequest struct {
 	Name                 string  `json:"name"`
 	Description          string  `json:"description,omitempty"`
 	Address              string  `json:"address"`
-	Port                 int     `json:"port"`
+	Port                 int     `json:"port,omitempty"`
 	AzureTenant          string  `json:"azure_tenant"`
 	EventhubID           *string `json:"eventhub_id,omitempty"`
-	MinNumberOfInstances int     `json:"min_number_of_instances"`
-	NotificationsEnabled bool    `json:"notifications_enabled"`
+	MinNumberOfInstances int     `json:"min_number_of_instances,omitempty"`
+	NotificationsEnabled bool    `json:"notifications_enabled,omitempty"`
 	NotificationsQueue   *string `json:"notifications_queue,omitempty"`
 }
 
 // TeamsProxyUpdateRequest represents a request to update a Teams proxy
 type TeamsProxyUpdateRequest struct {
 	Name                 string  `json:"name,omitempty"`
-	Description          string  `json:"description,omitempty"`
-	Address              string  `json:"address,omitempty"`
-	Port                 *int    `json:"port,omitempty"`
+	Description          string  `json:"description"`
+	Address              string  `json:"address"`
+	Port                 *int    `json:"port"`
 	AzureTenant          string  `json:"azure_tenant,omitempty"`
-	EventhubID           *string `json:"eventhub_id,omitempty"`
-	MinNumberOfInstances *int    `json:"min_number_of_instances,omitempty"`
-	NotificationsEnabled *bool   `json:"notifications_enabled,omitempty"`
-	NotificationsQueue   *string `json:"notifications_queue,omitempty"`
+	EventhubID           *string `json:"eventhub_id"`
+	MinNumberOfInstances *int    `json:"min_number_of_instances"`
+	NotificationsEnabled *bool   `json:"notifications_enabled"`
+	NotificationsQueue   *string `json:"notifications_queue"`
 }
 
 // TeamsProxyListResponse represents the response from listing Teams proxies

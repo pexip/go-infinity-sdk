@@ -10,27 +10,27 @@ import "github.com/pexip/go-infinity-sdk/v38/util"
 
 // TeamsProxy represents a Teams proxy configuration
 type TeamsProxy struct {
-	ID                   int                `json:"id,omitempty"`
+	ID                   int                `json:"id"`
 	Name                 string             `json:"name"`
 	Description          string             `json:"description,omitempty"`
 	Address              string             `json:"address"`
-	Port                 int                `json:"port"`
+	Port                 int                `json:"port,omitempty"`
 	AzureTenant          string             `json:"azure_tenant"`
 	EventhubID           *string            `json:"eventhub_id,omitempty"`
-	MinNumberOfInstances int                `json:"min_number_of_instances"`
-	NotificationsEnabled bool               `json:"notifications_enabled"`
+	MinNumberOfInstances int                `json:"min_number_of_instances,omitempty"`
+	NotificationsEnabled bool               `json:"notifications_enabled,omitempty"`
 	NotificationsQueue   *string            `json:"notifications_queue,omitempty"`
 	Updated              *util.InfinityTime `json:"updated,omitempty"`
-	ResourceURI          string             `json:"resource_uri,omitempty"`
+	ResourceURI          string             `json:"resource_uri"`
 }
 
 // TeamsProxyCreateRequest represents a request to create a Teams proxy
 type TeamsProxyCreateRequest struct {
-	Name                 string  `json:"name,omitempty"`
+	Name                 string  `json:"name"`
 	Description          string  `json:"description"`
 	Address              string  `json:"address"`
 	Port                 int     `json:"port"`
-	AzureTenant          string  `json:"azure_tenant,omitempty"`
+	AzureTenant          string  `json:"azure_tenant"`
 	EventhubID           *string `json:"eventhub_id"`
 	MinNumberOfInstances int     `json:"min_number_of_instances"`
 	NotificationsEnabled bool    `json:"notifications_enabled"`
@@ -39,11 +39,11 @@ type TeamsProxyCreateRequest struct {
 
 // TeamsProxyUpdateRequest represents a request to update a Teams proxy
 type TeamsProxyUpdateRequest struct {
-	Name                 string  `json:"name,omitempty"`
+	Name                 string  `json:"name"`
 	Description          string  `json:"description"`
 	Address              string  `json:"address"`
 	Port                 int     `json:"port"`
-	AzureTenant          string  `json:"azure_tenant,omitempty"`
+	AzureTenant          string  `json:"azure_tenant"`
 	EventhubID           *string `json:"eventhub_id"`
 	MinNumberOfInstances int     `json:"min_number_of_instances"`
 	NotificationsEnabled bool    `json:"notifications_enabled"`

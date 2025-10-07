@@ -163,15 +163,11 @@ func TestService_CreateTeamsProxy(t *testing.T) {
 func TestService_UpdateTeamsProxy(t *testing.T) {
 	client := interfaces.NewHTTPClientMock()
 
-	port := 8444
-	minInstances := 4
-	notificationsEnabled := false
-
 	updateRequest := &TeamsProxyUpdateRequest{
 		Description:          "Updated Teams proxy",
-		Port:                 &port,
-		MinNumberOfInstances: &minInstances,
-		NotificationsEnabled: &notificationsEnabled,
+		Port:                 8444,
+		MinNumberOfInstances: 4,
+		NotificationsEnabled: false,
 	}
 
 	updated := &util.InfinityTime{}

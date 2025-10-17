@@ -13,7 +13,7 @@ type IVRTheme struct {
 	ID             int               `json:"id,omitempty"`
 	Name           string            `json:"name"`
 	Package        string            `json:"package"`
-	UUID           string            `json:"uuid"`
+	UUID           string            `json:"uuid,omitempty"`
 	Conference     []string          `json:"conference,omitempty"`
 	CustomLayouts  string            `json:"custom_layouts,omitempty"`
 	PinningConfigs string            `json:"pinning_configs,omitempty"`
@@ -25,7 +25,7 @@ type IVRTheme struct {
 type IVRThemeCreateRequest struct {
 	Name           string   `json:"name"`
 	Package        string   `json:"package"`
-	UUID           string   `json:"uuid"`
+	UUID           string   `json:"uuid,omitempty"`
 	Conference     []string `json:"conference,omitempty"`
 	CustomLayouts  string   `json:"custom_layouts,omitempty"`
 	PinningConfigs string   `json:"pinning_configs,omitempty"`

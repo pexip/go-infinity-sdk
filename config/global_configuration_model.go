@@ -31,7 +31,7 @@ type GlobalConfiguration struct {
 	ContentSecurityPolicyHeader         string       `json:"content_security_policy_header,omitempty"`
 	ContentSecurityPolicyState          bool         `json:"content_security_policy_state,omitempty"`
 	CryptoMode                          string       `json:"crypto_mode,omitempty"`
-	DefaultTheme                        *string      `json:"default_theme,omitempty"`
+	DefaultTheme                        *IVRTheme    `json:"default_theme,omitempty"`
 	DefaultToNewWebapp                  bool         `json:"default_to_new_webapp,omitempty"`
 	DefaultWebapp                       string       `json:"default_webapp,omitempty"`
 	DefaultWebappAlias                  *string      `json:"default_webapp_alias,omitempty"`
@@ -135,7 +135,7 @@ type GlobalConfigurationUpdateRequest struct {
 	ContentSecurityPolicyHeader         string       `json:"content_security_policy_header"`
 	ContentSecurityPolicyState          bool         `json:"content_security_policy_state"`
 	CryptoMode                          string       `json:"crypto_mode"`
-	DefaultTheme                        *string      `json:"default_theme"`
+	DefaultTheme                        *IVRTheme    `json:"default_theme"`
 	DefaultToNewWebapp                  bool         `json:"default_to_new_webapp"`
 	DefaultWebapp                       string       `json:"default_webapp"`
 	DefaultWebappAlias                  *string      `json:"default_webapp_alias"`

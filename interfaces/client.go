@@ -10,6 +10,7 @@ package interfaces
 
 import (
 	"context"
+	"io"
 	"net/url"
 
 	"github.com/pexip/go-infinity-sdk/v38/types"
@@ -32,6 +33,15 @@ type HTTPClient interface {
 
 	// DeleteJSON performs a DELETE request and unmarshals the JSON response
 	DeleteJSON(ctx context.Context, endpoint string, result interface{}) error
+
+	// PostFile performs a POST request with a file upload
+	PostFile(ctx context.Context, endpoint string, fieldName, filename string, file io.Reader, result interface{}) error
+
+	// PutFile performs a PUT request with a file upload
+	PutFile(ctx context.Context, endpoint string, fieldName, filename string, file io.Reader, result interface{}) error
+
+	// PatchFile performs a PATCH request with a file upload
+	PatchFile(ctx context.Context, endpoint string, fieldName, filename string, file io.Reader, result interface{}) error
 
 	// PostWithResponse performs a POST request and returns both the response body and location header
 	PostWithResponse(ctx context.Context, endpoint string, body interface{}, result interface{}) (*types.PostResponse, error)

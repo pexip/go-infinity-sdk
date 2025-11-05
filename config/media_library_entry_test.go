@@ -7,6 +7,7 @@
 package config
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/pexip/go-infinity-sdk/v38/interfaces"
@@ -29,8 +30,8 @@ func TestService_ListMediaLibraryEntries(t *testing.T) {
 			setup: func(m *interfaces.HTTPClientMock) {
 				expectedResponse := &MediaLibraryEntryListResponse{
 					Objects: []MediaLibraryEntry{
-						{ID: 1, Name: "welcome-video", Description: "Welcome video for conferences", UUID: "123e4567-e89b-12d3-a456-426614174000", FileName: "welcome.mp4", MediaType: "video", MediaFormat: "video/mp4", MediaSize: 1048576, MediaFile: "/media/welcome.mp4"},
-						{ID: 2, Name: "hold-music", Description: "Music on hold", UUID: "123e4567-e89b-12d3-a456-426614174001", FileName: "hold.mp3", MediaType: "audio", MediaFormat: "audio/mpeg", MediaSize: 512000, MediaFile: "/media/hold.mp3"},
+						{ID: 1, Name: "welcome-video", Description: "Welcome video for conferences", UUID: "123e4567-e89b-12d3-a456-426614174000", FileName: "welcome.mp4", MediaType: "video", MediaFormat: "video/mp4", MediaSize: 1048576},
+						{ID: 2, Name: "hold-music", Description: "Music on hold", UUID: "123e4567-e89b-12d3-a456-426614174001", FileName: "hold.mp3", MediaType: "audio", MediaFormat: "audio/mpeg", MediaSize: 512000},
 					},
 				}
 				m.On("GetJSON", t.Context(), "configuration/v1/media_library_entry/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MediaLibraryEntryListResponse")).Return(nil).Run(func(args mock.Arguments) {
@@ -51,7 +52,7 @@ func TestService_ListMediaLibraryEntries(t *testing.T) {
 			setup: func(m *interfaces.HTTPClientMock) {
 				expectedResponse := &MediaLibraryEntryListResponse{
 					Objects: []MediaLibraryEntry{
-						{ID: 1, Name: "welcome-video", Description: "Welcome video for conferences", UUID: "123e4567-e89b-12d3-a456-426614174000", FileName: "welcome.mp4", MediaType: "video", MediaFormat: "video/mp4", MediaSize: 1048576, MediaFile: "/media/welcome.mp4"},
+						{ID: 1, Name: "welcome-video", Description: "Welcome video for conferences", UUID: "123e4567-e89b-12d3-a456-426614174000", FileName: "welcome.mp4", MediaType: "video", MediaFormat: "video/mp4", MediaSize: 1048576},
 					},
 				}
 				m.On("GetJSON", t.Context(), "configuration/v1/media_library_entry/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MediaLibraryEntryListResponse")).Return(nil).Run(func(args mock.Arguments) {
@@ -95,7 +96,6 @@ func TestService_GetMediaLibraryEntry(t *testing.T) {
 		MediaType:   "video",
 		MediaFormat: "video/mp4",
 		MediaSize:   2048000,
-		MediaFile:   "/media/test.mp4",
 	}
 
 	client.On("GetJSON", t.Context(), "configuration/v1/media_library_entry/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MediaLibraryEntry")).Return(nil).Run(func(args mock.Arguments) {
@@ -114,11 +114,11 @@ func TestService_GetMediaLibraryEntry(t *testing.T) {
 func TestService_CreateMediaLibraryEntry(t *testing.T) {
 	client := interfaces.NewHTTPClientMock()
 
+	mediaContent := strings.NewReader("mock media content")
 	createRequest := &MediaLibraryEntryCreateRequest{
 		Name:        "new-media",
 		Description: "New media file",
 		UUID:        "123e4567-e89b-12d3-a456-426614174002",
-		MediaFile:   "/uploads/new.mp4",
 	}
 
 	expectedResponse := &types.PostResponse{
@@ -129,7 +129,7 @@ func TestService_CreateMediaLibraryEntry(t *testing.T) {
 	client.On("PostWithResponse", t.Context(), "configuration/v1/media_library_entry/", createRequest, nil).Return(expectedResponse, nil)
 
 	service := New(client)
-	result, err := service.CreateMediaLibraryEntry(t.Context(), createRequest)
+	result, err := service.CreateMediaLibraryEntry(t.Context(), createRequest, "new_media.mp4", mediaContent)
 
 	assert.NoError(t, err)
 	assert.Equal(t, expectedResponse, result)
@@ -141,9 +141,9 @@ func TestService_UpdateMediaLibraryEntry(t *testing.T) {
 
 	updateRequest := &MediaLibraryEntryUpdateRequest{
 		Description: "Updated media file",
-		MediaFile:   "/media/updated.mp4",
 	}
 
+	mediaContent := strings.NewReader("mock updated media content")
 	expectedMediaLibraryEntry := &MediaLibraryEntry{
 		ID:          1,
 		Name:        "test-media",
@@ -153,7 +153,6 @@ func TestService_UpdateMediaLibraryEntry(t *testing.T) {
 		MediaType:   "video",
 		MediaFormat: "video/mp4",
 		MediaSize:   2048000,
-		MediaFile:   "/media/updated.mp4",
 	}
 
 	client.On("PutJSON", t.Context(), "configuration/v1/media_library_entry/1/", updateRequest, mock.AnythingOfType("*config.MediaLibraryEntry")).Return(nil).Run(func(args mock.Arguments) {
@@ -162,7 +161,7 @@ func TestService_UpdateMediaLibraryEntry(t *testing.T) {
 	})
 
 	service := New(client)
-	result, err := service.UpdateMediaLibraryEntry(t.Context(), 1, updateRequest)
+	result, err := service.UpdateMediaLibraryEntry(t.Context(), 1, updateRequest, "updated_media.mp4", mediaContent)
 
 	assert.NoError(t, err)
 	assert.Equal(t, expectedMediaLibraryEntry, result)

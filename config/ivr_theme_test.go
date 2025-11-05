@@ -7,6 +7,7 @@
 package config
 
 import (
+	"strings"
 	"testing"
 	"time"
 
@@ -33,10 +34,9 @@ func TestService_ListIVRThemes(t *testing.T) {
 				expectedResponse := &IVRThemeListResponse{
 					Objects: []IVRTheme{
 						{
-							ID:      1,
-							Name:    "default-theme",
-							Package: "default_package.tar.gz",
-							UUID:    "12345678-1234-5678-9abc-123456789012",
+							ID:   1,
+							Name: "default-theme",
+							UUID: "12345678-1234-5678-9abc-123456789012",
 							Conference: []string{
 								"/api/admin/configuration/v1/conference/1/",
 								"/api/admin/configuration/v1/conference/2/",
@@ -48,7 +48,6 @@ func TestService_ListIVRThemes(t *testing.T) {
 						{
 							ID:             2,
 							Name:           "custom-theme",
-							Package:        "custom_package.tar.gz",
 							UUID:           "87654321-4321-8765-cbaf-987654321098",
 							Conference:     []string{},
 							CustomLayouts:  `{"layout2": "config2"}`,
@@ -77,10 +76,9 @@ func TestService_ListIVRThemes(t *testing.T) {
 				expectedResponse := &IVRThemeListResponse{
 					Objects: []IVRTheme{
 						{
-							ID:      1,
-							Name:    "default-theme",
-							Package: "default_package.tar.gz",
-							UUID:    "12345678-1234-5678-9abc-123456789012",
+							ID:   1,
+							Name: "default-theme",
+							UUID: "12345678-1234-5678-9abc-123456789012",
 							Conference: []string{
 								"/api/admin/configuration/v1/conference/1/",
 								"/api/admin/configuration/v1/conference/2/",
@@ -125,10 +123,9 @@ func TestService_GetIVRTheme(t *testing.T) {
 	client := interfaces.NewHTTPClientMock()
 	lastUpdated := util.InfinityTime{Time: time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC)}
 	expectedTheme := &IVRTheme{
-		ID:      1,
-		Name:    "test-theme",
-		Package: "test_package.tar.gz",
-		UUID:    "12345678-1234-5678-9abc-123456789012",
+		ID:   1,
+		Name: "test-theme",
+		UUID: "12345678-1234-5678-9abc-123456789012",
 		Conference: []string{
 			"/api/admin/configuration/v1/conference/1/",
 		},
@@ -154,10 +151,10 @@ func TestService_GetIVRTheme(t *testing.T) {
 func TestService_CreateIVRTheme(t *testing.T) {
 	client := interfaces.NewHTTPClientMock()
 
+	packageContent := strings.NewReader("mock package content")
 	createRequest := &IVRThemeCreateRequest{
-		Name:    "new-theme",
-		Package: "new_package.tar.gz",
-		UUID:    "new12345-1234-5678-9abc-123456789012",
+		Name: "new-theme",
+		UUID: "new12345-1234-5678-9abc-123456789012",
 		Conference: []string{
 			"/api/admin/configuration/v1/conference/3/",
 		},
@@ -170,10 +167,14 @@ func TestService_CreateIVRTheme(t *testing.T) {
 		ResourceURI: "/api/admin/configuration/v1/ivr_theme/123/",
 	}
 
-	client.On("PostWithResponse", t.Context(), "configuration/v1/ivr_theme/", createRequest, nil).Return(expectedResponse, nil)
+	// Expect first call: POST with JSON data only (no file)
+	client.On("PostWithResponse", t.Context(), "configuration/v1/ivr_theme/", mock.Anything, mock.Anything).Return(expectedResponse, nil)
+
+	// Expect second call: PUT multipart with the package file
+	client.On("PutMultipart", t.Context(), "configuration/v1/ivr_theme/123/", mock.Anything, mock.AnythingOfType("map[string]interfaces.MultipartField"), mock.AnythingOfType("*config.IVRTheme")).Return(nil)
 
 	service := New(client)
-	result, err := service.CreateIVRTheme(t.Context(), createRequest)
+	result, err := service.CreateIVRTheme(t.Context(), createRequest, "new_package.tar.gz", packageContent)
 
 	assert.NoError(t, err)
 	assert.Equal(t, expectedResponse, result)
@@ -183,9 +184,9 @@ func TestService_CreateIVRTheme(t *testing.T) {
 func TestService_UpdateIVRTheme(t *testing.T) {
 	client := interfaces.NewHTTPClientMock()
 
+	packageContent := strings.NewReader("mock updated package content")
 	updateRequest := &IVRThemeUpdateRequest{
-		Name:    "updated-theme",
-		Package: "updated_package.tar.gz",
+		Name: "updated-theme",
 		Conference: []string{
 			"/api/admin/configuration/v1/conference/1/",
 			"/api/admin/configuration/v1/conference/4/",
@@ -195,10 +196,9 @@ func TestService_UpdateIVRTheme(t *testing.T) {
 
 	lastUpdated := util.InfinityTime{Time: time.Date(2024, 1, 2, 12, 0, 0, 0, time.UTC)}
 	expectedTheme := &IVRTheme{
-		ID:      1,
-		Name:    "updated-theme",
-		Package: "updated_package.tar.gz",
-		UUID:    "12345678-1234-5678-9abc-123456789012",
+		ID:   1,
+		Name: "updated-theme",
+		UUID: "12345678-1234-5678-9abc-123456789012",
 		Conference: []string{
 			"/api/admin/configuration/v1/conference/1/",
 			"/api/admin/configuration/v1/conference/4/",
@@ -209,13 +209,13 @@ func TestService_UpdateIVRTheme(t *testing.T) {
 		ResourceURI:    "/api/admin/configuration/v1/ivr_theme/1/",
 	}
 
-	client.On("PutJSON", t.Context(), "configuration/v1/ivr_theme/1/", updateRequest, mock.AnythingOfType("*config.IVRTheme")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(3).(*IVRTheme)
+	client.On("PutMultipart", t.Context(), "configuration/v1/ivr_theme/1/", mock.AnythingOfType("map[string]interface {}"), mock.AnythingOfType("map[string]interfaces.MultipartField"), mock.AnythingOfType("*config.IVRTheme")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(4).(*IVRTheme)
 		*result = *expectedTheme
 	})
 
 	service := New(client)
-	result, err := service.UpdateIVRTheme(t.Context(), 1, updateRequest)
+	result, err := service.UpdateIVRTheme(t.Context(), 1, updateRequest, "updated_package.tar.gz", packageContent)
 
 	assert.NoError(t, err)
 	assert.Equal(t, expectedTheme, result)

@@ -9,6 +9,7 @@ package config
 import (
 	"context"
 	"fmt"
+	"io"
 	"net/url"
 
 	"github.com/pexip/go-infinity-sdk/v38/types"
@@ -39,17 +40,40 @@ func (s *Service) GetMediaLibraryEntry(ctx context.Context, id int) (*MediaLibra
 }
 
 // CreateMediaLibraryEntry creates a new media library entry
-func (s *Service) CreateMediaLibraryEntry(ctx context.Context, req *MediaLibraryEntryCreateRequest) (*types.PostResponse, error) {
+func (s *Service) CreateMediaLibraryEntry(ctx context.Context, req *MediaLibraryEntryCreateRequest, filename string, file io.Reader) (*types.PostResponse, error) {
 	endpoint := "configuration/v1/media_library_entry/"
-	return s.client.PostWithResponse(ctx, endpoint, req, nil)
+	resp, err := s.client.PostWithResponse(ctx, endpoint, req, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	// Extract ID from resource URI (e.g., "/api/admin/configuration/v1/media_library_entry/123/" -> 123)
+	id, err := resp.ResourceID()
+	if err != nil {
+		return resp, fmt.Errorf("failed to parse ID from resource URI: %w", err)
+	}
+
+	// Upload the media file
+	if err = s.client.PutFile(ctx, fmt.Sprintf("%s/%d/", endpoint, id), "MediaFile", filename, file, nil); err != nil {
+		return resp, fmt.Errorf("failed to upload media file: %w", err)
+	}
+	return resp, nil
 }
 
 // UpdateMediaLibraryEntry updates an existing media library entry
-func (s *Service) UpdateMediaLibraryEntry(ctx context.Context, id int, req *MediaLibraryEntryUpdateRequest) (*MediaLibraryEntry, error) {
+func (s *Service) UpdateMediaLibraryEntry(ctx context.Context, id int, req *MediaLibraryEntryUpdateRequest, filename string, file io.Reader) (*MediaLibraryEntry, error) {
 	endpoint := fmt.Sprintf("configuration/v1/media_library_entry/%d/", id)
 
 	var result MediaLibraryEntry
 	err := s.client.PutJSON(ctx, endpoint, req, &result)
+	if err != nil {
+		return nil, err
+	}
+
+	// Upload the media file
+	if err = s.client.PutFile(ctx, fmt.Sprintf("%s/%d/", endpoint, id), "MediaFile", filename, file, nil); err != nil {
+		return &result, fmt.Errorf("failed to upload media file: %w", err)
+	}
 	return &result, err
 }
 

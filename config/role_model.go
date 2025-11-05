@@ -8,10 +8,10 @@ package config
 
 // Role represents a role configuration
 type Role struct {
-	ID          int      `json:"id,omitempty"`
-	Name        string   `json:"name"`
+	ID          int          `json:"id,omitempty"`
+	Name        string       `json:"name"`
 	Permissions []Permission `json:"permissions,omitempty"`
-	ResourceURI string   `json:"resource_uri,omitempty"`
+	ResourceURI string       `json:"resource_uri,omitempty"`
 }
 
 // RoleCreateRequest represents a request to create a role

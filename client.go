@@ -16,6 +16,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"io"
+	"mime/multipart"
 	"net/http"
 	"net/url"
 	"strings"
@@ -306,6 +307,48 @@ func (c *Client) PostWithResponse(ctx context.Context, endpoint string, body int
 	}
 
 	return postResp, nil
+}
+
+func (c *Client) PutFile(ctx context.Context, endpoint string, fieldname string, filename string, fileContent io.Reader, result interface{}) error {
+	body, err := c.createRequestBodyFromFile(fieldname, filename, fileContent)
+	if err != nil {
+		return err
+	}
+	return c.PutJSON(ctx, endpoint, &body, result)
+}
+
+func (c *Client) PatchFile(ctx context.Context, endpoint string, fieldname string, filename string, fileContent io.Reader, result interface{}) error {
+	body, err := c.createRequestBodyFromFile(fieldname, filename, fileContent)
+	if err != nil {
+		return err
+	}
+	return c.PatchJSON(ctx, endpoint, &body, result)
+}
+
+func (c *Client) PostFile(ctx context.Context, endpoint string, fieldname string, filename string, fileContent io.Reader, result interface{}) error {
+	body, err := c.createRequestBodyFromFile(fieldname, filename, fileContent)
+	if err != nil {
+		return err
+	}
+	return c.PostJSON(ctx, endpoint, &body, result)
+}
+
+func (c *Client) createRequestBodyFromFile(fieldname string, filename string, fileContent io.Reader) (io.Reader, error) {
+	var body bytes.Buffer
+	w := multipart.NewWriter(&body)
+
+	part, err := w.CreateFormFile(fieldname, filename)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create form file: %w", err)
+	}
+	if _, err = io.Copy(part, fileContent); err != nil {
+		return nil, fmt.Errorf("failed to write file content: %w", err)
+	}
+	if err = w.Close(); err != nil {
+		return nil, fmt.Errorf("failed to close multipart writer: %w", err)
+	}
+
+	return &body, nil
 }
 
 func (c *Client) performJSONRequest(ctx context.Context, method string, endpoint string, requestBody interface{}, result interface{}) error {

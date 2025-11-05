@@ -127,6 +127,7 @@ func TestService_CreateMediaLibraryEntry(t *testing.T) {
 	}
 
 	client.On("PostWithResponse", t.Context(), "configuration/v1/media_library_entry/", createRequest, nil).Return(expectedResponse, nil)
+	client.On("PutFile", t.Context(), "configuration/v1/media_library_entry//123/", "MediaFile", "new_media.mp4", mediaContent, mock.Anything).Return(nil)
 
 	service := New(client)
 	result, err := service.CreateMediaLibraryEntry(t.Context(), createRequest, "new_media.mp4", mediaContent)
@@ -159,6 +160,7 @@ func TestService_UpdateMediaLibraryEntry(t *testing.T) {
 		result := args.Get(3).(*MediaLibraryEntry)
 		*result = *expectedMediaLibraryEntry
 	})
+	client.On("PutFile", t.Context(), "configuration/v1/media_library_entry/1//1/", "MediaFile", "updated_media.mp4", mediaContent, mock.Anything).Return(nil)
 
 	service := New(client)
 	result, err := service.UpdateMediaLibraryEntry(t.Context(), 1, updateRequest, "updated_media.mp4", mediaContent)

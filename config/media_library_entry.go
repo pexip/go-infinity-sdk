@@ -54,7 +54,7 @@ func (s *Service) CreateMediaLibraryEntry(ctx context.Context, req *MediaLibrary
 	}
 
 	// Upload the media file
-	if err = s.client.PutFile(ctx, fmt.Sprintf("%s/%d/", endpoint, id), "MediaFile", filename, file, nil); err != nil {
+	if err = s.client.PatchFile(ctx, fmt.Sprintf("%s/%d/", endpoint, id), "MediaFile", filename, file, nil); err != nil {
 		return resp, fmt.Errorf("failed to upload media file: %w", err)
 	}
 	return resp, nil
@@ -71,7 +71,7 @@ func (s *Service) UpdateMediaLibraryEntry(ctx context.Context, id int, req *Medi
 	}
 
 	// Upload the media file
-	if err = s.client.PutFile(ctx, fmt.Sprintf("%s/%d/", endpoint, id), "MediaFile", filename, file, nil); err != nil {
+	if err = s.client.PatchFile(ctx, endpoint, "MediaFile", filename, file, nil); err != nil {
 		return &result, fmt.Errorf("failed to upload media file: %w", err)
 	}
 	return &result, err

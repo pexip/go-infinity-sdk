@@ -65,13 +65,13 @@ func (s *Service) UpdateIVRTheme(ctx context.Context, id int, req *IVRThemeUpdat
 	endpoint := fmt.Sprintf("configuration/v1/ivr_theme/%d/", id)
 
 	var result IVRTheme
-	err := s.client.PutJSON(ctx, endpoint, req, &result)
+	err := s.client.PatchJSON(ctx, endpoint, req, &result)
 	if err != nil {
 		return nil, err
 	}
 
 	// Upload the package file
-	if err = s.client.PatchFile(ctx, fmt.Sprintf("%s/%d/", endpoint, id), "package", filename, file, nil); err != nil {
+	if err = s.client.PatchFile(ctx, endpoint, "package", filename, file, nil); err != nil {
 		return &result, fmt.Errorf("failed to upload package file: %w", err)
 	}
 	return &result, err

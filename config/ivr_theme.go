@@ -54,7 +54,7 @@ func (s *Service) CreateIVRTheme(ctx context.Context, req *IVRThemeCreateRequest
 	}
 
 	// Upload the package file
-	if err = s.client.PutFile(ctx, fmt.Sprintf("%s/%d/", endpoint, id), "package", filename, file, nil); err != nil {
+	if err = s.client.PatchFile(ctx, fmt.Sprintf("%s/%d/", endpoint, id), "package", filename, file, nil); err != nil {
 		return resp, fmt.Errorf("failed to upload package file: %w", err)
 	}
 	return resp, nil
@@ -71,7 +71,7 @@ func (s *Service) UpdateIVRTheme(ctx context.Context, id int, req *IVRThemeUpdat
 	}
 
 	// Upload the package file
-	if err = s.client.PutFile(ctx, fmt.Sprintf("%s/%d/", endpoint, id), "package", filename, file, nil); err != nil {
+	if err = s.client.PatchFile(ctx, fmt.Sprintf("%s/%d/", endpoint, id), "package", filename, file, nil); err != nil {
 		return &result, fmt.Errorf("failed to upload package file: %w", err)
 	}
 	return &result, err

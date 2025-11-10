@@ -8,6 +8,7 @@ package infinity
 
 import (
 	"context"
+	"io"
 	"net/url"
 
 	"github.com/pexip/go-infinity-sdk/v38/command"
@@ -95,4 +96,19 @@ func (m *ClientMock) PostWithResponse(ctx context.Context, endpoint string, body
 		return nil, args.Error(1)
 	}
 	return args.Get(0).(*types.PostResponse), args.Error(1)
+}
+
+func (m *ClientMock) PutFile(ctx context.Context, endpoint string, fieldName string, filename string, file io.Reader, result interface{}) error {
+	args := m.Called(ctx, endpoint, fieldName, filename, file, result)
+	return args.Error(0)
+}
+
+func (m *ClientMock) PostFile(ctx context.Context, endpoint string, fieldName string, filename string, file io.Reader, result interface{}) error {
+	args := m.Called(ctx, endpoint, fieldName, filename, file, result)
+	return args.Error(0)
+}
+
+func (m *ClientMock) PatchFile(ctx context.Context, endpoint string, fieldName string, filename string, file io.Reader, result interface{}) error {
+	args := m.Called(ctx, endpoint, fieldName, filename, file, result)
+	return args.Error(0)
 }

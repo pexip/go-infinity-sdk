@@ -16,7 +16,6 @@ type MediaLibraryEntry struct {
 	MediaType   string `json:"media_type,omitempty"`
 	MediaFormat string `json:"media_format,omitempty"`
 	MediaSize   int    `json:"media_size,omitempty"`
-	MediaFile   string `json:"media_file,omitempty"`
 	ResourceURI string `json:"resource_uri,omitempty"`
 }
 
@@ -25,7 +24,6 @@ type MediaLibraryEntryCreateRequest struct {
 	Name        string `json:"name"`
 	Description string `json:"description,omitempty"`
 	UUID        string `json:"uuid,omitempty"`
-	MediaFile   string `json:"media_file"`
 }
 
 // MediaLibraryEntryUpdateRequest represents a request to update a media library entry
@@ -33,7 +31,6 @@ type MediaLibraryEntryUpdateRequest struct {
 	Name        string `json:"name,omitempty"`
 	Description string `json:"description,omitempty"`
 	UUID        string `json:"uuid,omitempty"`
-	MediaFile   string `json:"media_file,omitempty"`
 }
 
 // MediaLibraryEntryListResponse represents the response from listing media library entries

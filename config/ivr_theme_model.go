@@ -6,13 +6,14 @@
 
 package config
 
-import "github.com/pexip/go-infinity-sdk/v38/util"
+import (
+	"github.com/pexip/go-infinity-sdk/v38/util"
+)
 
 // IVRTheme represents an IVR theme configuration
 type IVRTheme struct {
 	ID             int               `json:"id,omitempty"`
 	Name           string            `json:"name"`
-	Package        string            `json:"package"`
 	UUID           string            `json:"uuid,omitempty"`
 	Conference     []string          `json:"conference,omitempty"`
 	CustomLayouts  string            `json:"custom_layouts,omitempty"`
@@ -24,7 +25,6 @@ type IVRTheme struct {
 // IVRThemeCreateRequest represents a request to create an IVR theme
 type IVRThemeCreateRequest struct {
 	Name           string   `json:"name"`
-	Package        string   `json:"package"`
 	UUID           string   `json:"uuid,omitempty"`
 	Conference     []string `json:"conference,omitempty"`
 	CustomLayouts  string   `json:"custom_layouts,omitempty"`
@@ -34,7 +34,6 @@ type IVRThemeCreateRequest struct {
 // IVRThemeUpdateRequest represents a request to update an IVR theme
 type IVRThemeUpdateRequest struct {
 	Name           string   `json:"name,omitempty"`
-	Package        string   `json:"package,omitempty"`
 	UUID           string   `json:"uuid,omitempty"`
 	Conference     []string `json:"conference,omitempty"`
 	CustomLayouts  string   `json:"custom_layouts,omitempty"`

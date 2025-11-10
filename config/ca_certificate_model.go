@@ -37,7 +37,7 @@ type CACertificateCreateRequest struct {
 // CACertificateUpdateRequest represents a request to update a CA certificate
 type CACertificateUpdateRequest struct {
 	Certificate         string `json:"certificate,omitempty"`
-	TrustedIntermediate bool  `json:"trusted_intermediate"`
+	TrustedIntermediate bool   `json:"trusted_intermediate"`
 }
 
 // CACertificateListResponse represents the response from listing CA certificates

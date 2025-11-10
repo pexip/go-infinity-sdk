@@ -8,6 +8,7 @@ package interfaces
 
 import (
 	"context"
+	"io"
 	"net/url"
 
 	"github.com/pexip/go-infinity-sdk/v38/types"
@@ -57,6 +58,21 @@ func (m *HTTPClientMock) PostWithResponse(ctx context.Context, endpoint string, 
 		return nil, args.Error(1)
 	}
 	return resp.(*types.PostResponse), args.Error(1)
+}
+
+func (m *HTTPClientMock) PutFile(ctx context.Context, endpoint string, fieldName string, filename string, file io.Reader, result interface{}) error {
+	args := m.Called(ctx, endpoint, fieldName, filename, file, result)
+	return args.Error(0)
+}
+
+func (m *HTTPClientMock) PostFile(ctx context.Context, endpoint string, fieldName string, filename string, file io.Reader, result interface{}) error {
+	args := m.Called(ctx, endpoint, fieldName, filename, file, result)
+	return args.Error(0)
+}
+
+func (m *HTTPClientMock) PatchFile(ctx context.Context, endpoint string, fieldName string, filename string, file io.Reader, result interface{}) error {
+	args := m.Called(ctx, endpoint, fieldName, filename, file, result)
+	return args.Error(0)
 }
 
 // NewHTTPClientMock creates a new mock HTTP client

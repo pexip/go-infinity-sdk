@@ -95,8 +95,8 @@ func TestService_ListRoles(t *testing.T) {
 func TestService_GetRole(t *testing.T) {
 	client := interfaces.NewHTTPClientMock()
 	expectedRole := &Role{
-		ID:          1,
-		Name:        "admin",
+		ID:   1,
+		Name: "admin",
 		Permissions: []Permission{
 			{Name: "admin"},
 			{Name: "user_management"},
@@ -150,8 +150,8 @@ func TestService_UpdateRole(t *testing.T) {
 	}
 
 	expectedRole := &Role{
-		ID:          1,
-		Name:        "updated-admin",
+		ID:   1,
+		Name: "updated-admin",
 		Permissions: []Permission{
 			{Name: "admin"},
 			{Name: "user_management"},

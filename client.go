@@ -16,6 +16,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"io"
+	"mime/multipart"
 	"net/http"
 	"net/url"
 	"strings"
@@ -71,7 +72,7 @@ func New(options ...ClientOption) (*Client, error) {
 	}
 
 	for _, option := range options {
-		if err := option(c); err != nil {
+		if err = option(c); err != nil {
 			return nil, err
 		}
 	}
@@ -109,19 +110,32 @@ func (c *Client) DoRequest(ctx context.Context, req *Request) (*Response, error)
 	}
 
 	// Pre-marshal request body once for all retries
-	var jsonBody []byte
 	var err error
+	var bodyReader io.Reader
+	var bodyBytes []byte
+	var contentTypeHeader string
+	var acceptHeader string
+
 	if req.Body != nil {
-		jsonBody, err = json.Marshal(req.Body)
-		if err != nil {
-			return nil, fmt.Errorf("failed to marshal request body: %w", err)
+		switch req.Body.(type) {
+		case io.Reader:
+			acceptHeader = "application/json"
+			bodyReader = req.Body.(io.Reader)
+		default:
+			acceptHeader = "application/json"
+			contentTypeHeader = "application/json"
+			if bodyBytes, err = json.Marshal(req.Body); err != nil {
+				return nil, fmt.Errorf("failed to marshal request body: %w", err)
+			}
+			bodyReader = bytes.NewReader(bodyBytes)
 		}
 	}
 
-	var lastResponse *Response
-	var lastError error
-
 	// Perform the request with retry logic
+	var lastError error
+	var lastResponse *Response
+	var httpReq *http.Request
+	var resp *http.Response
 	for attempt := 0; attempt <= c.retryConfig.MaxRetries; attempt++ {
 		// Check context cancellation before each attempt
 		select {
@@ -130,19 +144,17 @@ func (c *Client) DoRequest(ctx context.Context, req *Request) (*Response, error)
 		default:
 		}
 
-		var bodyReader io.Reader
-		if jsonBody != nil {
-			bodyReader = bytes.NewReader(jsonBody)
-		}
-
-		httpReq, err := http.NewRequestWithContext(ctx, req.Method, fullURL.String(), bodyReader)
-		if err != nil {
+		if httpReq, err = http.NewRequestWithContext(ctx, req.Method, fullURL.String(), bodyReader); err != nil {
 			return nil, fmt.Errorf("failed to create HTTP request: %w", err)
 		}
 
 		// Set default headers
-		httpReq.Header.Set("Content-Type", "application/json")
-		httpReq.Header.Set("Accept", "application/json")
+		if len(contentTypeHeader) > 0 {
+			httpReq.Header.Set("Content-Type", contentTypeHeader)
+		}
+		if len(acceptHeader) > 0 {
+			httpReq.Header.Set("Accept", acceptHeader)
+		}
 
 		// Set User-Agent header if configured
 		if c.userAgent != "" {
@@ -156,14 +168,13 @@ func (c *Client) DoRequest(ctx context.Context, req *Request) (*Response, error)
 
 		// Apply authentication
 		if c.auth != nil {
-			if err := c.auth.Authenticate(httpReq); err != nil {
+			if err = c.auth.Authenticate(httpReq); err != nil {
 				return nil, fmt.Errorf("failed to authenticate request: %w", err)
 			}
 		}
 
 		// Perform the HTTP request
-		resp, err := c.httpClient.Do(httpReq)
-		if err != nil {
+		if resp, err = c.httpClient.Do(httpReq); err != nil {
 			lastError = err
 
 			// Check if this error should be retried
@@ -178,7 +189,8 @@ func (c *Client) DoRequest(ctx context.Context, req *Request) (*Response, error)
 		}
 
 		// Read response body
-		respBody, err := io.ReadAll(resp.Body)
+		var respBody []byte
+		respBody, err = io.ReadAll(resp.Body)
 		resp.Body.Close() // Always close the body
 		if err != nil {
 			return nil, fmt.Errorf("failed to read response body: %w", err)
@@ -237,20 +249,20 @@ func (c *Client) handleAPIError(resp *Response) error {
 	return apiErr
 }
 
-func (client *Client) Config() *config.Service {
-	return client.config
+func (c *Client) Config() *config.Service {
+	return c.config
 }
 
-func (client *Client) Status() *status.Service {
-	return client.status
+func (c *Client) Status() *status.Service {
+	return c.status
 }
 
-func (client *Client) History() *history.Service {
-	return client.history
+func (c *Client) History() *history.Service {
+	return c.history
 }
 
-func (client *Client) Command() *command.Service {
-	return client.command
+func (c *Client) Command() *command.Service {
+	return c.command
 }
 
 // GetJSON performs a GET request and unmarshal the JSON response
@@ -300,12 +312,57 @@ func (c *Client) PostWithResponse(ctx context.Context, endpoint string, body int
 	}
 
 	if result != nil {
-		if err := unmarshalResponseBodyAuto(resp.Body, result); err != nil {
+		if err = unmarshalResponseBodyAuto(resp.Body, result); err != nil {
 			return postResp, err
 		}
 	}
 
 	return postResp, nil
+}
+
+func (c *Client) PutFile(ctx context.Context, endpoint string, fieldname string, filename string, fileContent io.Reader, result interface{}) error {
+	return c.performMultipartFileRequest(ctx, http.MethodPut, endpoint, fieldname, filename, fileContent, result)
+}
+
+func (c *Client) PatchFile(ctx context.Context, endpoint string, fieldname string, filename string, fileContent io.Reader, result interface{}) error {
+	return c.performMultipartFileRequest(ctx, http.MethodPatch, endpoint, fieldname, filename, fileContent, result)
+}
+
+func (c *Client) PostFile(ctx context.Context, endpoint string, fieldname string, filename string, fileContent io.Reader, result interface{}) error {
+	return c.performMultipartFileRequest(ctx, http.MethodPost, endpoint, fieldname, filename, fileContent, result)
+}
+
+func (c *Client) performMultipartFileRequest(ctx context.Context, method string, endpoint string, fieldname string, filename string, fileContent io.Reader, result interface{}) error {
+	var body bytes.Buffer
+	w := multipart.NewWriter(&body)
+
+	part, err := w.CreateFormFile(fieldname, filename)
+	if err != nil {
+		return fmt.Errorf("failed to create form file: %w", err)
+	}
+	if _, err = io.Copy(part, fileContent); err != nil {
+		return fmt.Errorf("failed to write file content: %w", err)
+	}
+	if err = w.Close(); err != nil {
+		return fmt.Errorf("failed to close multipart writer: %w", err)
+	}
+
+	req := &Request{
+		Method:   method,
+		Endpoint: endpoint,
+		Body:     bytes.NewReader(body.Bytes()),
+		Headers: map[string]string{
+			"content-type": w.FormDataContentType(),
+			"accept":       "application/json",
+		},
+	}
+
+	resp, err := c.DoRequest(ctx, req)
+	if err != nil {
+		return err
+	}
+
+	return unmarshalResponseBody(resp.Body, result)
 }
 
 func (c *Client) performJSONRequest(ctx context.Context, method string, endpoint string, requestBody interface{}, result interface{}) error {

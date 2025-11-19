@@ -121,13 +121,17 @@ func TestService_CreateMediaLibraryEntry(t *testing.T) {
 		UUID:        "123e4567-e89b-12d3-a456-426614174002",
 	}
 
+	expectedFields := map[string]string{
+		"name":        "new-media",
+		"description": "New media file",
+	}
+
 	expectedResponse := &types.PostResponse{
 		Body:        []byte{},
 		ResourceURI: "/api/admin/configuration/v1/media_library_entry/123/",
 	}
 
-	client.On("PostWithResponse", t.Context(), "configuration/v1/media_library_entry/", createRequest, nil).Return(expectedResponse, nil)
-	client.On("PatchFile", t.Context(), "configuration/v1/media_library_entry//123/", "MediaFile", "new_media.mp4", mediaContent, mock.Anything).Return(nil)
+	client.On("PostMultipartFormWithFieldsAndResponse", t.Context(), "configuration/v1/media_library_entry/", expectedFields, "media_file", "new_media.mp4", mediaContent, nil).Return(expectedResponse, nil)
 
 	service := New(client)
 	result, err := service.CreateMediaLibraryEntry(t.Context(), createRequest, "new_media.mp4", mediaContent)
@@ -156,11 +160,16 @@ func TestService_UpdateMediaLibraryEntry(t *testing.T) {
 		MediaSize:   2048000,
 	}
 
-	client.On("PutJSON", t.Context(), "configuration/v1/media_library_entry/1/", updateRequest, mock.AnythingOfType("*config.MediaLibraryEntry")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(3).(*MediaLibraryEntry)
+	expectedFields := map[string]string{
+		"name":        "",
+		"uuid":        "",
+		"description": "Updated media file",
+	}
+
+	client.On("PatchMultipartFormWithFieldsAndResponse", t.Context(), "configuration/v1/media_library_entry/1/", expectedFields, "media_file", "updated_media.mp4", mediaContent, mock.AnythingOfType("*config.MediaLibraryEntry")).Return(nil, nil).Run(func(args mock.Arguments) {
+		result := args.Get(6).(*MediaLibraryEntry)
 		*result = *expectedMediaLibraryEntry
 	})
-	client.On("PatchFile", t.Context(), "configuration/v1/media_library_entry/1/", "MediaFile", "updated_media.mp4", mediaContent, mock.Anything).Return(nil)
 
 	service := New(client)
 	result, err := service.UpdateMediaLibraryEntry(t.Context(), 1, updateRequest, "updated_media.mp4", mediaContent)

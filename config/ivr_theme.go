@@ -8,6 +8,7 @@ package config
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/url"
@@ -42,39 +43,55 @@ func (s *Service) GetIVRTheme(ctx context.Context, id int) (*IVRTheme, error) {
 // CreateIVRTheme creates a new IVR theme
 func (s *Service) CreateIVRTheme(ctx context.Context, req *IVRThemeCreateRequest, filename string, file io.Reader) (*types.PostResponse, error) {
 	endpoint := "configuration/v1/ivr_theme/"
-	resp, err := s.client.PostWithResponse(ctx, endpoint, req, nil)
-	if err != nil {
-		return nil, err
+
+	// Create form fields from request
+	fields := map[string]string{
+		"name":            req.Name,
+		"uuid":            req.UUID,
+		"custom_layouts":  req.CustomLayouts,
+		"pinning_configs": req.PinningConfigs,
 	}
 
-	// Extract ID from resource URI (e.g., "/api/admin/configuration/v1/ivr_theme/123/" -> 123)
-	id, err := resp.ResourceID()
-	if err != nil {
-		return resp, fmt.Errorf("failed to parse ID from resource URI: %w", err)
+	// Convert Conference slice to JSON string if not empty
+	if len(req.Conference) > 0 {
+		conferenceJSON, err := json.Marshal(req.Conference)
+		if err != nil {
+			return nil, fmt.Errorf("failed to marshal conference field: %w", err)
+		}
+		fields["conference"] = string(conferenceJSON)
 	}
 
-	// Upload the package file
-	if err = s.client.PatchFile(ctx, fmt.Sprintf("%s/%d/", endpoint, id), "package", filename, file, nil); err != nil {
-		return resp, fmt.Errorf("failed to upload package file: %w", err)
-	}
-	return resp, nil
+	return s.client.PostMultipartFormWithFieldsAndResponse(ctx, endpoint, fields, "package", filename, file, nil)
 }
 
 // UpdateIVRTheme updates an existing IVR theme
 func (s *Service) UpdateIVRTheme(ctx context.Context, id int, req *IVRThemeUpdateRequest, filename string, file io.Reader) (*IVRTheme, error) {
 	endpoint := fmt.Sprintf("configuration/v1/ivr_theme/%d/", id)
 
+	// Create form fields from request
+	fields := map[string]string{
+		"name":            req.Name,
+		"uuid":            req.UUID,
+		"custom_layouts":  req.CustomLayouts,
+		"pinning_configs": req.PinningConfigs,
+	}
+
+	// Convert Conference slice to JSON string if not empty
+	if len(req.Conference) > 0 {
+		conferenceJSON, err := json.Marshal(req.Conference)
+		if err != nil {
+			return nil, fmt.Errorf("failed to marshal conference field: %w", err)
+		}
+		fields["conference"] = string(conferenceJSON)
+	}
+
 	var result IVRTheme
-	err := s.client.PatchJSON(ctx, endpoint, req, &result)
+	_, err := s.client.PatchMultipartFormWithFieldsAndResponse(ctx, endpoint, fields, "package", filename, file, &result)
 	if err != nil {
 		return nil, err
 	}
 
-	// Upload the package file
-	if err = s.client.PatchFile(ctx, endpoint, "package", filename, file, nil); err != nil {
-		return &result, fmt.Errorf("failed to upload package file: %w", err)
-	}
-	return &result, err
+	return &result, nil
 }
 
 // DeleteIVRTheme deletes an IVR theme

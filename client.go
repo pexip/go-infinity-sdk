@@ -320,31 +320,37 @@ func (c *Client) PostWithResponse(ctx context.Context, endpoint string, body int
 	return postResp, nil
 }
 
-func (c *Client) PutFile(ctx context.Context, endpoint string, fieldname string, filename string, fileContent io.Reader, result interface{}) error {
-	return c.performMultipartFileRequest(ctx, http.MethodPut, endpoint, fieldname, filename, fileContent, result)
+func (c *Client) PostMultipartFormWithFieldsAndResponse(ctx context.Context, endpoint string, fields map[string]string, fileFieldName string, filename string, fileContent io.Reader, result interface{}) (*types.PostResponse, error) {
+	return c.performMultipartFormRequestWithFieldsAndResponse(ctx, http.MethodPost, endpoint, fields, fileFieldName, filename, fileContent, result)
 }
 
-func (c *Client) PatchFile(ctx context.Context, endpoint string, fieldname string, filename string, fileContent io.Reader, result interface{}) error {
-	return c.performMultipartFileRequest(ctx, http.MethodPatch, endpoint, fieldname, filename, fileContent, result)
+func (c *Client) PatchMultipartFormWithFieldsAndResponse(ctx context.Context, endpoint string, fields map[string]string, fileFieldName string, filename string, fileContent io.Reader, result interface{}) (*types.PostResponse, error) {
+	return c.performMultipartFormRequestWithFieldsAndResponse(ctx, http.MethodPatch, endpoint, fields, fileFieldName, filename, fileContent, result)
 }
 
-func (c *Client) PostFile(ctx context.Context, endpoint string, fieldname string, filename string, fileContent io.Reader, result interface{}) error {
-	return c.performMultipartFileRequest(ctx, http.MethodPost, endpoint, fieldname, filename, fileContent, result)
-}
-
-func (c *Client) performMultipartFileRequest(ctx context.Context, method string, endpoint string, fieldname string, filename string, fileContent io.Reader, result interface{}) error {
+func (c *Client) performMultipartFormRequestWithFieldsAndResponse(ctx context.Context, method string, endpoint string, fields map[string]string, fileFieldName string, filename string, fileContent io.Reader, result interface{}) (*types.PostResponse, error) {
 	var body bytes.Buffer
 	w := multipart.NewWriter(&body)
 
-	part, err := w.CreateFormFile(fieldname, filename)
+	// Add form fields (only non-empty values)
+	for key, value := range fields {
+		if value != "" {
+			if err := w.WriteField(key, value); err != nil {
+				return nil, fmt.Errorf("failed to write form field %s: %w", key, err)
+			}
+		}
+	}
+
+	// Add file field
+	part, err := w.CreateFormFile(fileFieldName, filename)
 	if err != nil {
-		return fmt.Errorf("failed to create form file: %w", err)
+		return nil, fmt.Errorf("failed to create form file: %w", err)
 	}
 	if _, err = io.Copy(part, fileContent); err != nil {
-		return fmt.Errorf("failed to write file content: %w", err)
+		return nil, fmt.Errorf("failed to write file content: %w", err)
 	}
 	if err = w.Close(); err != nil {
-		return fmt.Errorf("failed to close multipart writer: %w", err)
+		return nil, fmt.Errorf("failed to close multipart writer: %w", err)
 	}
 
 	req := &Request{
@@ -359,10 +365,21 @@ func (c *Client) performMultipartFileRequest(ctx context.Context, method string,
 
 	resp, err := c.DoRequest(ctx, req)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return unmarshalResponseBody(resp.Body, result)
+	postResp := &types.PostResponse{
+		Body:        resp.Body,
+		ResourceURI: resp.Headers.Get("Location"),
+	}
+
+	if result != nil {
+		if err = unmarshalResponseBodyAuto(resp.Body, result); err != nil {
+			return postResp, err
+		}
+	}
+
+	return postResp, nil
 }
 
 func (c *Client) performJSONRequest(ctx context.Context, method string, endpoint string, requestBody interface{}, result interface{}) error {

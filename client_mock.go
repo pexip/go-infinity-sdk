@@ -98,17 +98,18 @@ func (m *ClientMock) PostWithResponse(ctx context.Context, endpoint string, body
 	return args.Get(0).(*types.PostResponse), args.Error(1)
 }
 
-func (m *ClientMock) PutFile(ctx context.Context, endpoint string, fieldName string, filename string, file io.Reader, result interface{}) error {
-	args := m.Called(ctx, endpoint, fieldName, filename, file, result)
-	return args.Error(0)
+func (m *ClientMock) PostMultipartFormWithFieldsAndResponse(ctx context.Context, endpoint string, fields map[string]string, fileFieldName string, filename string, fileContent io.Reader, result interface{}) (*types.PostResponse, error) {
+	args := m.Called(ctx, endpoint, fields, fileFieldName, filename, fileContent, result)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*types.PostResponse), args.Error(1)
 }
 
-func (m *ClientMock) PostFile(ctx context.Context, endpoint string, fieldName string, filename string, file io.Reader, result interface{}) error {
-	args := m.Called(ctx, endpoint, fieldName, filename, file, result)
-	return args.Error(0)
-}
-
-func (m *ClientMock) PatchFile(ctx context.Context, endpoint string, fieldName string, filename string, file io.Reader, result interface{}) error {
-	args := m.Called(ctx, endpoint, fieldName, filename, file, result)
-	return args.Error(0)
+func (m *ClientMock) PatchMultipartFormWithFieldsAndResponse(ctx context.Context, endpoint string, fields map[string]string, fileFieldName string, filename string, fileContent io.Reader, result interface{}) (*types.PostResponse, error) {
+	args := m.Called(ctx, endpoint, fields, fileFieldName, filename, fileContent, result)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*types.PostResponse), args.Error(1)
 }

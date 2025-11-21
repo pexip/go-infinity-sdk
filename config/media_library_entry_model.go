@@ -29,7 +29,7 @@ type MediaLibraryEntryCreateRequest struct {
 // MediaLibraryEntryUpdateRequest represents a request to update a media library entry
 type MediaLibraryEntryUpdateRequest struct {
 	Name        string `json:"name,omitempty"`
-	Description string `json:"description,omitempty"`
+	Description string `json:"description"`
 	UUID        string `json:"uuid,omitempty"`
 }
 

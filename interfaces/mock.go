@@ -60,19 +60,20 @@ func (m *HTTPClientMock) PostWithResponse(ctx context.Context, endpoint string, 
 	return resp.(*types.PostResponse), args.Error(1)
 }
 
-func (m *HTTPClientMock) PutFile(ctx context.Context, endpoint string, fieldName string, filename string, file io.Reader, result interface{}) error {
-	args := m.Called(ctx, endpoint, fieldName, filename, file, result)
-	return args.Error(0)
+func (m *HTTPClientMock) PostMultipartFormWithFieldsAndResponse(ctx context.Context, endpoint string, fields map[string]string, fileFieldName string, filename string, fileContent io.Reader, result interface{}) (*types.PostResponse, error) {
+	args := m.Called(ctx, endpoint, fields, fileFieldName, filename, fileContent, result)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*types.PostResponse), args.Error(1)
 }
 
-func (m *HTTPClientMock) PostFile(ctx context.Context, endpoint string, fieldName string, filename string, file io.Reader, result interface{}) error {
-	args := m.Called(ctx, endpoint, fieldName, filename, file, result)
-	return args.Error(0)
-}
-
-func (m *HTTPClientMock) PatchFile(ctx context.Context, endpoint string, fieldName string, filename string, file io.Reader, result interface{}) error {
-	args := m.Called(ctx, endpoint, fieldName, filename, file, result)
-	return args.Error(0)
+func (m *HTTPClientMock) PatchMultipartFormWithFieldsAndResponse(ctx context.Context, endpoint string, fields map[string]string, fileFieldName string, filename string, fileContent io.Reader, result interface{}) (*types.PostResponse, error) {
+	args := m.Called(ctx, endpoint, fields, fileFieldName, filename, fileContent, result)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*types.PostResponse), args.Error(1)
 }
 
 // NewHTTPClientMock creates a new mock HTTP client

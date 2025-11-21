@@ -162,16 +162,21 @@ func TestService_CreateIVRTheme(t *testing.T) {
 		PinningConfigs: `{"newPin": "newPinConfig"}`,
 	}
 
+	expectedFields := map[string]string{
+		"name":            "new-theme",
+		"uuid":            "new12345-1234-5678-9abc-123456789012",
+		"conference":      `["/api/admin/configuration/v1/conference/3/"]`,
+		"custom_layouts":  `{"newLayout": "newConfig"}`,
+		"pinning_configs": `{"newPin": "newPinConfig"}`,
+	}
+
 	expectedResponse := &types.PostResponse{
 		Body:        []byte{},
 		ResourceURI: "/api/admin/configuration/v1/ivr_theme/123/",
 	}
 
-	// Expect first call: POST with JSON data only (no file)
-	client.On("PostWithResponse", t.Context(), "configuration/v1/ivr_theme/", createRequest, mock.Anything).Return(expectedResponse, nil)
-
-	// Expect second call: PATCH file upload (note the double slash is due to endpoint already having a trailing slash)
-	client.On("PatchFile", t.Context(), "configuration/v1/ivr_theme//123/", "package", "new_package.tar.gz", packageContent, mock.Anything).Return(nil)
+	// Expect single call: POST multipart form with all fields and file
+	client.On("PostMultipartFormWithFieldsAndResponse", t.Context(), "configuration/v1/ivr_theme/", expectedFields, "package", "new_package.tar.gz", packageContent, nil).Return(expectedResponse, nil)
 
 	service := New(client)
 	result, err := service.CreateIVRTheme(t.Context(), createRequest, "new_package.tar.gz", packageContent)
@@ -194,6 +199,14 @@ func TestService_UpdateIVRTheme(t *testing.T) {
 		CustomLayouts: `{"updatedLayout": "updatedConfig"}`,
 	}
 
+	expectedFields := map[string]string{
+		"name":            "updated-theme",
+		"uuid":            "",
+		"conference":      `["/api/admin/configuration/v1/conference/1/","/api/admin/configuration/v1/conference/4/"]`,
+		"custom_layouts":  `{"updatedLayout": "updatedConfig"}`,
+		"pinning_configs": "",
+	}
+
 	lastUpdated := util.InfinityTime{Time: time.Date(2024, 1, 2, 12, 0, 0, 0, time.UTC)}
 	expectedTheme := &IVRTheme{
 		ID:   1,
@@ -209,14 +222,11 @@ func TestService_UpdateIVRTheme(t *testing.T) {
 		ResourceURI:    "/api/admin/configuration/v1/ivr_theme/1/",
 	}
 
-	// Expect first call: PATCH JSON to update theme metadata
-	client.On("PatchJSON", t.Context(), "configuration/v1/ivr_theme/1/", updateRequest, mock.AnythingOfType("*config.IVRTheme")).Return(nil).Run(func(args mock.Arguments) {
-		result := args.Get(3).(*IVRTheme)
+	// Expect single call: PATCH multipart form with all fields and file
+	client.On("PatchMultipartFormWithFieldsAndResponse", t.Context(), "configuration/v1/ivr_theme/1/", expectedFields, "package", "updated_package.tar.gz", packageContent, mock.AnythingOfType("*config.IVRTheme")).Return(nil, nil).Run(func(args mock.Arguments) {
+		result := args.Get(6).(*IVRTheme)
 		*result = *expectedTheme
 	})
-
-	// Expect second call: PATCH file to upload package
-	client.On("PatchFile", t.Context(), "configuration/v1/ivr_theme/1/", "package", "updated_package.tar.gz", packageContent, mock.Anything).Return(nil)
 
 	service := New(client)
 	result, err := service.UpdateIVRTheme(t.Context(), 1, updateRequest, "updated_package.tar.gz", packageContent)

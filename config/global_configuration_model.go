@@ -18,7 +18,7 @@ The following fields have been deprecated and have been removed from the model:
   * live_captions_api_gateway - use 'media_processing_server' resource
   * live_captions_app_id - use 'media_processing_server' resource
   * live_captions_enabled - this field is deprecated and will be ignored
-  * live_captions_public_jwt_key  - use 'media_processing_server' resource
+  * live_captions_public_jwt_key - use 'media_processing_server' resource
 */
 
 // GlobalConfiguration represents the global system configuration (singleton resource)

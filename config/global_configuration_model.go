@@ -10,6 +10,17 @@ type CodecValue struct {
 	Value string `json:"value"`
 }
 
+/*
+The following fields have been deprecated and have been removed from the model:
+  * default_to_new_webapp - use 'default_webapp' instead
+  * default_webapp - use 'default_webapp_alias' instead
+  * enable_push_notifications (Deprecated field)
+  * live_captions_api_gateway - use 'media_processing_server' resource
+  * live_captions_app_id - use 'media_processing_server' resource
+  * live_captions_enabled - this field is deprecated and will be ignored
+  * live_captions_public_jwt_key - use 'media_processing_server' resource
+*/
+
 // GlobalConfiguration represents the global system configuration (singleton resource)
 type GlobalConfiguration struct {
 	ID                                  int          `json:"id,omitempty"`
@@ -32,8 +43,6 @@ type GlobalConfiguration struct {
 	ContentSecurityPolicyState          bool         `json:"content_security_policy_state,omitempty"`
 	CryptoMode                          string       `json:"crypto_mode,omitempty"`
 	DefaultTheme                        *IVRTheme    `json:"default_theme,omitempty"`
-	DefaultToNewWebapp                  bool         `json:"default_to_new_webapp,omitempty"`
-	DefaultWebapp                       string       `json:"default_webapp,omitempty"`
 	DefaultWebappAlias                  *string      `json:"default_webapp_alias,omitempty"`
 	DeploymentUUID                      string       `json:"deployment_uuid,omitempty"`
 	DisabledCodecs                      []CodecValue `json:"disabled_codecs,omitempty"`
@@ -53,7 +62,6 @@ type GlobalConfiguration struct {
 	EnableLyncVbss                      bool         `json:"enable_lync_vbss,omitempty"`
 	EnableMlvad                         bool         `json:"enable_mlvad,omitempty"`
 	EnableMultiscreen                   bool         `json:"enable_multiscreen,omitempty"`
-	EnablePushNotifications             bool         `json:"enable_push_notifications,omitempty"`
 	EnableRTMP                          bool         `json:"enable_rtmp,omitempty"`
 	EnableSIP                           bool         `json:"enable_sip,omitempty"`
 	EnableSIPUDP                        bool         `json:"enable_sip_udp,omitempty"`
@@ -78,10 +86,6 @@ type GlobalConfiguration struct {
 	LegacyAPIHTTP                       bool         `json:"legacy_api_http,omitempty"`
 	LegacyAPIUsername                   string       `json:"legacy_api_username,omitempty"`
 	LegacyAPIPassword                   string       `json:"legacy_api_password,omitempty"`
-	LiveCaptionsAPIGateway              string       `json:"live_captions_api_gateway,omitempty"`
-	LiveCaptionsAppID                   string       `json:"live_captions_app_id,omitempty"`
-	LiveCaptionsEnabled                 bool         `json:"live_captions_enabled,omitempty"`
-	LiveCaptionsPublicJWTKey            string       `json:"live_captions_public_jwt_key,omitempty"`
 	LiveCaptionsVMRDefault              bool         `json:"live_captions_vmr_default,omitempty"`
 	LiveviewShowConferences             bool         `json:"liveview_show_conferences,omitempty"`
 	LocalMssipDomain                    string       `json:"local_mssip_domain,omitempty"`
@@ -136,8 +140,6 @@ type GlobalConfigurationUpdateRequest struct {
 	ContentSecurityPolicyState          bool         `json:"content_security_policy_state"`
 	CryptoMode                          string       `json:"crypto_mode"`
 	DefaultTheme                        *IVRTheme    `json:"default_theme"`
-	DefaultToNewWebapp                  bool         `json:"default_to_new_webapp"`
-	DefaultWebapp                       string       `json:"default_webapp"`
 	DefaultWebappAlias                  *string      `json:"default_webapp_alias"`
 	DeploymentUUID                      string       `json:"deployment_uuid,omitempty"`
 	DisabledCodecs                      []CodecValue `json:"disabled_codecs,omitempty"`
@@ -157,7 +159,6 @@ type GlobalConfigurationUpdateRequest struct {
 	EnableLyncVbss                      bool         `json:"enable_lync_vbss"`
 	EnableMlvad                         bool         `json:"enable_mlvad"`
 	EnableMultiscreen                   bool         `json:"enable_multiscreen"`
-	EnablePushNotifications             bool         `json:"enable_push_notifications"`
 	EnableRTMP                          bool         `json:"enable_rtmp"`
 	EnableSIP                           bool         `json:"enable_sip"`
 	EnableSIPUDP                        bool         `json:"enable_sip_udp"`
@@ -182,10 +183,6 @@ type GlobalConfigurationUpdateRequest struct {
 	LegacyAPIHTTP                       bool         `json:"legacy_api_http"`
 	LegacyAPIUsername                   string       `json:"legacy_api_username"`
 	LegacyAPIPassword                   string       `json:"legacy_api_password"`
-	LiveCaptionsAPIGateway              string       `json:"live_captions_api_gateway"`
-	LiveCaptionsAppID                   string       `json:"live_captions_app_id"`
-	LiveCaptionsEnabled                 bool         `json:"live_captions_enabled"`
-	LiveCaptionsPublicJWTKey            string       `json:"live_captions_public_jwt_key"`
 	LiveCaptionsVMRDefault              bool         `json:"live_captions_vmr_default"`
 	LiveviewShowConferences             bool         `json:"liveview_show_conferences"`
 	LocalMssipDomain                    string       `json:"local_mssip_domain"`

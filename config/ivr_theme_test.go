@@ -175,8 +175,28 @@ func TestService_CreateIVRTheme(t *testing.T) {
 		ResourceURI: "/api/admin/configuration/v1/ivr_theme/123/",
 	}
 
-	// Expect single call: POST multipart form with all fields and file
-	client.On("PostMultipartFormWithFieldsAndResponse", t.Context(), "configuration/v1/ivr_theme/", expectedFields, "package", "new_package.tar.gz", packageContent, nil).Return(expectedResponse, nil)
+	lastUpdated := util.InfinityTime{Time: time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC)}
+	expectedTheme := &IVRTheme{
+		ID:   123,
+		Name: "new-theme",
+		UUID: "new12345-1234-5678-9abc-123456789012",
+		Conference: []string{
+			"/api/admin/configuration/v1/conference/3/",
+		},
+		CustomLayouts:  `{"newLayout": "newConfig"}`,
+		PinningConfigs: `{"newPin": "newPinConfig"}`,
+		LastUpdated:    lastUpdated,
+		ResourceURI:    "/api/admin/configuration/v1/ivr_theme/123/",
+	}
+
+	// First call: POST multipart form without file (workaround for API limitation)
+	client.On("PostMultipartFormWithFieldsAndResponse", t.Context(), "configuration/v1/ivr_theme/", expectedFields, "", "", nil, nil).Return(expectedResponse, nil)
+
+	// Second call: PATCH to upload the file
+	client.On("PatchMultipartFormWithFieldsAndResponse", t.Context(), "configuration/v1/ivr_theme/123/", mock.Anything, "package", "new_package.tar.gz", packageContent, mock.AnythingOfType("*config.IVRTheme")).Return(nil, nil).Run(func(args mock.Arguments) {
+		result := args.Get(6).(*IVRTheme)
+		*result = *expectedTheme
+	})
 
 	service := New(client)
 	result, err := service.CreateIVRTheme(t.Context(), createRequest, "new_package.tar.gz", packageContent)

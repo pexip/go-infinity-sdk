@@ -61,7 +61,23 @@ func (s *Service) CreateIVRTheme(ctx context.Context, req *IVRThemeCreateRequest
 		fields["conference"] = string(conferenceJSON)
 	}
 
-	return s.client.PostMultipartFormWithFieldsAndResponse(ctx, endpoint, fields, "package", filename, file, nil)
+	var err error
+	var resp *types.PostResponse
+	if resp, err = s.client.PostMultipartFormWithFieldsAndResponse(ctx, endpoint, fields, "", "", nil, nil); err != nil {
+		return resp, err
+	}
+
+	// We do this as a workaround since the API does not handle uploading the file in the POST request. This is probably a bug in the Infinity API.
+	id, err := resp.ResourceID()
+	if err != nil {
+		return resp, err
+	}
+	var result IVRTheme
+	_, err = s.client.PatchMultipartFormWithFieldsAndResponse(ctx, fmt.Sprintf("%s%d/", endpoint, id), nil, "package", filename, file, &result)
+	if err != nil {
+		return nil, err
+	}
+	return resp, err
 }
 
 // UpdateIVRTheme updates an existing IVR theme

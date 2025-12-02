@@ -333,24 +333,28 @@ func (c *Client) performMultipartFormRequestWithFieldsAndResponse(ctx context.Co
 	w := multipart.NewWriter(&body)
 
 	// Add form fields (only non-empty values)
-	for key, value := range fields {
-		if value != "" {
-			if err := w.WriteField(key, value); err != nil {
-				return nil, fmt.Errorf("failed to write form field %s: %w", key, err)
+	if fields != nil {
+		for key, value := range fields {
+			if value != "" {
+				if err := w.WriteField(key, value); err != nil {
+					return nil, fmt.Errorf("failed to write form field %s: %w", key, err)
+				}
 			}
 		}
 	}
 
 	// Add file field
-	part, err := w.CreateFormFile(fileFieldName, filename)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create form file: %w", err)
-	}
-	if _, err = io.Copy(part, fileContent); err != nil {
-		return nil, fmt.Errorf("failed to write file content: %w", err)
-	}
-	if err = w.Close(); err != nil {
-		return nil, fmt.Errorf("failed to close multipart writer: %w", err)
+	if fileFieldName != "" && filename != "" && fileContent != nil {
+		part, err := w.CreateFormFile(fileFieldName, filename)
+		if err != nil {
+			return nil, fmt.Errorf("failed to create form file: %w", err)
+		}
+		if _, err = io.Copy(part, fileContent); err != nil {
+			return nil, fmt.Errorf("failed to write file content: %w", err)
+		}
+		if err = w.Close(); err != nil {
+			return nil, fmt.Errorf("failed to close multipart writer: %w", err)
+		}
 	}
 
 	req := &Request{

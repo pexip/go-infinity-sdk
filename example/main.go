@@ -59,7 +59,6 @@ func main() {
 		Description: "Conference created by Go SDK example",
 		ServiceType: "conference",
 		AllowGuests: true,
-		GuestsMuted: false,
 	}
 
 	newConf, err := client.Config().CreateConference(ctx, createReq)

@@ -29,8 +29,8 @@ func TestService_ListAutomaticParticipants(t *testing.T) {
 			setup: func(m *interfaces.HTTPClientMock) {
 				expectedResponse := &AutomaticParticipantListResponse{
 					Objects: []AutomaticParticipant{
-						{ID: 1, Alias: "auto-participant-1", Description: "Primary participant", Conference: "/api/admin/configuration/v1/conference/1/", Protocol: "sip", CallType: "video", Role: "chair", KeepConferenceAlive: "keep_conference_alive_never", Routing: "routing_rule", Streaming: false},
-						{ID: 2, Alias: "auto-participant-2", Description: "Secondary participant", Conference: "/api/admin/configuration/v1/conference/2/", Protocol: "h323", CallType: "audio", Role: "guest", KeepConferenceAlive: "keep_conference_alive_if_multiple", Routing: "routing_rule", Streaming: true},
+						{ID: 1, Alias: "auto-participant-1", Description: "Primary participant", Conference: []string{"/api/admin/configuration/v1/conference/1/"}, Protocol: "sip", CallType: "video", Role: "chair", KeepConferenceAlive: "keep_conference_alive_never", Routing: "routing_rule", Streaming: false},
+						{ID: 2, Alias: "auto-participant-2", Description: "Secondary participant", Conference: []string{"/api/admin/configuration/v1/conference/2/"}, Protocol: "h323", CallType: "audio", Role: "guest", KeepConferenceAlive: "keep_conference_alive_if_multiple", Routing: "routing_rule", Streaming: true},
 					},
 				}
 				m.On("GetJSON", t.Context(), "configuration/v1/automatic_participant/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.AutomaticParticipantListResponse")).Return(nil).Run(func(args mock.Arguments) {
@@ -51,7 +51,7 @@ func TestService_ListAutomaticParticipants(t *testing.T) {
 			setup: func(m *interfaces.HTTPClientMock) {
 				expectedResponse := &AutomaticParticipantListResponse{
 					Objects: []AutomaticParticipant{
-						{ID: 1, Alias: "auto-participant-1", Description: "Primary participant", Conference: "/api/admin/configuration/v1/conference/1/", Protocol: "sip", CallType: "video", Role: "chair", KeepConferenceAlive: "keep_conference_alive_never", Routing: "routing_rule", Streaming: false},
+						{ID: 1, Alias: "auto-participant-1", Description: "Primary participant", Conference: []string{"/api/admin/configuration/v1/conference/1/"}, Protocol: "sip", CallType: "video", Role: "chair", KeepConferenceAlive: "keep_conference_alive_never", Routing: "routing_rule", Streaming: false},
 					},
 				}
 				m.On("GetJSON", t.Context(), "configuration/v1/automatic_participant/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.AutomaticParticipantListResponse")).Return(nil).Run(func(args mock.Arguments) {
@@ -91,7 +91,7 @@ func TestService_GetAutomaticParticipant(t *testing.T) {
 		ID:                  1,
 		Alias:               "test-participant",
 		Description:         "Test automatic participant",
-		Conference:          "/api/admin/configuration/v1/conference/1/",
+		Conference:          []string{"/api/admin/configuration/v1/conference/1/"},
 		Protocol:            "sip",
 		CallType:            "video",
 		Role:                "chair",
@@ -168,7 +168,7 @@ func TestService_UpdateAutomaticParticipant(t *testing.T) {
 		ID:                  1,
 		Alias:               "test-participant",
 		Description:         "Updated automatic participant",
-		Conference:          "/api/admin/configuration/v1/conference/1/",
+		Conference:          []string{"/api/admin/configuration/v1/conference/1/"},
 		Protocol:            "sip",
 		CallType:            "video",
 		Role:                "chair",

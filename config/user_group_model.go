@@ -8,12 +8,12 @@ package config
 
 // UserGroup represents a user group configuration
 type UserGroup struct {
-	ID                      int      `json:"id,omitempty"`
-	Name                    string   `json:"name"`
-	Description             string   `json:"description,omitempty"`
-	Users                   []string `json:"users,omitempty"`
-	UserGroupEntityMappings []string `json:"user_group_entity_mappings,omitempty"`
-	ResourceURI             string   `json:"resource_uri,omitempty"`
+	ID                      int                       `json:"id,omitempty"`
+	Name                    string                    `json:"name"`
+	Description             string                    `json:"description,omitempty"`
+	Users                   []string                  `json:"users,omitempty"`
+	UserGroupEntityMappings *[]UserGroupEntityMapping `json:"user_group_entity_mappings,omitempty"`
+	ResourceURI             string                    `json:"resource_uri,omitempty"`
 }
 
 // UserGroupCreateRequest represents a request to create a user group

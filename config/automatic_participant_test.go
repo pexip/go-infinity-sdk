@@ -124,7 +124,7 @@ func TestService_CreateAutomaticParticipant(t *testing.T) {
 	createRequest := &AutomaticParticipantCreateRequest{
 		Alias:               "new-participant",
 		Description:         "New automatic participant",
-		Conference:          "/api/admin/configuration/v1/conference/1/",
+		Conference:          []string{"/api/admin/configuration/v1/conference/1/"},
 		Protocol:            "sip",
 		CallType:            "video",
 		Role:                "guest",

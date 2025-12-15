@@ -97,6 +97,7 @@ func TestService_GetGatewayRoutingRule(t *testing.T) {
 	maxCallrateOut := 1024
 	cryptoMode := "auto"
 	maxPixelsPerSecond := "1966080"
+	disabledCodecs := []string{"h264", "vp8"}
 
 	expectedGatewayRoutingRule := &GatewayRoutingRule{
 		ID:                            1,
@@ -130,7 +131,7 @@ func TestService_GetGatewayRoutingRule(t *testing.T) {
 		LiveCaptionsEnabled:           "disabled",
 		TreatAsTrusted:                true,
 		Tag:                           "test-tag",
-		DisabledCodecs:                []string{"h264", "vp8"},
+		DisabledCodecs:                &disabledCodecs,
 	}
 
 	client.On("GetJSON", t.Context(), "configuration/v1/gateway_routing_rule/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.GatewayRoutingRule")).Return(nil).Run(func(args mock.Arguments) {
@@ -153,6 +154,7 @@ func TestService_CreateGatewayRoutingRule(t *testing.T) {
 	location := "/api/admin/configuration/v1/system_location/1/"
 	maxCallrateIn := 1024
 	cryptoMode := "besteffort"
+	disabledCodecs := []string{"vp9"}
 
 	createRequest := &GatewayRoutingRuleCreateRequest{
 		Name:                          "new-rule",
@@ -181,7 +183,7 @@ func TestService_CreateGatewayRoutingRule(t *testing.T) {
 		LiveCaptionsEnabled:           "auto",
 		TreatAsTrusted:                false,
 		Tag:                           "new-tag",
-		DisabledCodecs:                []string{"vp9"},
+		DisabledCodecs:                &disabledCodecs,
 	}
 
 	expectedResponse := &types.PostResponse{

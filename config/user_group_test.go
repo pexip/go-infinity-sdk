@@ -29,8 +29,8 @@ func TestService_ListUserGroups(t *testing.T) {
 			setup: func(m *interfaces.HTTPClientMock) {
 				expectedResponse := &UserGroupListResponse{
 					Objects: []UserGroup{
-						{ID: 1, Name: "administrators", Description: "System administrators", Users: []string{"/api/admin/configuration/v1/end_user/1/", "/api/admin/configuration/v1/end_user/2/"}, UserGroupEntityMappings: []string{"/api/admin/configuration/v1/user_group_entity_mapping/1/"}},
-						{ID: 2, Name: "users", Description: "Regular users", Users: []string{"/api/admin/configuration/v1/end_user/3/"}, UserGroupEntityMappings: []string{}},
+						{ID: 1, Name: "administrators", Description: "System administrators", Users: []string{"/api/admin/configuration/v1/end_user/1/", "/api/admin/configuration/v1/end_user/2/"}, UserGroupEntityMappings: &[]UserGroupEntityMapping{{ResourceURI: "/api/admin/configuration/v1/user_group_entity_mapping/1/"}}},
+						{ID: 2, Name: "users", Description: "Regular users", Users: []string{"/api/admin/configuration/v1/end_user/3/"}, UserGroupEntityMappings: &[]UserGroupEntityMapping{}},
 					},
 				}
 				m.On("GetJSON", t.Context(), "configuration/v1/user_group/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.UserGroupListResponse")).Return(nil).Run(func(args mock.Arguments) {
@@ -51,7 +51,7 @@ func TestService_ListUserGroups(t *testing.T) {
 			setup: func(m *interfaces.HTTPClientMock) {
 				expectedResponse := &UserGroupListResponse{
 					Objects: []UserGroup{
-						{ID: 1, Name: "administrators", Description: "System administrators", Users: []string{"/api/admin/configuration/v1/end_user/1/", "/api/admin/configuration/v1/end_user/2/"}, UserGroupEntityMappings: []string{"/api/admin/configuration/v1/user_group_entity_mapping/1/"}},
+						{ID: 1, Name: "administrators", Description: "System administrators", Users: []string{"/api/admin/configuration/v1/end_user/1/", "/api/admin/configuration/v1/end_user/2/"}, UserGroupEntityMappings: &[]UserGroupEntityMapping{{ResourceURI: "/api/admin/configuration/v1/user_group_entity_mapping/1/"}}},
 					},
 				}
 				m.On("GetJSON", t.Context(), "configuration/v1/user_group/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.UserGroupListResponse")).Return(nil).Run(func(args mock.Arguments) {
@@ -91,7 +91,7 @@ func TestService_GetUserGroup(t *testing.T) {
 		Name:                    "test-group",
 		Description:             "Test user group",
 		Users:                   []string{"/api/admin/configuration/v1/end_user/1/", "/api/admin/configuration/v1/end_user/2/"},
-		UserGroupEntityMappings: []string{"/api/admin/configuration/v1/user_group_entity_mapping/1/"},
+		UserGroupEntityMappings: &[]UserGroupEntityMapping{{ResourceURI: "/api/admin/configuration/v1/user_group_entity_mapping/1/"}},
 		ResourceURI:             "/api/admin/configuration/v1/user_group/1/",
 	}
 
@@ -146,7 +146,7 @@ func TestService_UpdateUserGroup(t *testing.T) {
 		Name:                    "test-group",
 		Description:             "Updated user group",
 		Users:                   []string{"/api/admin/configuration/v1/end_user/1/"},
-		UserGroupEntityMappings: []string{"/api/admin/configuration/v1/user_group_entity_mapping/1/"},
+		UserGroupEntityMappings: &[]UserGroupEntityMapping{{ResourceURI: "/api/admin/configuration/v1/user_group_entity_mapping/1/"}},
 		ResourceURI:             "/api/admin/configuration/v1/user_group/1/",
 	}
 

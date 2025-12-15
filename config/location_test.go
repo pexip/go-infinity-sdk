@@ -26,7 +26,7 @@ func TestService_ListLocations(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/location/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.LocationListResponse")).Return(nil).Run(func(args mock.Arguments) {
+	client.On("GetJSON", t.Context(), "configuration/v1/system_location/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.LocationListResponse")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(3).(*LocationListResponse)
 		*result = *expectedResponse
 	})
@@ -46,7 +46,7 @@ func TestService_GetLocation(t *testing.T) {
 		Name: "Test Location",
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/location/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.Location")).Return(nil).Run(func(args mock.Arguments) {
+	client.On("GetJSON", t.Context(), "configuration/v1/system_location/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.Location")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(3).(*Location)
 		*result = *expectedLocation
 	})
@@ -69,10 +69,10 @@ func TestService_CreateLocation(t *testing.T) {
 
 	expectedResponse := &types.PostResponse{
 		Body:        []byte{},
-		ResourceURI: "/api/admin/configuration/v1/location/123/",
+		ResourceURI: "/api/admin/configuration/v1/system_location/123/",
 	}
 
-	client.On("PostWithResponse", t.Context(), "configuration/v1/location/", createRequest, nil).Return(expectedResponse, nil)
+	client.On("PostWithResponse", t.Context(), "configuration/v1/system_location/", createRequest, nil).Return(expectedResponse, nil)
 
 	service := New(client)
 	result, err := service.CreateLocation(t.Context(), createRequest)
@@ -94,7 +94,7 @@ func TestService_UpdateLocation(t *testing.T) {
 		Name: "Updated Location",
 	}
 
-	client.On("PutJSON", t.Context(), "configuration/v1/location/1/", updateRequest, mock.AnythingOfType("*config.Location")).Return(nil).Run(func(args mock.Arguments) {
+	client.On("PutJSON", t.Context(), "configuration/v1/system_location/1/", updateRequest, mock.AnythingOfType("*config.Location")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(3).(*Location)
 		*result = *expectedLocation
 	})
@@ -110,7 +110,7 @@ func TestService_UpdateLocation(t *testing.T) {
 func TestService_DeleteLocation(t *testing.T) {
 	client := interfaces.NewHTTPClientMock()
 
-	client.On("DeleteJSON", t.Context(), "configuration/v1/location/1/", mock.Anything).Return(nil)
+	client.On("DeleteJSON", t.Context(), "configuration/v1/system_location/1/", mock.Anything).Return(nil)
 
 	service := New(client)
 	err := service.DeleteLocation(t.Context(), 1)
@@ -136,7 +136,7 @@ func TestService_ListLocations_WithOptions(t *testing.T) {
 		},
 	}
 
-	client.On("GetJSON", t.Context(), "configuration/v1/location/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.LocationListResponse")).Return(nil).Run(func(args mock.Arguments) {
+	client.On("GetJSON", t.Context(), "configuration/v1/system_location/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.LocationListResponse")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(3).(*LocationListResponse)
 		*result = *expectedResponse
 	})

@@ -67,7 +67,7 @@ type IdentityProviderCreateRequest struct {
 	DigestAlgorithm                     string `json:"digest_algorithm"`
 	DisplayNameAttributeName            string `json:"display_name_attribute_name,omitempty"`
 	RegistrationAliasAttributeName      string `json:"registration_alias_attribute_name,omitempty"`
-	AssertionConsumerServiceURL         string `json:"assertion_consumer_service_url"`
+	AssertionConsumerServiceURL         string `json:"assertion_consumer_service_url,omitempty"`
 	AssertionConsumerServiceURL2        string `json:"assertion_consumer_service_url2,omitempty"`
 	AssertionConsumerServiceURL3        string `json:"assertion_consumer_service_url3,omitempty"`
 	AssertionConsumerServiceURL4        string `json:"assertion_consumer_service_url4,omitempty"`

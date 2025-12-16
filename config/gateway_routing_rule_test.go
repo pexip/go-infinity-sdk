@@ -97,7 +97,7 @@ func TestService_GetGatewayRoutingRule(t *testing.T) {
 	maxCallrateOut := 1024
 	cryptoMode := "auto"
 	maxPixelsPerSecond := "1966080"
-	disabledCodecs := []string{"h264", "vp8"}
+	disabledCodecs := []CodecValue{{Value: "vp8"}, {Value: "h264"}}
 
 	expectedGatewayRoutingRule := &GatewayRoutingRule{
 		ID:                            1,
@@ -154,12 +154,12 @@ func TestService_CreateGatewayRoutingRule(t *testing.T) {
 	location := "/api/admin/configuration/v1/system_location/1/"
 	maxCallrateIn := 1024
 	cryptoMode := "besteffort"
-	disabledCodecs := []string{"vp9"}
+	disabledCodecs := []CodecValue{{Value: "vp9"}}
 
 	createRequest := &GatewayRoutingRuleCreateRequest{
 		Name:                          "new-rule",
 		Description:                   "New gateway routing rule",
-		Priority:                      300,
+		Priority:                      100,
 		Enable:                        true,
 		MatchString:                   "new@.*",
 		MatchStringFull:               false,
@@ -204,14 +204,11 @@ func TestService_CreateGatewayRoutingRule(t *testing.T) {
 func TestService_UpdateGatewayRoutingRule(t *testing.T) {
 	client := interfaces.NewHTTPClientMock()
 
-	priority := 250
-	enable := false
-	matchIncomingWebRTC := false
 	updateRequest := &GatewayRoutingRuleUpdateRequest{
 		Description:         "Updated gateway routing rule",
-		Priority:            &priority,
-		Enable:              &enable,
-		MatchIncomingWebRTC: &matchIncomingWebRTC,
+		Priority:            200,
+		Enable:              false,
+		MatchIncomingWebRTC: false,
 		CallType:            "audio",
 	}
 

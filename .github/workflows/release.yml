@@ -34,7 +34,7 @@ jobs:
           fi
       - name: Checkout
         uses: actions/checkout@v5
-      - uses: pexip/shared-github-actions/release-action@10073308ccd52cf0f47fe1fba7d912a17956ff6b
+      - uses: pexip/shared-github-actions/release-action@f596d7f32b05fa5ffebbb6634734860d5d1d6c2c
         with:
           version: ${{ inputs.version }}
           pre_release: ${{ inputs.pre_release }}

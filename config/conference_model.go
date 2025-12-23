@@ -90,7 +90,7 @@ type ConferenceCreateRequest struct {
 	GuestsCanSeeGuests              string    `json:"guests_can_see_guests,omitempty"`
 	HostIdentityProviderGroup       *string   `json:"host_identity_provider_group,omitempty"`
 	HostView                        *string   `json:"host_view,omitempty"`
-	IVRTheme                        *IVRTheme `json:"ivr_theme,omitempty"`
+	IVRTheme                        *string   `json:"ivr_theme,omitempty"`
 	LiveCaptionsEnabled             string    `json:"live_captions_enabled,omitempty"`
 	MatchString                     string    `json:"match_string,omitempty"`
 	MaxCallRateIn                   *int      `json:"max_callrate_in,omitempty"`
@@ -144,7 +144,7 @@ type ConferenceUpdateRequest struct {
 	GuestsCanSeeGuests              string    `json:"guests_can_see_guests"`
 	HostIdentityProviderGroup       *string   `json:"host_identity_provider_group"`
 	HostView                        *string   `json:"host_view"`
-	IVRTheme                        *IVRTheme `json:"ivr_theme"`
+	IVRTheme                        *string   `json:"ivr_theme"`
 	LiveCaptionsEnabled             string    `json:"live_captions_enabled"`
 	MatchString                     string    `json:"match_string"`
 	MaxCallRateIn                   *int      `json:"max_callrate_in"`

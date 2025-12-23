@@ -36,7 +36,7 @@ type Conference struct {
 	GuestsCanSeeGuests              string                  `json:"guests_can_see_guests,omitempty"`
 	HostIdentityProviderGroup       *string                 `json:"host_identity_provider_group,omitempty"`
 	HostView                        *string                 `json:"host_view,omitempty"`
-	IVRTheme                        *string                 `json:"ivr_theme,omitempty"`
+	IVRTheme                        *IVRTheme               `json:"ivr_theme,omitempty"`
 	LiveCaptionsEnabled             string                  `json:"live_captions_enabled,omitempty"`
 	MatchString                     string                  `json:"match_string,omitempty"`
 	MaxCallRateIn                   *int                    `json:"max_callrate_in,omitempty"`

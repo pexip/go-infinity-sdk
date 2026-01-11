@@ -113,3 +113,11 @@ func (m *ClientMock) PatchMultipartFormWithFieldsAndResponse(ctx context.Context
 	}
 	return args.Get(0).(*types.PostResponse), args.Error(1)
 }
+
+func (m *ClientMock) PostMultipartFormWithFieldsAndResponseUUID(ctx context.Context, endpoint string, fields map[string]string, fileFieldName string, filename string, fileContent io.Reader, result interface{}) (*types.PostResponseWithUUID, error) {
+	args := m.Called(ctx, endpoint, fields, fileFieldName, filename, fileContent, result)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*types.PostResponseWithUUID), args.Error(1)
+}

@@ -46,22 +46,20 @@ func toBoolStr(val bool) string {
 }
 
 // CreateWebappBranding creates a new webapp branding
-func (s *Service) CreateWebappBranding(ctx context.Context, req *WebappBrandingCreateRequest, filename string, file io.Reader) (*types.PostResponse, error) {
+func (s *Service) CreateWebappBranding(ctx context.Context, req *WebappBrandingCreateRequest, filename string, file io.Reader) (*types.PostResponseWithUUID, error) {
 	endpoint := "configuration/v1/webapp_branding/"
 
 	// Create form fields from request
 	fields := map[string]string{
 		"name":        req.Name,
 		"description": req.Description,
-		"uuid":        req.UUID,
 		"webapp_type": req.WebappType,
-		"is_default":  toBoolStr(req.IsDefault),
 	}
 
 	var err error
-	var resp *types.PostResponse
+	var resp *types.PostResponseWithUUID
 	var result WebappBranding
-	if resp, err = s.client.PostMultipartFormWithFieldsAndResponse(ctx, endpoint, fields, "branding_file", filename, file, &result); err != nil {
+	if resp, err = s.client.PostMultipartFormWithFieldsAndResponseUUID(ctx, endpoint, fields, "branding_file", filename, file, &result); err != nil {
 		return resp, err
 	}
 
@@ -69,26 +67,21 @@ func (s *Service) CreateWebappBranding(ctx context.Context, req *WebappBrandingC
 }
 
 // UpdateWebappBranding updates an existing webapp branding
-//func (s *Service) UpdateWebappBranding(ctx context.Context, req *WebappBrandingUpdateRequest, filename string, file io.Reader) (*WebappBranding, error) {
-//	endpoint := "configuration/v1/webapp_branding/" + req.UUID + "/"
-//
-//	// Create form fields from request
-//	fields := map[string]string{
-//		"name":        req.Name,
-//		"description": req.Description,
-//		"uuid":        req.UUID,
-//		"webapp_type": req.WebappType,
-//		"is_default":  toBoolStr(req.IsDefault),
-//	}
-//
-//	var result WebappBranding
-//	_, err := s.client.PatchMultipartFormWithFieldsAndResponse(ctx, endpoint, fields, "branding_file", filename, file, &result)
-//	if err != nil {
-//		return nil, err
-//	}
-//
-//	return &result, nil
-//}
+func (s *Service) UpdateWebappBranding(ctx context.Context, req *WebappBrandingUpdateRequest, filename string) (*WebappBranding, error) {
+	endpoint := "configuration/v1/webapp_branding/" + req.UUID + "/"
+
+	// Create form fields from request
+	fields := map[string]string{
+		"name":        req.Name,
+		"description": req.Description,
+		"webapp_type": req.WebappType,
+	}
+
+	var result WebappBranding
+	err := s.client.PatchJSON(ctx, endpoint, fields, &result)
+
+	return &result, err
+}
 
 // DeleteWebappBranding deletes a webapp branding
 func (s *Service) DeleteWebappBranding(ctx context.Context, uuid string) error {

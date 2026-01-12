@@ -190,7 +190,7 @@ func TestService_UpdateWebappBranding(t *testing.T) {
 	})
 
 	service := New(client)
-	result, err := service.UpdateWebappBranding(t.Context(), updateRequest, uuid)
+	result, err := service.UpdateWebappBranding(t.Context(), uuid, updateRequest)
 
 	assert.NoError(t, err)
 	assert.Equal(t, expectedWebappBranding, result)

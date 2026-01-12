@@ -67,8 +67,8 @@ func (s *Service) CreateWebappBranding(ctx context.Context, req *WebappBrandingC
 }
 
 // UpdateWebappBranding updates an existing webapp branding
-func (s *Service) UpdateWebappBranding(ctx context.Context, req *WebappBrandingUpdateRequest, filename string) (*WebappBranding, error) {
-	endpoint := "configuration/v1/webapp_branding/" + req.UUID + "/"
+func (s *Service) UpdateWebappBranding(ctx context.Context, req *WebappBrandingUpdateRequest, uuid string) (*WebappBranding, error) {
+	endpoint := "configuration/v1/webapp_branding/" + uuid + "/"
 
 	// Create form fields from request
 	fields := map[string]string{

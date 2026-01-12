@@ -134,9 +134,9 @@ func TestService_CreateWebappBranding(t *testing.T) {
 		WebappType:  "meeting",
 	}
 
-	expectedResponse := &types.PostResponse{
-		Body:        []byte{},
-		ResourceURI: "/api/admin/configuration/v1/webapp_branding/123e4567-e89b-12d3-a456-426614174002/",
+	expectedResponse := &types.PostResponseWithUUID{
+		Body: []byte{},
+		ResourceUUID: "123e4567-e89b-12d3-a456-426614174002",
 	}
 
 	expectedFields := map[string]string{
@@ -145,11 +145,7 @@ func TestService_CreateWebappBranding(t *testing.T) {
 		"webapp_type": "meeting",
 	}
 
-	// Step 1: Mock POST without file to create resource
-	client.On("PostMultipartFormWithFieldsAndResponse", t.Context(), "configuration/v1/webapp_branding/", expectedFields, "", "", mock.Anything, mock.Anything).Return(expectedResponse, nil)
-
-	// Step 2: Mock PATCH to upload file
-	client.On("PatchMultipartFormWithFieldsAndResponse", t.Context(), "configuration/v1/webapp_branding/123e4567-e89b-12d3-a456-426614174002/", mock.Anything, "branding_file", "test.zip", mock.Anything, mock.AnythingOfType("*config.WebappBranding")).Return(nil, nil).Run(func(args mock.Arguments) {
+	client.On("PostMultipartFormWithFieldsAndResponseUUID", t.Context(), "configuration/v1/webapp_branding/", expectedFields, "branding_file", "test.zip", mock.Anything, mock.AnythingOfType("*config.WebappBranding")).Return(expectedResponse, nil).Run(func(args mock.Arguments) {
 		result := args.Get(6).(*WebappBranding)
 		*result = *expectedBranding
 	})
@@ -158,11 +154,10 @@ func TestService_CreateWebappBranding(t *testing.T) {
 	result, err := service.CreateWebappBranding(t.Context(), createRequest, "test.zip", nil)
 
 	assert.NoError(t, err)
-	assert.Equal(t, expectedBranding, result)
+	assert.Equal(t, expectedResponse, result)
 	client.AssertExpectations(t)
 }
 
-// TestService_UpdateWebappBranding is commented out because UpdateWebappBranding is not yet implemented
 func TestService_UpdateWebappBranding(t *testing.T) {
 	client := interfaces.NewHTTPClientMock()
 
@@ -171,7 +166,6 @@ func TestService_UpdateWebappBranding(t *testing.T) {
 	updateRequest := &WebappBrandingUpdateRequest{
 		Name:        "test-branding",
 		Description: "Updated webapp branding",
-		WebappType:  "meeting",
 	}
 
 	lastUpdated := util.InfinityTime{}
@@ -184,7 +178,7 @@ func TestService_UpdateWebappBranding(t *testing.T) {
 		LastUpdated: lastUpdated,
 	}
 
-	client.On("PutJSON", t.Context(), "configuration/v1/webapp_branding/"+uuid+"/", mock.AnythingOfType("*config.WebappBrandingUpdateRequest"), mock.AnythingOfType("*config.WebappBranding")).Return(nil).Run(func(args mock.Arguments) {
+	client.On("PatchJSON", t.Context(), "configuration/v1/webapp_branding/"+uuid+"/", mock.AnythingOfType("*config.WebappBrandingUpdateRequest"), mock.AnythingOfType("*config.WebappBranding")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(3).(*WebappBranding)
 		*result = *expectedWebappBranding
 	})

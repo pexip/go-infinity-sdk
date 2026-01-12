@@ -325,15 +325,15 @@ func (c *Client) PostMultipartFormWithFieldsAndResponse(ctx context.Context, end
 }
 
 func (c *Client) PostMultipartFormWithFieldsAndResponseUUID(ctx context.Context, endpoint string, fields map[string]string, fileFieldName string, filename string, fileContent io.Reader, result interface{}) (*types.PostResponseWithUUID, error) {
-    postResp, err := c.performMultipartFormRequestWithFieldsAndResponse(ctx, http.MethodPost, endpoint, fields, fileFieldName, filename, fileContent, result)
-    if err != nil {
-        return nil, err
-    }
-    
-    return &types.PostResponseWithUUID{
-        Body:        postResp.Body,
-        ResourceUUID: postResp.ResourceURI,
-    }, nil
+	postResp, err := c.performMultipartFormRequestWithFieldsAndResponse(ctx, http.MethodPost, endpoint, fields, fileFieldName, filename, fileContent, result)
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.PostResponseWithUUID{
+		Body:         postResp.Body,
+		ResourceUUID: postResp.ResourceURI,
+	}, nil
 }
 
 func (c *Client) PatchMultipartFormWithFieldsAndResponse(ctx context.Context, endpoint string, fields map[string]string, fileFieldName string, filename string, fileContent io.Reader, result interface{}) (*types.PostResponse, error) {

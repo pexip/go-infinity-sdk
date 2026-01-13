@@ -29,7 +29,7 @@ func (pr *PostResponse) ResourceID() (int, error) {
 	return 0, fmt.Errorf("failed to extract resource ID from location URI: %s", pr.ResourceURI)
 }
 
-// PostResponse represents a POST response that includes both the response body and location header containing the resource UUID.
+// PostResponseWithUUID represents a POST response that includes both the response body and location header containing the resource UUID.
 // this is used by a small number of Infinity resources that use UUIDs instead of integer IDs.
 type PostResponseWithUUID struct {
 	Body         []byte

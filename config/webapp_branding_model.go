@@ -30,8 +30,8 @@ type WebappBrandingCreateRequest struct {
 type WebappBrandingUpdateRequest struct {
 	Name        string `json:"name,omitempty"`
 	Description string `json:"description,omitempty"`
-	UUID        string `json:"uuid"`
-	WebappType  string `json:"webapp_type"`
+	UUID        string `json:"uuid,omitempty"`
+	WebappType  string `json:"webapp_type,omitempty"`
 }
 
 // WebappBrandingListResponse represents the response from listing webapp brandings

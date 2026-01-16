@@ -76,6 +76,14 @@ func (m *HTTPClientMock) PatchMultipartFormWithFieldsAndResponse(ctx context.Con
 	return args.Get(0).(*types.PostResponse), args.Error(1)
 }
 
+func (m *HTTPClientMock) PostMultipartFormWithFieldsAndResponseUUID(ctx context.Context, endpoint string, fields map[string]string, fieldName string, filename string, file io.Reader, response interface{}) (*types.PostResponseWithUUID, error) {
+	args := m.Called(ctx, endpoint, fields, fieldName, filename, file, response)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*types.PostResponseWithUUID), args.Error(1)
+}
+
 // NewHTTPClientMock creates a new mock HTTP client
 func NewHTTPClientMock() *HTTPClientMock {
 	return &HTTPClientMock{}

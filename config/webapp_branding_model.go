@@ -23,9 +23,7 @@ type WebappBranding struct {
 type WebappBrandingCreateRequest struct {
 	Name        string `json:"name"`
 	Description string `json:"description,omitempty"`
-	UUID        string `json:"uuid"`
 	WebappType  string `json:"webapp_type"`
-	IsDefault   bool   `json:"is_default"`
 }
 
 // WebappBrandingUpdateRequest represents a request to update a webapp branding
@@ -34,7 +32,6 @@ type WebappBrandingUpdateRequest struct {
 	Description string `json:"description,omitempty"`
 	UUID        string `json:"uuid,omitempty"`
 	WebappType  string `json:"webapp_type,omitempty"`
-	IsDefault   bool   `json:"is_default"`
 }
 
 // WebappBrandingListResponse represents the response from listing webapp brandings

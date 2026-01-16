@@ -37,6 +37,9 @@ type HTTPClient interface {
 	// PostMultipartFormWithFieldsAndResponse performs a POST request with multipart form data and returns both the response body and location header
 	PostMultipartFormWithFieldsAndResponse(ctx context.Context, endpoint string, fields map[string]string, fileFieldName, filename string, fileContent io.Reader, result interface{}) (*types.PostResponse, error)
 
+	// PostMultipartFormWithFieldsAndResponseUUID performs a POST request with multipart form data and returns both the response body and location header that includes a UUID
+	PostMultipartFormWithFieldsAndResponseUUID(ctx context.Context, endpoint string, fields map[string]string, fileFieldName, filename string, fileContent io.Reader, result interface{}) (*types.PostResponseWithUUID, error)
+
 	// PatchMultipartFormWithFieldsAndResponse performs a POST request with multipart form data and returns both the response body and location header
 	PatchMultipartFormWithFieldsAndResponse(ctx context.Context, endpoint string, fields map[string]string, fileFieldName, filename string, fileContent io.Reader, result interface{}) (*types.PostResponse, error)
 

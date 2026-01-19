@@ -24,6 +24,6 @@ func (s *Service) UpdateGMSGatewayToken(ctx context.Context, req *GMSGatewayToke
 	endpoint := "configuration/v1/gms_gateway_token/1/"
 
 	var result GMSGatewayToken
-	err := s.client.PutJSON(ctx, endpoint, req, &result)
+	err := s.client.PatchJSON(ctx, endpoint, req, &result)
 	return &result, err
 }

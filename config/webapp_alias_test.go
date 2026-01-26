@@ -27,13 +27,13 @@ func TestService_ListWebappAliases(t *testing.T) {
 			name: "successful list without options",
 			opts: nil,
 			setup: func(m *interfaces.HTTPClientMock) {
-				bundle1 := "/api/admin/configuration/v1/software_bundle/1/"
-				branding1 := "/api/admin/configuration/v1/webapp_branding/custom/"
+				bundle1 := &SoftwareBundleRevision{ID: 1, ResourceURI: "/api/admin/configuration/v1/software_bundle_revision/1/"}
+				branding1 := &WebappBranding{UUID: "custom", ResourceURI: "/api/admin/configuration/v1/webapp_branding/custom/"}
 
 				expectedResponse := &WebappAliasListResponse{
 					Objects: []WebappAlias{
-						{ID: 1, Slug: "meeting", Description: "Main meeting interface", WebappType: "meeting", IsEnabled: true, Bundle: &bundle1, Branding: &branding1},
-						{ID: 2, Slug: "admin", Description: "Admin interface", WebappType: "admin", IsEnabled: true, Bundle: &bundle1},
+						{ID: 1, Slug: "meeting", Description: "Main meeting interface", WebappType: "meeting", IsEnabled: true, Bundle: bundle1, Branding: branding1},
+						{ID: 2, Slug: "admin", Description: "Admin interface", WebappType: "admin", IsEnabled: true, Bundle: bundle1},
 					},
 				}
 				m.On("GetJSON", t.Context(), "configuration/v1/webapp_alias/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.WebappAliasListResponse")).Return(nil).Run(func(args mock.Arguments) {
@@ -52,12 +52,12 @@ func TestService_ListWebappAliases(t *testing.T) {
 				Search: "meeting",
 			},
 			setup: func(m *interfaces.HTTPClientMock) {
-				bundle := "/api/admin/configuration/v1/software_bundle/1/"
-				branding := "/api/admin/configuration/v1/webapp_branding/custom/"
+				bundle := &SoftwareBundleRevision{ID: 1, ResourceURI: "/api/admin/configuration/v1/software_bundle_revision/1/"}
+				branding := &WebappBranding{UUID: "custom", ResourceURI: "/api/admin/configuration/v1/webapp_branding/custom/"}
 
 				expectedResponse := &WebappAliasListResponse{
 					Objects: []WebappAlias{
-						{ID: 1, Slug: "meeting", Description: "Main meeting interface", WebappType: "meeting", IsEnabled: true, Bundle: &bundle, Branding: &branding},
+						{ID: 1, Slug: "meeting", Description: "Main meeting interface", WebappType: "meeting", IsEnabled: true, Bundle: bundle, Branding: branding},
 					},
 				}
 				m.On("GetJSON", t.Context(), "configuration/v1/webapp_alias/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.WebappAliasListResponse")).Return(nil).Run(func(args mock.Arguments) {
@@ -92,8 +92,8 @@ func TestService_ListWebappAliases(t *testing.T) {
 
 func TestService_GetWebappAlias(t *testing.T) {
 	client := interfaces.NewHTTPClientMock()
-	bundle := "/api/admin/configuration/v1/software_bundle/1/"
-	branding := "/api/admin/configuration/v1/webapp_branding/custom/"
+	bundle := &SoftwareBundleRevision{ID: 1, ResourceURI: "/api/admin/configuration/v1/software_bundle_revision/1/"}
+	branding := &WebappBranding{UUID: "custom", ResourceURI: "/api/admin/configuration/v1/webapp_branding/custom/"}
 
 	expectedWebappAlias := &WebappAlias{
 		ID:          1,
@@ -101,8 +101,8 @@ func TestService_GetWebappAlias(t *testing.T) {
 		Description: "Test web app alias",
 		WebappType:  "meeting",
 		IsEnabled:   true,
-		Bundle:      &bundle,
-		Branding:    &branding,
+		Bundle:      bundle,
+		Branding:    branding,
 		ResourceURI: "/api/admin/configuration/v1/webapp_alias/1/",
 	}
 
@@ -153,23 +153,24 @@ func TestService_UpdateWebappAlias(t *testing.T) {
 	client := interfaces.NewHTTPClientMock()
 
 	isEnabled := false
-	branding := "/api/admin/configuration/v1/webapp_branding/updated/"
+	brandingURI := "/api/admin/configuration/v1/webapp_branding/updated/"
 
 	updateRequest := &WebappAliasUpdateRequest{
 		Description: "Updated web app alias",
 		IsEnabled:   &isEnabled,
-		Branding:    &branding,
+		Branding:    &brandingURI,
 	}
 
-	bundle := "/api/admin/configuration/v1/software_bundle/1/"
+	bundle := &SoftwareBundleRevision{ID: 1, ResourceURI: "/api/admin/configuration/v1/software_bundle_revision/1/"}
+	branding := &WebappBranding{UUID: "updated", ResourceURI: "/api/admin/configuration/v1/webapp_branding/updated/"}
 	expectedWebappAlias := &WebappAlias{
 		ID:          1,
 		Slug:        "test-webapp",
 		Description: "Updated web app alias",
 		WebappType:  "meeting",
 		IsEnabled:   false,
-		Bundle:      &bundle,
-		Branding:    &branding,
+		Bundle:      bundle,
+		Branding:    branding,
 		ResourceURI: "/api/admin/configuration/v1/webapp_alias/1/",
 	}
 

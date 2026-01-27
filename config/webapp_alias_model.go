@@ -8,14 +8,14 @@ package config
 
 // WebappAlias represents a web app alias configuration
 type WebappAlias struct {
-	ID          int     `json:"id,omitempty"`
-	Slug        string  `json:"slug"`
-	Description string  `json:"description,omitempty"`
-	WebappType  string  `json:"webapp_type"`
-	IsEnabled   bool    `json:"is_enabled"`
-	Bundle      *string `json:"bundle,omitempty"`
-	Branding    *string `json:"branding,omitempty"`
-	ResourceURI string  `json:"resource_uri,omitempty"`
+	ID          int                     `json:"id,omitempty"`
+	Slug        string                  `json:"slug"`
+	Description string                  `json:"description,omitempty"`
+	WebappType  string                  `json:"webapp_type"`
+	IsEnabled   bool                    `json:"is_enabled"`
+	Bundle      *SoftwareBundleRevision `json:"bundle,omitempty"`
+	Branding    *WebappBranding         `json:"branding,omitempty"`
+	ResourceURI string                  `json:"resource_uri,omitempty"`
 }
 
 // WebappAliasCreateRequest represents a request to create a web app alias

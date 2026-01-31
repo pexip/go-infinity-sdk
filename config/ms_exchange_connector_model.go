@@ -134,7 +134,7 @@ type MsExchangeConnectorCreateRequest struct {
 	Password                   string  `json:"password,omitempty"`
 	AuthenticationMethod       string  `json:"authentication_method"`
 	AuthProvider               string  `json:"auth_provider"`
-	UUID                       string  `json:"uuid"`
+	UUID                       string  `json:"uuid,omitempty"`
 	ScheduledAliasPrefix       *string `json:"scheduled_alias_prefix,omitempty"`
 	ScheduledAliasDomain       string  `json:"scheduled_alias_domain,omitempty"`
 	ScheduledAliasSuffixLength int     `json:"scheduled_alias_suffix_length"`

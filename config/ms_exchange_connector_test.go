@@ -32,7 +32,6 @@ func TestService_ListMsExchangeConnectors(t *testing.T) {
 				oauthClientID := "oauth-client-123"
 				oauthState := "oauth-state"
 				addinApplicationID := "addin-app-123"
-				domains := "/api/admin/configuration/v1/domains/1/"
 				ivrTheme := "/api/admin/configuration/v1/ivr_theme/1/"
 
 				expectedResponse := &MsExchangeConnectorListResponse{
@@ -77,9 +76,9 @@ func TestService_ListMsExchangeConnectors(t *testing.T) {
 							OfficeJsURL:                  "https://appsforoffice.microsoft.com/lib/1/hosted/office.js",
 							MicrosoftFabricURL:           "https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/11.0.0/css/fabric.min.css",
 							MicrosoftFabricComponentsURL: "https://static2.sharepointonline.com/files/fabric/office-ui-fabric-js/1.4.0/js/fabric.min.js",
-							Domains:                      &domains,
-							IvrTheme:                     &ivrTheme,
-							NonIdpParticipants:           "allowed",
+
+							IvrTheme:           &ivrTheme,
+							NonIdpParticipants: "allowed",
 						},
 						{
 							ID:                           2,
@@ -184,7 +183,6 @@ func TestService_GetMsExchangeConnector(t *testing.T) {
 	addinApplicationID := "test-addin-app"
 	addinNaaWebApiAppID := "test-naa-app"
 	personalVmrOauthClientID := "test-personal-vmr-client"
-	domains := "/api/admin/configuration/v1/domains/1/"
 	hostIdpGroup := "/api/admin/configuration/v1/identity_provider_group/1/"
 	ivrTheme := "/api/admin/configuration/v1/ivr_theme/1/"
 
@@ -294,7 +292,6 @@ func TestService_GetMsExchangeConnector(t *testing.T) {
 		MicrosoftFabricComponentsURL: "https://static2.sharepointonline.com/files/fabric/office-ui-fabric-js/1.4.0/js/fabric.min.js",
 		AdditionalAddInScriptSources: "https://test.example.com/custom.js",
 		// Related resources
-		Domains:                   &domains,
 		HostIdentityProviderGroup: &hostIdpGroup,
 		IvrTheme:                  &ivrTheme,
 		NonIdpParticipants:        "allowed",
@@ -321,7 +318,7 @@ func TestService_CreateMsExchangeConnector(t *testing.T) {
 	scheduledAliasPrefix := "new"
 	oauthClientID := "new-oauth-client"
 	addinApplicationID := "new-addin-app"
-	domains := "/api/admin/configuration/v1/domains/1/"
+	domains := []string{"/api/admin/configuration/v1/domains/1/"}
 	ivrTheme := "/api/admin/configuration/v1/ivr_theme/1/"
 
 	createRequest := &MsExchangeConnectorCreateRequest{
@@ -334,7 +331,6 @@ func TestService_CreateMsExchangeConnector(t *testing.T) {
 		Password:                     "new-password",
 		AuthenticationMethod:         "oauth",
 		AuthProvider:                 "microsoft",
-		UUID:                         "new-uuid-1234-5678-9012",
 		ScheduledAliasPrefix:         &scheduledAliasPrefix,
 		ScheduledAliasDomain:         "new.example.com",
 		ScheduledAliasSuffixLength:   8,

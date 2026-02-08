@@ -139,10 +139,10 @@ type WorkerVMUpdateRequest struct {
 	SNMPSystemContact          string   `json:"snmp_system_contact"`
 	SNMPSystemLocation         string   `json:"snmp_system_location"`
 	SNMPUsername               string   `json:"snmp_username"`
-	ServiceManager             bool     `json:"service_manager"`
-	ServicePolicy              bool     `json:"service_policy"`
-	Signalling                 bool     `json:"signalling"`
-	Managed                    bool     `json:"managed"`
+	ServiceManager             bool     `json:"service_manager,omitempty"`
+	ServicePolicy              bool     `json:"service_policy,omitempty"`
+	Signalling                 bool     `json:"signalling,omitempty"`
+	Managed                    bool     `json:"managed,omitempty"`
 }
 
 // WorkerVMListResponse represents the response from listing worker VMs

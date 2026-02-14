@@ -25,7 +25,7 @@ type AzureTenantCreateRequest struct {
 // AzureTenantUpdateRequest represents a request to update a Microsoft Teams tenant
 type AzureTenantUpdateRequest struct {
 	Name        string `json:"name,omitempty"`
-	Description string `json:"description,omitempty"`
+	Description string `json:"description"`
 	TenantID    string `json:"tenant_id,omitempty"`
 }
 

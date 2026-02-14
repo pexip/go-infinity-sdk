@@ -29,7 +29,7 @@ type SIPProxyCreateRequest struct {
 // SIPProxyUpdateRequest represents a request to update a SIP proxy
 type SIPProxyUpdateRequest struct {
 	Name        string `json:"name,omitempty"`
-	Description string `json:"description,omitempty"`
+	Description string `json:"description"`
 	Address     string `json:"address,omitempty"`
 	Port        *int   `json:"port,omitempty"`
 	Transport   string `json:"transport,omitempty"`

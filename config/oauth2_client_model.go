@@ -8,11 +8,11 @@ package config
 
 // OAuth2Client represents an OAuth2 client configuration
 type OAuth2Client struct {
-	ClientID      string  `json:"client_id,omitempty"`
-	ClientName    string  `json:"client_name"`
-	Role          string  `json:"role"`
-	PrivateKeyJWT *string `json:"private_key_jwt,omitempty"`
-	ResourceURI   string  `json:"resource_uri,omitempty"`
+	ClientID      string `json:"client_id,omitempty"`
+	ClientName    string `json:"client_name"`
+	Role          string `json:"role"`
+	PrivateKeyJWT string `json:"private_key_jwt,omitempty"`
+	ResourceURI   string `json:"resource_uri,omitempty"`
 }
 
 // OAuth2ClientCreateRequest represents a request to create an OAuth2 client

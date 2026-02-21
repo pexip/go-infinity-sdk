@@ -31,8 +31,8 @@ func TestService_ListOAuth2Clients(t *testing.T) {
 				privateKeyJWT2 := "private-key-jwt-2"
 				expectedResponse := &OAuth2ClientListResponse{
 					Objects: []OAuth2Client{
-						{ClientID: "client-1", ClientName: "Primary OAuth2 Client", Role: "admin", PrivateKeyJWT: &privateKeyJWT1},
-						{ClientID: "client-2", ClientName: "Secondary OAuth2 Client", Role: "user", PrivateKeyJWT: &privateKeyJWT2},
+						{ClientID: "client-1", ClientName: "Primary OAuth2 Client", Role: "admin", PrivateKeyJWT: privateKeyJWT1},
+						{ClientID: "client-2", ClientName: "Secondary OAuth2 Client", Role: "user", PrivateKeyJWT: privateKeyJWT2},
 					},
 				}
 				m.On("GetJSON", t.Context(), "configuration/v1/oauth2_client/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.OAuth2ClientListResponse")).Return(nil).Run(func(args mock.Arguments) {
@@ -54,7 +54,7 @@ func TestService_ListOAuth2Clients(t *testing.T) {
 				privateKeyJWT := "private-key-jwt-1"
 				expectedResponse := &OAuth2ClientListResponse{
 					Objects: []OAuth2Client{
-						{ClientID: "client-1", ClientName: "Primary OAuth2 Client", Role: "admin", PrivateKeyJWT: &privateKeyJWT},
+						{ClientID: "client-1", ClientName: "Primary OAuth2 Client", Role: "admin", PrivateKeyJWT: privateKeyJWT},
 					},
 				}
 				m.On("GetJSON", t.Context(), "configuration/v1/oauth2_client/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.OAuth2ClientListResponse")).Return(nil).Run(func(args mock.Arguments) {
@@ -94,7 +94,7 @@ func TestService_GetOAuth2Client(t *testing.T) {
 		ClientID:      "test-client-id",
 		ClientName:    "Test OAuth2 Client",
 		Role:          "admin",
-		PrivateKeyJWT: &privateKeyJWT,
+		PrivateKeyJWT: privateKeyJWT,
 	}
 
 	client.On("GetJSON", t.Context(), "configuration/v1/oauth2_client/test-client-id/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.OAuth2Client")).Return(nil).Run(func(args mock.Arguments) {
@@ -146,7 +146,7 @@ func TestService_UpdateOAuth2Client(t *testing.T) {
 		ClientID:      "test-client-id",
 		ClientName:    "Updated OAuth2 Client",
 		Role:          "admin",
-		PrivateKeyJWT: &privateKeyJWT,
+		PrivateKeyJWT: privateKeyJWT,
 	}
 
 	client.On("PutJSON", t.Context(), "configuration/v1/oauth2_client/test-client-id/", updateRequest, mock.AnythingOfType("*config.OAuth2Client")).Return(nil).Run(func(args mock.Arguments) {

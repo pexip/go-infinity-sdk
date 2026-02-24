@@ -35,13 +35,13 @@ type SMTPServerCreateRequest struct {
 // SMTPServerUpdateRequest represents a request to update an SMTP server
 type SMTPServerUpdateRequest struct {
 	Name               string `json:"name,omitempty"`
-	Description        string `json:"description,omitempty"`
+	Description        string `json:"description"`
 	Address            string `json:"address,omitempty"`
-	Port               *int   `json:"port,omitempty"`
-	Username           string `json:"username,omitempty"`
-	Password           string `json:"password,omitempty"`
+	Port               *int   `json:"port"`
+	Username           string `json:"username"`
+	Password           string `json:"password"`
 	FromEmailAddress   string `json:"from_email_address,omitempty"`
-	ConnectionSecurity string `json:"connection_security,omitempty"`
+	ConnectionSecurity string `json:"connection_security"`
 }
 
 // SMTPServerListResponse represents the response from listing SMTP servers

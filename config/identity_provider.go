@@ -49,7 +49,7 @@ func (s *Service) UpdateIdentityProvider(ctx context.Context, id int, req *Ident
 	endpoint := fmt.Sprintf("configuration/v1/identity_provider/%d/", id)
 
 	var result IdentityProvider
-	err := s.client.PutJSON(ctx, endpoint, req, &result)
+	err := s.client.PatchJSON(ctx, endpoint, req, &result)
 	return &result, err
 }
 

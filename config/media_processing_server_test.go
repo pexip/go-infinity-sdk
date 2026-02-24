@@ -27,12 +27,10 @@ func TestService_ListMediaProcessingServers(t *testing.T) {
 			name: "successful list without options",
 			opts: nil,
 			setup: func(m *interfaces.HTTPClientMock) {
-				appID1 := "media-app-01"
-				appID2 := "media-app-02"
 				expectedResponse := &MediaProcessingServerListResponse{
 					Objects: []MediaProcessingServer{
-						{ID: 1, FQDN: "media1.example.com", AppID: &appID1, PublicJWTKey: "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA...\n-----END PUBLIC KEY-----"},
-						{ID: 2, FQDN: "media2.example.com", AppID: &appID2, PublicJWTKey: "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA...\n-----END PUBLIC KEY-----"},
+						{ID: 1, FQDN: "media1.example.com", AppID: "media-app-01", PublicJWTKey: "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA...\n-----END PUBLIC KEY-----"},
+						{ID: 2, FQDN: "media2.example.com", AppID: "media-app-02", PublicJWTKey: "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA...\n-----END PUBLIC KEY-----"},
 					},
 				}
 				m.On("GetJSON", t.Context(), "configuration/v1/media_processing_server/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MediaProcessingServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
@@ -51,10 +49,9 @@ func TestService_ListMediaProcessingServers(t *testing.T) {
 				Search: "media1",
 			},
 			setup: func(m *interfaces.HTTPClientMock) {
-				appID := "media-app-01"
 				expectedResponse := &MediaProcessingServerListResponse{
 					Objects: []MediaProcessingServer{
-						{ID: 1, FQDN: "media1.example.com", AppID: &appID, PublicJWTKey: "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA...\n-----END PUBLIC KEY-----"},
+						{ID: 1, FQDN: "media1.example.com", AppID: "media-app-01", PublicJWTKey: "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA...\n-----END PUBLIC KEY-----"},
 					},
 				}
 				m.On("GetJSON", t.Context(), "configuration/v1/media_processing_server/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MediaProcessingServerListResponse")).Return(nil).Run(func(args mock.Arguments) {
@@ -89,11 +86,10 @@ func TestService_ListMediaProcessingServers(t *testing.T) {
 
 func TestService_GetMediaProcessingServer(t *testing.T) {
 	client := interfaces.NewHTTPClientMock()
-	appID := "test-media-app"
 	expectedMediaProcessingServer := &MediaProcessingServer{
 		ID:           1,
 		FQDN:         "test-media.example.com",
-		AppID:        &appID,
+		AppID:        "test-media-app",
 		PublicJWTKey: "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtest...\n-----END PUBLIC KEY-----",
 	}
 
@@ -113,11 +109,8 @@ func TestService_GetMediaProcessingServer(t *testing.T) {
 func TestService_CreateMediaProcessingServer(t *testing.T) {
 	client := interfaces.NewHTTPClientMock()
 
-	appID := "new-media-app"
 	createRequest := &MediaProcessingServerCreateRequest{
-		FQDN:         "new-media.example.com",
-		AppID:        &appID,
-		PublicJWTKey: "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnew...\n-----END PUBLIC KEY-----",
+		FQDN: "new-media.example.com",
 	}
 
 	expectedResponse := &types.PostResponse{
@@ -139,14 +132,13 @@ func TestService_UpdateMediaProcessingServer(t *testing.T) {
 	client := interfaces.NewHTTPClientMock()
 
 	updateRequest := &MediaProcessingServerUpdateRequest{
-		PublicJWTKey: "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAupdated...\n-----END PUBLIC KEY-----",
+		FQDN: "updated-media.example.com",
 	}
 
-	appID := "test-media-app"
 	expectedMediaProcessingServer := &MediaProcessingServer{
 		ID:           1,
-		FQDN:         "test-media.example.com",
-		AppID:        &appID,
+		FQDN:         "updated-media.example.com",
+		AppID:        "test-media-app",
 		PublicJWTKey: "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAupdated...\n-----END PUBLIC KEY-----",
 	}
 

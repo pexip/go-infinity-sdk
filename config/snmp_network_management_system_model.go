@@ -29,10 +29,10 @@ type SnmpNetworkManagementSystemCreateRequest struct {
 // SnmpNetworkManagementSystemUpdateRequest represents a request to update an SNMP network management system
 type SnmpNetworkManagementSystemUpdateRequest struct {
 	Name              string `json:"name,omitempty"`
-	Description       string `json:"description,omitempty"`
+	Description       string `json:"description"`
 	Address           string `json:"address,omitempty"`
 	Port              *int   `json:"port,omitempty"`
-	SnmpTrapCommunity string `json:"snmp_trap_community,omitempty"`
+	SnmpTrapCommunity string `json:"snmp_trap_community"`
 }
 
 // SnmpNetworkManagementSystemListResponse represents the response from listing SNMP network management systems

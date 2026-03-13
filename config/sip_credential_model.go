@@ -26,7 +26,7 @@ type SIPCredentialCreateRequest struct {
 type SIPCredentialUpdateRequest struct {
 	Realm    string `json:"realm,omitempty"`
 	Username string `json:"username,omitempty"`
-	Password string `json:"password,omitempty"`
+	Password string `json:"password"`
 }
 
 // SIPCredentialListResponse represents the response from listing SIP credentials

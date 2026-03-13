@@ -27,7 +27,7 @@ type NTPServerCreateRequest struct {
 // NTPServerUpdateRequest represents a request to update an NTP server
 type NTPServerUpdateRequest struct {
 	Address     string `json:"address,omitempty"`
-	Description string `json:"description,omitempty"`
+	Description string `json:"description"`
 	Key         string `json:"key,omitempty"`
 	KeyID       *int   `json:"key_id,omitempty"`
 }

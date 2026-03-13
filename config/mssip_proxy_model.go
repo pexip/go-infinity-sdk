@@ -29,7 +29,7 @@ type MSSIPProxyCreateRequest struct {
 // MSSIPProxyUpdateRequest represents a request to update an MS-SIP proxy
 type MSSIPProxyUpdateRequest struct {
 	Name        string `json:"name,omitempty"`
-	Description string `json:"description,omitempty"`
+	Description string `json:"description"`
 	Address     string `json:"address,omitempty"`
 	Port        *int   `json:"port,omitempty"`
 	Transport   string `json:"transport,omitempty"`

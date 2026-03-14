@@ -27,7 +27,7 @@ type UserGroupCreateRequest struct {
 // UserGroupUpdateRequest represents a request to update a user group
 type UserGroupUpdateRequest struct {
 	Name                    string   `json:"name,omitempty"`
-	Description             string   `json:"description,omitempty"`
+	Description             string   `json:"description"`
 	Users                   []string `json:"users,omitempty"`
 	UserGroupEntityMappings []string `json:"user_group_entity_mappings,omitempty"`
 }

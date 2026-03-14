@@ -24,7 +24,7 @@ type UserGroupEntityMappingCreateRequest struct {
 
 // UserGroupEntityMappingUpdateRequest represents a request to update a user group entity mapping
 type UserGroupEntityMappingUpdateRequest struct {
-	Description       string `json:"description,omitempty"`
+	Description       string `json:"description"`
 	EntityResourceURI string `json:"entity_resource_uri,omitempty"`
 	UserGroup         string `json:"user_group,omitempty"`
 }

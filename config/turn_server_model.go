@@ -37,12 +37,12 @@ type TURNServerCreateRequest struct {
 // TURNServerUpdateRequest represents a request to update a TURN server
 type TURNServerUpdateRequest struct {
 	Name          string `json:"name,omitempty"`
-	Description   string `json:"description,omitempty"`
+	Description   string `json:"description"`
 	Address       string `json:"address,omitempty"`
 	Port          *int   `json:"port,omitempty"`
-	Username      string `json:"username,omitempty"`
-	Password      string `json:"password,omitempty"`
-	SecretKey     string `json:"secret_key,omitempty"`
+	Username      string `json:"username"`
+	Password      string `json:"password"`
+	SecretKey     string `json:"secret_key"`
 	ServerType    string `json:"server_type,omitempty"`
 	TransportType string `json:"transport_type,omitempty"`
 }

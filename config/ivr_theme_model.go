@@ -33,7 +33,7 @@ type IVRThemeCreateRequest struct {
 
 // IVRThemeUpdateRequest represents a request to update an IVR theme
 type IVRThemeUpdateRequest struct {
-	Name           string   `json:"name,omitempty"`
+	Name           string   `json:"name"`
 	UUID           string   `json:"uuid,omitempty"`
 	Conference     []string `json:"conference,omitempty"`
 	CustomLayouts  string   `json:"custom_layouts,omitempty"`

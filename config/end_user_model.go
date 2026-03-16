@@ -48,19 +48,19 @@ type EndUserCreateRequest struct {
 // EndUserUpdateRequest represents a request to update an end user
 type EndUserUpdateRequest struct {
 	PrimaryEmailAddress string   `json:"primary_email_address,omitempty"`
-	FirstName           string   `json:"first_name,omitempty"`
-	LastName            string   `json:"last_name,omitempty"`
-	DisplayName         string   `json:"display_name,omitempty"`
-	TelephoneNumber     string   `json:"telephone_number,omitempty"`
-	MobileNumber        string   `json:"mobile_number,omitempty"`
-	Title               string   `json:"title,omitempty"`
-	Department          string   `json:"department,omitempty"`
-	AvatarURL           string   `json:"avatar_url,omitempty"`
+	FirstName           string   `json:"first_name"`
+	LastName            string   `json:"last_name"`
+	DisplayName         string   `json:"display_name"`
+	TelephoneNumber     string   `json:"telephone_number"`
+	MobileNumber        string   `json:"mobile_number"`
+	Title               string   `json:"title"`
+	Department          string   `json:"department"`
+	AvatarURL           string   `json:"avatar_url"`
 	UserGroups          []string `json:"user_groups,omitempty"`
 	UserOID             *string  `json:"user_oid,omitempty"`
 	ExchangeUserID      *string  `json:"exchange_user_id,omitempty"`
 	MSExchangeGUID      *string  `json:"ms_exchange_guid,omitempty"`
-	SyncTag             string   `json:"sync_tag,omitempty"`
+	SyncTag             string   `json:"sync_tag"`
 }
 
 // EndUserListResponse represents the response from listing end users

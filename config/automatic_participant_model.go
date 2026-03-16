@@ -56,7 +56,7 @@ type AutomaticParticipantUpdateRequest struct {
 	DTMFSequence        string   `json:"dtmf_sequence,omitempty"`
 	KeepConferenceAlive string   `json:"keep_conference_alive,omitempty"`
 	Routing             string   `json:"routing,omitempty"`
-	SystemLocation      *string  `json:"system_location,omitempty"`
+	SystemLocation      *string  `json:"system_location"`
 	Streaming           *bool    `json:"streaming,omitempty"`
 	RemoteDisplayName   string   `json:"remote_display_name,omitempty"`
 	PresentationURL     string   `json:"presentation_url,omitempty"`

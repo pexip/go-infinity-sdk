@@ -55,10 +55,10 @@ type PolicyServerCreateRequest struct {
 // PolicyServerUpdateRequest represents a request to update a policy server
 type PolicyServerUpdateRequest struct {
 	Name                                string `json:"name,omitempty"`
-	Description                         string `json:"description,omitempty"`
-	URL                                 string `json:"url,omitempty"`
-	Username                            string `json:"username,omitempty"`
-	Password                            string `json:"password,omitempty"`
+	Description                         string `json:"description"`
+	URL                                 string `json:"url"`
+	Username                            string `json:"username"`
+	Password                            string `json:"password"`
 	EnableServiceLookup                 *bool  `json:"enable_service_lookup,omitempty"`
 	EnableParticipantLookup             *bool  `json:"enable_participant_lookup,omitempty"`
 	EnableRegistrationLookup            *bool  `json:"enable_registration_lookup,omitempty"`
@@ -68,9 +68,9 @@ type PolicyServerUpdateRequest struct {
 	EnableInternalServicePolicy         *bool  `json:"enable_internal_service_policy,omitempty"`
 	EnableInternalParticipantPolicy     *bool  `json:"enable_internal_participant_policy,omitempty"`
 	EnableInternalMediaLocationPolicy   *bool  `json:"enable_internal_media_location_policy,omitempty"`
-	InternalServicePolicyTemplate       string `json:"internal_service_policy_template,omitempty"`
-	InternalParticipantPolicyTemplate   string `json:"internal_participant_policy_template,omitempty"`
-	InternalMediaLocationPolicyTemplate string `json:"internal_media_location_policy_template,omitempty"`
+	InternalServicePolicyTemplate       string `json:"internal_service_policy_template"`
+	InternalParticipantPolicyTemplate   string `json:"internal_participant_policy_template"`
+	InternalMediaLocationPolicyTemplate string `json:"internal_media_location_policy_template"`
 	PreferLocalAvatarConfiguration      *bool  `json:"prefer_local_avatar_configuration,omitempty"`
 }
 

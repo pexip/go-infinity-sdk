@@ -22,8 +22,8 @@ type LogLevelCreateRequest struct {
 
 // LogLevelUpdateRequest represents a request to update a log level
 type LogLevelUpdateRequest struct {
-	Name  string `json:"name,omitempty"`
-	Level string `json:"level,omitempty"`
+	Name  string `json:"name"`
+	Level string `json:"level"`
 }
 
 // LogLevelListResponse represents the response from listing log levels

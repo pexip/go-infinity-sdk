@@ -18,7 +18,7 @@ type SSHAuthorizedKey struct {
 
 // SSHAuthorizedKeyCreateRequest represents a request to create an SSH authorized key
 type SSHAuthorizedKeyCreateRequest struct {
-	Keytype string   `json:"keytype"`
+	Keytype string   `json:"keytype,omitempty"`
 	Key     string   `json:"key"`
 	Comment string   `json:"comment,omitempty"`
 	Nodes   []string `json:"nodes,omitempty"`

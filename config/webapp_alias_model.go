@@ -31,7 +31,7 @@ type WebappAliasCreateRequest struct {
 // WebappAliasUpdateRequest represents a request to update a web app alias
 type WebappAliasUpdateRequest struct {
 	Slug        string  `json:"slug,omitempty"`
-	Description string  `json:"description,omitempty"`
+	Description string  `json:"description"`
 	WebappType  string  `json:"webapp_type,omitempty"`
 	IsEnabled   *bool   `json:"is_enabled,omitempty"`
 	Bundle      *string `json:"bundle,omitempty"`

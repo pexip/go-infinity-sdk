@@ -33,8 +33,8 @@ type HTTPProxyUpdateRequest struct {
 	Name     string `json:"name,omitempty"`
 	Address  string `json:"address,omitempty"`
 	Port     *int   `json:"port,omitempty"`
-	Username string `json:"username,omitempty"`
-	Password string `json:"password,omitempty"`
+	Username string `json:"username"`
+	Password string `json:"password"`
 	Protocol string `json:"protocol,omitempty"`
 }
 

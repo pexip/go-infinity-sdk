@@ -27,7 +27,7 @@ type H323GatekeeperCreateRequest struct {
 // H323GatekeeperUpdateRequest represents a request to update an H.323 gatekeeper
 type H323GatekeeperUpdateRequest struct {
 	Name        string `json:"name,omitempty"`
-	Description string `json:"description,omitempty"`
+	Description string `json:"description"`
 	Address     string `json:"address,omitempty"`
 	Port        *int   `json:"port,omitempty"`
 }

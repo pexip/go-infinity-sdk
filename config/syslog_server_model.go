@@ -33,7 +33,7 @@ type SyslogServerCreateRequest struct {
 // SyslogServerUpdateRequest represents a request to update a syslog server
 type SyslogServerUpdateRequest struct {
 	Address     string `json:"address,omitempty"`
-	Description string `json:"description,omitempty"`
+	Description string `json:"description"`
 	Port        int    `json:"port,omitempty"`
 	Transport   string `json:"transport,omitempty"`
 	AuditLog    *bool  `json:"audit_log,omitempty"`

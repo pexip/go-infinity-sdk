@@ -23,7 +23,7 @@ type RoleCreateRequest struct {
 // RoleUpdateRequest represents a request to update a role
 type RoleUpdateRequest struct {
 	Name        string   `json:"name,omitempty"`
-	Permissions []string `json:"permissions,omitempty"`
+	Permissions []string `json:"permissions"`
 }
 
 // RoleListResponse represents the response from listing roles

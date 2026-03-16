@@ -28,8 +28,8 @@ type WebappBrandingCreateRequest struct {
 
 // WebappBrandingUpdateRequest represents a request to update a webapp branding
 type WebappBrandingUpdateRequest struct {
-	Name        string `json:"name,omitempty"`
-	Description string `json:"description,omitempty"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
 	UUID        string `json:"uuid,omitempty"`
 	WebappType  string `json:"webapp_type,omitempty"`
 }

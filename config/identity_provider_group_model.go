@@ -25,7 +25,7 @@ type IdentityProviderGroupCreateRequest struct {
 // IdentityProviderGroupUpdateRequest represents a request to update an identity provider group
 type IdentityProviderGroupUpdateRequest struct {
 	Name             string   `json:"name,omitempty"`
-	Description      string   `json:"description,omitempty"`
+	Description      string   `json:"description"`
 	IdentityProvider []string `json:"identity_provider,omitempty"`
 }
 

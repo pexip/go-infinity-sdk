@@ -23,7 +23,7 @@ type IdentityProviderAttributeCreateRequest struct {
 // IdentityProviderAttributeUpdateRequest represents a request to update an identity provider attribute
 type IdentityProviderAttributeUpdateRequest struct {
 	Name        string `json:"name,omitempty"`
-	Description string `json:"description,omitempty"`
+	Description string `json:"description"`
 }
 
 // IdentityProviderAttributeListResponse represents the response from listing identity provider attributes

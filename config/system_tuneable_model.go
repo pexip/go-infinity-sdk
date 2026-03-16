@@ -22,8 +22,8 @@ type SystemTuneableCreateRequest struct {
 
 // SystemTuneableUpdateRequest represents a request to update a system tuneable
 type SystemTuneableUpdateRequest struct {
-	Name    string `json:"name,omitempty"`
-	Setting string `json:"setting,omitempty"`
+	Name    string `json:"name"`
+	Setting string `json:"setting"`
 }
 
 // SystemTuneableListResponse represents the response from listing system tuneables

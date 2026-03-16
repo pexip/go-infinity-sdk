@@ -19,7 +19,7 @@ type STUNServer struct {
 // STUNServerCreateRequest represents a request to create a STUN server
 type STUNServerCreateRequest struct {
 	Name        string `json:"name"`
-	Description string `json:"description,omitempty"`
+	Description string `json:"description"`
 	Address     string `json:"address"`
 	Port        int    `json:"port"`
 }
@@ -27,7 +27,7 @@ type STUNServerCreateRequest struct {
 // STUNServerUpdateRequest represents a request to update a STUN server
 type STUNServerUpdateRequest struct {
 	Name        string `json:"name,omitempty"`
-	Description string `json:"description,omitempty"`
+	Description string `json:"description"`
 	Address     string `json:"address,omitempty"`
 	Port        *int   `json:"port,omitempty"`
 }

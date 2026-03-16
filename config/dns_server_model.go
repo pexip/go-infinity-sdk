@@ -23,7 +23,7 @@ type DNSServerCreateRequest struct {
 // DNSServerUpdateRequest represents a request to update a DNS server
 type DNSServerUpdateRequest struct {
 	Address     string `json:"address,omitempty"`
-	Description string `json:"description,omitempty"`
+	Description string `json:"description"`
 }
 
 // DNSServerListResponse represents the response from listing DNS servers

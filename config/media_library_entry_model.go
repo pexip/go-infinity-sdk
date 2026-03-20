@@ -22,15 +22,13 @@ type MediaLibraryEntry struct {
 // MediaLibraryEntryCreateRequest represents a request to create a media library entry
 type MediaLibraryEntryCreateRequest struct {
 	Name        string `json:"name"`
-	Description string `json:"description,omitempty"`
-	UUID        string `json:"uuid,omitempty"`
+	Description string `json:"description"`
 }
 
 // MediaLibraryEntryUpdateRequest represents a request to update a media library entry
 type MediaLibraryEntryUpdateRequest struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
-	UUID        string `json:"uuid,omitempty"`
 }
 
 // MediaLibraryEntryListResponse represents the response from listing media library entries

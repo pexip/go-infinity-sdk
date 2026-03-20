@@ -118,7 +118,6 @@ func TestService_CreateMediaLibraryEntry(t *testing.T) {
 	createRequest := &MediaLibraryEntryCreateRequest{
 		Name:        "new-media",
 		Description: "New media file",
-		UUID:        "123e4567-e89b-12d3-a456-426614174002",
 	}
 
 	expectedFields := map[string]string{
@@ -162,7 +161,6 @@ func TestService_UpdateMediaLibraryEntry(t *testing.T) {
 
 	expectedFields := map[string]string{
 		"name":        "",
-		"uuid":        "",
 		"description": "Updated media file",
 	}
 

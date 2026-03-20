@@ -29,8 +29,8 @@ func TestService_ListMediaLibraryPlaylists(t *testing.T) {
 			setup: func(m *interfaces.HTTPClientMock) {
 				expectedResponse := &MediaLibraryPlaylistListResponse{
 					Objects: []MediaLibraryPlaylist{
-						{ID: 1, Name: "welcome-playlist", Description: "Welcome and onboarding videos", Loop: true, Shuffle: false, PlaylistEntries: []string{"/api/admin/configuration/v1/media_library_playlist_entry/1/", "/api/admin/configuration/v1/media_library_playlist_entry/2/"}},
-						{ID: 2, Name: "hold-music-playlist", Description: "Music on hold collection", Loop: true, Shuffle: true, PlaylistEntries: []string{"/api/admin/configuration/v1/media_library_playlist_entry/3/", "/api/admin/configuration/v1/media_library_playlist_entry/4/"}},
+						{ID: 1, Name: "welcome-playlist", Description: "Welcome and onboarding videos", Loop: true, Shuffle: false, PlaylistEntries: []MediaLibraryPlaylistEntry{{ResourceURI: "/api/admin/configuration/v1/media_library_playlist_entry/1/"}, {ResourceURI: "/api/admin/configuration/v1/media_library_playlist_entry/2/"}}},
+						{ID: 2, Name: "hold-music-playlist", Description: "Music on hold collection", Loop: true, Shuffle: true, PlaylistEntries: []MediaLibraryPlaylistEntry{{ResourceURI: "/api/admin/configuration/v1/media_library_playlist_entry/3/"}, {ResourceURI: "/api/admin/configuration/v1/media_library_playlist_entry/4/"}}},
 					},
 				}
 				m.On("GetJSON", t.Context(), "configuration/v1/media_library_playlist/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MediaLibraryPlaylistListResponse")).Return(nil).Run(func(args mock.Arguments) {
@@ -51,7 +51,7 @@ func TestService_ListMediaLibraryPlaylists(t *testing.T) {
 			setup: func(m *interfaces.HTTPClientMock) {
 				expectedResponse := &MediaLibraryPlaylistListResponse{
 					Objects: []MediaLibraryPlaylist{
-						{ID: 1, Name: "welcome-playlist", Description: "Welcome and onboarding videos", Loop: true, Shuffle: false, PlaylistEntries: []string{"/api/admin/configuration/v1/media_library_playlist_entry/1/", "/api/admin/configuration/v1/media_library_playlist_entry/2/"}},
+						{ID: 1, Name: "welcome-playlist", Description: "Welcome and onboarding videos", Loop: true, Shuffle: false, PlaylistEntries: []MediaLibraryPlaylistEntry{{ResourceURI: "/api/admin/configuration/v1/media_library_playlist_entry/1/"}, {ResourceURI: "/api/admin/configuration/v1/media_library_playlist_entry/2/"}}},
 					},
 				}
 				m.On("GetJSON", t.Context(), "configuration/v1/media_library_playlist/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MediaLibraryPlaylistListResponse")).Return(nil).Run(func(args mock.Arguments) {
@@ -92,10 +92,10 @@ func TestService_GetMediaLibraryPlaylist(t *testing.T) {
 		Description: "Test media playlist",
 		Loop:        true,
 		Shuffle:     false,
-		PlaylistEntries: []string{
-			"/api/admin/configuration/v1/media_library_playlist_entry/1/",
-			"/api/admin/configuration/v1/media_library_playlist_entry/2/",
-			"/api/admin/configuration/v1/media_library_playlist_entry/3/",
+		PlaylistEntries: []MediaLibraryPlaylistEntry{
+			{ResourceURI: "/api/admin/configuration/v1/media_library_playlist_entry/1/"},
+			{ResourceURI: "/api/admin/configuration/v1/media_library_playlist_entry/2/"},
+			{ResourceURI: "/api/admin/configuration/v1/media_library_playlist_entry/3/"},
 		},
 	}
 
@@ -161,10 +161,10 @@ func TestService_UpdateMediaLibraryPlaylist(t *testing.T) {
 		Description: "Updated media playlist",
 		Loop:        true,
 		Shuffle:     true,
-		PlaylistEntries: []string{
-			"/api/admin/configuration/v1/media_library_playlist_entry/1/",
-			"/api/admin/configuration/v1/media_library_playlist_entry/2/",
-			"/api/admin/configuration/v1/media_library_playlist_entry/7/",
+		PlaylistEntries: []MediaLibraryPlaylistEntry{
+			{ResourceURI: "/api/admin/configuration/v1/media_library_playlist_entry/1/"},
+			{ResourceURI: "/api/admin/configuration/v1/media_library_playlist_entry/2/"},
+			{ResourceURI: "/api/admin/configuration/v1/media_library_playlist_entry/7/"},
 		},
 	}
 

@@ -8,13 +8,13 @@ package config
 
 // MediaLibraryPlaylist represents a media library playlist configuration
 type MediaLibraryPlaylist struct {
-	ID              int                          `json:"id,omitempty"`
-	Name            string                       `json:"name"`
-	Description     string                       `json:"description,omitempty"`
-	Loop            bool                         `json:"loop"`
-	Shuffle         bool                         `json:"shuffle"`
-	PlaylistEntries []MediaLibraryPlaylistEntry  `json:"playlist_entries,omitempty"`
-	ResourceURI     string                       `json:"resource_uri,omitempty"`
+	ID              int                         `json:"id,omitempty"`
+	Name            string                      `json:"name"`
+	Description     string                      `json:"description,omitempty"`
+	Loop            bool                        `json:"loop"`
+	Shuffle         bool                        `json:"shuffle"`
+	PlaylistEntries []MediaLibraryPlaylistEntry `json:"playlist_entries,omitempty"`
+	ResourceURI     string                      `json:"resource_uri,omitempty"`
 }
 
 // MediaLibraryPlaylistCreateRequest represents a request to create a media library playlist

@@ -345,11 +345,9 @@ func (c *Client) performMultipartFormRequestWithFieldsAndResponse(ctx context.Co
 	w := multipart.NewWriter(&body)
 
 	// Add form fields (including empty strings to allow clearing fields)
-	if fields != nil {
-		for key, value := range fields {
-			if err := w.WriteField(key, value); err != nil {
-				return nil, fmt.Errorf("failed to write form field %s: %w", key, err)
-			}
+	for key, value := range fields {
+		if err := w.WriteField(key, value); err != nil {
+			return nil, fmt.Errorf("failed to write form field %s: %w", key, err)
 		}
 	}
 

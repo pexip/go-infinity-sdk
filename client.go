@@ -360,9 +360,11 @@ func (c *Client) performMultipartFormRequestWithFieldsAndResponse(ctx context.Co
 		if _, err = io.Copy(part, fileContent); err != nil {
 			return nil, fmt.Errorf("failed to write file content: %w", err)
 		}
-		if err = w.Close(); err != nil {
-			return nil, fmt.Errorf("failed to close multipart writer: %w", err)
-		}
+	}
+
+	// Close multipart writer
+	if err := w.Close(); err != nil {
+		return nil, fmt.Errorf("failed to close multipart writer: %w", err)
 	}
 
 	req := &Request{

@@ -344,14 +344,10 @@ func (c *Client) performMultipartFormRequestWithFieldsAndResponse(ctx context.Co
 	var body bytes.Buffer
 	w := multipart.NewWriter(&body)
 
-	// Add form fields (only non-empty values)
-	if fields != nil {
-		for key, value := range fields {
-			if value != "" {
-				if err := w.WriteField(key, value); err != nil {
-					return nil, fmt.Errorf("failed to write form field %s: %w", key, err)
-				}
-			}
+	// Add form fields (including empty strings to allow clearing fields)
+	for key, value := range fields {
+		if err := w.WriteField(key, value); err != nil {
+			return nil, fmt.Errorf("failed to write form field %s: %w", key, err)
 		}
 	}
 
@@ -364,9 +360,11 @@ func (c *Client) performMultipartFormRequestWithFieldsAndResponse(ctx context.Co
 		if _, err = io.Copy(part, fileContent); err != nil {
 			return nil, fmt.Errorf("failed to write file content: %w", err)
 		}
-		if err = w.Close(); err != nil {
-			return nil, fmt.Errorf("failed to close multipart writer: %w", err)
-		}
+	}
+
+	// Close multipart writer
+	if err := w.Close(); err != nil {
+		return nil, fmt.Errorf("failed to close multipart writer: %w", err)
 	}
 
 	req := &Request{

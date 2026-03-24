@@ -60,7 +60,6 @@ func (s *Service) UpdateMediaLibraryEntry(ctx context.Context, id int, req *Medi
 	// Create form fields from request
 	fields := map[string]string{
 		"name":        req.Name,
-		"uuid":        req.UUID,
 		"description": req.Description,
 	}
 

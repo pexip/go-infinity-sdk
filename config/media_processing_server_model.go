@@ -17,12 +17,12 @@ type MediaProcessingServer struct {
 
 // MediaProcessingServerCreateRequest represents a request to create a media processing server
 type MediaProcessingServerCreateRequest struct {
-	FQDN         string `json:"fqdn"`
+	FQDN string `json:"fqdn"`
 }
 
 // MediaProcessingServerUpdateRequest represents a request to update a media processing server
 type MediaProcessingServerUpdateRequest struct {
-	FQDN         string `json:"fqdn,omitempty"`
+	FQDN string `json:"fqdn,omitempty"`
 }
 
 // MediaProcessingServerListResponse represents the response from listing media processing servers

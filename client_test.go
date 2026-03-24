@@ -11,9 +11,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"strings"
 	"testing"
 	"time"
 
@@ -909,4 +911,287 @@ func TestClient_HttpClient(t *testing.T) {
 	retrievedDefault := defaultClient.HttpClient()
 	assert.NotNil(t, retrievedDefault)
 	assert.Equal(t, DefaultTimeout, retrievedDefault.Timeout)
+}
+
+func TestPerformMultipartFormRequestWithFieldsAndResponse(t *testing.T) {
+	tests := []struct {
+		name               string
+		method             string
+		fields             map[string]string
+		fileFieldName      string
+		filename           string
+		fileContent        string
+		expectedStatusCode int
+		validateRequest    func(t *testing.T, r *http.Request)
+	}{
+		{
+			name:   "fields only without file",
+			method: http.MethodPost,
+			fields: map[string]string{
+				"name":        "test-resource",
+				"description": "test description",
+				"enabled":     "true",
+			},
+			fileFieldName:      "",
+			filename:           "",
+			fileContent:        "",
+			expectedStatusCode: http.StatusCreated,
+			validateRequest: func(t *testing.T, r *http.Request) {
+				assert.Equal(t, http.MethodPost, r.Method)
+				assert.Contains(t, r.Header.Get("Content-Type"), "multipart/form-data")
+				assert.Equal(t, "application/json", r.Header.Get("Accept"))
+
+				err := r.ParseMultipartForm(32 << 20)
+				require.NoError(t, err)
+
+				assert.Equal(t, "test-resource", r.FormValue("name"))
+				assert.Equal(t, "test description", r.FormValue("description"))
+				assert.Equal(t, "true", r.FormValue("enabled"))
+			},
+		},
+		{
+			name:   "fields with empty strings to clear values",
+			method: http.MethodPatch,
+			fields: map[string]string{
+				"name":        "updated-resource",
+				"description": "",
+				"uuid":        "",
+			},
+			fileFieldName:      "",
+			filename:           "",
+			fileContent:        "",
+			expectedStatusCode: http.StatusOK,
+			validateRequest: func(t *testing.T, r *http.Request) {
+				assert.Equal(t, http.MethodPatch, r.Method)
+				assert.Contains(t, r.Header.Get("Content-Type"), "multipart/form-data")
+
+				err := r.ParseMultipartForm(32 << 20)
+				require.NoError(t, err)
+
+				assert.Equal(t, "updated-resource", r.FormValue("name"))
+				// Empty string fields should be present in the form
+				assert.Equal(t, "", r.FormValue("description"))
+				assert.Equal(t, "", r.FormValue("uuid"))
+
+				// Verify that the fields are actually present in the form, not just missing
+				form := r.MultipartForm
+				require.NotNil(t, form)
+				_, hasDescription := form.Value["description"]
+				_, hasUUID := form.Value["uuid"]
+				assert.True(t, hasDescription, "description field should be present even if empty")
+				assert.True(t, hasUUID, "uuid field should be present even if empty")
+			},
+		},
+		{
+			name:   "fields and file",
+			method: http.MethodPost,
+			fields: map[string]string{
+				"name":        "resource-with-file",
+				"description": "has a file attached",
+			},
+			fileFieldName:      "package",
+			filename:           "test.tar.gz",
+			fileContent:        "mock file content",
+			expectedStatusCode: http.StatusCreated,
+			validateRequest: func(t *testing.T, r *http.Request) {
+				assert.Equal(t, http.MethodPost, r.Method)
+				assert.Contains(t, r.Header.Get("Content-Type"), "multipart/form-data")
+
+				err := r.ParseMultipartForm(32 << 20)
+				require.NoError(t, err)
+
+				// Validate fields
+				assert.Equal(t, "resource-with-file", r.FormValue("name"))
+				assert.Equal(t, "has a file attached", r.FormValue("description"))
+
+				// Validate file
+				file, header, err := r.FormFile("package")
+				require.NoError(t, err)
+				defer file.Close()
+
+				assert.Equal(t, "test.tar.gz", header.Filename)
+
+				fileData, err := io.ReadAll(file)
+				require.NoError(t, err)
+				assert.Equal(t, "mock file content", string(fileData))
+			},
+		},
+		{
+			name:   "patch with both empty fields and file",
+			method: http.MethodPatch,
+			fields: map[string]string{
+				"name":            "updated-resource",
+				"description":     "",
+				"custom_layouts":  "",
+				"pinning_configs": `{"pin": "value"}`,
+			},
+			fileFieldName:      "package",
+			filename:           "updated.tar.gz",
+			fileContent:        "updated content",
+			expectedStatusCode: http.StatusOK,
+			validateRequest: func(t *testing.T, r *http.Request) {
+				assert.Equal(t, http.MethodPatch, r.Method)
+
+				err := r.ParseMultipartForm(32 << 20)
+				require.NoError(t, err)
+
+				// Validate all fields are present
+				assert.Equal(t, "updated-resource", r.FormValue("name"))
+				assert.Equal(t, "", r.FormValue("description"))
+				assert.Equal(t, "", r.FormValue("custom_layouts"))
+				assert.Equal(t, `{"pin": "value"}`, r.FormValue("pinning_configs"))
+
+				// Verify empty fields are actually present
+				form := r.MultipartForm
+				require.NotNil(t, form)
+				_, hasDescription := form.Value["description"]
+				_, hasCustomLayouts := form.Value["custom_layouts"]
+				assert.True(t, hasDescription)
+				assert.True(t, hasCustomLayouts)
+
+				// Validate file
+				file, header, err := r.FormFile("package")
+				require.NoError(t, err)
+				defer file.Close()
+				assert.Equal(t, "updated.tar.gz", header.Filename)
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				tt.validateRequest(t, r)
+				w.Header().Set("Location", "/api/admin/configuration/v1/resource/123/")
+				w.WriteHeader(tt.expectedStatusCode)
+				_ = json.NewEncoder(w).Encode(map[string]interface{}{
+					"id":   123,
+					"name": "test",
+				})
+			}))
+			defer server.Close()
+
+			client, err := New(WithBaseURL(server.URL))
+			require.NoError(t, err)
+
+			var fileReader io.Reader
+			if tt.fileContent != "" {
+				fileReader = strings.NewReader(tt.fileContent)
+			}
+
+			var result map[string]interface{}
+			resp, err := client.performMultipartFormRequestWithFieldsAndResponse(
+				context.Background(),
+				tt.method,
+				"test",
+				tt.fields,
+				tt.fileFieldName,
+				tt.filename,
+				fileReader,
+				&result,
+			)
+
+			assert.NoError(t, err)
+			assert.NotNil(t, resp)
+			assert.Equal(t, "/api/admin/configuration/v1/resource/123/", resp.ResourceURI)
+			assert.NotNil(t, result)
+			assert.Equal(t, float64(123), result["id"])
+		})
+	}
+}
+
+func TestPerformMultipartFormRequestWithFieldsAndResponse_Errors(t *testing.T) {
+	tests := []struct {
+		name        string
+		setupServer func() *httptest.Server
+		fields      map[string]string
+		expectError bool
+		errorMsg    string
+	}{
+		{
+			name: "server returns error",
+			setupServer: func() *httptest.Server {
+				return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+					w.WriteHeader(http.StatusBadRequest)
+					_ = json.NewEncoder(w).Encode(map[string]string{
+						"error": "Invalid field value",
+					})
+				}))
+			},
+			fields: map[string]string{
+				"name": "test",
+			},
+			expectError: true,
+			errorMsg:    "400",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			server := tt.setupServer()
+			defer server.Close()
+
+			client, err := New(WithBaseURL(server.URL))
+			require.NoError(t, err)
+
+			var result map[string]interface{}
+			_, err = client.performMultipartFormRequestWithFieldsAndResponse(
+				context.Background(),
+				http.MethodPost,
+				"test",
+				tt.fields,
+				"",
+				"",
+				nil,
+				&result,
+			)
+
+			if tt.expectError {
+				assert.Error(t, err)
+				assert.Contains(t, err.Error(), tt.errorMsg)
+			} else {
+				assert.NoError(t, err)
+			}
+		})
+	}
+}
+
+func TestPostMultipartFormWithFieldsAndResponseUUID(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		err := r.ParseMultipartForm(32 << 20)
+		require.NoError(t, err)
+
+		assert.Equal(t, "test-resource", r.FormValue("name"))
+
+		w.Header().Set("Location", "12345678-1234-5678-9abc-123456789012")
+		w.WriteHeader(http.StatusCreated)
+		_ = json.NewEncoder(w).Encode(map[string]interface{}{
+			"uuid": "12345678-1234-5678-9abc-123456789012",
+			"name": "test-resource",
+		})
+	}))
+	defer server.Close()
+
+	client, err := New(WithBaseURL(server.URL))
+	require.NoError(t, err)
+
+	fields := map[string]string{
+		"name": "test-resource",
+	}
+
+	var result map[string]interface{}
+	resp, err := client.PostMultipartFormWithFieldsAndResponseUUID(
+		context.Background(),
+		"test",
+		fields,
+		"",
+		"",
+		nil,
+		&result,
+	)
+
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+	assert.Equal(t, "12345678-1234-5678-9abc-123456789012", resp.ResourceUUID)
+	assert.NotNil(t, result)
 }

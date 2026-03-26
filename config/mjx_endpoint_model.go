@@ -61,7 +61,7 @@ type MjxEndpointUpdateRequest struct {
 	VerifyCert                     string  `json:"verify_cert"`
 	PolyUsername                   *string `json:"poly_username"`
 	PolyPassword                   *string `json:"poly_password"`
-	PolyRaiseAlarmsForThisEndpoint *bool   `json:"poly_raise_alarms_for_this_endpoint"`
+	PolyRaiseAlarmsForThisEndpoint bool    `json:"poly_raise_alarms_for_this_endpoint"`
 	WebexDeviceID                  *string `json:"webex_device_id"`
 }
 

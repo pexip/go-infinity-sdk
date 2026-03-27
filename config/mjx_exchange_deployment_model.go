@@ -65,25 +65,24 @@ type MjxExchangeDeploymentCreateRequest struct {
 // MjxExchangeDeploymentUpdateRequest represents a request to update a MJX Exchange deployment
 type MjxExchangeDeploymentUpdateRequest struct {
 	Name                           string    `json:"name,omitempty"`
-	Description                    string    `json:"description,omitempty"`
+	Description                    string    `json:"description"`
 	ServiceAccountUsername         string    `json:"service_account_username,omitempty"`
 	ServiceAccountPassword         string    `json:"service_account_password,omitempty"`
 	AuthenticationMethod           string    `json:"authentication_method,omitempty"`
-	EWSURL                         string    `json:"ews_url,omitempty"`
-	DisableProxy                   bool     `json:"disable_proxy,omitempty"`
-	FindItemsRequestQuota          int      `json:"find_items_request_quota,omitempty"`
-	KerberosRealm                  string    `json:"kerberos_realm,omitempty"`
-	KerberosKDC                    string    `json:"kerberos_kdc,omitempty"`
-	KerberosExchangeSPN            string    `json:"kerberos_exchange_spn,omitempty"`
-	KerberosAuthEveryRequest       bool     `json:"kerberos_auth_every_request,omitempty"`
-	KerberosEnableTLS              bool     `json:"kerberos_enable_tls,omitempty"`
-	KerberosKDCHTTPSProxy          string    `json:"kerberos_kdc_https_proxy,omitempty"`
-	KerberosVerifyTLSUsingCustomCA bool     `json:"kerberos_verify_tls_using_custom_ca,omitempty"`
+	EWSURL                         string    `json:"ews_url"`
+	DisableProxy                   *bool     `json:"disable_proxy,omitempty"`
+	FindItemsRequestQuota          int       `json:"find_items_request_quota,omitempty"`
+	KerberosRealm                  string    `json:"kerberos_realm"`
+	KerberosKDC                    string    `json:"kerberos_kdc"`
+	KerberosExchangeSPN            string    `json:"kerberos_exchange_spn"`
+	KerberosAuthEveryRequest       *bool     `json:"kerberos_auth_every_request,omitempty"`
+	KerberosEnableTLS              *bool     `json:"kerberos_enable_tls,omitempty"`
+	KerberosKDCHTTPSProxy          string    `json:"kerberos_kdc_https_proxy"`
+	KerberosVerifyTLSUsingCustomCA *bool     `json:"kerberos_verify_tls_using_custom_ca,omitempty"`
 	OAuthClientID                  *string   `json:"oauth_client_id,omitempty"`
-	OAuthAuthEndpoint              string    `json:"oauth_auth_endpoint,omitempty"`
-	OAuthTokenEndpoint             string    `json:"oauth_token_endpoint,omitempty"`
-	OAuthRedirectURI               string    `json:"oauth_redirect_uri,omitempty"`
-	OAuthRefreshToken              string    `json:"oauth_refresh_token,omitempty"`
+	OAuthAuthEndpoint              string    `json:"oauth_auth_endpoint"`
+	OAuthTokenEndpoint             string    `json:"oauth_token_endpoint"`
+	OAuthRedirectURI               string    `json:"oauth_redirect_uri"`
 	OAuthState                     *string   `json:"oauth_state,omitempty"`
 	AutodiscoverURLs               *[]string `json:"autodiscover_urls,omitempty"`
 	MjxIntegrations                *[]string `json:"mjx_integrations,omitempty"`

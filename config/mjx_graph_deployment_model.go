@@ -37,7 +37,7 @@ type MjxGraphDeploymentCreateRequest struct {
 // MjxGraphDeploymentUpdateRequest represents a request to update a MJX Graph deployment
 type MjxGraphDeploymentUpdateRequest struct {
 	Name            string    `json:"name,omitempty"`
-	Description     string    `json:"description,omitempty"`
+	Description     string    `json:"description"`
 	ClientID        string    `json:"client_id,omitempty"`
 	ClientSecret    string    `json:"client_secret,omitempty"`
 	OAuthTokenURL   string    `json:"oauth_token_url,omitempty"`

@@ -6,6 +6,11 @@
 
 package config
 
+// MjxExchangeAutodiscoverURLReference represents a related autodiscover URL returned by the API
+type MjxExchangeAutodiscoverURLReference struct {
+	ResourceURI string `json:"resource_uri"`
+}
+
 // MjxExchangeDeployment represents a MJX Exchange deployment configuration
 type MjxExchangeDeployment struct {
 	ID                             int       `json:"id,omitempty"`
@@ -30,9 +35,9 @@ type MjxExchangeDeployment struct {
 	OAuthRedirectURI               string    `json:"oauth_redirect_uri,omitempty"`
 	OAuthRefreshToken              string    `json:"oauth_refresh_token,omitempty"`
 	OAuthState                     *string   `json:"oauth_state,omitempty"`
-	AutodiscoverURLs               *[]string `json:"autodiscover_urls,omitempty"`
-	MjxIntegrations                *[]string `json:"mjx_integrations,omitempty"`
-	ResourceURI                    string    `json:"resource_uri,omitempty"`
+	AutodiscoverURLs               *[]MjxExchangeAutodiscoverURLReference `json:"autodiscover_urls,omitempty"`
+	MjxIntegrations                *[]string                              `json:"mjx_integrations,omitempty"`
+	ResourceURI                    string                                 `json:"resource_uri,omitempty"`
 }
 
 // MjxExchangeDeploymentCreateRequest represents a request to create a MJX Exchange deployment

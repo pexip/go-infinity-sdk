@@ -156,13 +156,12 @@ func TestService_CreateMjxEndpointGroup(t *testing.T) {
 func TestService_UpdateMjxEndpointGroup(t *testing.T) {
 	client := interfaces.NewHTTPClientMock()
 
-	disableProxy := true
 	newLocation := "/api/admin/configuration/v1/system_location/5/"
 
 	updateRequest := &MjxEndpointGroupUpdateRequest{
 		Description:    "Updated MJX endpoint group",
 		SystemLocation: &newLocation,
-		DisableProxy:   &disableProxy,
+		DisableProxy:   true,
 	}
 
 	integration := "/api/admin/configuration/v1/mjx_integration/1/"

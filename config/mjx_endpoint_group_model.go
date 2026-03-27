@@ -29,11 +29,11 @@ type MjxEndpointGroupCreateRequest struct {
 
 // MjxEndpointGroupUpdateRequest represents a request to update a MJX endpoint group
 type MjxEndpointGroupUpdateRequest struct {
-	Name           string  `json:"name,omitempty"`
-	Description    string  `json:"description,omitempty"`
-	MjxIntegration *string `json:"mjx_integration,omitempty"`
-	SystemLocation *string `json:"system_location,omitempty"`
-	DisableProxy   *bool   `json:"disable_proxy,omitempty"`
+	Name           string  `json:"name"`
+	Description    string  `json:"description"`
+	MjxIntegration *string `json:"mjx_integration"`
+	SystemLocation *string `json:"system_location"`
+	DisableProxy   bool    `json:"disable_proxy"`
 }
 
 // MjxEndpointGroupListResponse represents the response from listing MJX endpoint groups

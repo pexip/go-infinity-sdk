@@ -46,20 +46,20 @@ type MjxMeetingProcessingRuleCreateRequest struct {
 
 // MjxMeetingProcessingRuleUpdateRequest represents a request to update a MJX meeting processing rule
 type MjxMeetingProcessingRuleUpdateRequest struct {
-	Name                     string `json:"name,omitempty"`
-	Description              string `json:"description,omitempty"`
-	Priority                 int    `json:"priority,omitempty"`
-	Enabled                  bool   `json:"enabled,omitempty"`
-	MeetingType              string `json:"meeting_type,omitempty"`
-	MjxIntegration           string `json:"mjx_integration,omitempty"`
-	MatchString              string `json:"match_string,omitempty"`
-	ReplaceString            string `json:"replace_string,omitempty"`
-	TransformRule            string `json:"transform_rule,omitempty"`
-	CustomTemplate           string `json:"custom_template,omitempty"`
-	Domain                   string `json:"domain,omitempty"`
-	CompanyID                string `json:"company_id,omitempty"`
-	IncludePin               bool   `json:"include_pin,omitempty"`
-	DefaultProcessingEnabled bool   `json:"default_processing_enabled,omitempty"`
+	Name                     string `json:"name"`
+	Description              string `json:"description"`
+	Priority                 int    `json:"priority"`
+	Enabled                  bool   `json:"enabled"`
+	MeetingType              string `json:"meeting_type"`
+	MjxIntegration           string `json:"mjx_integration"`
+	MatchString              string `json:"match_string"`
+	ReplaceString            string `json:"replace_string"`
+	TransformRule            string `json:"transform_rule"`
+	CustomTemplate           string `json:"custom_template"`
+	Domain                   string `json:"domain"`
+	CompanyID                string `json:"company_id"`
+	IncludePin               bool   `json:"include_pin"`
+	DefaultProcessingEnabled bool   `json:"default_processing_enabled"`
 }
 
 // MjxMeetingProcessingRuleListResponse represents the response from listing MJX meeting processing rules

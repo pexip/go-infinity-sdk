@@ -27,7 +27,7 @@ type MjxExchangeAutodiscoverURLCreateRequest struct {
 // MjxExchangeAutodiscoverURLUpdateRequest represents a request to update a MJX Exchange autodiscover URL
 type MjxExchangeAutodiscoverURLUpdateRequest struct {
 	Name               string  `json:"name,omitempty"`
-	Description        string  `json:"description,omitempty"`
+	Description        string  `json:"description"`
 	URL                string  `json:"url,omitempty"`
 	ExchangeDeployment *string `json:"exchange_deployment,omitempty"`
 }

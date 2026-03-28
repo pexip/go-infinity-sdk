@@ -34,8 +34,8 @@ func TestService_ListMjxEndpointGroups(t *testing.T) {
 
 				expectedResponse := &MjxEndpointGroupListResponse{
 					Objects: []MjxEndpointGroup{
-						{ID: 1, Name: "floor-1-rooms", Description: "Conference rooms on floor 1", MjxIntegration: &integration1, SystemLocation: &location1, DisableProxy: false, Endpoints: []string{"/api/admin/configuration/v1/mjx_endpoint/1/", "/api/admin/configuration/v1/mjx_endpoint/2/"}},
-						{ID: 2, Name: "floor-2-rooms", Description: "Conference rooms on floor 2", MjxIntegration: &integration2, SystemLocation: &location2, DisableProxy: true, Endpoints: []string{"/api/admin/configuration/v1/mjx_endpoint/3/", "/api/admin/configuration/v1/mjx_endpoint/4/"}},
+						{ID: 1, Name: "floor-1-rooms", Description: "Conference rooms on floor 1", MjxIntegration: &integration1, SystemLocation: &location1, DisableProxy: false, Endpoints: []MjxEndpointReference{{ResourceURI: "/api/admin/configuration/v1/mjx_endpoint/1/"}, {ResourceURI: "/api/admin/configuration/v1/mjx_endpoint/2/"}}},
+						{ID: 2, Name: "floor-2-rooms", Description: "Conference rooms on floor 2", MjxIntegration: &integration2, SystemLocation: &location2, DisableProxy: true, Endpoints: []MjxEndpointReference{{ResourceURI: "/api/admin/configuration/v1/mjx_endpoint/3/"}, {ResourceURI: "/api/admin/configuration/v1/mjx_endpoint/4/"}}},
 					},
 				}
 				m.On("GetJSON", t.Context(), "configuration/v1/mjx_endpoint_group/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MjxEndpointGroupListResponse")).Return(nil).Run(func(args mock.Arguments) {
@@ -59,7 +59,7 @@ func TestService_ListMjxEndpointGroups(t *testing.T) {
 
 				expectedResponse := &MjxEndpointGroupListResponse{
 					Objects: []MjxEndpointGroup{
-						{ID: 1, Name: "floor-1-rooms", Description: "Conference rooms on floor 1", MjxIntegration: &integration, SystemLocation: &location, DisableProxy: false, Endpoints: []string{"/api/admin/configuration/v1/mjx_endpoint/1/", "/api/admin/configuration/v1/mjx_endpoint/2/"}},
+						{ID: 1, Name: "floor-1-rooms", Description: "Conference rooms on floor 1", MjxIntegration: &integration, SystemLocation: &location, DisableProxy: false, Endpoints: []MjxEndpointReference{{ResourceURI: "/api/admin/configuration/v1/mjx_endpoint/1/"}, {ResourceURI: "/api/admin/configuration/v1/mjx_endpoint/2/"}}},
 					},
 				}
 				m.On("GetJSON", t.Context(), "configuration/v1/mjx_endpoint_group/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MjxEndpointGroupListResponse")).Return(nil).Run(func(args mock.Arguments) {
@@ -104,10 +104,10 @@ func TestService_GetMjxEndpointGroup(t *testing.T) {
 		MjxIntegration: &integration,
 		SystemLocation: &location,
 		DisableProxy:   false,
-		Endpoints: []string{
-			"/api/admin/configuration/v1/mjx_endpoint/1/",
-			"/api/admin/configuration/v1/mjx_endpoint/2/",
-			"/api/admin/configuration/v1/mjx_endpoint/3/",
+		Endpoints: []MjxEndpointReference{
+			{ResourceURI: "/api/admin/configuration/v1/mjx_endpoint/1/"},
+			{ResourceURI: "/api/admin/configuration/v1/mjx_endpoint/2/"},
+			{ResourceURI: "/api/admin/configuration/v1/mjx_endpoint/3/"},
 		},
 	}
 
@@ -173,10 +173,10 @@ func TestService_UpdateMjxEndpointGroup(t *testing.T) {
 		MjxIntegration: &integration,
 		SystemLocation: &newLocation,
 		DisableProxy:   true,
-		Endpoints: []string{
-			"/api/admin/configuration/v1/mjx_endpoint/1/",
-			"/api/admin/configuration/v1/mjx_endpoint/2/",
-			"/api/admin/configuration/v1/mjx_endpoint/3/",
+		Endpoints: []MjxEndpointReference{
+			{ResourceURI: "/api/admin/configuration/v1/mjx_endpoint/1/"},
+			{ResourceURI: "/api/admin/configuration/v1/mjx_endpoint/2/"},
+			{ResourceURI: "/api/admin/configuration/v1/mjx_endpoint/3/"},
 		},
 	}
 

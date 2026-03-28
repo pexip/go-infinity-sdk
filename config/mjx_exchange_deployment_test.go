@@ -150,8 +150,8 @@ func TestService_GetMjxExchangeDeployment(t *testing.T) {
 		OAuthRedirectURI:               "https://pexip.example.com/oauth/callback",
 		OAuthRefreshToken:              "refresh-token-123",
 		OAuthState:                     &oauthState,
-		AutodiscoverURLs:               []string{"/api/admin/configuration/v1/mjx_exchange_autodiscover_url/1/"},
-		MjxIntegrations:                []string{"/api/admin/configuration/v1/mjx_integration/1/"},
+		AutodiscoverURLs:               &[]MjxExchangeAutodiscoverURLReference{{ResourceURI: "/api/admin/configuration/v1/mjx_exchange_autodiscover_url/1/"}},
+		MjxIntegrations:                &[]string{"/api/admin/configuration/v1/mjx_integration/1/"},
 	}
 
 	client.On("GetJSON", t.Context(), "configuration/v1/mjx_exchange_deployment/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MjxExchangeDeployment")).Return(nil).Run(func(args mock.Arguments) {
@@ -192,7 +192,7 @@ func TestService_CreateMjxExchangeDeployment(t *testing.T) {
 		OAuthTokenEndpoint:             "https://login.microsoftonline.com/common/oauth2/v2.0/token",
 		OAuthRedirectURI:               "https://pexip.example.com/oauth/callback",
 		OAuthRefreshToken:              "new-refresh-token",
-		AutodiscoverURLs:               []string{"/api/admin/configuration/v1/mjx_exchange_autodiscover_url/1/"},
+		AutodiscoverURLs:               &[]string{"/api/admin/configuration/v1/mjx_exchange_autodiscover_url/1/"},
 	}
 
 	expectedResponse := &types.PostResponse{
@@ -220,7 +220,7 @@ func TestService_UpdateMjxExchangeDeployment(t *testing.T) {
 	updateRequest := &MjxExchangeDeploymentUpdateRequest{
 		Description:           "Updated Exchange deployment",
 		DisableProxy:          &disableProxy,
-		FindItemsRequestQuota: &findItemsQuota,
+		FindItemsRequestQuota: findItemsQuota,
 		KerberosEnableTLS:     &kerberosEnableTLS,
 	}
 

@@ -42,7 +42,7 @@ func TestService_ListMjxGoogleDeployments(t *testing.T) {
 							RedirectURI:                "https://pexip.example.com/oauth/google/callback",
 							MaximumNumberOfAPIRequests: 1000,
 							OAuthState:                 &oauthState,
-							MjxIntegrations:            []string{"/api/admin/configuration/v1/mjx_integration/1/"},
+							MjxIntegrations:            &[]string{"/api/admin/configuration/v1/mjx_integration/1/"},
 						},
 						{
 							ID:                         2,
@@ -135,7 +135,7 @@ func TestService_GetMjxGoogleDeployment(t *testing.T) {
 		RefreshToken:               "refresh-token-123",
 		OAuthState:                 &oauthState,
 		MaximumNumberOfAPIRequests: 1000,
-		MjxIntegrations:            []string{"/api/admin/configuration/v1/mjx_integration/1/", "/api/admin/configuration/v1/mjx_integration/2/"},
+		MjxIntegrations:            &[]string{"/api/admin/configuration/v1/mjx_integration/1/", "/api/admin/configuration/v1/mjx_integration/2/"},
 	}
 
 	client.On("GetJSON", t.Context(), "configuration/v1/mjx_google_deployment/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MjxGoogleDeployment")).Return(nil).Run(func(args mock.Arguments) {
@@ -193,7 +193,7 @@ func TestService_UpdateMjxGoogleDeployment(t *testing.T) {
 	updateRequest := &MjxGoogleDeploymentUpdateRequest{
 		Description:                "Updated Google deployment",
 		UseUserConsent:             &useUserConsent,
-		MaximumNumberOfAPIRequests: &maxRequests,
+		MaximumNumberOfAPIRequests: maxRequests,
 		RedirectURI:                "https://updated.example.com/oauth/google/callback",
 	}
 
@@ -210,7 +210,7 @@ func TestService_UpdateMjxGoogleDeployment(t *testing.T) {
 		RedirectURI:                "https://updated.example.com/oauth/google/callback",
 		OAuthState:                 &oauthState,
 		MaximumNumberOfAPIRequests: 1500,
-		MjxIntegrations:            []string{"/api/admin/configuration/v1/mjx_integration/1/"},
+		MjxIntegrations:            &[]string{"/api/admin/configuration/v1/mjx_integration/1/"},
 	}
 
 	client.On("PutJSON", t.Context(), "configuration/v1/mjx_google_deployment/1/", updateRequest, mock.AnythingOfType("*config.MjxGoogleDeployment")).Return(nil).Run(func(args mock.Arguments) {

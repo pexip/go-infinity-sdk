@@ -203,11 +203,11 @@ func TestService_UpdateMjxMeetingProcessingRule(t *testing.T) {
 
 	updateRequest := &MjxMeetingProcessingRuleUpdateRequest{
 		Description:              "Updated meeting processing rule",
-		Priority:                 &priority,
-		Enabled:                  &enabled,
+		Priority:                 priority,
+		Enabled:                  enabled,
 		CustomTemplate:           "Updated: {{subject}} at {{location}}",
-		IncludePin:               &includePin,
-		DefaultProcessingEnabled: &defaultProcessingEnabled,
+		IncludePin:               includePin,
+		DefaultProcessingEnabled: defaultProcessingEnabled,
 	}
 
 	expectedRule := &MjxMeetingProcessingRule{

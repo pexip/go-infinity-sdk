@@ -50,13 +50,13 @@ func TestService_ListMjxIntegrations(t *testing.T) {
 							EPUsername:                  "mjx-user",
 							EPUseHTTPS:                  true,
 							EPVerifyCertificate:         true,
-							ExchangeDeployment:          &exchangeDeployment,
+							ExchangeDeployment:          &MjxIntegrationResourceReference{ResourceURI: exchangeDeployment},
 							ProcessAliasPrivateMeetings: false,
 							ReplaceEmptySubject:         true,
 							ReplaceSubjectType:          "template",
 							ReplaceSubjectTemplate:      "Meeting: {{subject}}",
 							UseWebex:                    false,
-							EndpointGroups:              []string{"/api/admin/configuration/v1/mjx_endpoint_group/1/"},
+							EndpointGroups:              []MjxIntegrationResourceReference{{ResourceURI: "/api/admin/configuration/v1/mjx_endpoint_group/1/"}},
 						},
 						{
 							ID:                          2,
@@ -70,8 +70,8 @@ func TestService_ListMjxIntegrations(t *testing.T) {
 							EPUsername:                  "backup-mjx-user",
 							EPUseHTTPS:                  false,
 							EPVerifyCertificate:         false,
-							GoogleDeployment:            &googleDeployment,
-							GraphDeployment:             &graphDeployment,
+							GoogleDeployment:            &MjxIntegrationResourceReference{ResourceURI: googleDeployment},
+							GraphDeployment:             &MjxIntegrationResourceReference{ResourceURI: graphDeployment},
 							ProcessAliasPrivateMeetings: true,
 							ReplaceEmptySubject:         false,
 							ReplaceSubjectType:          "none",
@@ -82,7 +82,7 @@ func TestService_ListMjxIntegrations(t *testing.T) {
 							WebexOAuthState:             &webexOAuthState,
 							WebexRedirectURI:            &webexRedirectURI,
 							WebexRefreshToken:           &webexRefreshToken,
-							EndpointGroups:              []string{"/api/admin/configuration/v1/mjx_endpoint_group/2/"},
+							EndpointGroups:              []MjxIntegrationResourceReference{{ResourceURI: "/api/admin/configuration/v1/mjx_endpoint_group/2/"}},
 						},
 					},
 				}
@@ -112,7 +112,7 @@ func TestService_ListMjxIntegrations(t *testing.T) {
 							DisplayUpcomingMeetings: 5,
 							EnableNonVideoMeetings:  true,
 							EnablePrivateMeetings:   false,
-							ExchangeDeployment:      &exchangeDeployment,
+							ExchangeDeployment:      &MjxIntegrationResourceReference{ResourceURI: exchangeDeployment},
 						},
 					},
 				}
@@ -170,9 +170,9 @@ func TestService_GetMjxIntegration(t *testing.T) {
 		EPPassword:                  "mjx-password123",
 		EPUseHTTPS:                  true,
 		EPVerifyCertificate:         true,
-		ExchangeDeployment:          &exchangeDeployment,
-		GoogleDeployment:            &googleDeployment,
-		GraphDeployment:             &graphDeployment,
+		ExchangeDeployment:          &MjxIntegrationResourceReference{ResourceURI: exchangeDeployment},
+		GoogleDeployment:            &MjxIntegrationResourceReference{ResourceURI: googleDeployment},
+		GraphDeployment:             &MjxIntegrationResourceReference{ResourceURI: graphDeployment},
 		ProcessAliasPrivateMeetings: false,
 		ReplaceEmptySubject:         true,
 		ReplaceSubjectType:          "template",
@@ -184,7 +184,7 @@ func TestService_GetMjxIntegration(t *testing.T) {
 		WebexOAuthState:             &webexOAuthState,
 		WebexRedirectURI:            &webexRedirectURI,
 		WebexRefreshToken:           &webexRefreshToken,
-		EndpointGroups:              []string{"/api/admin/configuration/v1/mjx_endpoint_group/1/", "/api/admin/configuration/v1/mjx_endpoint_group/2/"},
+		EndpointGroups:              []MjxIntegrationResourceReference{{ResourceURI: "/api/admin/configuration/v1/mjx_endpoint_group/1/"}, {ResourceURI: "/api/admin/configuration/v1/mjx_endpoint_group/2/"}},
 	}
 
 	client.On("GetJSON", t.Context(), "configuration/v1/mjx_integration/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.MjxIntegration")).Return(nil).Run(func(args mock.Arguments) {
@@ -260,12 +260,12 @@ func TestService_UpdateMjxIntegration(t *testing.T) {
 
 	updateRequest := &MjxIntegrationUpdateRequest{
 		Description:             "Updated MJX integration",
-		DisplayUpcomingMeetings: &displayUpcomingMeetings,
-		EnableNonVideoMeetings:  &enableNonVideoMeetings,
-		EndBuffer:               &endBuffer,
-		EPUseHTTPS:              &epUseHTTPS,
+		DisplayUpcomingMeetings: displayUpcomingMeetings,
+		EnableNonVideoMeetings:  enableNonVideoMeetings,
+		EndBuffer:               endBuffer,
+		EPUseHTTPS:              epUseHTTPS,
 		ReplaceSubjectTemplate:  "Updated: {{subject}}",
-		UseWebex:                &useWebex,
+		UseWebex:                useWebex,
 	}
 
 	exchangeDeployment := "/api/admin/configuration/v1/mjx_exchange_deployment/1/"
@@ -281,12 +281,12 @@ func TestService_UpdateMjxIntegration(t *testing.T) {
 		EPUsername:              "mjx-test-user",
 		EPUseHTTPS:              false,
 		EPVerifyCertificate:     true,
-		ExchangeDeployment:      &exchangeDeployment,
+		ExchangeDeployment:      &MjxIntegrationResourceReference{ResourceURI: exchangeDeployment},
 		ReplaceEmptySubject:     true,
 		ReplaceSubjectType:      "template",
 		ReplaceSubjectTemplate:  "Updated: {{subject}}",
 		UseWebex:                false,
-		EndpointGroups:          []string{"/api/admin/configuration/v1/mjx_endpoint_group/1/"},
+		EndpointGroups:          []MjxIntegrationResourceReference{{ResourceURI: "/api/admin/configuration/v1/mjx_endpoint_group/1/"}},
 	}
 
 	client.On("PutJSON", t.Context(), "configuration/v1/mjx_integration/1/", updateRequest, mock.AnythingOfType("*config.MjxIntegration")).Return(nil).Run(func(args mock.Arguments) {

@@ -38,7 +38,7 @@ func TestService_ListMjxGraphDeployments(t *testing.T) {
 							GraphAPIDomain:  "graph.microsoft.com",
 							RequestQuota:    1000,
 							DisableProxy:    false,
-							MjxIntegrations: []string{"/api/admin/configuration/v1/mjx_integration/1/"},
+							MjxIntegrations: &[]string{"/api/admin/configuration/v1/mjx_integration/1/"},
 						},
 						{
 							ID:              2,
@@ -49,7 +49,7 @@ func TestService_ListMjxGraphDeployments(t *testing.T) {
 							GraphAPIDomain:  "graph.microsoft.com",
 							RequestQuota:    500,
 							DisableProxy:    true,
-							MjxIntegrations: []string{"/api/admin/configuration/v1/mjx_integration/2/"},
+							MjxIntegrations: &[]string{"/api/admin/configuration/v1/mjx_integration/2/"},
 						},
 					},
 				}
@@ -126,7 +126,7 @@ func TestService_GetMjxGraphDeployment(t *testing.T) {
 		GraphAPIDomain: "graph.microsoft.com",
 		RequestQuota:   1000,
 		DisableProxy:   false,
-		MjxIntegrations: []string{
+		MjxIntegrations: &[]string{
 			"/api/admin/configuration/v1/mjx_integration/1/",
 			"/api/admin/configuration/v1/mjx_integration/2/",
 		},
@@ -197,7 +197,7 @@ func TestService_UpdateMjxGraphDeployment(t *testing.T) {
 		GraphAPIDomain:  "graph.microsoft.com",
 		RequestQuota:    1500,
 		DisableProxy:    true,
-		MjxIntegrations: []string{"/api/admin/configuration/v1/mjx_integration/1/"},
+		MjxIntegrations: &[]string{"/api/admin/configuration/v1/mjx_integration/1/"},
 	}
 
 	client.On("PutJSON", t.Context(), "configuration/v1/mjx_graph_deployment/1/", updateRequest, mock.AnythingOfType("*config.MjxGraphDeployment")).Return(nil).Run(func(args mock.Arguments) {

@@ -194,7 +194,7 @@ func TestService_UpdateMjxEndpoint(t *testing.T) {
 	updateRequest := &MjxEndpointUpdateRequest{
 		Description:                    "Updated MJX endpoint",
 		UseHTTPS:                       "no",
-		PolyRaiseAlarmsForThisEndpoint: &raiseAlarms,
+		PolyRaiseAlarmsForThisEndpoint: raiseAlarms,
 	}
 
 	group := "/api/admin/configuration/v1/mjx_endpoint_group/1/"

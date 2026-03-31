@@ -13,28 +13,28 @@ type MjxExchangeAutodiscoverURLReference struct {
 
 // MjxExchangeDeployment represents a MJX Exchange deployment configuration
 type MjxExchangeDeployment struct {
-	ID                             int       `json:"id,omitempty"`
-	Name                           string    `json:"name"`
-	Description                    string    `json:"description,omitempty"`
-	ServiceAccountUsername         string    `json:"service_account_username"`
-	ServiceAccountPassword         string    `json:"service_account_password,omitempty"`
-	AuthenticationMethod           string    `json:"authentication_method"`
-	EWSURL                         string    `json:"ews_url,omitempty"`
-	DisableProxy                   bool      `json:"disable_proxy"`
-	FindItemsRequestQuota          int       `json:"find_items_request_quota"`
-	KerberosRealm                  string    `json:"kerberos_realm,omitempty"`
-	KerberosKDC                    string    `json:"kerberos_kdc,omitempty"`
-	KerberosExchangeSPN            string    `json:"kerberos_exchange_spn,omitempty"`
-	KerberosAuthEveryRequest       bool      `json:"kerberos_auth_every_request"`
-	KerberosEnableTLS              bool      `json:"kerberos_enable_tls"`
-	KerberosKDCHTTPSProxy          string    `json:"kerberos_kdc_https_proxy,omitempty"`
-	KerberosVerifyTLSUsingCustomCA bool      `json:"kerberos_verify_tls_using_custom_ca"`
-	OAuthClientID                  *string   `json:"oauth_client_id,omitempty"`
-	OAuthAuthEndpoint              string    `json:"oauth_auth_endpoint,omitempty"`
-	OAuthTokenEndpoint             string    `json:"oauth_token_endpoint,omitempty"`
-	OAuthRedirectURI               string    `json:"oauth_redirect_uri,omitempty"`
-	OAuthRefreshToken              string    `json:"oauth_refresh_token,omitempty"`
-	OAuthState                     *string   `json:"oauth_state,omitempty"`
+	ID                             int                                    `json:"id,omitempty"`
+	Name                           string                                 `json:"name"`
+	Description                    string                                 `json:"description,omitempty"`
+	ServiceAccountUsername         string                                 `json:"service_account_username"`
+	ServiceAccountPassword         string                                 `json:"service_account_password,omitempty"`
+	AuthenticationMethod           string                                 `json:"authentication_method"`
+	EWSURL                         string                                 `json:"ews_url,omitempty"`
+	DisableProxy                   bool                                   `json:"disable_proxy"`
+	FindItemsRequestQuota          int                                    `json:"find_items_request_quota"`
+	KerberosRealm                  string                                 `json:"kerberos_realm,omitempty"`
+	KerberosKDC                    string                                 `json:"kerberos_kdc,omitempty"`
+	KerberosExchangeSPN            string                                 `json:"kerberos_exchange_spn,omitempty"`
+	KerberosAuthEveryRequest       bool                                   `json:"kerberos_auth_every_request"`
+	KerberosEnableTLS              bool                                   `json:"kerberos_enable_tls"`
+	KerberosKDCHTTPSProxy          string                                 `json:"kerberos_kdc_https_proxy,omitempty"`
+	KerberosVerifyTLSUsingCustomCA bool                                   `json:"kerberos_verify_tls_using_custom_ca"`
+	OAuthClientID                  *string                                `json:"oauth_client_id,omitempty"`
+	OAuthAuthEndpoint              string                                 `json:"oauth_auth_endpoint,omitempty"`
+	OAuthTokenEndpoint             string                                 `json:"oauth_token_endpoint,omitempty"`
+	OAuthRedirectURI               string                                 `json:"oauth_redirect_uri,omitempty"`
+	OAuthRefreshToken              string                                 `json:"oauth_refresh_token,omitempty"`
+	OAuthState                     *string                                `json:"oauth_state,omitempty"`
 	AutodiscoverURLs               *[]MjxExchangeAutodiscoverURLReference `json:"autodiscover_urls,omitempty"`
 	MjxIntegrations                *[]string                              `json:"mjx_integrations,omitempty"`
 	ResourceURI                    string                                 `json:"resource_uri,omitempty"`

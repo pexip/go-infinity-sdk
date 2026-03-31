@@ -200,9 +200,9 @@ func TestService_UpdateIVRTheme(t *testing.T) {
 	}
 
 	expectedFields := map[string]string{
-		"name":           "updated-theme",
-		"conference":     `["/api/admin/configuration/v1/conference/1/","/api/admin/configuration/v1/conference/4/"]`,
-		"custom_layouts": `{"updatedLayout": "updatedConfig"}`,
+		"name":            "updated-theme",
+		"conference":      `["/api/admin/configuration/v1/conference/1/","/api/admin/configuration/v1/conference/4/"]`,
+		"custom_layouts":  `{"updatedLayout": "updatedConfig"}`,
 		"pinning_configs": "",
 	}
 

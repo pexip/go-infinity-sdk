@@ -51,6 +51,7 @@ type GlobalConfiguration struct {
 	EnableApplicationAPI                bool         `json:"enable_application_api,omitempty"`
 	EnableBreakoutRooms                 bool         `json:"enable_breakout_rooms,omitempty"`
 	EnableChat                          bool         `json:"enable_chat,omitempty"`
+	EnableClock                         bool         `json:"enable_clock,omitempty"`
 	EnableDenoise                       bool         `json:"enable_denoise,omitempty"`
 	EnableDialout                       bool         `json:"enable_dialout,omitempty"`
 	EnableDirectory                     bool         `json:"enable_directory,omitempty"`
@@ -148,6 +149,7 @@ type GlobalConfigurationUpdateRequest struct {
 	EnableApplicationAPI                bool         `json:"enable_application_api"`
 	EnableBreakoutRooms                 bool         `json:"enable_breakout_rooms"`
 	EnableChat                          bool         `json:"enable_chat"`
+	EnableClock                         bool         `json:"enable_clock"`
 	EnableDenoise                       bool         `json:"enable_denoise"`
 	EnableDialout                       bool         `json:"enable_dialout"`
 	EnableDirectory                     bool         `json:"enable_directory"`

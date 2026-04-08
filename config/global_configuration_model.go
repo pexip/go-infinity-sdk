@@ -21,6 +21,7 @@ The following fields have been deprecated and have been removed from the model:
   * live_captions_app_id - use 'media_processing_server' resource
   * live_captions_enabled - this field is deprecated and will be ignored
   * live_captions_public_jwt_key - use 'media_processing_server' resource
+  * es_maximum_deferred_posts (Deprecated field)
   * pss_customer_id (Deprecated field)
   * pss_enabled (Deprecated field)
   * pss_gateway (Deprecated field)
@@ -79,7 +80,6 @@ type GlobalConfiguration struct {
 	ErrorReportingURL                   string       `json:"error_reporting_url,omitempty"`
 	EsConnectionTimeout                 int          `json:"es_connection_timeout,omitempty"`
 	EsInitialRetryBackoff               int          `json:"es_initial_retry_backoff,omitempty"`
-	EsMaximumDeferredPosts              int          `json:"es_maximum_deferred_posts,omitempty"`
 	EsMaximumRetryBackoff               int          `json:"es_maximum_retry_backoff,omitempty"`
 	EsMediaStreamsWait                  int          `json:"es_media_streams_wait,omitempty"`
 	EsMetricsUpdateInterval             int          `json:"es_metrics_update_interval,omitempty"`
@@ -171,7 +171,6 @@ type GlobalConfigurationUpdateRequest struct {
 	ErrorReportingURL                   string       `json:"error_reporting_url"`
 	EsConnectionTimeout                 int          `json:"es_connection_timeout"`
 	EsInitialRetryBackoff               int          `json:"es_initial_retry_backoff"`
-	EsMaximumDeferredPosts              int          `json:"es_maximum_deferred_posts"`
 	EsMaximumRetryBackoff               int          `json:"es_maximum_retry_backoff"`
 	EsMediaStreamsWait                  int          `json:"es_media_streams_wait"`
 	EsMetricsUpdateInterval             int          `json:"es_metrics_update_interval"`

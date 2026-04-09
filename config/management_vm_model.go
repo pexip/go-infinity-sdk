@@ -24,12 +24,12 @@ type ManagementVM struct {
 	DNSServers                  []DNSServer    `json:"dns_servers,omitempty"`
 	NTPServers                  []NTPServer    `json:"ntp_servers,omitempty"`
 	SyslogServers               []SyslogServer `json:"syslog_servers,omitempty"`
-	StaticRoutes                []string       `json:"static_routes,omitempty"`
-	EventSinks                  []string       `json:"event_sinks,omitempty"`
-	HTTPProxy                   *string        `json:"http_proxy,omitempty"`
-	TLSCertificate              *string        `json:"tls_certificate,omitempty"`
-	EnableSSH                   string         `json:"enable_ssh"`
-	SSHAuthorizedKeys           []string       `json:"ssh_authorized_keys,omitempty"`
+	StaticRoutes                []StaticRoute       `json:"static_routes,omitempty"`
+	EventSinks                  []EventSink         `json:"event_sinks,omitempty"`
+	HTTPProxy                   *string             `json:"http_proxy,omitempty"`
+	TLSCertificate              *string             `json:"tls_certificate,omitempty"`
+	EnableSSH                   string              `json:"enable_ssh"`
+	SSHAuthorizedKeys           []string            `json:"ssh_authorized_keys,omitempty"`
 	SSHAuthorizedKeysUseCloud   bool           `json:"ssh_authorized_keys_use_cloud"`
 	SecondaryConfigPassphrase   string         `json:"secondary_config_passphrase,omitempty"`
 	SNMPMode                    string         `json:"snmp_mode"`
@@ -90,25 +90,25 @@ type ManagementVMUpdateRequest struct {
 	Gateway                     string   `json:"gateway,omitempty"`
 	Hostname                    string   `json:"hostname,omitempty"`
 	Domain                      string   `json:"domain,omitempty"`
-	AlternativeFQDN             string   `json:"alternative_fqdn,omitempty"`
-	IPV6Address                 *string  `json:"ipv6_address,omitempty"`
-	IPV6Gateway                 *string  `json:"ipv6_gateway,omitempty"`
+	AlternativeFQDN             string   `json:"alternative_fqdn"`
+	IPV6Address                 *string  `json:"ipv6_address"`
+	IPV6Gateway                 *string  `json:"ipv6_gateway"`
 	MTU                         int      `json:"mtu,omitempty"`
-	StaticNATAddress            *string  `json:"static_nat_address,omitempty"`
+	StaticNATAddress            *string  `json:"static_nat_address"`
 	DNSServers                  []string `json:"dns_servers"`
 	NTPServers                  []string `json:"ntp_servers"`
 	SyslogServers               []string `json:"syslog_servers"`
 	StaticRoutes                []string `json:"static_routes"`
-	EventSinks                  []string `json:"event_sinks,omitempty"`
-	HTTPProxy                   *string  `json:"http_proxy,omitempty"`
+	EventSinks                  []string `json:"event_sinks"`
+	HTTPProxy                   *string  `json:"http_proxy"`
 	TLSCertificate              *string  `json:"tls_certificate"`
 	EnableSSH                   string   `json:"enable_ssh,omitempty"`
 	SSHAuthorizedKeys           []string `json:"ssh_authorized_keys"`
 	SSHAuthorizedKeysUseCloud   bool     `json:"ssh_authorized_keys_use_cloud"`
-	SecondaryConfigPassphrase   string   `json:"secondary_config_passphrase,omitempty"`
+	SecondaryConfigPassphrase   string   `json:"secondary_config_passphrase"`
 	SNMPMode                    string   `json:"snmp_mode,omitempty"`
 	SNMPCommunity               string   `json:"snmp_community,omitempty"`
-	SNMPUsername                string   `json:"snmp_username,omitempty"`
+	SNMPUsername                string   `json:"snmp_username"`
 	SNMPAuthenticationPassword  string   `json:"snmp_authentication_password,omitempty"`
 	SNMPPrivacyPassword         string   `json:"snmp_privacy_password,omitempty"`
 	SNMPSystemContact           string   `json:"snmp_system_contact,omitempty"`

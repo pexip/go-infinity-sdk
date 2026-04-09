@@ -14,11 +14,18 @@ type CodecValue struct {
 The following fields have been deprecated and have been removed from the model:
   * default_to_new_webapp - use 'default_webapp' instead
   * default_webapp - use 'default_webapp_alias' instead
+  * enable_multiscreen (Deprecated field)
   * enable_push_notifications (Deprecated field)
+  * legacy_api_http (Deprecated field)
   * live_captions_api_gateway - use 'media_processing_server' resource
   * live_captions_app_id - use 'media_processing_server' resource
   * live_captions_enabled - this field is deprecated and will be ignored
   * live_captions_public_jwt_key - use 'media_processing_server' resource
+  * es_maximum_deferred_posts (Deprecated field)
+  * pss_customer_id (Deprecated field)
+  * pss_enabled (Deprecated field)
+  * pss_gateway (Deprecated field)
+  * pss_token (Deprecated field)
 */
 
 // GlobalConfiguration represents the global system configuration (singleton resource)
@@ -51,6 +58,7 @@ type GlobalConfiguration struct {
 	EnableApplicationAPI                bool         `json:"enable_application_api,omitempty"`
 	EnableBreakoutRooms                 bool         `json:"enable_breakout_rooms,omitempty"`
 	EnableChat                          bool         `json:"enable_chat,omitempty"`
+	EnableClock                         bool         `json:"enable_clock,omitempty"`
 	EnableDenoise                       bool         `json:"enable_denoise,omitempty"`
 	EnableDialout                       bool         `json:"enable_dialout,omitempty"`
 	EnableDirectory                     bool         `json:"enable_directory,omitempty"`
@@ -61,7 +69,6 @@ type GlobalConfiguration struct {
 	EnableLyncAutoEscalate              bool         `json:"enable_lync_auto_escalate,omitempty"`
 	EnableLyncVbss                      bool         `json:"enable_lync_vbss,omitempty"`
 	EnableMlvad                         bool         `json:"enable_mlvad,omitempty"`
-	EnableMultiscreen                   bool         `json:"enable_multiscreen,omitempty"`
 	EnableRTMP                          bool         `json:"enable_rtmp,omitempty"`
 	EnableSIP                           bool         `json:"enable_sip,omitempty"`
 	EnableSIPUDP                        bool         `json:"enable_sip_udp,omitempty"`
@@ -73,7 +80,6 @@ type GlobalConfiguration struct {
 	ErrorReportingURL                   string       `json:"error_reporting_url,omitempty"`
 	EsConnectionTimeout                 int          `json:"es_connection_timeout,omitempty"`
 	EsInitialRetryBackoff               int          `json:"es_initial_retry_backoff,omitempty"`
-	EsMaximumDeferredPosts              int          `json:"es_maximum_deferred_posts,omitempty"`
 	EsMaximumRetryBackoff               int          `json:"es_maximum_retry_backoff,omitempty"`
 	EsMediaStreamsWait                  int          `json:"es_media_streams_wait,omitempty"`
 	EsMetricsUpdateInterval             int          `json:"es_metrics_update_interval,omitempty"`
@@ -83,7 +89,6 @@ type GlobalConfiguration struct {
 	GcpPrivateKey                       *string      `json:"gcp_private_key,omitempty"`
 	GcpProjectID                        *string      `json:"gcp_project_id,omitempty"`
 	GuestsOnlyTimeout                   int          `json:"guests_only_timeout,omitempty"`
-	LegacyAPIHTTP                       bool         `json:"legacy_api_http,omitempty"`
 	LegacyAPIUsername                   string       `json:"legacy_api_username,omitempty"`
 	LegacyAPIPassword                   string       `json:"legacy_api_password,omitempty"`
 	LiveCaptionsVMRDefault              bool         `json:"live_captions_vmr_default,omitempty"`
@@ -103,10 +108,6 @@ type GlobalConfiguration struct {
 	OcspResponderURL                    string       `json:"ocsp_responder_url,omitempty"`
 	OcspState                           string       `json:"ocsp_state,omitempty"`
 	PinEntryTimeout                     int          `json:"pin_entry_timeout,omitempty"`
-	PssCustomerID                       string       `json:"pss_customer_id,omitempty"`
-	PssEnabled                          bool         `json:"pss_enabled,omitempty"`
-	PssGateway                          string       `json:"pss_gateway,omitempty"`
-	PssToken                            string       `json:"pss_token,omitempty"`
 	ResourceURI                         string       `json:"resource_uri,omitempty"`
 	SessionTimeoutEnabled               bool         `json:"session_timeout_enabled,omitempty"`
 	SignallingPortsEnd                  int          `json:"signalling_ports_end,omitempty"`
@@ -148,6 +149,7 @@ type GlobalConfigurationUpdateRequest struct {
 	EnableApplicationAPI                bool         `json:"enable_application_api"`
 	EnableBreakoutRooms                 bool         `json:"enable_breakout_rooms"`
 	EnableChat                          bool         `json:"enable_chat"`
+	EnableClock                         bool         `json:"enable_clock"`
 	EnableDenoise                       bool         `json:"enable_denoise"`
 	EnableDialout                       bool         `json:"enable_dialout"`
 	EnableDirectory                     bool         `json:"enable_directory"`
@@ -158,7 +160,6 @@ type GlobalConfigurationUpdateRequest struct {
 	EnableLyncAutoEscalate              bool         `json:"enable_lync_auto_escalate"`
 	EnableLyncVbss                      bool         `json:"enable_lync_vbss"`
 	EnableMlvad                         bool         `json:"enable_mlvad"`
-	EnableMultiscreen                   bool         `json:"enable_multiscreen"`
 	EnableRTMP                          bool         `json:"enable_rtmp"`
 	EnableSIP                           bool         `json:"enable_sip"`
 	EnableSIPUDP                        bool         `json:"enable_sip_udp"`
@@ -170,7 +171,6 @@ type GlobalConfigurationUpdateRequest struct {
 	ErrorReportingURL                   string       `json:"error_reporting_url"`
 	EsConnectionTimeout                 int          `json:"es_connection_timeout"`
 	EsInitialRetryBackoff               int          `json:"es_initial_retry_backoff"`
-	EsMaximumDeferredPosts              int          `json:"es_maximum_deferred_posts"`
 	EsMaximumRetryBackoff               int          `json:"es_maximum_retry_backoff"`
 	EsMediaStreamsWait                  int          `json:"es_media_streams_wait"`
 	EsMetricsUpdateInterval             int          `json:"es_metrics_update_interval"`
@@ -180,7 +180,6 @@ type GlobalConfigurationUpdateRequest struct {
 	GcpPrivateKey                       *string      `json:"gcp_private_key"`
 	GcpProjectID                        *string      `json:"gcp_project_id"`
 	GuestsOnlyTimeout                   int          `json:"guests_only_timeout"`
-	LegacyAPIHTTP                       bool         `json:"legacy_api_http"`
 	LegacyAPIUsername                   string       `json:"legacy_api_username"`
 	LegacyAPIPassword                   string       `json:"legacy_api_password"`
 	LiveCaptionsVMRDefault              bool         `json:"live_captions_vmr_default"`
@@ -200,10 +199,6 @@ type GlobalConfigurationUpdateRequest struct {
 	OcspResponderURL                    string       `json:"ocsp_responder_url"`
 	OcspState                           string       `json:"ocsp_state"`
 	PinEntryTimeout                     int          `json:"pin_entry_timeout"`
-	PssCustomerID                       string       `json:"pss_customer_id"`
-	PssEnabled                          bool         `json:"pss_enabled"`
-	PssGateway                          string       `json:"pss_gateway"`
-	PssToken                            string       `json:"pss_token"`
 	SessionTimeoutEnabled               bool         `json:"session_timeout_enabled"`
 	SignallingPortsEnd                  int          `json:"signalling_ports_end"`
 	SignallingPortsStart                int          `json:"signalling_ports_start"`

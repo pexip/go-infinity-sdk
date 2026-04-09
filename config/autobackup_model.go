@@ -23,9 +23,9 @@ type Autobackup struct {
 type AutobackupUpdateRequest struct {
 	AutobackupEnabled        *bool  `json:"autobackup_enabled,omitempty"`
 	AutobackupInterval       *int   `json:"autobackup_interval,omitempty"`
-	AutobackupPassphrase     string `json:"autobackup_passphrase,omitempty"`
+	AutobackupPassphrase     string `json:"autobackup_passphrase"`
 	AutobackupStartHour      *int   `json:"autobackup_start_hour,omitempty"`
-	AutobackupUploadURL      string `json:"autobackup_upload_url,omitempty"`
-	AutobackupUploadUsername string `json:"autobackup_upload_username,omitempty"`
-	AutobackupUploadPassword string `json:"autobackup_upload_password,omitempty"`
+	AutobackupUploadURL      string `json:"autobackup_upload_url"`
+	AutobackupUploadUsername string `json:"autobackup_upload_username"`
+	AutobackupUploadPassword string `json:"autobackup_upload_password"`
 }

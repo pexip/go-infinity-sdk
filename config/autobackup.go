@@ -24,6 +24,6 @@ func (s *Service) UpdateAutobackup(ctx context.Context, req *AutobackupUpdateReq
 	endpoint := "configuration/v1/autobackup/1/"
 
 	var result Autobackup
-	err := s.client.PutJSON(ctx, endpoint, req, &result)
+	err := s.client.PatchJSON(ctx, endpoint, req, &result)
 	return &result, err
 }

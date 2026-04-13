@@ -66,7 +66,7 @@ func TestService_UpdateAutobackup(t *testing.T) {
 		AutobackupUploadPassword: "backuppass",
 	}
 
-	client.On("PutJSON", t.Context(), "configuration/v1/autobackup/1/", updateRequest, mock.AnythingOfType("*config.Autobackup")).Return(nil).Run(func(args mock.Arguments) {
+	client.On("PatchJSON", t.Context(), "configuration/v1/autobackup/1/", updateRequest, mock.AnythingOfType("*config.Autobackup")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(3).(*Autobackup)
 		*result = *expectedAutobackup
 	})

@@ -39,7 +39,7 @@ type GatewayRoutingRule struct {
 	TURNServer                      *string           `json:"turn_server,omitempty"`
 	GMSAccessToken                  *string           `json:"gms_access_token,omitempty"`
 	TelehealthProfile               *string           `json:"telehealth_profile,omitempty"`
-	IVRTheme                        *string           `json:"ivr_theme,omitempty"`
+	IVRTheme                        *int              `json:"ivr_theme,omitempty"`
 	MaxPixelsPerSecond              *string           `json:"max_pixels_per_second,omitempty"`
 	MaxCallrateIn                   *int              `json:"max_callrate_in,omitempty"`
 	MaxCallrateOut                  *int              `json:"max_callrate_out,omitempty"`
@@ -84,7 +84,7 @@ type GatewayRoutingRuleCreateRequest struct {
 	TURNServer                      *string       `json:"turn_server"`
 	GMSAccessToken                  *string       `json:"gms_access_token"`
 	TelehealthProfile               *string       `json:"telehealth_profile"`
-	IVRTheme                        *string       `json:"ivr_theme"`
+	IVRTheme                        *int          `json:"ivr_theme"`
 	MaxPixelsPerSecond              *string       `json:"max_pixels_per_second"`
 	MaxCallrateIn                   *int          `json:"max_callrate_in"`
 	MaxCallrateOut                  *int          `json:"max_callrate_out"`
@@ -127,7 +127,7 @@ type GatewayRoutingRuleUpdateRequest struct {
 	TURNServer                      *string       `json:"turn_server"`
 	GMSAccessToken                  *string       `json:"gms_access_token"`
 	TelehealthProfile               *string       `json:"telehealth_profile"`
-	IVRTheme                        *string       `json:"ivr_theme"`
+	IVRTheme                        *int          `json:"ivr_theme"`
 	MaxPixelsPerSecond              *string       `json:"max_pixels_per_second"`
 	MaxCallrateIn                   *int          `json:"max_callrate_in"`
 	MaxCallrateOut                  *int          `json:"max_callrate_out"`

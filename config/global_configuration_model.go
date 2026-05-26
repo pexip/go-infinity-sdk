@@ -105,6 +105,7 @@ type GlobalConfiguration struct {
 	MaxPresentationBandwidthRatio       int          `json:"max_presentation_bandwidth_ratio,omitempty"`
 	MediaPortsEnd                       int          `json:"media_ports_end,omitempty"`
 	MediaPortsStart                     int          `json:"media_ports_start,omitempty"`
+	MinPinLength                        int          `json:"min_pin_length,omitempty"`
 	OcspResponderURL                    string       `json:"ocsp_responder_url,omitempty"`
 	OcspState                           string       `json:"ocsp_state,omitempty"`
 	PinEntryTimeout                     int          `json:"pin_entry_timeout,omitempty"`
@@ -196,6 +197,7 @@ type GlobalConfigurationUpdateRequest struct {
 	MaxPresentationBandwidthRatio       int          `json:"max_presentation_bandwidth_ratio"`
 	MediaPortsEnd                       int          `json:"media_ports_end"`
 	MediaPortsStart                     int          `json:"media_ports_start"`
+	MinPinLength                        int          `json:"min_pin_length"`
 	OcspResponderURL                    string       `json:"ocsp_responder_url"`
 	OcspState                           string       `json:"ocsp_state"`
 	PinEntryTimeout                     int          `json:"pin_entry_timeout"`

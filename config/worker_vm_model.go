@@ -32,6 +32,7 @@ type WorkerVM struct {
 	IPv6Address                *string       `json:"ipv6_address,omitempty"`
 	IPv6Gateway                *string       `json:"ipv6_gateway,omitempty"`
 	TLSCertificate             *string       `json:"tls_certificate,omitempty"`
+	TLSClientCertificate       *string       `json:"tls_client_certificate,omitempty"`
 	SecondaryAddress           *string       `json:"secondary_address,omitempty"`
 	SecondaryNetmask           *string       `json:"secondary_netmask,omitempty"`
 	MediaPriorityWeight        *int          `json:"media_priority_weight,omitempty"`
@@ -79,11 +80,12 @@ type WorkerVMCreateRequest struct {
 	IPv6Address                *string  `json:"ipv6_address,omitempty"`
 	IPv6Gateway                *string  `json:"ipv6_gateway,omitempty"`
 	TLSCertificate             *string  `json:"tls_certificate,omitempty"`
+	TLSClientCertificate       *string  `json:"tls_client_certificate,omitempty"`
 	SecondaryAddress           *string  `json:"secondary_address,omitempty"`
 	SecondaryNetmask           *string  `json:"secondary_netmask,omitempty"`
 	MediaPriorityWeight        *int     `json:"media_priority_weight,omitempty"`
 	SSHAuthorizedKeys          []string `json:"ssh_authorized_keys,omitempty"`
-	SSHAuthorizedKeysUseCloud  bool     `json:"ssh_authorized_keys_use_cloud,omitempty"`
+	SSHAuthorizedKeysUseCloud  bool     `json:"ssh_authorized_keys_use_cloud"`
 	StaticNATAddress           *string  `json:"static_nat_address,omitempty"`
 	StaticRoutes               []string `json:"static_routes,omitempty"`
 	SNMPAuthenticationPassword string   `json:"snmp_authentication_password,omitempty"`
@@ -125,6 +127,7 @@ type WorkerVMUpdateRequest struct {
 	IPv6Address                *string  `json:"ipv6_address"`
 	IPv6Gateway                *string  `json:"ipv6_gateway"`
 	TLSCertificate             *string  `json:"tls_certificate"`
+	TLSClientCertificate       *string  `json:"tls_client_certificate"`
 	SecondaryAddress           *string  `json:"secondary_address"`
 	SecondaryNetmask           *string  `json:"secondary_netmask"`
 	MediaPriorityWeight        *int     `json:"media_priority_weight"`

@@ -28,6 +28,7 @@ type ManagementVM struct {
 	EventSinks                  []EventSink         `json:"event_sinks,omitempty"`
 	HTTPProxy                   *string             `json:"http_proxy,omitempty"`
 	TLSCertificate              *string             `json:"tls_certificate,omitempty"`
+	TLSClientCertificate        *string             `json:"tls_client_certificate,omitempty"`
 	EnableSSH                   string              `json:"enable_ssh"`
 	SSHAuthorizedKeys           []string            `json:"ssh_authorized_keys,omitempty"`
 	SSHAuthorizedKeysUseCloud   bool           `json:"ssh_authorized_keys_use_cloud"`
@@ -66,6 +67,7 @@ type ManagementVMCreateRequest struct {
 	EventSinks                  []string `json:"event_sinks,omitempty"`
 	HTTPProxy                   *string  `json:"http_proxy,omitempty"`
 	TLSCertificate              *string  `json:"tls_certificate,omitempty"`
+	TLSClientCertificate        *string  `json:"tls_client_certificate,omitempty"`
 	EnableSSH                   string   `json:"enable_ssh"`
 	SSHAuthorizedKeys           []string `json:"ssh_authorized_keys,omitempty"`
 	SSHAuthorizedKeysUseCloud   bool     `json:"ssh_authorized_keys_use_cloud"`
@@ -102,6 +104,7 @@ type ManagementVMUpdateRequest struct {
 	EventSinks                  []string `json:"event_sinks"`
 	HTTPProxy                   *string  `json:"http_proxy"`
 	TLSCertificate              *string  `json:"tls_certificate"`
+	TLSClientCertificate        *string  `json:"tls_client_certificate"`
 	EnableSSH                   string   `json:"enable_ssh,omitempty"`
 	SSHAuthorizedKeys           []string `json:"ssh_authorized_keys"`
 	SSHAuthorizedKeysUseCloud   bool     `json:"ssh_authorized_keys_use_cloud"`

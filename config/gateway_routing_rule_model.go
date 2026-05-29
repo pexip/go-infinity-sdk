@@ -39,7 +39,7 @@ type GatewayRoutingRule struct {
 	TURNServer                      *string           `json:"turn_server,omitempty"`
 	GMSAccessToken                  *string           `json:"gms_access_token,omitempty"`
 	TelehealthProfile               *string           `json:"telehealth_profile,omitempty"`
-	IVRTheme                        *string           `json:"ivr_theme,omitempty"`
+	IVRTheme                        *IVRTheme         `json:"ivr_theme,omitempty"`
 	MaxPixelsPerSecond              *string           `json:"max_pixels_per_second,omitempty"`
 	MaxCallrateIn                   *int              `json:"max_callrate_in,omitempty"`
 	MaxCallrateOut                  *int              `json:"max_callrate_out,omitempty"`

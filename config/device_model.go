@@ -48,18 +48,18 @@ type DeviceCreateRequest struct {
 // DeviceUpdateRequest represents a request to update a device
 type DeviceUpdateRequest struct {
 	Alias                       string  `json:"alias,omitempty"`
-	Description                 string  `json:"description,omitempty"`
-	Username                    string  `json:"username,omitempty"`
-	Password                    string  `json:"password,omitempty"`
-	PrimaryOwnerEmailAddress    string  `json:"primary_owner_email_address,omitempty"`
-	EnableSIP                   *bool   `json:"enable_sip,omitempty"`
-	EnableH323                  *bool   `json:"enable_h323,omitempty"`
-	EnableInfinityConnectNonSSO *bool   `json:"enable_infinity_connect_non_sso,omitempty"`
-	EnableInfinityConnectSSO    *bool   `json:"enable_infinity_connect_sso,omitempty"`
-	EnableStandardSSO           *bool   `json:"enable_standard_sso,omitempty"`
-	SSOIdentityProviderGroup    *string `json:"sso_identity_provider_group,omitempty"`
-	Tag                         string  `json:"tag,omitempty"`
-	SyncTag                     string  `json:"sync_tag,omitempty"`
+	Description                 string  `json:"description"`
+	Username                    string  `json:"username"`
+	Password                    string  `json:"password"`
+	PrimaryOwnerEmailAddress    string  `json:"primary_owner_email_address"`
+	EnableSIP                   *bool   `json:"enable_sip"`
+	EnableH323                  *bool   `json:"enable_h323"`
+	EnableInfinityConnectNonSSO *bool   `json:"enable_infinity_connect_non_sso"`
+	EnableInfinityConnectSSO    *bool   `json:"enable_infinity_connect_sso"`
+	EnableStandardSSO           *bool   `json:"enable_standard_sso"`
+	SSOIdentityProviderGroup    *string `json:"sso_identity_provider_group"`
+	Tag                         string  `json:"tag"`
+	SyncTag                     string  `json:"sync_tag"`
 }
 
 // DeviceListResponse represents the response from listing devices

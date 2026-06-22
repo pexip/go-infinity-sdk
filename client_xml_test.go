@@ -13,7 +13,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v38/types"
+	"github.com/pexip/go-infinity-sdk/v40/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

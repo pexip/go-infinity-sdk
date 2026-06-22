@@ -11,7 +11,7 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/pexip/go-infinity-sdk/v38/types"
+	"github.com/pexip/go-infinity-sdk/v40/types"
 )
 
 // ListWebappAliases retrieves a list of web app aliases

@@ -7,8 +7,8 @@
 package history
 
 import (
-	"github.com/pexip/go-infinity-sdk/v38/options"
-	"github.com/pexip/go-infinity-sdk/v38/util"
+	"github.com/pexip/go-infinity-sdk/v40/options"
+	"github.com/pexip/go-infinity-sdk/v40/util"
 )
 
 // ListOptions contains options for listing historical records

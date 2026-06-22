@@ -10,7 +10,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/pexip/go-infinity-sdk/v38/types"
+	"github.com/pexip/go-infinity-sdk/v40/types"
 )
 
 // CreateSystemSyncpoint creates a new system syncpoint

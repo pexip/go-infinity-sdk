@@ -10,7 +10,7 @@
 package command
 
 import (
-	"github.com/pexip/go-infinity-sdk/v38/interfaces"
+	"github.com/pexip/go-infinity-sdk/v40/interfaces"
 )
 
 // Service handles command API endpoints

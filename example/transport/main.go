@@ -15,7 +15,7 @@ import (
 	"net/url"
 	"time"
 
-	infinity "github.com/pexip/go-infinity-sdk/v38"
+	infinity "github.com/pexip/go-infinity-sdk/v40"
 )
 
 func main() {

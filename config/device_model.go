@@ -6,7 +6,7 @@
 
 package config
 
-import "github.com/pexip/go-infinity-sdk/v38/util"
+import "github.com/pexip/go-infinity-sdk/v40/util"
 
 // Device represents a device configuration
 type Device struct {

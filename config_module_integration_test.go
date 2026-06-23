@@ -10,7 +10,7 @@ package infinity
 
 import (
 	"crypto/tls"
-	"github.com/pexip/go-infinity-sdk/v38/config"
+	"github.com/pexip/go-infinity-sdk/v40/config"
 	"github.com/stretchr/testify/require"
 	"net/http"
 	"os"

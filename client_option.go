@@ -8,7 +8,7 @@ package infinity
 
 import (
 	"fmt"
-	"github.com/pexip/go-infinity-sdk/v38/auth"
+	"github.com/pexip/go-infinity-sdk/v40/auth"
 	"net/http"
 	"net/url"
 )

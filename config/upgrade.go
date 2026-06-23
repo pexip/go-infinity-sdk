@@ -9,7 +9,7 @@ package config
 import (
 	"context"
 
-	"github.com/pexip/go-infinity-sdk/v38/types"
+	"github.com/pexip/go-infinity-sdk/v40/types"
 )
 
 // CreateUpgrade initiates a system upgrade (POST only)

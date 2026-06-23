@@ -10,9 +10,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v38/interfaces"
-	"github.com/pexip/go-infinity-sdk/v38/options"
-	"github.com/pexip/go-infinity-sdk/v38/types"
+	"github.com/pexip/go-infinity-sdk/v40/interfaces"
+	"github.com/pexip/go-infinity-sdk/v40/options"
+	"github.com/pexip/go-infinity-sdk/v40/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )

@@ -7,7 +7,7 @@
 package config
 
 import (
-	"github.com/pexip/go-infinity-sdk/v38/util"
+	"github.com/pexip/go-infinity-sdk/v40/util"
 )
 
 // IVRTheme represents an IVR theme configuration

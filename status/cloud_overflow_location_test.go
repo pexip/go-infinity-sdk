@@ -9,7 +9,7 @@ package status
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v38/interfaces"
+	"github.com/pexip/go-infinity-sdk/v40/interfaces"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )

@@ -22,7 +22,7 @@ jobs:
       contents: read
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - uses: pexip/shared-github-actions/setup-zizmor-action@2e66b267fba3099dedb01447d9e2bd688dfc85ea
         with:
           version: "latest"

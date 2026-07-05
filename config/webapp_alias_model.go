@@ -12,6 +12,7 @@ type WebappAlias struct {
 	Slug        string                  `json:"slug"`
 	Description string                  `json:"description,omitempty"`
 	WebappType  string                  `json:"webapp_type"`
+	IsDefault   bool                    `json:"is_default"`
 	IsEnabled   bool                    `json:"is_enabled"`
 	Bundle      *SoftwareBundleRevision `json:"bundle,omitempty"`
 	Branding    *WebappBranding         `json:"branding,omitempty"`
@@ -23,6 +24,7 @@ type WebappAliasCreateRequest struct {
 	Slug        string  `json:"slug"`
 	Description string  `json:"description,omitempty"`
 	WebappType  string  `json:"webapp_type"`
+	IsDefault   bool    `json:"is_default"`
 	IsEnabled   bool    `json:"is_enabled"`
 	Bundle      *string `json:"bundle,omitempty"`
 	Branding    *string `json:"branding,omitempty"`
@@ -33,7 +35,8 @@ type WebappAliasUpdateRequest struct {
 	Slug        string  `json:"slug,omitempty"`
 	Description string  `json:"description"`
 	WebappType  string  `json:"webapp_type,omitempty"`
-	IsEnabled   *bool   `json:"is_enabled,omitempty"`
+	IsDefault   bool    `json:"is_default"`
+	IsEnabled   bool    `json:"is_enabled"`
 	Bundle      *string `json:"bundle,omitempty"`
 	Branding    *string `json:"branding,omitempty"`
 }

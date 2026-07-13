@@ -6,7 +6,7 @@
 
 package config
 
-import "github.com/pexip/go-infinity-sdk/v40/util"
+import "github.com/pexip/go-infinity-sdk/v41/util"
 
 // Conference represents a conference configuration
 type Conference struct {

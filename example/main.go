@@ -11,8 +11,8 @@ import (
 	"fmt"
 	"log"
 
-	infinity "github.com/pexip/go-infinity-sdk/v40"
-	"github.com/pexip/go-infinity-sdk/v40/config"
+	infinity "github.com/pexip/go-infinity-sdk/v41"
+	"github.com/pexip/go-infinity-sdk/v41/config"
 )
 
 func main() {

@@ -10,7 +10,7 @@
 package config
 
 import (
-	"github.com/pexip/go-infinity-sdk/v40/interfaces"
+	"github.com/pexip/go-infinity-sdk/v41/interfaces"
 )
 
 // Service handles Configuration API endpoints

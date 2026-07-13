@@ -16,6 +16,7 @@ type SyslogServer struct {
 	AuditLog    bool   `json:"audit_log"`
 	SupportLog  bool   `json:"support_log"`
 	WebLog      bool   `json:"web_log"`
+	ProtoFormat string `json:"proto_format"`
 	ResourceURI string `json:"resource_uri,omitempty"`
 }
 
@@ -28,6 +29,7 @@ type SyslogServerCreateRequest struct {
 	AuditLog    bool   `json:"audit_log"`
 	SupportLog  bool   `json:"support_log"`
 	WebLog      bool   `json:"web_log"`
+	ProtoFormat string `json:"proto_format"`
 }
 
 // SyslogServerUpdateRequest represents a request to update a syslog server
@@ -39,6 +41,7 @@ type SyslogServerUpdateRequest struct {
 	AuditLog    *bool  `json:"audit_log,omitempty"`
 	SupportLog  *bool  `json:"support_log,omitempty"`
 	WebLog      *bool  `json:"web_log,omitempty"`
+	ProtoFormat string `json:"proto_format,omitempty"`
 }
 
 // SyslogServerListResponse represents the response from listing syslog servers

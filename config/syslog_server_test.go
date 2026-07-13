@@ -95,6 +95,7 @@ func TestService_GetSyslogServer(t *testing.T) {
 		AuditLog:    true,
 		SupportLog:  true,
 		WebLog:      false,
+		ProtoFormat: "rfc3164",
 	}
 
 	client.On("GetJSON", t.Context(), "configuration/v1/syslog_server/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.SyslogServer")).Return(nil).Run(func(args mock.Arguments) {
@@ -121,6 +122,7 @@ func TestService_CreateSyslogServer(t *testing.T) {
 		AuditLog:    true,
 		SupportLog:  true,
 		WebLog:      false,
+		ProtoFormat: "rfc3164",
 	}
 
 	expectedResponse := &types.PostResponse{
@@ -144,6 +146,7 @@ func TestService_UpdateSyslogServer(t *testing.T) {
 	updateRequest := &SyslogServerUpdateRequest{
 		Description: "Updated syslog server",
 		Port:        1514,
+		ProtoFormat: "rfc5424",
 	}
 
 	expectedServer := &SyslogServer{
@@ -155,6 +158,7 @@ func TestService_UpdateSyslogServer(t *testing.T) {
 		AuditLog:    true,
 		SupportLog:  true,
 		WebLog:      false,
+		ProtoFormat: "rfc5424",
 	}
 
 	client.On("PutJSON", t.Context(), "configuration/v1/syslog_server/1/", updateRequest, mock.AnythingOfType("*config.SyslogServer")).Return(nil).Run(func(args mock.Arguments) {

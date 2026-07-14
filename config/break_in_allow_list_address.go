@@ -11,7 +11,7 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/pexip/go-infinity-sdk/v40/types"
+	"github.com/pexip/go-infinity-sdk/v41/types"
 )
 
 // ListBreakInAllowListAddresses retrieves a list of break-in attempt IP allow list entries

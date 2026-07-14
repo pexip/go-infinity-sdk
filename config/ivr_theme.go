@@ -13,7 +13,7 @@ import (
 	"io"
 	"net/url"
 
-	"github.com/pexip/go-infinity-sdk/v40/types"
+	"github.com/pexip/go-infinity-sdk/v41/types"
 )
 
 // ListIVRThemes retrieves a list of IVR themes

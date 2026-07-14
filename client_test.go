@@ -19,7 +19,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/pexip/go-infinity-sdk/v40/auth"
+	"github.com/pexip/go-infinity-sdk/v41/auth"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -173,7 +173,7 @@ func TestWithUserAgent(t *testing.T) {
 		},
 		{
 			name:      "another valid user agent",
-			userAgent: "go-infinity-sdk/v40",
+			userAgent: "go-infinity-sdk/v41",
 			wantErr:   false,
 		},
 		{

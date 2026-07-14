@@ -11,12 +11,12 @@ import (
 	"io"
 	"net/url"
 
-	"github.com/pexip/go-infinity-sdk/v40/command"
-	"github.com/pexip/go-infinity-sdk/v40/config"
-	"github.com/pexip/go-infinity-sdk/v40/history"
-	"github.com/pexip/go-infinity-sdk/v40/status"
+	"github.com/pexip/go-infinity-sdk/v41/command"
+	"github.com/pexip/go-infinity-sdk/v41/config"
+	"github.com/pexip/go-infinity-sdk/v41/history"
+	"github.com/pexip/go-infinity-sdk/v41/status"
 
-	"github.com/pexip/go-infinity-sdk/v40/types"
+	"github.com/pexip/go-infinity-sdk/v41/types"
 	"github.com/stretchr/testify/mock"
 )
 

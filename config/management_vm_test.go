@@ -70,3 +70,82 @@ func TestService_GetManagementVM(t *testing.T) {
 	assert.Equal(t, expectedManagementVM, result)
 	client.AssertExpectations(t)
 }
+
+func TestService_GetManagementVM_ExplicitID(t *testing.T) {
+	client := interfaces.NewHTTPClientMock()
+
+	expected := &ManagementVM{ID: 3, Name: "test-mgmt-vm", Address: "192.168.1.10"}
+
+	client.On("GetJSON", t.Context(), "configuration/v1/management_vm/3/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.ManagementVM")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*ManagementVM)
+		*result = *expected
+	})
+
+	service := New(client)
+	result, err := service.GetManagementVM(t.Context(), 3)
+
+	assert.NoError(t, err)
+	assert.Equal(t, expected, result)
+	client.AssertExpectations(t)
+}
+
+func TestService_ListManagementVMs(t *testing.T) {
+	client := interfaces.NewHTTPClientMock()
+
+	expected := &ManagementVMListResponse{
+		Objects: []ManagementVM{
+			{ID: 1, Name: "primary-mgr"},
+			{ID: 2, Name: "secondary-mgr"},
+		},
+	}
+
+	client.On("GetJSON", t.Context(), "configuration/v1/management_vm/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.ManagementVMListResponse")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*ManagementVMListResponse)
+		*result = *expected
+	})
+
+	service := New(client)
+	result, err := service.ListManagementVMs(t.Context(), nil)
+
+	assert.NoError(t, err)
+	assert.Equal(t, expected, result)
+	client.AssertExpectations(t)
+}
+
+func TestService_UpdateManagementVM(t *testing.T) {
+	client := interfaces.NewHTTPClientMock()
+
+	req := &ManagementVMUpdateRequest{Name: "test-mgmt-vm", SNMPMode: "DISABLED"}
+	expected := &ManagementVM{ID: 1, Name: "test-mgmt-vm"}
+
+	client.On("PatchJSON", t.Context(), "configuration/v1/management_vm/1/", req, mock.AnythingOfType("*config.ManagementVM")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*ManagementVM)
+		*result = *expected
+	})
+
+	service := New(client)
+	result, err := service.UpdateManagementVM(t.Context(), req)
+
+	assert.NoError(t, err)
+	assert.Equal(t, expected, result)
+	client.AssertExpectations(t)
+}
+
+func TestService_UpdateManagementVM_ExplicitID(t *testing.T) {
+	client := interfaces.NewHTTPClientMock()
+
+	req := &ManagementVMUpdateRequest{Name: "test-mgmt-vm", SNMPMode: "DISABLED"}
+	expected := &ManagementVM{ID: 3, Name: "test-mgmt-vm"}
+
+	client.On("PatchJSON", t.Context(), "configuration/v1/management_vm/3/", req, mock.AnythingOfType("*config.ManagementVM")).Return(nil).Run(func(args mock.Arguments) {
+		result := args.Get(3).(*ManagementVM)
+		*result = *expected
+	})
+
+	service := New(client)
+	result, err := service.UpdateManagementVM(t.Context(), req, 3)
+
+	assert.NoError(t, err)
+	assert.Equal(t, expected, result)
+	client.AssertExpectations(t)
+}

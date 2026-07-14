@@ -74,7 +74,7 @@ func TestService_GetManagementVM(t *testing.T) {
 func TestService_GetManagementVM_ExplicitID(t *testing.T) {
 	client := interfaces.NewHTTPClientMock()
 
-	expected := &ManagementVM{ID: 3, Name: "pi2-mgr", Address: "172.21.33.135"}
+	expected := &ManagementVM{ID: 3, Name: "test-mgmt-vm", Address: "192.168.1.10"}
 
 	client.On("GetJSON", t.Context(), "configuration/v1/management_vm/3/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.ManagementVM")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(3).(*ManagementVM)
@@ -115,8 +115,8 @@ func TestService_ListManagementVMs(t *testing.T) {
 func TestService_UpdateManagementVM(t *testing.T) {
 	client := interfaces.NewHTTPClientMock()
 
-	req := &ManagementVMUpdateRequest{Name: "updated-mgr", SNMPMode: "DISABLED"}
-	expected := &ManagementVM{ID: 1, Name: "updated-mgr"}
+	req := &ManagementVMUpdateRequest{Name: "test-mgmt-vm", SNMPMode: "DISABLED"}
+	expected := &ManagementVM{ID: 1, Name: "test-mgmt-vm"}
 
 	client.On("PatchJSON", t.Context(), "configuration/v1/management_vm/1/", req, mock.AnythingOfType("*config.ManagementVM")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(3).(*ManagementVM)
@@ -134,8 +134,8 @@ func TestService_UpdateManagementVM(t *testing.T) {
 func TestService_UpdateManagementVM_ExplicitID(t *testing.T) {
 	client := interfaces.NewHTTPClientMock()
 
-	req := &ManagementVMUpdateRequest{Name: "pi2-mgr", SNMPMode: "DISABLED"}
-	expected := &ManagementVM{ID: 3, Name: "pi2-mgr"}
+	req := &ManagementVMUpdateRequest{Name: "test-mgmt-vm", SNMPMode: "DISABLED"}
+	expected := &ManagementVM{ID: 3, Name: "test-mgmt-vm"}
 
 	client.On("PatchJSON", t.Context(), "configuration/v1/management_vm/3/", req, mock.AnythingOfType("*config.ManagementVM")).Return(nil).Run(func(args mock.Arguments) {
 		result := args.Get(3).(*ManagementVM)

@@ -1,13 +1,27 @@
 #!/bin/bash
 
 COOKIES_FILE="cookies.txt" # Define the cookies file name
+CURL_INSECURE=""
+
+while [[ "$#" -gt 0 ]]; do
+    case "$1" in
+        -k|--insecure) CURL_INSECURE="-k" ;;
+        *) echo "Unknown flag: $1"; exit 1 ;;
+    esac
+    shift
+done
 
 read -p "Enter base URL (e.g., https://manager.example.com): " BASE_URL
 BASE_URL="${BASE_URL%/}"
 read -p "Enter basic username: " USERNAME
-read -p "Enter basic password: " PASSWORD
+read -sp "Enter basic password: " PASSWORD
+echo ""
 BASIC_AUTH=$(echo -n "${USERNAME}:${PASSWORD}" | base64)
 read -p "Enter module name (default: configuration): " MODULE
+MODULE="${MODULE:-configuration}"
+
+read -p "Enter output filename (default: ${MODULE}): " OUTPUT_NAME
+OUTPUT_NAME="${OUTPUT_NAME:-$MODULE}"
 
 SUB_MODULE="" # Either of participant, conference or platform is valid
 if [ "$MODULE" == "command" ]; then
@@ -34,6 +48,7 @@ download_file() {
 
  echo "Downloading $url -> $out_file"
  curl \
+   $CURL_INSECURE \
    -H "authorization: Basic ${basic_auth_token}" \
    -H 'cache-control: no-cache' \
    -b "${cookies_data}" \
@@ -53,22 +68,22 @@ config_url="${BASE_URL}/api/admin/${MODULE}/v1/"
 if [ -n "$SUB_MODULE" ]; then
   config_url="${config_url}${SUB_MODULE}/"
 fi
-config_output_file="${MODULE}.json"
+config_output_file="${OUTPUT_NAME}.json"
 
 download_file "$config_url" "$config_output_file" "$BASIC_AUTH" "$COOKIES"
 if [ $? -eq 0 ]; then
-  echo "configuration.json downloaded successfully to $config_output_file."
+  echo "Downloaded successfully to $config_output_file."
 else
-  echo "Error: Failed to download configuration.json from $config_url."
+  echo "Error: Failed to download from $config_url."
   exit 1
 fi
 
-mkdir -p "$MODULE"
+mkdir -p "$OUTPUT_NAME"
 
 # Extract all schema URLs and resource names from the config
 jq -r 'to_entries[] | "\(.key) \(.value.schema)"' "$config_output_file" | while read -r name schema; do
    url="${BASE_URL}${schema}"
-   out_file="${MODULE}/${name}.json"
+   out_file="${OUTPUT_NAME}/${name}.json"
    download_file "$url" "$out_file" "$BASIC_AUTH" "$COOKIES"
    if [ $? -ne 0 ]; then
         echo "Failed to download $url"

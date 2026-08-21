@@ -1,0 +1,90 @@
+name: Create a release
+description: Creates a release on GitHub and tags the code
+author: "havard.bakke@pexip.com"
+
+inputs:
+  version:
+    required: true
+    description: Release version (e.g., v1.0.0)
+  pre_release:
+    required: false
+    default: "false"
+    description: Mark as pre-release (true or false)
+  jira_webhook:
+    required: false
+    description: The Jira webhook URL
+  jira_artifact_name:
+    required: false
+    description: The name of the component to release in Jira
+  jira_project_key:
+    required: false
+    description: The Jira project key (given issues in project named TEST-123, TEST is the key)
+  github_token:
+    required: true
+    description: The GitHub token (use secrets.GITHUB_TOKEN)
+
+runs:
+  using: "composite"
+  steps:
+    - name: Validate inputs
+      shell: bash
+      run: |
+        if [ -z "${{ inputs.version }}" ]; then
+          echo "Error: version is required"
+          exit 1
+        fi
+        if [ -z "${{ inputs.github_token }}" ]; then
+          echo "Error: github_token is required"
+          exit 1
+        fi
+        # Validate Jira inputs as a group
+        if [ -n "${{ inputs.jira_project_key }}" ]; then
+          if [ -z "${{ inputs.jira_webhook }}" ] || [ -z "${{ inputs.jira_artifact_name }}" ]; then
+            echo "Error: When jira_project_key is provided, jira_webhook and jira_artifact_name are also required"
+            exit 1
+          fi
+        fi
+
+    - name: Create release branch
+      shell: bash
+      run: |
+        VERSION="${{ inputs.version }}"
+        BRANCH_NAME="releases/${VERSION}"
+
+        git config user.name "GitHub Actions"
+        git config user.email noreply@github.com
+
+        git checkout -b "${BRANCH_NAME}"
+        git push origin "${BRANCH_NAME}"
+
+        echo "Created and pushed branch: ${BRANCH_NAME}"
+
+    - name: Create release
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 #v9.0.0
+      with:
+        github-token: ${{ inputs.github_token }}
+        script: |
+          try {
+            const version = '${{ inputs.version }}'
+            const response = await github.rest.repos.createRelease({
+              draft: false,
+              generate_release_notes: true,
+              name: `Release ${version}`,
+              owner: context.repo.owner,
+              prerelease: ${{ inputs.pre_release == 'true' }},
+              repo: context.repo.repo,
+              tag_name: version,
+              target_commitish: context.sha,
+            });
+            core.exportVariable('RELEASE_ID', response.data.id);
+            core.exportVariable('RELEASE_UPLOAD_URL', response.data.upload_url);
+          } catch (error) {
+            core.setFailed(error.message);
+          }
+    - name: Create Jira release
+      if: inputs.jira_project_key != ''
+      uses: GeoWerkstatt/create-jira-release@66a6a3a84ddaf7349c47ee0aa20f252b80420146 #v1.0.9
+      with:
+        jira-project-key: ${{ inputs.jira_project_key }}
+        jira-automation-webhook: ${{ inputs.jira_webhook }}
+        build-version: ${{ inputs.jira_artifact_name }}-${{ inputs.version }}

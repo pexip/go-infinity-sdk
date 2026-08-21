@@ -16,3 +16,7 @@
 # ...even if they are in subdirectories
 !*/
 
+# GitHub Actions
+!*.yml
+!*.sh
+

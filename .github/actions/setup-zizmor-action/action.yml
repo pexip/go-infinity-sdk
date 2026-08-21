@@ -1,0 +1,64 @@
+---
+name: "Setup zizmor"
+author: Havard Bakke
+description: "This action installs zizmor cli tool."
+branding:
+  icon: terminal
+  color: gray-dark
+inputs:
+  version:
+    description: zizmor version. Defaults to the latest version.
+    required: false
+    default: "latest"
+  force:
+    description: |
+      If "false" skips installation if zizmor is already installed. If "true"
+      installs zizmor in any case. Defaults to "false".
+    required: false
+    default: "false"
+outputs:
+  installed:
+    description: Whether zizmor was installed or not.
+    value: "${{ steps.install-zizmor.outcome == 'success' }}"
+runs:
+  using: "composite"
+  steps:
+    - name: Validate inputs
+      env:
+        INPUT_VERSION: "${{ inputs.version }}"
+        INPUT_FORCE: "${{ inputs.force }}"
+      run: ./validate-inputs.sh "${INPUT_VERSION}" "${INPUT_FORCE}"
+      shell: sh
+      working-directory: ${{ github.action_path }}/src
+
+    - name: Collect info
+      id: info
+      env:
+        INPUT_FORCE: "${{ inputs.force }}"
+      run: ./collect-info.sh "${INPUT_FORCE}"
+      shell: sh
+      working-directory: ${{ github.action_path }}/src
+
+    - name: Setup python
+      if: ${{ steps.info.outputs.bin-installed == 'false' && steps.info.outputs.pip-installed == 'false' }}
+      id: setup-python
+      uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 #v6.2.0
+      with:
+        python-version: "3.x"
+
+    - name: Install zizmor
+      if: ${{ steps.info.outputs.bin-installed == 'false' }}
+      id: install-zizmor
+      env:
+        INPUT_VERSION: "${{ inputs.version }}"
+      run: |
+        if [ "${INPUT_VERSION}" = "latest" ]; then
+          python3 -m pip install zizmor --root-user-action=ignore
+        else
+          python3 -m pip install zizmor==${INPUT_VERSION} --root-user-action=ignore
+        fi
+      shell: sh
+
+    - name: Print version
+      run: zizmor --version
+      shell: sh

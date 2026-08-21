@@ -1,6 +1,6 @@
 module github.com/pexip/go-infinity-sdk/v41
 
-go 1.24.3
+go 1.25.14
 
 require github.com/stretchr/testify v1.12.0
 

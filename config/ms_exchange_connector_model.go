@@ -237,17 +237,17 @@ type MsExchangeConnectorCreateRequest struct {
 // MsExchangeConnectorUpdateRequest represents a request to update a Microsoft Exchange connector
 type MsExchangeConnectorUpdateRequest struct {
 	Name                       string  `json:"name,omitempty"`
-	Description                string  `json:"description,omitempty"`
-	RoomMailboxEmailAddress    *string `json:"room_mailbox_email_address,omitempty"`
-	RoomMailboxName            string  `json:"room_mailbox_name,omitempty"`
-	URL                        string  `json:"url,omitempty"`
-	Username                   string  `json:"username,omitempty"`
+	Description                string  `json:"description"`
+	RoomMailboxEmailAddress    *string `json:"room_mailbox_email_address"`
+	RoomMailboxName            string  `json:"room_mailbox_name"`
+	URL                        string  `json:"url"`
+	Username                   string  `json:"username"`
 	Password                   string  `json:"password,omitempty"`
 	AuthenticationMethod       string  `json:"authentication_method,omitempty"`
 	AuthProvider               string  `json:"auth_provider,omitempty"`
 	UUID                       string  `json:"uuid,omitempty"`
-	ScheduledAliasPrefix       *string `json:"scheduled_alias_prefix,omitempty"`
-	ScheduledAliasDomain       string  `json:"scheduled_alias_domain,omitempty"`
+	ScheduledAliasPrefix       *string `json:"scheduled_alias_prefix"`
+	ScheduledAliasDomain       string  `json:"scheduled_alias_domain"`
 	ScheduledAliasSuffixLength *int    `json:"scheduled_alias_suffix_length,omitempty"`
 	MeetingBufferBefore        *int    `json:"meeting_buffer_before,omitempty"`
 	MeetingBufferAfter         *int    `json:"meeting_buffer_after,omitempty"`
@@ -258,17 +258,17 @@ type MsExchangeConnectorUpdateRequest struct {
 	UseCustomAddInSources      *bool   `json:"use_custom_add_in_sources,omitempty"`
 	EnableAddinDebugLogs       *bool   `json:"enable_addin_debug_logs,omitempty"`
 	// OAuth fields
-	OauthClientID      *string `json:"oauth_client_id,omitempty"`
+	OauthClientID      *string `json:"oauth_client_id"`
 	OauthClientSecret  string  `json:"oauth_client_secret,omitempty"`
-	OauthAuthEndpoint  string  `json:"oauth_auth_endpoint,omitempty"`
-	OauthTokenEndpoint string  `json:"oauth_token_endpoint,omitempty"`
-	OauthRedirectURI   string  `json:"oauth_redirect_uri,omitempty"`
+	OauthAuthEndpoint  string  `json:"oauth_auth_endpoint"`
+	OauthTokenEndpoint string  `json:"oauth_token_endpoint"`
+	OauthRedirectURI   string  `json:"oauth_redirect_uri"`
 	OauthRefreshToken  string  `json:"oauth_refresh_token,omitempty"`
 	// Kerberos fields
-	KerberosRealm                  string `json:"kerberos_realm,omitempty"`
-	KerberosKdc                    string `json:"kerberos_kdc,omitempty"`
-	KerberosKdcHttpsProxy          string `json:"kerberos_kdc_https_proxy,omitempty"`
-	KerberosExchangeSpn            string `json:"kerberos_exchange_spn,omitempty"`
+	KerberosRealm                  string `json:"kerberos_realm"`
+	KerberosKdc                    string `json:"kerberos_kdc"`
+	KerberosKdcHttpsProxy          string `json:"kerberos_kdc_https_proxy"`
+	KerberosExchangeSpn            string `json:"kerberos_exchange_spn"`
 	KerberosEnableTls              *bool  `json:"kerberos_enable_tls,omitempty"`
 	KerberosAuthEveryRequest       *bool  `json:"kerberos_auth_every_request,omitempty"`
 	KerberosVerifyTlsUsingCustomCa *bool  `json:"kerberos_verify_tls_using_custom_ca,omitempty"`
@@ -281,11 +281,11 @@ type MsExchangeConnectorUpdateRequest struct {
 	AddinGroupLabel             string  `json:"addin_group_label,omitempty"`
 	AddinSupertipTitle          string  `json:"addin_supertip_title,omitempty"`
 	AddinSupertipDescription    string  `json:"addin_supertip_description,omitempty"`
-	AddinApplicationID          *string `json:"addin_application_id,omitempty"`
-	AddinAuthorityURL           string  `json:"addin_authority_url,omitempty"`
-	AddinOidcMetadataURL        string  `json:"addin_oidc_metadata_url,omitempty"`
+	AddinApplicationID          *string `json:"addin_application_id"`
+	AddinAuthorityURL           string  `json:"addin_authority_url"`
+	AddinOidcMetadataURL        string  `json:"addin_oidc_metadata_url"`
 	AddinAuthenticationMethod   string  `json:"addin_authentication_method,omitempty"`
-	AddinNaaWebApiApplicationID *string `json:"addin_naa_web_api_application_id,omitempty"`
+	AddinNaaWebApiApplicationID *string `json:"addin_naa_web_api_application_id"`
 	// Add-in pane fields
 	AddinPaneTitle                                   string `json:"addin_pane_title,omitempty"`
 	AddinPaneDescription                             string `json:"addin_pane_description,omitempty"`
@@ -306,11 +306,11 @@ type MsExchangeConnectorUpdateRequest struct {
 	AddinPanePersonalVmrErrorSigningInMessage        string `json:"addin_pane_personal_vmr_error_signing_in_message,omitempty"`
 	AddinPanePersonalVmrErrorInsertingMeetingMessage string `json:"addin_pane_personal_vmr_error_inserting_meeting_message,omitempty"`
 	// Personal VMR OAuth fields
-	PersonalVmrOauthClientID                   *string `json:"personal_vmr_oauth_client_id,omitempty"`
+	PersonalVmrOauthClientID                   *string `json:"personal_vmr_oauth_client_id"`
 	PersonalVmrOauthClientSecret               string  `json:"personal_vmr_oauth_client_secret,omitempty"`
-	PersonalVmrOauthAuthEndpoint               string  `json:"personal_vmr_oauth_auth_endpoint,omitempty"`
-	PersonalVmrOauthTokenEndpoint              string  `json:"personal_vmr_oauth_token_endpoint,omitempty"`
-	PersonalVmrAdfsRelyingPartyTrustIdentifier string  `json:"personal_vmr_adfs_relying_party_trust_identifier,omitempty"`
+	PersonalVmrOauthAuthEndpoint               string  `json:"personal_vmr_oauth_auth_endpoint"`
+	PersonalVmrOauthTokenEndpoint              string  `json:"personal_vmr_oauth_token_endpoint"`
+	PersonalVmrAdfsRelyingPartyTrustIdentifier string  `json:"personal_vmr_adfs_relying_party_trust_identifier"`
 	// Template fields
 	MeetingInstructionsTemplate         string `json:"meeting_instructions_template,omitempty"`
 	PersonalVmrInstructionsTemplate     string `json:"personal_vmr_instructions_template,omitempty"`
@@ -337,7 +337,7 @@ type MsExchangeConnectorUpdateRequest struct {
 	OfficeJsURL                  string `json:"office_js_url,omitempty"`
 	MicrosoftFabricURL           string `json:"microsoft_fabric_url,omitempty"`
 	MicrosoftFabricComponentsURL string `json:"microsoft_fabric_components_url,omitempty"`
-	AdditionalAddInScriptSources string `json:"additional_add_in_script_sources,omitempty"`
+	AdditionalAddInScriptSources string `json:"additional_add_in_script_sources"`
 	// Related resources
 	Domains                   *[]string `json:"domains,omitempty"`
 	HostIdentityProviderGroup *string   `json:"host_identity_provider_group,omitempty"`

@@ -71,6 +71,7 @@ type GlobalConfiguration struct {
 	EnableMlvad                         bool         `json:"enable_mlvad,omitempty"`
 	EnableRTMP                          bool         `json:"enable_rtmp,omitempty"`
 	EnableSIP                           bool         `json:"enable_sip,omitempty"`
+	EnableSIPTCP                        bool         `json:"enable_sip_tcp,omitempty"`
 	EnableSIPUDP                        bool         `json:"enable_sip_udp,omitempty"`
 	EnableSoftmute                      bool         `json:"enable_softmute,omitempty"`
 	EnableSSH                           bool         `json:"enable_ssh,omitempty"`
@@ -163,6 +164,7 @@ type GlobalConfigurationUpdateRequest struct {
 	EnableMlvad                         bool         `json:"enable_mlvad"`
 	EnableRTMP                          bool         `json:"enable_rtmp"`
 	EnableSIP                           bool         `json:"enable_sip"`
+	EnableSIPTCP                        bool         `json:"enable_sip_tcp,omitempty"`
 	EnableSIPUDP                        bool         `json:"enable_sip_udp"`
 	EnableSoftmute                      bool         `json:"enable_softmute"`
 	EnableSSH                           bool         `json:"enable_ssh"`

@@ -22,6 +22,7 @@ type IdentityProvider struct {
 	SignatureAlgorithm                  string                       `json:"signature_algorithm"`
 	DigestAlgorithm                     string                       `json:"digest_algorithm"`
 	DisplayNameAttributeName            string                       `json:"display_name_attribute_name,omitempty"`
+	EmailAttributeName                  *string                      `json:"email_attribute_name,omitempty"`
 	RegistrationAliasAttributeName      string                       `json:"registration_alias_attribute_name,omitempty"`
 	AssertionConsumerServiceURL         string                       `json:"assertion_consumer_service_url"`
 	AssertionConsumerServiceURL2        string                       `json:"assertion_consumer_service_url2,omitempty"`
@@ -44,6 +45,7 @@ type IdentityProvider struct {
 	OidcTokenEndpointAuthScheme         string                       `json:"oidc_token_endpoint_auth_scheme"`
 	OidcTokenSignatureScheme            string                       `json:"oidc_token_signature_scheme"`
 	OidcDisplayNameClaimName            string                       `json:"oidc_display_name_claim_name,omitempty"`
+	OidcEmailClaimName                  *string                      `json:"oidc_email_claim_name,omitempty"`
 	OidcRegistrationAliasClaimName      string                       `json:"oidc_registration_alias_claim_name,omitempty"`
 	OidcAdditionalScopes                string                       `json:"oidc_additional_scopes,omitempty"`
 	OidcFranceConnectRequiredEidasLevel string                       `json:"oidc_france_connect_required_eidas_level"`
@@ -66,6 +68,7 @@ type IdentityProviderCreateRequest struct {
 	SignatureAlgorithm                  string    `json:"signature_algorithm"`
 	DigestAlgorithm                     string    `json:"digest_algorithm"`
 	DisplayNameAttributeName            string    `json:"display_name_attribute_name,omitempty"`
+	EmailAttributeName                  *string   `json:"email_attribute_name,omitempty"`
 	RegistrationAliasAttributeName      string    `json:"registration_alias_attribute_name,omitempty"`
 	AssertionConsumerServiceURL         string    `json:"assertion_consumer_service_url,omitempty"`
 	AssertionConsumerServiceURL2        string    `json:"assertion_consumer_service_url2,omitempty"`
@@ -88,6 +91,7 @@ type IdentityProviderCreateRequest struct {
 	OidcTokenEndpointAuthScheme         string    `json:"oidc_token_endpoint_auth_scheme"`
 	OidcTokenSignatureScheme            string    `json:"oidc_token_signature_scheme"`
 	OidcDisplayNameClaimName            string    `json:"oidc_display_name_claim_name,omitempty"`
+	OidcEmailClaimName                  *string   `json:"oidc_email_claim_name,omitempty"`
 	OidcRegistrationAliasClaimName      string    `json:"oidc_registration_alias_claim_name,omitempty"`
 	OidcAdditionalScopes                string    `json:"oidc_additional_scopes,omitempty"`
 	OidcFranceConnectRequiredEidasLevel string    `json:"oidc_france_connect_required_eidas_level"`
@@ -108,6 +112,7 @@ type IdentityProviderUpdateRequest struct {
 	SignatureAlgorithm                  string    `json:"signature_algorithm"`
 	DigestAlgorithm                     string    `json:"digest_algorithm"`
 	DisplayNameAttributeName            string    `json:"display_name_attribute_name"`
+	EmailAttributeName                  *string   `json:"email_attribute_name"`
 	RegistrationAliasAttributeName      string    `json:"registration_alias_attribute_name"`
 	AssertionConsumerServiceURL         string    `json:"assertion_consumer_service_url"`
 	AssertionConsumerServiceURL2        string    `json:"assertion_consumer_service_url2"`
@@ -130,6 +135,7 @@ type IdentityProviderUpdateRequest struct {
 	OidcTokenEndpointAuthScheme         string    `json:"oidc_token_endpoint_auth_scheme"`
 	OidcTokenSignatureScheme            string    `json:"oidc_token_signature_scheme"`
 	OidcDisplayNameClaimName            string    `json:"oidc_display_name_claim_name"`
+	OidcEmailClaimName                  *string   `json:"oidc_email_claim_name"`
 	OidcRegistrationAliasClaimName      string    `json:"oidc_registration_alias_claim_name"`
 	OidcAdditionalScopes                string    `json:"oidc_additional_scopes"`
 	OidcFranceConnectRequiredEidasLevel string    `json:"oidc_france_connect_required_eidas_level"`

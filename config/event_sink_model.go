@@ -8,6 +8,11 @@ package config
 
 import "github.com/pexip/go-infinity-sdk/v41/util"
 
+// EventSinkEvent represents a single event type associated with an event sink
+type EventSinkEvent struct {
+	Name string `json:"name"`
+}
+
 // EventSink represents an event sink configuration
 type EventSink struct {
 	ID                   int                `json:"id,omitempty"`
@@ -19,32 +24,35 @@ type EventSink struct {
 	BulkSupport          bool               `json:"bulk_support"`
 	VerifyTLSCertificate bool               `json:"verify_tls_certificate"`
 	Version              int                `json:"version"`
+	Events               *[]EventSinkEvent  `json:"events,omitempty"`
 	RestartDate          *util.InfinityTime `json:"restart_date,omitempty"`
 	ResourceURI          string             `json:"resource_uri,omitempty"`
 }
 
 // EventSinkCreateRequest represents a request to create an event sink
 type EventSinkCreateRequest struct {
-	Name                 string  `json:"name"`
-	Description          *string `json:"description,omitempty"`
-	URL                  string  `json:"url"`
-	Username             *string `json:"username,omitempty"`
-	Password             *string `json:"password,omitempty"`
-	BulkSupport          bool    `json:"bulk_support"`
-	VerifyTLSCertificate bool    `json:"verify_tls_certificate"`
-	Version              int     `json:"version"`
+	Name                 string            `json:"name"`
+	Description          *string           `json:"description,omitempty"`
+	URL                  string            `json:"url"`
+	Username             *string           `json:"username,omitempty"`
+	Password             *string           `json:"password,omitempty"`
+	BulkSupport          bool              `json:"bulk_support"`
+	VerifyTLSCertificate bool              `json:"verify_tls_certificate"`
+	Version              int               `json:"version"`
+	Events               *[]EventSinkEvent `json:"events,omitempty"`
 }
 
 // EventSinkUpdateRequest represents a request to update an event sink
 type EventSinkUpdateRequest struct {
-	Name                 string  `json:"name,omitempty"`
-	Description          *string `json:"description,omitempty"`
-	URL                  string  `json:"url,omitempty"`
-	Username             *string `json:"username,omitempty"`
-	Password             *string `json:"password,omitempty"`
-	BulkSupport          *bool   `json:"bulk_support,omitempty"`
-	VerifyTLSCertificate *bool   `json:"verify_tls_certificate,omitempty"`
-	Version              *int    `json:"version,omitempty"`
+	Name                 string            `json:"name,omitempty"`
+	Description          *string           `json:"description,omitempty"`
+	URL                  string            `json:"url,omitempty"`
+	Username             *string           `json:"username,omitempty"`
+	Password             *string           `json:"password,omitempty"`
+	BulkSupport          *bool             `json:"bulk_support,omitempty"`
+	VerifyTLSCertificate *bool             `json:"verify_tls_certificate,omitempty"`
+	Version              *int              `json:"version,omitempty"`
+	Events               *[]EventSinkEvent `json:"events"`
 }
 
 // EventSinkListResponse represents the response from listing event sinks

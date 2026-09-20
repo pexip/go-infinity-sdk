@@ -168,7 +168,7 @@ type GlobalConfigurationUpdateRequest struct {
 	EnableMSSIP                         bool         `json:"enable_mssip"`
 	EnableRTMP                          bool         `json:"enable_rtmp"`
 	EnableSIP                           bool         `json:"enable_sip"`
-	EnableSIPTCP                        bool         `json:"enable_sip_tcp,omitempty"`
+	EnableSIPTCP                        bool         `json:"enable_sip_tcp"`
 	EnableSIPUDP                        bool         `json:"enable_sip_udp"`
 	EnableSoftmute                      bool         `json:"enable_softmute"`
 	EnableSSH                           bool         `json:"enable_ssh"`

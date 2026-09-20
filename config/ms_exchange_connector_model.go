@@ -18,6 +18,7 @@ type MsExchangeConnector struct {
 	Password                   string  `json:"password,omitempty"`                   // The password of the service account to be used by the scheduling service. Maximum length: 100 characters. Default: ""
 	AuthenticationMethod       string  `json:"authentication_method"`                // The method used to authenticate to Exchange. Valid values: BASIC, NTLM, KERBEROS, OAUTH, APP_PERM. Default: BASIC
 	AuthProvider               string  `json:"auth_provider"`                        // The method by which users will sign into the Outlook add-in. Valid values: ADFS, AZURE. Default: ADFS
+	ExchangeAPIType            string  `json:"exchange_api_type"`                    // The API that should be used to communicate with the Exchange server. Valid values: EWS, GRAPH. Default: EWS
 	UUID                       string  `json:"uuid"`                                 // The unique identifier of the Secure Scheduler for Exchange Integration.
 	ScheduledAliasPrefix       *string `json:"scheduled_alias_prefix,omitempty"`     // The prefix to use when generating aliases for scheduled conferences. Minimum length: 1 characters. Maximum length: 8 characters.
 	ScheduledAliasDomain       string  `json:"scheduled_alias_domain,omitempty"`     // The domain to use when generating aliases for scheduled conferences. Maximum length: 192 characters. Default: ""
@@ -31,13 +32,18 @@ type MsExchangeConnector struct {
 	UseCustomAddInSources      bool    `json:"use_custom_add_in_sources"`            // Enable this to specify custom locations to serve add-in JavaScript and CSS from. This can be used to support offline deployments. Default: false
 	EnableAddinDebugLogs       bool    `json:"enable_addin_debug_logs"`              // Enable this option to view debug logs within the add-in side pane. Note that these logs will appear for all users of this add-in. Default: false
 	// OAuth fields
+	OauthCertificate   *string `json:"oauth_certificate,omitempty"`    // The certificate which was generated when creating an App Registration in Microsoft Entra.
 	OauthClientID      *string `json:"oauth_client_id,omitempty"`      // The Application ID which was generated when creating an App Registration in Azure Active Directory
 	OauthClientSecret  string  `json:"oauth_client_secret,omitempty"`  // The OAuth Client Secret which was generated when creating an App Registration in Microsoft Entra. Default: ""
+	OauthPrivateKey    *string `json:"oauth_private_key,omitempty"`    // The private key which was generated when creating an App Registration in Microsoft Entra. Maximum length: 12288 characters.
 	OauthAuthEndpoint  string  `json:"oauth_auth_endpoint,omitempty"`  // The URI of the OAuth authorization endpoint. This should be copied from the 'Endpoints' section in Azure Active Directory App Registrations. Maximum length: 255 characters. Default: ""
 	OauthTokenEndpoint string  `json:"oauth_token_endpoint,omitempty"` // The URI of the OAuth token endpoint. This should be copied from the 'Endpoints' section in Azure Active Directory App Registrations. Maximum length: 255 characters. Default: ""
 	OauthRedirectURI   string  `json:"oauth_redirect_uri,omitempty"`   // The redirect URI you entered when creating an App Registration in Azure Active Directory. It should be in the format 'https://[Management Node Address]/admin/platform/msexchangeconnector/oauth_redirect/'. Maximum length: 255 characters. Default: ""
 	OauthRefreshToken  string  `json:"oauth_refresh_token,omitempty"`  // The OAuth refresh token which is obtained after successfully signing in via the OAuth flow. Maximum length: 4096 characters. Default: ""
 	OauthState         *string `json:"oauth_state,omitempty"`          // A unique state which is used during the OAuth sign-in flow.
+	// Graph API fields
+	GraphAPIDomain            string `json:"graph_api_domain,omitempty"`            // The FQDN to use when connecting to the Graph API. Maximum length: 192 characters. Default: "graph.microsoft.com"
+	GraphAuthenticationMethod string `json:"graph_authentication_method,omitempty"` // The method used to authenticate to Exchange. Valid values: APP_PERM, APP_PERM_PK. Default: APP_PERM
 	// Kerberos fields
 	KerberosRealm                  string `json:"kerberos_realm,omitempty"`            // The Kerberos Realm, which is usually your domain in upper-case. Maximum length: 250 characters. Default: ""
 	KerberosKdc                    string `json:"kerberos_kdc,omitempty"`              // The address of the Kerberos key distribution center (KDC). Maximum length: 255 characters. Default: ""
@@ -117,6 +123,7 @@ type MsExchangeConnector struct {
 	HostIdentityProviderGroup *string           `json:"host_identity_provider_group,omitempty"` // The set of Identity Providers to use if participants are required to authenticate in order to join the scheduled conference. If this is blank, participants will not be required to authenticate.
 	IvrTheme                  *string           `json:"ivr_theme,omitempty"`                    // The theme for use with this service.
 	NonIdpParticipants        string            `json:"non_idp_participants,omitempty"`         // Determines whether participants attempting to join from devices other than the Infinity Connect apps (for example, SIP or H.323 endpoints) are permitted to join the conference when authentication is required. Disallow all: these devices may not join the conference. Allow if trusted: these devices may join the conference if they are locally registered. Default: "disallow_all"
+	PersonalVmrIDP            *string           `json:"personal_vmr_idp,omitempty"`             // The Identity Providers that will be accepted when this Identity Provider Group is in use.
 	// Read-only fields
 	PrivateKey  *string `json:"private_key,omitempty"`  // The private key used by this Secure Scheduler for Exchange Integration. Maximum length: 12288 characters.
 	PublicKey   string  `json:"public_key,omitempty"`   // The public key used by this Secure Scheduler for Exchange Integration. Maximum length: 12288 characters.
@@ -134,6 +141,7 @@ type MsExchangeConnectorCreateRequest struct {
 	Password                   string  `json:"password,omitempty"`
 	AuthenticationMethod       string  `json:"authentication_method"`
 	AuthProvider               string  `json:"auth_provider"`
+	ExchangeAPIType            string  `json:"exchange_api_type,omitempty"`
 	UUID                       string  `json:"uuid,omitempty"`
 	ScheduledAliasPrefix       *string `json:"scheduled_alias_prefix,omitempty"`
 	ScheduledAliasDomain       string  `json:"scheduled_alias_domain,omitempty"`
@@ -147,12 +155,17 @@ type MsExchangeConnectorCreateRequest struct {
 	UseCustomAddInSources      bool    `json:"use_custom_add_in_sources"`
 	EnableAddinDebugLogs       bool    `json:"enable_addin_debug_logs"`
 	// OAuth fields
+	OauthCertificate   *string `json:"oauth_certificate,omitempty"`
 	OauthClientID      *string `json:"oauth_client_id,omitempty"`
 	OauthClientSecret  string  `json:"oauth_client_secret,omitempty"`
+	OauthPrivateKey    *string `json:"oauth_private_key,omitempty"`
 	OauthAuthEndpoint  string  `json:"oauth_auth_endpoint,omitempty"`
 	OauthTokenEndpoint string  `json:"oauth_token_endpoint,omitempty"`
 	OauthRedirectURI   string  `json:"oauth_redirect_uri,omitempty"`
 	OauthRefreshToken  string  `json:"oauth_refresh_token,omitempty"`
+	// Graph API fields
+	GraphAPIDomain            string `json:"graph_api_domain,omitempty"`
+	GraphAuthenticationMethod string `json:"graph_authentication_method,omitempty"`
 	// Kerberos fields
 	KerberosRealm                  string `json:"kerberos_realm,omitempty"`
 	KerberosKdc                    string `json:"kerberos_kdc,omitempty"`
@@ -232,6 +245,7 @@ type MsExchangeConnectorCreateRequest struct {
 	HostIdentityProviderGroup *string   `json:"host_identity_provider_group,omitempty"`
 	IvrTheme                  *string   `json:"ivr_theme,omitempty"`
 	NonIdpParticipants        string    `json:"non_idp_participants,omitempty"`
+	PersonalVmrIDP            *string   `json:"personal_vmr_idp,omitempty"`
 }
 
 // MsExchangeConnectorUpdateRequest represents a request to update a Microsoft Exchange connector
@@ -245,6 +259,7 @@ type MsExchangeConnectorUpdateRequest struct {
 	Password                   string  `json:"password,omitempty"`
 	AuthenticationMethod       string  `json:"authentication_method,omitempty"`
 	AuthProvider               string  `json:"auth_provider,omitempty"`
+	ExchangeAPIType            string  `json:"exchange_api_type,omitempty"`
 	UUID                       string  `json:"uuid,omitempty"`
 	ScheduledAliasPrefix       *string `json:"scheduled_alias_prefix"`
 	ScheduledAliasDomain       string  `json:"scheduled_alias_domain"`
@@ -258,12 +273,17 @@ type MsExchangeConnectorUpdateRequest struct {
 	UseCustomAddInSources      *bool   `json:"use_custom_add_in_sources,omitempty"`
 	EnableAddinDebugLogs       *bool   `json:"enable_addin_debug_logs,omitempty"`
 	// OAuth fields
+	OauthCertificate   *string `json:"oauth_certificate"`
 	OauthClientID      *string `json:"oauth_client_id"`
 	OauthClientSecret  string  `json:"oauth_client_secret,omitempty"`
+	OauthPrivateKey    *string `json:"oauth_private_key"`
 	OauthAuthEndpoint  string  `json:"oauth_auth_endpoint"`
 	OauthTokenEndpoint string  `json:"oauth_token_endpoint"`
 	OauthRedirectURI   string  `json:"oauth_redirect_uri"`
 	OauthRefreshToken  string  `json:"oauth_refresh_token,omitempty"`
+	// Graph API fields
+	GraphAPIDomain            string `json:"graph_api_domain"`
+	GraphAuthenticationMethod string `json:"graph_authentication_method,omitempty"`
 	// Kerberos fields
 	KerberosRealm                  string `json:"kerberos_realm"`
 	KerberosKdc                    string `json:"kerberos_kdc"`
@@ -343,6 +363,7 @@ type MsExchangeConnectorUpdateRequest struct {
 	HostIdentityProviderGroup *string   `json:"host_identity_provider_group,omitempty"`
 	IvrTheme                  *string   `json:"ivr_theme,omitempty"`
 	NonIdpParticipants        string    `json:"non_idp_participants,omitempty"`
+	PersonalVmrIDP            *string   `json:"personal_vmr_idp"`
 }
 
 // MsExchangeConnectorListResponse represents the response from listing Microsoft Exchange connectors

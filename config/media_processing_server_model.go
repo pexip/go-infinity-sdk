@@ -8,11 +8,12 @@ package config
 
 // MediaProcessingServer represents a media processing server configuration
 type MediaProcessingServer struct {
-	ID           int    `json:"id,omitempty"`
-	FQDN         string `json:"fqdn"`
-	AppID        string `json:"app_id,omitempty"`
-	PublicJWTKey string `json:"public_jwt_key"`
-	ResourceURI  string `json:"resource_uri,omitempty"`
+	ID                     int    `json:"id,omitempty"`
+	FQDN                   string `json:"fqdn"`
+	AppID                  string `json:"app_id,omitempty"`
+	PublicJWTKey           string `json:"public_jwt_key"`
+	RegistrationPrivateKey string `json:"registration_private_key,omitempty"`
+	ResourceURI            string `json:"resource_uri,omitempty"`
 }
 
 // MediaProcessingServerCreateRequest represents a request to create a media processing server

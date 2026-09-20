@@ -24,13 +24,13 @@ type ManagementVM struct {
 	DNSServers                  []DNSServer    `json:"dns_servers,omitempty"`
 	NTPServers                  []NTPServer    `json:"ntp_servers,omitempty"`
 	SyslogServers               []SyslogServer `json:"syslog_servers,omitempty"`
-	StaticRoutes                []StaticRoute       `json:"static_routes,omitempty"`
-	EventSinks                  []EventSink         `json:"event_sinks,omitempty"`
-	HTTPProxy                   *string             `json:"http_proxy,omitempty"`
-	TLSCertificate              *string             `json:"tls_certificate,omitempty"`
-	TLSClientCertificate        *string             `json:"tls_client_certificate,omitempty"`
-	EnableSSH                   string              `json:"enable_ssh"`
-	SSHAuthorizedKeys           []string            `json:"ssh_authorized_keys,omitempty"`
+	StaticRoutes                []StaticRoute  `json:"static_routes,omitempty"`
+	EventSinks                  []EventSink    `json:"event_sinks,omitempty"`
+	HTTPProxy                   *string        `json:"http_proxy,omitempty"`
+	TLSCertificate              *string        `json:"tls_certificate,omitempty"`
+	TLSClientCertificate        *string        `json:"tls_client_certificate,omitempty"`
+	EnableSSH                   string         `json:"enable_ssh"`
+	SSHAuthorizedKeys           []string       `json:"ssh_authorized_keys,omitempty"`
 	SSHAuthorizedKeysUseCloud   bool           `json:"ssh_authorized_keys_use_cloud"`
 	SecondaryConfigPassphrase   string         `json:"secondary_config_passphrase,omitempty"`
 	SNMPMode                    string         `json:"snmp_mode"`

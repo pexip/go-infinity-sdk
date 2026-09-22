@@ -62,6 +62,7 @@ type Conference struct {
 	SystemLocation                  *string                 `json:"system_location,omitempty"`
 	Tag                             string                  `json:"tag,omitempty"`
 	TeamsProxy                      *string                 `json:"teams_proxy,omitempty"`
+	TranscriptMode                  string                  `json:"transcript_mode,omitempty"`
 	TwoStageDialType                string                  `json:"two_stage_dial_type,omitempty"`
 }
 
@@ -116,6 +117,7 @@ type ConferenceCreateRequest struct {
 	SystemLocation                  *string   `json:"system_location,omitempty"`
 	Tag                             string    `json:"tag,omitempty"`
 	TeamsProxy                      *string   `json:"teams_proxy,omitempty"`
+	TranscriptMode                  string    `json:"transcript_mode,omitempty"`
 	TwoStageDialType                string    `json:"two_stage_dial_type,omitempty"`
 }
 
@@ -170,6 +172,7 @@ type ConferenceUpdateRequest struct {
 	SystemLocation                  *string   `json:"system_location"`
 	Tag                             string    `json:"tag"`
 	TeamsProxy                      *string   `json:"teams_proxy"`
+	TranscriptMode                  string    `json:"transcript_mode"`
 	TwoStageDialType                string    `json:"two_stage_dial_type"`
 }
 

@@ -69,8 +69,10 @@ type GlobalConfiguration struct {
 	EnableLyncAutoEscalate              bool         `json:"enable_lync_auto_escalate,omitempty"`
 	EnableLyncVbss                      bool         `json:"enable_lync_vbss,omitempty"`
 	EnableMlvad                         bool         `json:"enable_mlvad,omitempty"`
+	EnableMSSIP                         bool         `json:"enable_mssip,omitempty"`
 	EnableRTMP                          bool         `json:"enable_rtmp,omitempty"`
 	EnableSIP                           bool         `json:"enable_sip,omitempty"`
+	EnableSIPTCP                        bool         `json:"enable_sip_tcp,omitempty"`
 	EnableSIPUDP                        bool         `json:"enable_sip_udp,omitempty"`
 	EnableSoftmute                      bool         `json:"enable_softmute,omitempty"`
 	EnableSSH                           bool         `json:"enable_ssh,omitempty"`
@@ -110,6 +112,7 @@ type GlobalConfiguration struct {
 	OcspState                           string       `json:"ocsp_state,omitempty"`
 	PinEntryTimeout                     int          `json:"pin_entry_timeout,omitempty"`
 	ResourceURI                         string       `json:"resource_uri,omitempty"`
+	RestrictCORSOrigins                 bool         `json:"restrict_cors_origins,omitempty"`
 	SessionTimeoutEnabled               bool         `json:"session_timeout_enabled,omitempty"`
 	SignallingPortsEnd                  int          `json:"signalling_ports_end,omitempty"`
 	SignallingPortsStart                int          `json:"signalling_ports_start,omitempty"`
@@ -118,6 +121,7 @@ type GlobalConfiguration struct {
 	SiteBannerBg                        string       `json:"site_banner_bg,omitempty"`
 	SiteBannerFg                        string       `json:"site_banner_fg,omitempty"`
 	TeamsEnablePowerpointRender         bool         `json:"teams_enable_powerpoint_render,omitempty"`
+	TranscriptModeVMRDefault            string       `json:"transcript_mode_vmr_default,omitempty"`
 	WaitingForChairTimeout              int          `json:"waiting_for_chair_timeout,omitempty"`
 }
 
@@ -161,8 +165,10 @@ type GlobalConfigurationUpdateRequest struct {
 	EnableLyncAutoEscalate              bool         `json:"enable_lync_auto_escalate"`
 	EnableLyncVbss                      bool         `json:"enable_lync_vbss"`
 	EnableMlvad                         bool         `json:"enable_mlvad"`
+	EnableMSSIP                         bool         `json:"enable_mssip"`
 	EnableRTMP                          bool         `json:"enable_rtmp"`
 	EnableSIP                           bool         `json:"enable_sip"`
+	EnableSIPTCP                        bool         `json:"enable_sip_tcp"`
 	EnableSIPUDP                        bool         `json:"enable_sip_udp"`
 	EnableSoftmute                      bool         `json:"enable_softmute"`
 	EnableSSH                           bool         `json:"enable_ssh"`
@@ -201,6 +207,7 @@ type GlobalConfigurationUpdateRequest struct {
 	OcspResponderURL                    string       `json:"ocsp_responder_url"`
 	OcspState                           string       `json:"ocsp_state"`
 	PinEntryTimeout                     int          `json:"pin_entry_timeout"`
+	RestrictCORSOrigins                 bool         `json:"restrict_cors_origins"`
 	SessionTimeoutEnabled               bool         `json:"session_timeout_enabled"`
 	SignallingPortsEnd                  int          `json:"signalling_ports_end"`
 	SignallingPortsStart                int          `json:"signalling_ports_start"`
@@ -209,5 +216,6 @@ type GlobalConfigurationUpdateRequest struct {
 	SiteBannerBg                        string       `json:"site_banner_bg"`
 	SiteBannerFg                        string       `json:"site_banner_fg"`
 	TeamsEnablePowerpointRender         bool         `json:"teams_enable_powerpoint_render"`
+	TranscriptModeVMRDefault            string       `json:"transcript_mode_vmr_default"`
 	WaitingForChairTimeout              int          `json:"waiting_for_chair_timeout"`
 }

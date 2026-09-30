@@ -10,6 +10,7 @@ package config
 type PolicyServer struct {
 	ID                                  int    `json:"id,omitempty"`
 	Name                                string `json:"name"`
+	AllowHTTP                           bool   `json:"allow_http,omitempty"`
 	Description                         string `json:"description,omitempty"`
 	URL                                 string `json:"url,omitempty"`
 	Username                            string `json:"username,omitempty"`
@@ -33,6 +34,7 @@ type PolicyServer struct {
 // PolicyServerCreateRequest represents a request to create a policy server
 type PolicyServerCreateRequest struct {
 	Name                                string `json:"name"`
+	AllowHTTP                           bool   `json:"allow_http,omitempty"`
 	Description                         string `json:"description,omitempty"`
 	URL                                 string `json:"url,omitempty"`
 	Username                            string `json:"username,omitempty"`
@@ -55,6 +57,7 @@ type PolicyServerCreateRequest struct {
 // PolicyServerUpdateRequest represents a request to update a policy server
 type PolicyServerUpdateRequest struct {
 	Name                                string `json:"name,omitempty"`
+	AllowHTTP                           *bool  `json:"allow_http,omitempty"`
 	Description                         string `json:"description"`
 	URL                                 string `json:"url"`
 	Username                            string `json:"username"`

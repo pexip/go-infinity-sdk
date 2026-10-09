@@ -6,7 +6,7 @@
 
 package config
 
-import "github.com/pexip/go-infinity-sdk/v41/util"
+import "github.com/pexip/go-infinity-sdk/v42/util"
 
 // EventSinkEvent represents a single event type associated with an event sink
 type EventSinkEvent struct {

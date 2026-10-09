@@ -11,7 +11,7 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/pexip/go-infinity-sdk/v41/types"
+	"github.com/pexip/go-infinity-sdk/v42/types"
 )
 
 // ListMediaLibraryPlaylistEntries retrieves a list of media library playlist entries

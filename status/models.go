@@ -7,7 +7,7 @@
 package status
 
 import (
-	"github.com/pexip/go-infinity-sdk/v41/util"
+	"github.com/pexip/go-infinity-sdk/v42/util"
 )
 
 // Meta represents the pagination metadata for list responses

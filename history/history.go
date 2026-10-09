@@ -14,7 +14,7 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/pexip/go-infinity-sdk/v41/interfaces"
+	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 )
 
 // Service handles history API endpoints

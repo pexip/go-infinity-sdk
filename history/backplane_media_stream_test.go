@@ -12,9 +12,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/pexip/go-infinity-sdk/v41/interfaces"
-	"github.com/pexip/go-infinity-sdk/v41/options"
-	"github.com/pexip/go-infinity-sdk/v41/util"
+	"github.com/pexip/go-infinity-sdk/v42/interfaces"
+	"github.com/pexip/go-infinity-sdk/v42/options"
+	"github.com/pexip/go-infinity-sdk/v42/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )

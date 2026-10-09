@@ -11,7 +11,7 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/pexip/go-infinity-sdk/v41/types"
+	"github.com/pexip/go-infinity-sdk/v42/types"
 )
 
 // ListMSSIPProxies retrieves a list of MS-SIP proxies

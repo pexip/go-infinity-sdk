@@ -7,7 +7,7 @@
 package command
 
 import (
-	"github.com/pexip/go-infinity-sdk/v41/interfaces"
+	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"testing"
 
 	"github.com/stretchr/testify/assert"

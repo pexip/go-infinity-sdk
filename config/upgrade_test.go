@@ -9,8 +9,8 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v41/interfaces"
-	"github.com/pexip/go-infinity-sdk/v41/types"
+	"github.com/pexip/go-infinity-sdk/v42/interfaces"
+	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
 )
 

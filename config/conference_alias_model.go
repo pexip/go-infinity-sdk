@@ -6,7 +6,7 @@
 
 package config
 
-import "github.com/pexip/go-infinity-sdk/v41/util"
+import "github.com/pexip/go-infinity-sdk/v42/util"
 
 // ConferenceAlias represents a conference alias configuration
 type ConferenceAlias struct {

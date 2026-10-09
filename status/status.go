@@ -13,8 +13,8 @@ import (
 	"context"
 	"net/url"
 
-	"github.com/pexip/go-infinity-sdk/v41/interfaces"
-	"github.com/pexip/go-infinity-sdk/v41/options"
+	"github.com/pexip/go-infinity-sdk/v42/interfaces"
+	"github.com/pexip/go-infinity-sdk/v42/options"
 )
 
 // Service handles status API endpoints

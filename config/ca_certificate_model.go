@@ -6,7 +6,7 @@
 
 package config
 
-import "github.com/pexip/go-infinity-sdk/v41/util"
+import "github.com/pexip/go-infinity-sdk/v42/util"
 
 // CACertificate represents a CA certificate configuration
 type CACertificate struct {

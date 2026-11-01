@@ -57,13 +57,13 @@ func TestService_ListBackupRequests(t *testing.T) {
 	assert.Equal(t, "Backup completed successfully", result.Objects[0].Message)
 	assert.Equal(t, "/downloads/backup/1", result.Objects[0].DownloadURI)
 	assert.Equal(t, "/api/admin/status/v1/backup_request/1/", result.Objects[0].ResourceURI)
-	assert.Equal(t, created.Unix(), result.Objects[0].CreatedAt.Time.Unix())
-	assert.Equal(t, updated.Unix(), result.Objects[0].UpdatedAt.Time.Unix())
+	assert.Equal(t, created.Unix(), result.Objects[0].CreatedAt.Unix())
+	assert.Equal(t, updated.Unix(), result.Objects[0].UpdatedAt.Unix())
 	assert.Equal(t, "running", result.Objects[1].State)
 	assert.Equal(t, "Backup in progress", result.Objects[1].Message)
 	assert.Equal(t, "", result.Objects[1].DownloadURI)
 	assert.Equal(t, "/api/admin/status/v1/backup_request/2/", result.Objects[1].ResourceURI)
-	assert.Equal(t, created.Unix(), result.Objects[1].CreatedAt.Time.Unix())
+	assert.Equal(t, created.Unix(), result.Objects[1].CreatedAt.Unix())
 	assert.Nil(t, result.Objects[1].UpdatedAt)
 	client.AssertExpectations(t)
 }
@@ -96,8 +96,8 @@ func TestService_GetBackupRequest(t *testing.T) {
 	assert.Equal(t, "Full system backup completed", result.Message)
 	assert.Equal(t, "/downloads/backup/1", result.DownloadURI)
 	assert.Equal(t, "/api/admin/status/v1/backup_request/1/", result.ResourceURI)
-	assert.Equal(t, created.Unix(), result.CreatedAt.Time.Unix())
-	assert.Equal(t, completed.Unix(), result.UpdatedAt.Time.Unix())
+	assert.Equal(t, created.Unix(), result.CreatedAt.Unix())
+	assert.Equal(t, completed.Unix(), result.UpdatedAt.Unix())
 	client.AssertExpectations(t)
 }
 

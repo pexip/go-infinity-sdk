@@ -40,7 +40,7 @@ func TestPostWithResponse_XML(t *testing.T) {
 		w.Header().Set("Location", "https://example.com/api/admin/resource/12345/")
 		w.Header().Set("Content-Type", "application/xml")
 		w.WriteHeader(http.StatusCreated)
-		w.Write([]byte(xmlResponse))
+		_, _ = w.Write([]byte(xmlResponse))
 	}))
 	defer server.Close()
 
@@ -67,7 +67,7 @@ func TestPostWithResponse_JSON(t *testing.T) {
 		w.Header().Set("Location", "https://example.com/api/admin/resource/12345/")
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusCreated)
-		w.Write([]byte(jsonResponse))
+		_, _ = w.Write([]byte(jsonResponse))
 	}))
 	defer server.Close()
 
@@ -91,7 +91,7 @@ func TestPostWithResponse_NoLocationHeader(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(jsonResponse))
+		_, _ = w.Write([]byte(jsonResponse))
 	}))
 	defer server.Close()
 
@@ -164,9 +164,10 @@ func TestUnmarshalResponseBodyAuto(t *testing.T) {
 			} else {
 				assert.NoError(t, err)
 				if tt.expected != nil {
-					if tt.name == "valid XML" {
+					switch tt.name {
+					case "valid XML":
 						assert.Equal(t, tt.expected, *result.(*TestResponse))
-					} else if tt.name == "valid JSON" {
+					case "valid JSON":
 						assert.Equal(t, tt.expected, *result.(*map[string]interface{}))
 					}
 				}

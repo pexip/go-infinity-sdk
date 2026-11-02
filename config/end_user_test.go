@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListEndUsers(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &EndUserListResponse{
 					Objects: []EndUser{
 						{ID: 1, PrimaryEmailAddress: "user1@example.com", FirstName: "John", LastName: "Doe"},
@@ -49,7 +48,7 @@ func TestService_ListEndUsers(t *testing.T) {
 				},
 				Search: "john",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &EndUserListResponse{
 					Objects: []EndUser{
 						{ID: 1, PrimaryEmailAddress: "john@example.com", FirstName: "John", LastName: "Doe"},
@@ -66,7 +65,7 @@ func TestService_ListEndUsers(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -86,7 +85,7 @@ func TestService_ListEndUsers(t *testing.T) {
 }
 
 func TestService_GetEndUser(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	expectedUser := &EndUser{
 		ID:                  1,
 		PrimaryEmailAddress: "john@example.com",
@@ -110,7 +109,7 @@ func TestService_GetEndUser(t *testing.T) {
 }
 
 func TestService_CreateEndUser(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &EndUserCreateRequest{
 		PrimaryEmailAddress: "newuser@example.com",
@@ -135,7 +134,7 @@ func TestService_CreateEndUser(t *testing.T) {
 }
 
 func TestService_UpdateEndUser(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	updateRequest := &EndUserUpdateRequest{
 		DisplayName: "Updated User",
@@ -162,7 +161,7 @@ func TestService_UpdateEndUser(t *testing.T) {
 }
 
 func TestService_DeleteEndUser(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/end_user/1/", mock.Anything).Return(nil)
 

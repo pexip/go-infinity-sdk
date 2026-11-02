@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -19,13 +18,13 @@ func TestService_ListSoftwareBundles(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				revision1 := "v27.4.1"
 				revision2 := "v28.0.0"
 				expectedResponse := &SoftwareBundleListResponse{
@@ -49,7 +48,7 @@ func TestService_ListSoftwareBundles(t *testing.T) {
 				},
 				Search: "core",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				revision := "v27.4.1"
 				expectedResponse := &SoftwareBundleListResponse{
 					Objects: []SoftwareBundle{
@@ -67,7 +66,7 @@ func TestService_ListSoftwareBundles(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -87,7 +86,7 @@ func TestService_ListSoftwareBundles(t *testing.T) {
 }
 
 func TestService_GetSoftwareBundle(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	revision := "v27.4.1"
 	expectedSoftwareBundle := &SoftwareBundle{
 		ID:               1,
@@ -110,7 +109,7 @@ func TestService_GetSoftwareBundle(t *testing.T) {
 }
 
 func TestService_UpdateSoftwareBundle(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	newRevision := "v28.0.0"
 	updateRequest := &SoftwareBundleUpdateRequest{

@@ -10,14 +10,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestService_ListMediaStreams(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedResponse := &MediaStreamListResponse{
 		Objects: []MediaStream{
@@ -50,7 +49,7 @@ func TestService_ListMediaStreams(t *testing.T) {
 }
 
 func TestService_GetMediaStream(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	expectedStream := &MediaStream{
 		ID:              1,
 		ParticipantID:   1,
@@ -75,7 +74,7 @@ func TestService_GetMediaStream(t *testing.T) {
 }
 
 func TestService_ListMediaStreamsByParticipant(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedResponse := &MediaStreamListResponse{
 		Objects: []MediaStream{
@@ -112,7 +111,7 @@ func TestService_ListMediaStreamsByParticipant(t *testing.T) {
 }
 
 func TestService_ListMediaStreams_WithOptions(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	service := New(client)
 
 	startTime := time.Now().Add(-30 * time.Minute)
@@ -154,7 +153,7 @@ func TestService_ListMediaStreams_WithOptions(t *testing.T) {
 }
 
 func TestService_ListMediaStreamsByParticipant_WithOptions(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	service := New(client)
 
 	startTime := time.Now().Add(-45 * time.Minute)

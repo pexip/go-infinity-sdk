@@ -9,13 +9,12 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestService_CreateUpgrade(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	packageName := "upgrade-package-v28.0.0.tar.gz"
 	createRequest := &UpgradeCreateRequest{

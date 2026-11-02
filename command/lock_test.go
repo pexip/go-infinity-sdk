@@ -9,13 +9,12 @@ package command
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestService_LockConferenceByID(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedRequest := &ConferenceLockRequest{
 		ConferenceID: "test-conference-id",
@@ -40,7 +39,7 @@ func TestService_LockConferenceByID(t *testing.T) {
 }
 
 func TestService_UnlockConferenceByID(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedRequest := &ConferenceUnlockRequest{
 		ConferenceID: "test-conference-id",

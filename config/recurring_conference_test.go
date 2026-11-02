@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListRecurringConferences(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				scheduledAlias1 := "weekly-meeting"
 				scheduledAlias2 := "monthly-review"
 				expectedResponse := &RecurringConferenceListResponse{
@@ -50,7 +49,7 @@ func TestService_ListRecurringConferences(t *testing.T) {
 				},
 				Search: "weekly",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				scheduledAlias := "weekly-meeting"
 				expectedResponse := &RecurringConferenceListResponse{
 					Objects: []RecurringConference{
@@ -68,7 +67,7 @@ func TestService_ListRecurringConferences(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -88,7 +87,7 @@ func TestService_ListRecurringConferences(t *testing.T) {
 }
 
 func TestService_GetRecurringConference(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	scheduledAlias := "test-alias"
 	expectedRecurringConference := &RecurringConference{
 		ID:             1,
@@ -114,7 +113,7 @@ func TestService_GetRecurringConference(t *testing.T) {
 }
 
 func TestService_CreateRecurringConference(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	scheduledAlias := "new-alias"
 	createRequest := &RecurringConferenceCreateRequest{
@@ -142,7 +141,7 @@ func TestService_CreateRecurringConference(t *testing.T) {
 }
 
 func TestService_UpdateRecurringConference(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	currentIndex := 15
 	isDepleted := true
@@ -180,7 +179,7 @@ func TestService_UpdateRecurringConference(t *testing.T) {
 }
 
 func TestService_DeleteRecurringConference(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/recurring_conference/1/", mock.Anything).Return(nil)
 

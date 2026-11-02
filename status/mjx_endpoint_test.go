@@ -10,14 +10,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestService_ListMJXEndpoints(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	lastContact := time.Now().Add(-15 * time.Minute)
 
@@ -80,7 +79,7 @@ func TestService_ListMJXEndpoints(t *testing.T) {
 }
 
 func TestService_GetMJXEndpoint(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	lastContact := time.Now().Add(-2 * time.Minute)
 
 	expectedEndpoint := &MJXEndpoint{
@@ -118,7 +117,7 @@ func TestService_GetMJXEndpoint(t *testing.T) {
 }
 
 func TestService_ListMJXEndpoints_WithOptions(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	service := New(client)
 
 	opts := &ListOptions{

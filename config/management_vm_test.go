@@ -9,13 +9,12 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestService_GetManagementVM(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	ipv6Address := "2001:db8::1"
 	ipv6Gateway := "2001:db8::1"
 	natAddress := "203.0.113.1"
@@ -72,7 +71,7 @@ func TestService_GetManagementVM(t *testing.T) {
 }
 
 func TestService_GetManagementVM_ExplicitID(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expected := &ManagementVM{ID: 3, Name: "test-mgmt-vm", Address: "192.168.1.10"}
 
@@ -90,7 +89,7 @@ func TestService_GetManagementVM_ExplicitID(t *testing.T) {
 }
 
 func TestService_ListManagementVMs(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expected := &ManagementVMListResponse{
 		Objects: []ManagementVM{
@@ -113,7 +112,7 @@ func TestService_ListManagementVMs(t *testing.T) {
 }
 
 func TestService_UpdateManagementVM(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	req := &ManagementVMUpdateRequest{Name: "test-mgmt-vm", SNMPMode: "DISABLED"}
 	expected := &ManagementVM{ID: 1, Name: "test-mgmt-vm"}
@@ -132,7 +131,7 @@ func TestService_UpdateManagementVM(t *testing.T) {
 }
 
 func TestService_UpdateManagementVM_ExplicitID(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	req := &ManagementVMUpdateRequest{Name: "test-mgmt-vm", SNMPMode: "DISABLED"}
 	expected := &ManagementVM{ID: 3, Name: "test-mgmt-vm"}

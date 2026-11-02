@@ -9,13 +9,12 @@ package status
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestService_GetLicensing(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	expectedLicensingResponse := &LicensingResponse{
 		Objects: []Licensing{
 			{
@@ -75,7 +74,7 @@ func TestService_GetLicensing(t *testing.T) {
 }
 
 func TestService_GetLicensing_EmptyResponse(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	emptyLicensing := &LicensingResponse{
 		Objects: []Licensing{},
 	}

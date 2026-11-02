@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListSIPProxies(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				port1 := 5060
 				port2 := 5061
 				expectedResponse := &SIPProxyListResponse{
@@ -50,7 +49,7 @@ func TestService_ListSIPProxies(t *testing.T) {
 				},
 				Search: "primary",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				port := 5060
 				expectedResponse := &SIPProxyListResponse{
 					Objects: []SIPProxy{
@@ -68,7 +67,7 @@ func TestService_ListSIPProxies(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -88,7 +87,7 @@ func TestService_ListSIPProxies(t *testing.T) {
 }
 
 func TestService_GetSIPProxy(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	port := 5080
 	expectedSIPProxy := &SIPProxy{
 		ID:          1,
@@ -113,7 +112,7 @@ func TestService_GetSIPProxy(t *testing.T) {
 }
 
 func TestService_CreateSIPProxy(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	port := 5070
 	createRequest := &SIPProxyCreateRequest{
@@ -140,7 +139,7 @@ func TestService_CreateSIPProxy(t *testing.T) {
 }
 
 func TestService_UpdateSIPProxy(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	port := 5090
 	updateRequest := &SIPProxyUpdateRequest{
@@ -173,7 +172,7 @@ func TestService_UpdateSIPProxy(t *testing.T) {
 }
 
 func TestService_DeleteSIPProxy(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/sip_proxy/1/", mock.Anything).Return(nil)
 

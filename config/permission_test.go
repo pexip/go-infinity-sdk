@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -19,13 +18,13 @@ func TestService_ListPermissions(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &PermissionListResponse{
 					Objects: []Permission{
 						{
@@ -95,7 +94,7 @@ func TestService_ListPermissions(t *testing.T) {
 				},
 				Search: "conference",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &PermissionListResponse{
 					Objects: []Permission{
 						{
@@ -131,7 +130,7 @@ func TestService_ListPermissions(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -151,7 +150,7 @@ func TestService_ListPermissions(t *testing.T) {
 }
 
 func TestService_GetPermission(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedPermission := &Permission{
 		ID:       1,

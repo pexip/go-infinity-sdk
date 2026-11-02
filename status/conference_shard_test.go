@@ -9,13 +9,12 @@ package status
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestService_ListConferenceShards(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedResponse := &ConferenceShardListResponse{
 		Meta: Meta{
@@ -80,7 +79,7 @@ func TestService_ListConferenceShards(t *testing.T) {
 }
 
 func TestService_GetConferenceShard(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedShard := &ConferenceShard{
 		ID:                 "shard-primary",
@@ -122,7 +121,7 @@ func TestService_GetConferenceShard(t *testing.T) {
 }
 
 func TestService_ListConferenceShards_WithOptions(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	service := New(client)
 
 	opts := &ListOptions{

@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListLicences(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &LicenceListResponse{
 					Objects: []Licence{
 						{FulfillmentID: "12345", ProductID: "pexip-infinity", Status: "active", Concurrent: 100, Activatable: 25},
@@ -48,7 +47,7 @@ func TestService_ListLicences(t *testing.T) {
 				},
 				Search: "Infinity",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &LicenceListResponse{
 					Objects: []Licence{
 						{FulfillmentID: "12345", ProductID: "pexip-infinity", Status: "active", Concurrent: 100, Activatable: 25},
@@ -65,7 +64,7 @@ func TestService_ListLicences(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -85,7 +84,7 @@ func TestService_ListLicences(t *testing.T) {
 }
 
 func TestService_GetLicence(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	expectedLicence := &Licence{
 		FulfillmentID:  "test-12345",
 		ProductID:      "pexip-infinity",
@@ -110,7 +109,7 @@ func TestService_GetLicence(t *testing.T) {
 }
 
 func TestService_CreateLicence(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &LicenceCreateRequest{
 		EntitlementID: "ABC123-DEF456-GHI789",
@@ -133,7 +132,7 @@ func TestService_CreateLicence(t *testing.T) {
 }
 
 func TestService_DeleteLicence(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/licence/test-12345/", mock.Anything).Return(nil)
 

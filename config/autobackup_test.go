@@ -9,13 +9,12 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestService_GetAutobackup(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	expectedAutobackup := &Autobackup{
 		ID:                       1,
 		AutobackupEnabled:        true,
@@ -41,7 +40,7 @@ func TestService_GetAutobackup(t *testing.T) {
 }
 
 func TestService_UpdateAutobackup(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	enabled := false
 	interval := 48

@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListGMSAccessTokens(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &GMSAccessTokenListResponse{
 					Objects: []GMSAccessToken{
 						{ID: 1, Name: "primary-gms-token", Token: "token1"},
@@ -48,7 +47,7 @@ func TestService_ListGMSAccessTokens(t *testing.T) {
 				},
 				Search: "primary",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &GMSAccessTokenListResponse{
 					Objects: []GMSAccessToken{
 						{ID: 1, Name: "primary-gms-token", Token: "token1"},
@@ -65,7 +64,7 @@ func TestService_ListGMSAccessTokens(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -85,7 +84,7 @@ func TestService_ListGMSAccessTokens(t *testing.T) {
 }
 
 func TestService_GetGMSAccessToken(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	expectedGMSAccessToken := &GMSAccessToken{
 		ID:    1,
 		Name:  "test-gms-token",
@@ -106,7 +105,7 @@ func TestService_GetGMSAccessToken(t *testing.T) {
 }
 
 func TestService_CreateGMSAccessToken(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &GMSAccessTokenCreateRequest{
 		Name:  "new-gms-token",
@@ -129,7 +128,7 @@ func TestService_CreateGMSAccessToken(t *testing.T) {
 }
 
 func TestService_UpdateGMSAccessToken(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	updateRequest := &GMSAccessTokenUpdateRequest{
 		Name:  "updated-gms-token",
@@ -156,7 +155,7 @@ func TestService_UpdateGMSAccessToken(t *testing.T) {
 }
 
 func TestService_DeleteGMSAccessToken(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/gms_access_token/1/", mock.Anything).Return(nil)
 

@@ -7,7 +7,6 @@
 package command
 
 import (
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -15,7 +14,7 @@ import (
 )
 
 func TestService_LockConference(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedRequest := &ConferenceLockRequestLegacy{
 		ConferenceID: 1,
@@ -41,7 +40,7 @@ func TestService_LockConference(t *testing.T) {
 }
 
 func TestService_UnlockConference(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedRequest := &ConferenceLockRequestLegacy{
 		ConferenceID: 1,
@@ -67,7 +66,7 @@ func TestService_UnlockConference(t *testing.T) {
 }
 
 func TestService_SendMessageToConference(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedRequest := &ConferenceMessageRequest{
 		ConferenceID: 1,
@@ -93,7 +92,7 @@ func TestService_SendMessageToConference(t *testing.T) {
 }
 
 func TestService_StartConference(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedRequest := &ConferenceStartRequest{
 		ConferenceAlias: "test-conference",
@@ -118,7 +117,7 @@ func TestService_StartConference(t *testing.T) {
 }
 
 func TestService_ToggleLockConference(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedRequest := &ConferenceLockRequestLegacy{
 		ConferenceID: 1,
@@ -144,7 +143,7 @@ func TestService_ToggleLockConference(t *testing.T) {
 }
 
 func TestService_StopConference(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedRequest := &ConferenceStopRequest{
 		ConferenceID: 1,

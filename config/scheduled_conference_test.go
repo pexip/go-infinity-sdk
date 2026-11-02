@@ -10,7 +10,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/pexip/go-infinity-sdk/v42/util"
@@ -22,13 +21,13 @@ func TestService_ListScheduledConferences(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				startTime1 := util.InfinityTime{Time: time.Date(2023, 10, 15, 10, 0, 0, 0, time.UTC)}
 				endTime1 := util.InfinityTime{Time: time.Date(2023, 10, 15, 11, 0, 0, 0, time.UTC)}
 				startTime2 := util.InfinityTime{Time: time.Date(2023, 10, 16, 14, 0, 0, 0, time.UTC)}
@@ -58,7 +57,7 @@ func TestService_ListScheduledConferences(t *testing.T) {
 				},
 				Search: "team",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				startTime := util.InfinityTime{Time: time.Date(2023, 10, 15, 10, 0, 0, 0, time.UTC)}
 				endTime := util.InfinityTime{Time: time.Date(2023, 10, 15, 11, 0, 0, 0, time.UTC)}
 				recurringConf := "/api/admin/configuration/v1/recurring_conference/1/"
@@ -80,7 +79,7 @@ func TestService_ListScheduledConferences(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -100,7 +99,7 @@ func TestService_ListScheduledConferences(t *testing.T) {
 }
 
 func TestService_GetScheduledConference(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	startTime := util.InfinityTime{Time: time.Date(2023, 12, 1, 9, 0, 0, 0, time.UTC)}
 	endTime := util.InfinityTime{Time: time.Date(2023, 12, 1, 10, 0, 0, 0, time.UTC)}
 	recurringConference := "/api/admin/configuration/v1/recurring_conference/5/"
@@ -132,7 +131,7 @@ func TestService_GetScheduledConference(t *testing.T) {
 }
 
 func TestService_CreateScheduledConference(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	startTime := util.InfinityTime{Time: time.Date(2024, 1, 15, 14, 0, 0, 0, time.UTC)}
 	endTime := util.InfinityTime{Time: time.Date(2024, 1, 15, 15, 30, 0, 0, time.UTC)}
@@ -166,7 +165,7 @@ func TestService_CreateScheduledConference(t *testing.T) {
 }
 
 func TestService_UpdateScheduledConference(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	newStartTime := util.InfinityTime{Time: time.Date(2024, 2, 1, 10, 0, 0, 0, time.UTC)}
 	newEndTime := util.InfinityTime{Time: time.Date(2024, 2, 1, 12, 0, 0, 0, time.UTC)}
@@ -207,7 +206,7 @@ func TestService_UpdateScheduledConference(t *testing.T) {
 }
 
 func TestService_DeleteScheduledConference(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/scheduled_conference/1/", mock.Anything).Return(nil)
 

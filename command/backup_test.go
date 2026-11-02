@@ -7,7 +7,6 @@
 package command
 
 import (
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -37,7 +36,7 @@ func TestService_CreateBackup(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 
 			expectedRequest := &BackupCreateRequest{
 				Passphrase: tt.passphrase,
@@ -70,7 +69,7 @@ func TestService_CreateBackup(t *testing.T) {
 }
 
 func TestService_RestoreBackup(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedRequest := &BackupRestoreRequest{
 		Package:    "backup-file.zip",

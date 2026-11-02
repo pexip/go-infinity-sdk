@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListMjxIntegrations(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				exchangeDeployment := "/api/admin/configuration/v1/mjx_exchange_deployment/1/"
 				googleDeployment := "/api/admin/configuration/v1/mjx_google_deployment/1/"
 				graphDeployment := "/api/admin/configuration/v1/mjx_graph_deployment/1/"
@@ -101,7 +100,7 @@ func TestService_ListMjxIntegrations(t *testing.T) {
 				},
 				Search: "primary",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				exchangeDeployment := "/api/admin/configuration/v1/mjx_exchange_deployment/1/"
 				expectedResponse := &MjxIntegrationListResponse{
 					Objects: []MjxIntegration{
@@ -127,7 +126,7 @@ func TestService_ListMjxIntegrations(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -147,7 +146,7 @@ func TestService_ListMjxIntegrations(t *testing.T) {
 }
 
 func TestService_GetMjxIntegration(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	exchangeDeployment := "/api/admin/configuration/v1/mjx_exchange_deployment/1/"
 	googleDeployment := "/api/admin/configuration/v1/mjx_google_deployment/1/"
 	graphDeployment := "/api/admin/configuration/v1/mjx_graph_deployment/1/"
@@ -201,7 +200,7 @@ func TestService_GetMjxIntegration(t *testing.T) {
 }
 
 func TestService_CreateMjxIntegration(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	exchangeDeployment := "/api/admin/configuration/v1/mjx_exchange_deployment/1/"
 	webexClientID := "new-webex-client"
@@ -250,7 +249,7 @@ func TestService_CreateMjxIntegration(t *testing.T) {
 }
 
 func TestService_UpdateMjxIntegration(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	displayUpcomingMeetings := 7
 	enableNonVideoMeetings := false
@@ -303,7 +302,7 @@ func TestService_UpdateMjxIntegration(t *testing.T) {
 }
 
 func TestService_DeleteMjxIntegration(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/mjx_integration/1/", mock.Anything).Return(nil)
 

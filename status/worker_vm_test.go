@@ -9,13 +9,12 @@ package status
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestService_ListWorkerVMs(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedResponse := &WorkerVMListResponse{
 		Objects: []WorkerVM{
@@ -53,7 +52,7 @@ func TestService_ListWorkerVMs(t *testing.T) {
 }
 
 func TestService_ListWorkerVMs_WithOptions(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	service := New(client)
 
 	opts := &ListOptions{
@@ -88,7 +87,7 @@ func TestService_ListWorkerVMs_WithOptions(t *testing.T) {
 }
 
 func TestService_GetWorkerVM(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	expectedWorkerVM := &WorkerVM{
 		ID:             1,
 		Name:           "pexip-worker-1",

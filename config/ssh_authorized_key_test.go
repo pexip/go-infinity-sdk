@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListSSHAuthorizedKeys(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &SSHAuthorizedKeyListResponse{
 					Objects: []SSHAuthorizedKey{
 						{ID: 1, Keytype: "ssh-rsa", Key: "AAAAB3NzaC1yc2EAAAADAQABAAABAQ...", Comment: "admin@example.com", Nodes: []string{"management"}},
@@ -48,7 +47,7 @@ func TestService_ListSSHAuthorizedKeys(t *testing.T) {
 				},
 				Search: "admin",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &SSHAuthorizedKeyListResponse{
 					Objects: []SSHAuthorizedKey{
 						{ID: 1, Keytype: "ssh-rsa", Key: "AAAAB3NzaC1yc2EAAAADAQABAAABAQ...", Comment: "admin@example.com", Nodes: []string{"management"}},
@@ -65,7 +64,7 @@ func TestService_ListSSHAuthorizedKeys(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -85,7 +84,7 @@ func TestService_ListSSHAuthorizedKeys(t *testing.T) {
 }
 
 func TestService_GetSSHAuthorizedKey(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	expectedSSHAuthorizedKey := &SSHAuthorizedKey{
 		ID:          1,
 		Keytype:     "ssh-rsa",
@@ -109,7 +108,7 @@ func TestService_GetSSHAuthorizedKey(t *testing.T) {
 }
 
 func TestService_CreateSSHAuthorizedKey(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &SSHAuthorizedKeyCreateRequest{
 		Keytype: "ssh-rsa",
@@ -134,7 +133,7 @@ func TestService_CreateSSHAuthorizedKey(t *testing.T) {
 }
 
 func TestService_UpdateSSHAuthorizedKey(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	updateRequest := &SSHAuthorizedKeyUpdateRequest{
 		Comment: "updated-admin@example.com",
@@ -164,7 +163,7 @@ func TestService_UpdateSSHAuthorizedKey(t *testing.T) {
 }
 
 func TestService_DeleteSSHAuthorizedKey(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/ssh_authorized_key/1/", mock.Anything).Return(nil)
 

@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/pexip/go-infinity-sdk/v42/util"
 	"github.com/stretchr/testify/assert"
@@ -17,7 +16,7 @@ import (
 )
 
 func TestService_CreateSystemSyncpoint(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &SystemSyncpointCreateRequest{}
 
@@ -37,7 +36,7 @@ func TestService_CreateSystemSyncpoint(t *testing.T) {
 }
 
 func TestService_GetSystemSyncpoint(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	creationTime := util.InfinityTime{}
 
 	expectedSystemSyncpoint := &SystemSyncpoint{

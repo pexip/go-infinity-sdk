@@ -9,17 +9,21 @@
 // muting, spotlighting, transferring, and sending messages.
 package command
 
-import (
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
-)
+import "context"
+
+// HTTPClient is the subset of HTTP operations required by the command service.
+type HTTPClient interface {
+	// PostJSON performs a POST request with JSON body and unmarshals the JSON response
+	PostJSON(ctx context.Context, endpoint string, body interface{}, result interface{}) error
+}
 
 // Service handles command API endpoints
 type Service struct {
-	client interfaces.HTTPClient
+	client HTTPClient
 }
 
 // New creates a new command API service
-func New(client interfaces.HTTPClient) *Service {
+func New(client HTTPClient) *Service {
 	return &Service{
 		client: client,
 	}

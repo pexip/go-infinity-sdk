@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListGoogleAuthServers(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				clientID1 := "123456789.apps.googleusercontent.com"
 				clientID2 := "987654321.apps.googleusercontent.com"
 				expectedResponse := &GoogleAuthServerListResponse{
@@ -50,7 +49,7 @@ func TestService_ListGoogleAuthServers(t *testing.T) {
 				},
 				Search: "primary",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				clientID := "123456789.apps.googleusercontent.com"
 				expectedResponse := &GoogleAuthServerListResponse{
 					Objects: []GoogleAuthServer{
@@ -68,7 +67,7 @@ func TestService_ListGoogleAuthServers(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -88,7 +87,7 @@ func TestService_ListGoogleAuthServers(t *testing.T) {
 }
 
 func TestService_GetGoogleAuthServer(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	clientID := "123456789.apps.googleusercontent.com"
 	expectedServer := &GoogleAuthServer{
 		ID:              1,
@@ -114,7 +113,7 @@ func TestService_GetGoogleAuthServer(t *testing.T) {
 }
 
 func TestService_CreateGoogleAuthServer(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	clientID := "new123456789.apps.googleusercontent.com"
 	createRequest := &GoogleAuthServerCreateRequest{
@@ -141,7 +140,7 @@ func TestService_CreateGoogleAuthServer(t *testing.T) {
 }
 
 func TestService_UpdateGoogleAuthServer(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	updateRequest := &GoogleAuthServerUpdateRequest{
 		Name:            "updated-google-auth",
@@ -174,7 +173,7 @@ func TestService_UpdateGoogleAuthServer(t *testing.T) {
 }
 
 func TestService_DeleteGoogleAuthServer(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/google_auth_server/1/", mock.Anything).Return(nil)
 

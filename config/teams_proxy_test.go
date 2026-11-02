@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/pexip/go-infinity-sdk/v42/util"
@@ -21,13 +20,13 @@ func TestService_ListTeamsProxies(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				eventhubID1 := "eh-primary"
 				notificationsQueue1 := "queue-primary"
 				updated1 := &util.InfinityTime{}
@@ -53,7 +52,7 @@ func TestService_ListTeamsProxies(t *testing.T) {
 				},
 				Search: "primary",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				eventhubID := "eh-primary"
 				notificationsQueue := "queue-primary"
 				updated := &util.InfinityTime{}
@@ -74,7 +73,7 @@ func TestService_ListTeamsProxies(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -94,7 +93,7 @@ func TestService_ListTeamsProxies(t *testing.T) {
 }
 
 func TestService_GetTeamsProxy(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	eventhubID := "eh-test"
 	notificationsQueue := "queue-test"
 	updated := &util.InfinityTime{}
@@ -128,7 +127,7 @@ func TestService_GetTeamsProxy(t *testing.T) {
 }
 
 func TestService_CreateTeamsProxy(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	eventhubID := "eh-new"
 	notificationsQueue := "queue-new"
@@ -161,7 +160,7 @@ func TestService_CreateTeamsProxy(t *testing.T) {
 }
 
 func TestService_UpdateTeamsProxy(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	updateRequest := &TeamsProxyUpdateRequest{
 		Description:          "Updated Teams proxy",
@@ -198,7 +197,7 @@ func TestService_UpdateTeamsProxy(t *testing.T) {
 }
 
 func TestService_DeleteTeamsProxy(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/teams_proxy/1/", mock.Anything).Return(nil)
 

@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListMjxGraphDeployments(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &MjxGraphDeploymentListResponse{
 					Objects: []MjxGraphDeployment{
 						{
@@ -68,7 +67,7 @@ func TestService_ListMjxGraphDeployments(t *testing.T) {
 				},
 				Search: "primary",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &MjxGraphDeploymentListResponse{
 					Objects: []MjxGraphDeployment{
 						{
@@ -94,7 +93,7 @@ func TestService_ListMjxGraphDeployments(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -114,7 +113,7 @@ func TestService_ListMjxGraphDeployments(t *testing.T) {
 }
 
 func TestService_GetMjxGraphDeployment(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedDeployment := &MjxGraphDeployment{
 		ID:             1,
@@ -146,7 +145,7 @@ func TestService_GetMjxGraphDeployment(t *testing.T) {
 }
 
 func TestService_CreateMjxGraphDeployment(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &MjxGraphDeploymentCreateRequest{
 		Name:           "new-graph",
@@ -175,7 +174,7 @@ func TestService_CreateMjxGraphDeployment(t *testing.T) {
 }
 
 func TestService_UpdateMjxGraphDeployment(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	requestQuota := 1500
 	disableProxy := true
@@ -214,7 +213,7 @@ func TestService_UpdateMjxGraphDeployment(t *testing.T) {
 }
 
 func TestService_DeleteMjxGraphDeployment(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/mjx_graph_deployment/1/", mock.Anything).Return(nil)
 

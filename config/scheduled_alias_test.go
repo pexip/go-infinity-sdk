@@ -10,7 +10,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/pexip/go-infinity-sdk/v42/util"
@@ -22,13 +21,13 @@ func TestService_ListScheduledAliases(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				ewsItemUID1 := "ews-uid-1"
 				ewsItemUID2 := "ews-uid-2"
 				creationTime := util.InfinityTime{Time: time.Date(2023, 1, 1, 10, 0, 0, 0, time.UTC)}
@@ -55,7 +54,7 @@ func TestService_ListScheduledAliases(t *testing.T) {
 				},
 				Search: "room1",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				ewsItemUID := "ews-uid-1"
 				creationTime := util.InfinityTime{Time: time.Date(2023, 1, 1, 10, 0, 0, 0, time.UTC)}
 
@@ -75,7 +74,7 @@ func TestService_ListScheduledAliases(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -95,7 +94,7 @@ func TestService_ListScheduledAliases(t *testing.T) {
 }
 
 func TestService_GetScheduledAlias(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	ewsItemUID := "test-ews-uid"
 	creationTime := util.InfinityTime{Time: time.Date(2023, 6, 15, 14, 30, 0, 0, time.UTC)}
 	deletionTime := util.InfinityTime{Time: time.Date(2023, 12, 25, 18, 0, 0, 0, time.UTC)}
@@ -127,7 +126,7 @@ func TestService_GetScheduledAlias(t *testing.T) {
 }
 
 func TestService_CreateScheduledAlias(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	ewsItemUID := "new-ews-uid"
 	createRequest := &ScheduledAliasCreateRequest{
@@ -156,7 +155,7 @@ func TestService_CreateScheduledAlias(t *testing.T) {
 }
 
 func TestService_UpdateScheduledAlias(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	aliasNumber := 9999
 	isUsed := false
@@ -197,7 +196,7 @@ func TestService_UpdateScheduledAlias(t *testing.T) {
 }
 
 func TestService_DeleteScheduledAlias(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/scheduled_alias/1/", mock.Anything).Return(nil)
 

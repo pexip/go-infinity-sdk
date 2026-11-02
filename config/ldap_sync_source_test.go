@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListLdapSyncSources(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &LdapSyncSourceListResponse{
 					Objects: []LdapSyncSource{
 						{ID: 1, Name: "primary-ldap", Description: "Primary LDAP sync source", LdapServer: "ldap.example.com", LdapBaseDN: "dc=example,dc=com", LdapBindUsername: "cn=admin,dc=example,dc=com", LdapUseGlobalCatalog: false, LdapPermitNoTLS: false},
@@ -48,7 +47,7 @@ func TestService_ListLdapSyncSources(t *testing.T) {
 				},
 				Search: "primary",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &LdapSyncSourceListResponse{
 					Objects: []LdapSyncSource{
 						{ID: 1, Name: "primary-ldap", Description: "Primary LDAP sync source", LdapServer: "ldap.example.com", LdapBaseDN: "dc=example,dc=com", LdapBindUsername: "cn=admin,dc=example,dc=com", LdapUseGlobalCatalog: false, LdapPermitNoTLS: false},
@@ -65,7 +64,7 @@ func TestService_ListLdapSyncSources(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -85,7 +84,7 @@ func TestService_ListLdapSyncSources(t *testing.T) {
 }
 
 func TestService_GetLdapSyncSource(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	expectedLdapSyncSource := &LdapSyncSource{
 		ID:                   1,
 		Name:                 "test-ldap",
@@ -112,7 +111,7 @@ func TestService_GetLdapSyncSource(t *testing.T) {
 }
 
 func TestService_CreateLdapSyncSource(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &LdapSyncSourceCreateRequest{
 		Name:                 "new-ldap",
@@ -141,7 +140,7 @@ func TestService_CreateLdapSyncSource(t *testing.T) {
 }
 
 func TestService_UpdateLdapSyncSource(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	useGlobalCatalog := true
 	updateRequest := &LdapSyncSourceUpdateRequest{
@@ -175,7 +174,7 @@ func TestService_UpdateLdapSyncSource(t *testing.T) {
 }
 
 func TestService_DeleteLdapSyncSource(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/ldap_sync_source/1/", mock.Anything).Return(nil)
 

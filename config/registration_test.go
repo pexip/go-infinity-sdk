@@ -9,13 +9,12 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestService_GetRegistration(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	expectedRegistration := &Registration{
 		ID:                         1,
 		Enable:                     true,
@@ -46,7 +45,7 @@ func TestService_GetRegistration(t *testing.T) {
 }
 
 func TestService_UpdateRegistration(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	enable := false
 	adaptiveMinRefresh := 90

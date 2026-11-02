@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListMjxEndpointGroups(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				integration1 := "/api/admin/configuration/v1/mjx_integration/1/"
 				location1 := "/api/admin/configuration/v1/system_location/1/"
 				integration2 := "/api/admin/configuration/v1/mjx_integration/2/"
@@ -53,7 +52,7 @@ func TestService_ListMjxEndpointGroups(t *testing.T) {
 				},
 				Search: "floor-1",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				integration := "/api/admin/configuration/v1/mjx_integration/1/"
 				location := "/api/admin/configuration/v1/system_location/1/"
 
@@ -73,7 +72,7 @@ func TestService_ListMjxEndpointGroups(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -93,7 +92,7 @@ func TestService_ListMjxEndpointGroups(t *testing.T) {
 }
 
 func TestService_GetMjxEndpointGroup(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	integration := "/api/admin/configuration/v1/mjx_integration/1/"
 	location := "/api/admin/configuration/v1/system_location/1/"
 
@@ -125,7 +124,7 @@ func TestService_GetMjxEndpointGroup(t *testing.T) {
 }
 
 func TestService_CreateMjxEndpointGroup(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	integration := "/api/admin/configuration/v1/mjx_integration/2/"
 	location := "/api/admin/configuration/v1/system_location/3/"
@@ -154,7 +153,7 @@ func TestService_CreateMjxEndpointGroup(t *testing.T) {
 }
 
 func TestService_UpdateMjxEndpointGroup(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	newLocation := "/api/admin/configuration/v1/system_location/5/"
 
@@ -194,7 +193,7 @@ func TestService_UpdateMjxEndpointGroup(t *testing.T) {
 }
 
 func TestService_DeleteMjxEndpointGroup(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/mjx_endpoint_group/1/", mock.Anything).Return(nil)
 

@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListMjxExchangeAutodiscoverURLs(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				exchangeDeployment := "/api/admin/configuration/v1/mjx_exchange_deployment/1/"
 				expectedResponse := &MjxExchangeAutodiscoverURLListResponse{
 					Objects: []MjxExchangeAutodiscoverURL{
@@ -49,7 +48,7 @@ func TestService_ListMjxExchangeAutodiscoverURLs(t *testing.T) {
 				},
 				Search: "primary",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				exchangeDeployment := "/api/admin/configuration/v1/mjx_exchange_deployment/1/"
 				expectedResponse := &MjxExchangeAutodiscoverURLListResponse{
 					Objects: []MjxExchangeAutodiscoverURL{
@@ -67,7 +66,7 @@ func TestService_ListMjxExchangeAutodiscoverURLs(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -87,7 +86,7 @@ func TestService_ListMjxExchangeAutodiscoverURLs(t *testing.T) {
 }
 
 func TestService_GetMjxExchangeAutodiscoverURL(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	exchangeDeployment := "/api/admin/configuration/v1/mjx_exchange_deployment/1/"
 
 	expectedURL := &MjxExchangeAutodiscoverURL{
@@ -112,7 +111,7 @@ func TestService_GetMjxExchangeAutodiscoverURL(t *testing.T) {
 }
 
 func TestService_CreateMjxExchangeAutodiscoverURL(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	exchangeDeployment := "/api/admin/configuration/v1/mjx_exchange_deployment/1/"
 	createRequest := &MjxExchangeAutodiscoverURLCreateRequest{
@@ -138,7 +137,7 @@ func TestService_CreateMjxExchangeAutodiscoverURL(t *testing.T) {
 }
 
 func TestService_UpdateMjxExchangeAutodiscoverURL(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	updateRequest := &MjxExchangeAutodiscoverURLUpdateRequest{
 		Description: "Updated Exchange autodiscover URL",
@@ -168,7 +167,7 @@ func TestService_UpdateMjxExchangeAutodiscoverURL(t *testing.T) {
 }
 
 func TestService_DeleteMjxExchangeAutodiscoverURL(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/mjx_exchange_autodiscover_url/1/", mock.Anything).Return(nil)
 

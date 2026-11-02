@@ -10,14 +10,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	util "github.com/pexip/go-infinity-sdk/v42/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestService_ListCloudNodes(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	awsLaunchTime := time.Now().Add(-24 * time.Hour)
 	cloudLaunchTime := time.Now().Add(-24 * time.Hour)
@@ -100,7 +99,7 @@ func TestService_ListCloudNodes(t *testing.T) {
 }
 
 func TestService_GetCloudNode(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	awsLaunchTime := time.Now().Add(-48 * time.Hour)
 	cloudLaunchTime := time.Now().Add(-48 * time.Hour)
 
@@ -143,7 +142,7 @@ func TestService_GetCloudNode(t *testing.T) {
 }
 
 func TestService_ListCloudNodes_WithOptions(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	service := New(client)
 
 	opts := &ListOptions{

@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListIdentityProviders(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &IdentityProviderListResponse{
 					Objects: []IdentityProvider{
 						{
@@ -75,7 +74,7 @@ func TestService_ListIdentityProviders(t *testing.T) {
 				},
 				Search: "saml",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &IdentityProviderListResponse{
 					Objects: []IdentityProvider{
 						{
@@ -105,7 +104,7 @@ func TestService_ListIdentityProviders(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -125,7 +124,7 @@ func TestService_ListIdentityProviders(t *testing.T) {
 }
 
 func TestService_GetIdentityProvider(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	expectedProvider := &IdentityProvider{
 		ID:                                  1,
 		Name:                                "test-saml-idp",
@@ -164,7 +163,7 @@ func TestService_GetIdentityProvider(t *testing.T) {
 }
 
 func TestService_CreateIdentityProvider(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &IdentityProviderCreateRequest{
 		Name:                                "new-saml-idp",
@@ -203,7 +202,7 @@ func TestService_CreateIdentityProvider(t *testing.T) {
 }
 
 func TestService_UpdateIdentityProvider(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	disablePopupFlow := true
 	updateRequest := &IdentityProviderUpdateRequest{
@@ -249,7 +248,7 @@ func TestService_UpdateIdentityProvider(t *testing.T) {
 }
 
 func TestService_DeleteIdentityProvider(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/identity_provider/1/", mock.Anything).Return(nil)
 

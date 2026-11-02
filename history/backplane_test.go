@@ -12,7 +12,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/util"
 	"github.com/stretchr/testify/assert"
@@ -20,7 +19,7 @@ import (
 )
 
 func TestService_ListBackplanes(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	service := New(client)
 
 	expectedResponse := &BackplaneListResponse{
@@ -69,7 +68,7 @@ func TestService_ListBackplanes(t *testing.T) {
 }
 
 func TestService_GetBackplane(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	service := New(client)
 
 	expectedBackplane := &Backplane{
@@ -100,7 +99,7 @@ func TestService_GetBackplane(t *testing.T) {
 }
 
 func TestService_ListBackplanes_WithOptions(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	service := New(client)
 
 	startTime := time.Now().Add(-24 * time.Hour)
@@ -146,7 +145,7 @@ func TestService_ListBackplanes_WithOptions(t *testing.T) {
 }
 
 func TestService_ListBackplanes_Error(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	service := New(client)
 
 	client.On("GetJSON", context.Background(), "history/v1/backplane/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.BackplaneListResponse")).Return(errors.New("server error"))
@@ -159,7 +158,7 @@ func TestService_ListBackplanes_Error(t *testing.T) {
 }
 
 func TestService_GetBackplane_NotFound(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	service := New(client)
 
 	client.On("GetJSON", context.Background(), "history/v1/backplane/nonexistent/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.Backplane")).Return(errors.New("backplane not found"))

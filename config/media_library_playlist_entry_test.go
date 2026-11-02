@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListMediaLibraryPlaylistEntries(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				media1 := "/api/admin/configuration/v1/media_library_entry/1/"
 				media2 := "/api/admin/configuration/v1/media_library_entry/2/"
 				playlist1 := "/api/admin/configuration/v1/media_library_playlist/1/"
@@ -52,7 +51,7 @@ func TestService_ListMediaLibraryPlaylistEntries(t *testing.T) {
 				},
 				Search: "media",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				media1 := "/api/admin/configuration/v1/media_library_entry/1/"
 				media2 := "/api/admin/configuration/v1/media_library_entry/2/"
 				expectedResponse := &MediaLibraryPlaylistEntryListResponse{
@@ -72,7 +71,7 @@ func TestService_ListMediaLibraryPlaylistEntries(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -92,7 +91,7 @@ func TestService_ListMediaLibraryPlaylistEntries(t *testing.T) {
 }
 
 func TestService_GetMediaLibraryPlaylistEntry(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	media := "/api/admin/configuration/v1/media_library_entry/1/"
 	expectedMediaLibraryPlaylistEntry := &MediaLibraryPlaylistEntry{
 		ID:        1,
@@ -116,7 +115,7 @@ func TestService_GetMediaLibraryPlaylistEntry(t *testing.T) {
 }
 
 func TestService_CreateMediaLibraryPlaylistEntry(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	media := "/api/admin/configuration/v1/media_library_entry/3/"
 	createRequest := &MediaLibraryPlaylistEntryCreateRequest{
@@ -142,7 +141,7 @@ func TestService_CreateMediaLibraryPlaylistEntry(t *testing.T) {
 }
 
 func TestService_UpdateMediaLibraryPlaylistEntry(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	position := 3
 	playcount := 15
@@ -174,7 +173,7 @@ func TestService_UpdateMediaLibraryPlaylistEntry(t *testing.T) {
 }
 
 func TestService_DeleteMediaLibraryPlaylistEntry(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/media_library_playlist_entry/1/", mock.Anything).Return(nil)
 

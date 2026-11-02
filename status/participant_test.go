@@ -9,14 +9,13 @@ package status
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestService_ListParticipants(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedResponse := &ParticipantListResponse{
 		Objects: []Participant{
@@ -139,7 +138,7 @@ func TestService_ListParticipants(t *testing.T) {
 }
 
 func TestService_ListParticipants_WithOptions(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	service := New(client)
 
 	opts := &ListOptions{
@@ -216,7 +215,7 @@ func TestService_ListParticipants_WithOptions(t *testing.T) {
 }
 
 func TestService_GetParticipant(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	expectedParticipant := &Participant{
 		ID:                      "participant-1",
 		Bandwidth:               intPtr(1600),

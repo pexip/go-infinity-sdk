@@ -50,7 +50,7 @@ func TestService_ListSchedulingOperations(t *testing.T) {
 	assert.Equal(t, "/api/admin/status/v1/scheduling_operation/1/", result.Objects[0].ResourceURI)
 	assert.Equal(t, true, result.Objects[0].Success)
 	assert.Equal(t, "uuid-1", result.Objects[0].TransactionUUID)
-	assert.Equal(t, creationTime.Unix(), result.Objects[0].CreationTime.Time.Unix())
+	assert.Equal(t, creationTime.Unix(), result.Objects[0].CreationTime.Unix())
 	client.AssertExpectations(t)
 }
 
@@ -92,7 +92,7 @@ func TestService_ListSchedulingOperations_WithOptions(t *testing.T) {
 	assert.Equal(t, "Some error", result.Objects[0].ErrorDescription)
 	assert.Equal(t, false, result.Objects[0].Success)
 	assert.Equal(t, "uuid-2", result.Objects[0].TransactionUUID)
-	assert.Equal(t, creationTime.Unix(), result.Objects[0].CreationTime.Time.Unix())
+	assert.Equal(t, creationTime.Unix(), result.Objects[0].CreationTime.Unix())
 
 	client.AssertExpectations(t)
 }
@@ -127,7 +127,7 @@ func TestService_GetSchedulingOperation(t *testing.T) {
 	assert.Equal(t, "/api/admin/status/v1/scheduling_operation/1/", result.ResourceURI)
 	assert.Equal(t, true, result.Success)
 	assert.Equal(t, "uuid-3", result.TransactionUUID)
-	assert.Equal(t, creationTime.Unix(), result.CreationTime.Time.Unix())
+	assert.Equal(t, creationTime.Unix(), result.CreationTime.Unix())
 	assert.NotNil(t, result.ResourceID)
 	assert.Equal(t, 42, *result.ResourceID)
 	client.AssertExpectations(t)

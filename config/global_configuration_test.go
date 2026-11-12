@@ -80,8 +80,3 @@ func TestService_UpdateGlobalConfiguration(t *testing.T) {
 	assert.Equal(t, expectedConfig, result)
 	client.AssertExpectations(t)
 }
-
-// Helper function for tests
-func intPtr(i int) *int {
-	return &i
-}

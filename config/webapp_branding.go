@@ -38,13 +38,6 @@ func (s *Service) GetWebappBranding(ctx context.Context, uuid string) (*WebappBr
 	return &result, err
 }
 
-func toBoolStr(val bool) string {
-	if val {
-		return "True"
-	}
-	return "False"
-}
-
 // CreateWebappBranding creates a new webapp branding
 func (s *Service) CreateWebappBranding(ctx context.Context, req *WebappBrandingCreateRequest, filename string, file io.Reader) (*types.PostResponseWithUUID, error) {
 	endpoint := "configuration/v1/webapp_branding/"

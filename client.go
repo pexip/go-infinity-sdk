@@ -191,7 +191,7 @@ func (c *Client) DoRequest(ctx context.Context, req *Request) (*Response, error)
 		// Read response body
 		var respBody []byte
 		respBody, err = io.ReadAll(resp.Body)
-		resp.Body.Close() // Always close the body
+		_ = resp.Body.Close() // Always close the body
 		if err != nil {
 			return nil, fmt.Errorf("failed to read response body: %w", err)
 		}

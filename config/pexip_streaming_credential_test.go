@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListPexipStreamingCredentials(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &PexipStreamingCredentialListResponse{
 					Objects: []PexipStreamingCredential{
 						{
@@ -56,7 +55,7 @@ func TestService_ListPexipStreamingCredentials(t *testing.T) {
 				},
 				Search: "primary",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &PexipStreamingCredentialListResponse{
 					Objects: []PexipStreamingCredential{
 						{
@@ -77,7 +76,7 @@ func TestService_ListPexipStreamingCredentials(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -97,7 +96,7 @@ func TestService_ListPexipStreamingCredentials(t *testing.T) {
 }
 
 func TestService_GetPexipStreamingCredential(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedCredential := &PexipStreamingCredential{
 		ID:        1,
@@ -119,7 +118,7 @@ func TestService_GetPexipStreamingCredential(t *testing.T) {
 }
 
 func TestService_CreatePexipStreamingCredential(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &PexipStreamingCredentialCreateRequest{
 		Kid:       "new-streaming-key",
@@ -142,7 +141,7 @@ func TestService_CreatePexipStreamingCredential(t *testing.T) {
 }
 
 func TestService_UpdatePexipStreamingCredential(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	updateRequest := &PexipStreamingCredentialUpdateRequest{
 		PublicKey: "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAupdated1lCKE8rMQS7Md\nJvzzGtx3Ip8K7OqN9ZKF2eODJzCq3ZOD4oBnVtJOv3V8XqOWLm8HRgfEKVkZtQz2\npMJ3J5dT4V6L9QxzB7wX8oGjWzF9QyX8LmN2VfZpJzOKvQyF6qRz3tJ9QyNkD8G7\nX2LfL8QV9rOq3ZdFG7wX2qVzPyGjNkT4V9LrOz3QyF8V2Lm3J9ZFq7wXzGjNkL8V\nr2QyF9LmOz3V7wXGjN4T8V2Lm3QyF9ZrOzVf7wXGjNkT8V2LmQyF9ZOz3V7wGjN4\nTLmQyVZrOz3F7wXGjNkT8V2LmQyFZOzV7wXGjN4TLmQyVZOzF7wGjNkTLmQyVZF7\nwGjNQIDAQAB\n-----END PUBLIC KEY-----",
@@ -168,7 +167,7 @@ func TestService_UpdatePexipStreamingCredential(t *testing.T) {
 }
 
 func TestService_DeletePexipStreamingCredential(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/pexip_streaming_credential/1/", mock.Anything).Return(nil)
 

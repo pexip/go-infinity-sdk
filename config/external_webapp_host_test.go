@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListExternalWebappHosts(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &ExternalWebappHostListResponse{
 					Objects: []ExternalWebappHost{
 						{ID: 1, Address: "webapp1.example.com"},
@@ -48,7 +47,7 @@ func TestService_ListExternalWebappHosts(t *testing.T) {
 				},
 				Search: "webapp1",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &ExternalWebappHostListResponse{
 					Objects: []ExternalWebappHost{
 						{ID: 1, Address: "webapp1.example.com"},
@@ -65,7 +64,7 @@ func TestService_ListExternalWebappHosts(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -85,7 +84,7 @@ func TestService_ListExternalWebappHosts(t *testing.T) {
 }
 
 func TestService_GetExternalWebappHost(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	expectedExternalWebappHost := &ExternalWebappHost{
 		ID:      1,
 		Address: "test-webapp.example.com",
@@ -105,7 +104,7 @@ func TestService_GetExternalWebappHost(t *testing.T) {
 }
 
 func TestService_CreateExternalWebappHost(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &ExternalWebappHostCreateRequest{
 		Address: "new-webapp.example.com",
@@ -127,7 +126,7 @@ func TestService_CreateExternalWebappHost(t *testing.T) {
 }
 
 func TestService_UpdateExternalWebappHost(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	updateRequest := &ExternalWebappHostUpdateRequest{
 		Address: "updated-webapp.example.com",
@@ -152,7 +151,7 @@ func TestService_UpdateExternalWebappHost(t *testing.T) {
 }
 
 func TestService_DeleteExternalWebappHost(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/external_webapp_host/1/", mock.Anything).Return(nil)
 

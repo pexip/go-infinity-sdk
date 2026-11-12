@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListSyslogServers(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &SyslogServerListResponse{
 					Objects: []SyslogServer{
 						{ID: 1, Address: "192.168.1.100", Port: 514, Transport: "udp", Description: "Main syslog server"},
@@ -48,7 +47,7 @@ func TestService_ListSyslogServers(t *testing.T) {
 				},
 				Search: "main",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &SyslogServerListResponse{
 					Objects: []SyslogServer{
 						{ID: 1, Address: "192.168.1.100", Port: 514, Transport: "udp", Description: "Main syslog server"},
@@ -65,7 +64,7 @@ func TestService_ListSyslogServers(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -85,7 +84,7 @@ func TestService_ListSyslogServers(t *testing.T) {
 }
 
 func TestService_GetSyslogServer(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	expectedServer := &SyslogServer{
 		ID:          1,
 		Address:     "192.168.1.100",
@@ -112,7 +111,7 @@ func TestService_GetSyslogServer(t *testing.T) {
 }
 
 func TestService_CreateSyslogServer(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &SyslogServerCreateRequest{
 		Address:     "syslog.example.com",
@@ -141,7 +140,7 @@ func TestService_CreateSyslogServer(t *testing.T) {
 }
 
 func TestService_UpdateSyslogServer(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	updateRequest := &SyslogServerUpdateRequest{
 		Description: "Updated syslog server",
@@ -175,7 +174,7 @@ func TestService_UpdateSyslogServer(t *testing.T) {
 }
 
 func TestService_DeleteSyslogServer(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/syslog_server/1/", mock.Anything).Return(nil)
 

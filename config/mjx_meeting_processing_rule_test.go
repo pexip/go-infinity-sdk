@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListMjxMeetingProcessingRules(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &MjxMeetingProcessingRuleListResponse{
 					Objects: []MjxMeetingProcessingRule{
 						{
@@ -79,7 +78,7 @@ func TestService_ListMjxMeetingProcessingRules(t *testing.T) {
 				},
 				Search: "primary",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &MjxMeetingProcessingRuleListResponse{
 					Objects: []MjxMeetingProcessingRule{
 						{
@@ -105,7 +104,7 @@ func TestService_ListMjxMeetingProcessingRules(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -125,7 +124,7 @@ func TestService_ListMjxMeetingProcessingRules(t *testing.T) {
 }
 
 func TestService_GetMjxMeetingProcessingRule(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedRule := &MjxMeetingProcessingRule{
 		ID:                       1,
@@ -159,7 +158,7 @@ func TestService_GetMjxMeetingProcessingRule(t *testing.T) {
 }
 
 func TestService_CreateMjxMeetingProcessingRule(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &MjxMeetingProcessingRuleCreateRequest{
 		Name:                     "new-processing-rule",
@@ -194,7 +193,7 @@ func TestService_CreateMjxMeetingProcessingRule(t *testing.T) {
 }
 
 func TestService_UpdateMjxMeetingProcessingRule(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	priority := 80
 	enabled := false
@@ -242,7 +241,7 @@ func TestService_UpdateMjxMeetingProcessingRule(t *testing.T) {
 }
 
 func TestService_DeleteMjxMeetingProcessingRule(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/mjx_meeting_processing_rule/1/", mock.Anything).Return(nil)
 

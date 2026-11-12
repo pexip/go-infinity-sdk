@@ -12,7 +12,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/util"
 	"github.com/stretchr/testify/assert"
@@ -20,7 +19,7 @@ import (
 )
 
 func TestService_ListWorkerVMStatusEvents(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	service := New(client)
 
 	state := "running"
@@ -74,7 +73,7 @@ func TestService_ListWorkerVMStatusEvents(t *testing.T) {
 }
 
 func TestService_GetWorkerVMStatusEvent(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	service := New(client)
 
 	state := "stopped"
@@ -111,7 +110,7 @@ func TestService_GetWorkerVMStatusEvent(t *testing.T) {
 }
 
 func TestService_ListWorkerVMStatusEvents_WithOptions(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	service := New(client)
 
 	startTime := time.Now().Add(-12 * time.Hour)
@@ -164,7 +163,7 @@ func TestService_ListWorkerVMStatusEvents_WithOptions(t *testing.T) {
 }
 
 func TestService_ListWorkerVMStatusEvents_Error(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	service := New(client)
 
 	client.On("GetJSON", context.Background(), "history/v1/workervm_status_event/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.WorkerVMStatusEventListResponse")).Return(errors.New("server error"))
@@ -177,7 +176,7 @@ func TestService_ListWorkerVMStatusEvents_Error(t *testing.T) {
 }
 
 func TestService_GetWorkerVMStatusEvent_NotFound(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	service := New(client)
 
 	client.On("GetJSON", context.Background(), "history/v1/workervm_status_event/999/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*history.WorkerVMStatusEvent")).Return(errors.New("worker VM status event not found"))

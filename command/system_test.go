@@ -9,13 +9,12 @@ package command
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestService_CreateSnapshot(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	includeDiagnostics := true
 	expectedRequest := &SnapshotRequest{
@@ -43,7 +42,7 @@ func TestService_CreateSnapshot(t *testing.T) {
 }
 
 func TestService_CreateSnapshotSimple(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedResponse := &CommandResponse{
 		Status:  "success",
@@ -64,7 +63,7 @@ func TestService_CreateSnapshotSimple(t *testing.T) {
 }
 
 func TestService_ImportCertificates(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedRequest := &CertificatesImportRequest{
 		Bundle:               "-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----",
@@ -90,7 +89,7 @@ func TestService_ImportCertificates(t *testing.T) {
 }
 
 func TestService_ManageSoftwareBundle(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedRequest := &SoftwareBundleRequest{
 		Package: "software-bundle.zip",
@@ -115,7 +114,7 @@ func TestService_ManageSoftwareBundle(t *testing.T) {
 }
 
 func TestService_UpgradeSystem(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedRequest := &UpgradeRequest{
 		Package: "upgrade-package.zip",
@@ -140,7 +139,7 @@ func TestService_UpgradeSystem(t *testing.T) {
 }
 
 func TestService_StartCloudNode(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedRequest := &StartCloudNodeRequest{
 		InstanceID: "cloud-instance-123",
@@ -165,7 +164,7 @@ func TestService_StartCloudNode(t *testing.T) {
 }
 
 func TestService_Sync(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedRequest := &SyncRequest{
 		ConferenceSyncTemplateID: "sync-template-456",

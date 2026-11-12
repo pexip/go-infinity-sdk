@@ -10,7 +10,6 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -21,13 +20,13 @@ func TestService_ListConferences(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &ConferenceListResponse{
 					Objects: []Conference{
 						{ID: 1, Name: "Test Conference 1"},
@@ -50,7 +49,7 @@ func TestService_ListConferences(t *testing.T) {
 				},
 				Search: "test",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &ConferenceListResponse{
 					Objects: []Conference{
 						{ID: 1, Name: "Test Conference"},
@@ -67,7 +66,7 @@ func TestService_ListConferences(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -87,7 +86,7 @@ func TestService_ListConferences(t *testing.T) {
 }
 
 func TestService_GetConference(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	expectedConference := &Conference{
 		ID:   1,
 		Name: "Test Conference",
@@ -107,7 +106,7 @@ func TestService_GetConference(t *testing.T) {
 }
 
 func TestService_CreateConference(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &ConferenceCreateRequest{
 		Name:        "New Conference",
@@ -130,7 +129,7 @@ func TestService_CreateConference(t *testing.T) {
 }
 
 func TestService_UpdateConference(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	updateRequest := &ConferenceUpdateRequest{
 		Name: "Updated Conference",
@@ -155,7 +154,7 @@ func TestService_UpdateConference(t *testing.T) {
 }
 
 func TestService_DeleteConference(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/conference/1/", mock.Anything).Return(nil)
 
@@ -205,7 +204,7 @@ func TestService_ListConferences_QueryParameterValidation(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			expectedResponse := &ConferenceListResponse{Objects: []Conference{}}
 
 			client.On("GetJSON", t.Context(), tt.expectedQuery, mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.ConferenceListResponse")).Return(nil).Run(func(args mock.Arguments) {
@@ -225,12 +224,12 @@ func TestService_ListConferences_QueryParameterValidation(t *testing.T) {
 func TestService_ConferenceErrorHandling(t *testing.T) {
 	tests := []struct {
 		name      string
-		setup     func(m *interfaces.HTTPClientMock)
+		setup     func(m *mockHTTPClient)
 		operation func(service *Service) error
 	}{
 		{
 			name: "ListConferences client error",
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				m.On("GetJSON", t.Context(), "configuration/v1/conference/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.ConferenceListResponse")).Return(errors.New("network error"))
 			},
 			operation: func(service *Service) error {
@@ -240,7 +239,7 @@ func TestService_ConferenceErrorHandling(t *testing.T) {
 		},
 		{
 			name: "GetConference client error",
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				m.On("GetJSON", t.Context(), "configuration/v1/conference/1/", mock.AnythingOfType("*url.Values"), mock.AnythingOfType("*config.Conference")).Return(errors.New("not found"))
 			},
 			operation: func(service *Service) error {
@@ -250,7 +249,7 @@ func TestService_ConferenceErrorHandling(t *testing.T) {
 		},
 		{
 			name: "CreateConference client error",
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				m.On("PostWithResponse", t.Context(), "configuration/v1/conference/", mock.Anything, nil).Return(nil, errors.New("validation error"))
 			},
 			operation: func(service *Service) error {
@@ -260,7 +259,7 @@ func TestService_ConferenceErrorHandling(t *testing.T) {
 		},
 		{
 			name: "UpdateConference client error",
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				m.On("PutJSON", t.Context(), "configuration/v1/conference/1/", mock.Anything, mock.AnythingOfType("*config.Conference")).Return(errors.New("update failed"))
 			},
 			operation: func(service *Service) error {
@@ -270,7 +269,7 @@ func TestService_ConferenceErrorHandling(t *testing.T) {
 		},
 		{
 			name: "DeleteConference client error",
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				m.On("DeleteJSON", t.Context(), "configuration/v1/conference/1/", mock.Anything).Return(errors.New("delete failed"))
 			},
 			operation: func(service *Service) error {
@@ -281,7 +280,7 @@ func TestService_ConferenceErrorHandling(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)

@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListPolicyServers(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &PolicyServerListResponse{
 					Objects: []PolicyServer{
 						{ID: 1, Name: "policy-server1", Description: "Primary policy server", URL: "https://policy.example.com", EnableServiceLookup: true, EnableParticipantLookup: true},
@@ -48,7 +47,7 @@ func TestService_ListPolicyServers(t *testing.T) {
 				},
 				Search: "policy-server1",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &PolicyServerListResponse{
 					Objects: []PolicyServer{
 						{ID: 1, Name: "policy-server1", Description: "Primary policy server", URL: "https://policy.example.com", EnableServiceLookup: true, EnableParticipantLookup: true},
@@ -65,7 +64,7 @@ func TestService_ListPolicyServers(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -85,7 +84,7 @@ func TestService_ListPolicyServers(t *testing.T) {
 }
 
 func TestService_GetPolicyServer(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	expectedPolicyServer := &PolicyServer{
 		ID:                                  1,
 		Name:                                "test-policy-server",
@@ -122,7 +121,7 @@ func TestService_GetPolicyServer(t *testing.T) {
 }
 
 func TestService_CreatePolicyServer(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &PolicyServerCreateRequest{
 		Name:                                "new-policy-server",
@@ -161,7 +160,7 @@ func TestService_CreatePolicyServer(t *testing.T) {
 }
 
 func TestService_UpdatePolicyServer(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	enableServiceLookup := false
 	enableAvatarLookup := true
@@ -209,7 +208,7 @@ func TestService_UpdatePolicyServer(t *testing.T) {
 }
 
 func TestService_DeletePolicyServer(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/policy_server/1/", mock.Anything).Return(nil)
 

@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListMjxGoogleDeployments(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				oauthState := "test-state"
 				expectedResponse := &MjxGoogleDeploymentListResponse{
 					Objects: []MjxGoogleDeployment{
@@ -73,7 +72,7 @@ func TestService_ListMjxGoogleDeployments(t *testing.T) {
 				},
 				Search: "primary",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &MjxGoogleDeploymentListResponse{
 					Objects: []MjxGoogleDeployment{
 						{
@@ -97,7 +96,7 @@ func TestService_ListMjxGoogleDeployments(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -117,7 +116,7 @@ func TestService_ListMjxGoogleDeployments(t *testing.T) {
 }
 
 func TestService_GetMjxGoogleDeployment(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	oauthState := "test-state"
 
 	expectedDeployment := &MjxGoogleDeployment{
@@ -152,7 +151,7 @@ func TestService_GetMjxGoogleDeployment(t *testing.T) {
 }
 
 func TestService_CreateMjxGoogleDeployment(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &MjxGoogleDeploymentCreateRequest{
 		Name:                       "new-google",
@@ -185,7 +184,7 @@ func TestService_CreateMjxGoogleDeployment(t *testing.T) {
 }
 
 func TestService_UpdateMjxGoogleDeployment(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	useUserConsent := true
 	maxRequests := 1500
@@ -227,7 +226,7 @@ func TestService_UpdateMjxGoogleDeployment(t *testing.T) {
 }
 
 func TestService_DeleteMjxGoogleDeployment(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/mjx_google_deployment/1/", mock.Anything).Return(nil)
 

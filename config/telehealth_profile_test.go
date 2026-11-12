@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListTelehealthProfiles(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &TelehealthProfileListResponse{
 					Objects: []TelehealthProfile{
 						{ID: 1, Name: "epic-profile-1", Description: "Epic Telehealth Profile 1", UUID: "123e4567-e89b-12d3-a456-426614174000", TelehealthCallDomain: "telehealth.example.com", EpicEncryptionAlgorithm: "AES256", EpicEncryptionKeyType: "direct"},
@@ -48,7 +47,7 @@ func TestService_ListTelehealthProfiles(t *testing.T) {
 				},
 				Search: "epic-profile-1",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &TelehealthProfileListResponse{
 					Objects: []TelehealthProfile{
 						{ID: 1, Name: "epic-profile-1", Description: "Epic Telehealth Profile 1", UUID: "123e4567-e89b-12d3-a456-426614174000", TelehealthCallDomain: "telehealth.example.com", EpicEncryptionAlgorithm: "AES256", EpicEncryptionKeyType: "direct"},
@@ -65,7 +64,7 @@ func TestService_ListTelehealthProfiles(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -85,7 +84,7 @@ func TestService_ListTelehealthProfiles(t *testing.T) {
 }
 
 func TestService_GetTelehealthProfile(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	expectedTelehealthProfile := &TelehealthProfile{
 		ID:                                    1,
 		Name:                                  "test-epic-profile",
@@ -125,7 +124,7 @@ func TestService_GetTelehealthProfile(t *testing.T) {
 }
 
 func TestService_CreateTelehealthProfile(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &TelehealthProfileCreateRequest{
 		Name:                                  "new-epic-profile",
@@ -166,7 +165,7 @@ func TestService_CreateTelehealthProfile(t *testing.T) {
 }
 
 func TestService_UpdateTelehealthProfile(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	updateRequest := &TelehealthProfileUpdateRequest{
 		Description:          "Updated Epic Telehealth Profile",
@@ -213,7 +212,7 @@ func TestService_UpdateTelehealthProfile(t *testing.T) {
 }
 
 func TestService_DeleteTelehealthProfile(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/telehealth_profile/1/", mock.Anything).Return(nil)
 

@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListHTTPProxies(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				port1 := 8080
 				port2 := 3128
 				expectedResponse := &HTTPProxyListResponse{
@@ -50,7 +49,7 @@ func TestService_ListHTTPProxies(t *testing.T) {
 				},
 				Search: "primary",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				port := 8080
 				expectedResponse := &HTTPProxyListResponse{
 					Objects: []HTTPProxy{
@@ -68,7 +67,7 @@ func TestService_ListHTTPProxies(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -88,7 +87,7 @@ func TestService_ListHTTPProxies(t *testing.T) {
 }
 
 func TestService_GetHTTPProxy(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	port := 8080
 	expectedProxy := &HTTPProxy{
 		ID:          1,
@@ -115,7 +114,7 @@ func TestService_GetHTTPProxy(t *testing.T) {
 }
 
 func TestService_CreateHTTPProxy(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	port := 8080
 	createRequest := &HTTPProxyCreateRequest{
@@ -143,7 +142,7 @@ func TestService_CreateHTTPProxy(t *testing.T) {
 }
 
 func TestService_UpdateHTTPProxy(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	newPort := 3128
 	updateRequest := &HTTPProxyUpdateRequest{
@@ -177,7 +176,7 @@ func TestService_UpdateHTTPProxy(t *testing.T) {
 }
 
 func TestService_DeleteHTTPProxy(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/http_proxy/1/", mock.Anything).Return(nil)
 

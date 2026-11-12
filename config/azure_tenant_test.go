@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListAzureTenants(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &AzureTenantListResponse{
 					Objects: []AzureTenant{
 						{ID: 1, Name: "primary-tenant", Description: "Primary Teams tenant", TenantID: "12345678-1234-1234-1234-123456789abc"},
@@ -48,7 +47,7 @@ func TestService_ListAzureTenants(t *testing.T) {
 				},
 				Search: "primary",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &AzureTenantListResponse{
 					Objects: []AzureTenant{
 						{ID: 1, Name: "primary-tenant", Description: "Primary Teams tenant", TenantID: "12345678-1234-1234-1234-123456789abc"},
@@ -65,7 +64,7 @@ func TestService_ListAzureTenants(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -85,7 +84,7 @@ func TestService_ListAzureTenants(t *testing.T) {
 }
 
 func TestService_GetAzureTenant(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	expectedAzureTenant := &AzureTenant{
 		ID:          1,
 		Name:        "test-tenant",
@@ -107,7 +106,7 @@ func TestService_GetAzureTenant(t *testing.T) {
 }
 
 func TestService_CreateAzureTenant(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &AzureTenantCreateRequest{
 		Name:        "new-tenant",
@@ -131,7 +130,7 @@ func TestService_CreateAzureTenant(t *testing.T) {
 }
 
 func TestService_UpdateAzureTenant(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	updateRequest := &AzureTenantUpdateRequest{
 		Description: "Updated Teams tenant",
@@ -159,7 +158,7 @@ func TestService_UpdateAzureTenant(t *testing.T) {
 }
 
 func TestService_DeleteAzureTenant(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/azure_tenant/1/", mock.Anything).Return(nil)
 

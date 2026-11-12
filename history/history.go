@@ -13,17 +13,21 @@ import (
 	"context"
 	"net/url"
 	"time"
-
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 )
+
+// HTTPClient is the subset of HTTP operations required by the history service.
+type HTTPClient interface {
+	// GetJSON performs a GET request and unmarshals the JSON response
+	GetJSON(ctx context.Context, endpoint string, queryParams *url.Values, result interface{}) error
+}
 
 // Service handles history API endpoints
 type Service struct {
-	client interfaces.HTTPClient
+	client HTTPClient
 }
 
 // New creates a new history API service
-func New(client interfaces.HTTPClient) *Service {
+func New(client HTTPClient) *Service {
 	return &Service{
 		client: client,
 	}

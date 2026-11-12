@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListMSSIPProxies(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				port1 := 5060
 				port2 := 5061
 				expectedResponse := &MSSIPProxyListResponse{
@@ -64,7 +63,7 @@ func TestService_ListMSSIPProxies(t *testing.T) {
 				},
 				Search: "primary",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				port := 5060
 				expectedResponse := &MSSIPProxyListResponse{
 					Objects: []MSSIPProxy{
@@ -89,7 +88,7 @@ func TestService_ListMSSIPProxies(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -109,7 +108,7 @@ func TestService_ListMSSIPProxies(t *testing.T) {
 }
 
 func TestService_GetMSSIPProxy(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	port := 5060
 
 	expectedProxy := &MSSIPProxy{
@@ -135,7 +134,7 @@ func TestService_GetMSSIPProxy(t *testing.T) {
 }
 
 func TestService_CreateMSSIPProxy(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	port := 5060
 	createRequest := &MSSIPProxyCreateRequest{
@@ -162,7 +161,7 @@ func TestService_CreateMSSIPProxy(t *testing.T) {
 }
 
 func TestService_UpdateMSSIPProxy(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	port := 5061
 	updateRequest := &MSSIPProxyUpdateRequest{
@@ -194,7 +193,7 @@ func TestService_UpdateMSSIPProxy(t *testing.T) {
 }
 
 func TestService_DeleteMSSIPProxy(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/mssip_proxy/1/", mock.Anything).Return(nil)
 

@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListLogLevels(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &LogLevelListResponse{
 					Objects: []LogLevel{
 						{ID: 1, Name: "media_processing", Level: "INFO"},
@@ -48,7 +47,7 @@ func TestService_ListLogLevels(t *testing.T) {
 				},
 				Search: "media",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &LogLevelListResponse{
 					Objects: []LogLevel{
 						{ID: 1, Name: "media_processing", Level: "INFO"},
@@ -65,7 +64,7 @@ func TestService_ListLogLevels(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -85,7 +84,7 @@ func TestService_ListLogLevels(t *testing.T) {
 }
 
 func TestService_GetLogLevel(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	expectedLogLevel := &LogLevel{
 		ID:    1,
 		Name:  "test_service",
@@ -106,7 +105,7 @@ func TestService_GetLogLevel(t *testing.T) {
 }
 
 func TestService_CreateLogLevel(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &LogLevelCreateRequest{
 		Name:  "new_service",
@@ -129,7 +128,7 @@ func TestService_CreateLogLevel(t *testing.T) {
 }
 
 func TestService_UpdateLogLevel(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	updateRequest := &LogLevelUpdateRequest{
 		Level: "DEBUG",
@@ -155,7 +154,7 @@ func TestService_UpdateLogLevel(t *testing.T) {
 }
 
 func TestService_DeleteLogLevel(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/log_level/1/", mock.Anything).Return(nil)
 

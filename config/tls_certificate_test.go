@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/pexip/go-infinity-sdk/v42/util"
@@ -21,13 +20,13 @@ func TestService_ListTLSCertificates(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				startDate1 := util.InfinityTime{}
 				endDate1 := util.InfinityTime{}
 				keyID1 := "key123"
@@ -53,7 +52,7 @@ func TestService_ListTLSCertificates(t *testing.T) {
 				},
 				Search: "example.com",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				startDate := util.InfinityTime{}
 				endDate := util.InfinityTime{}
 				keyID := "key123"
@@ -74,7 +73,7 @@ func TestService_ListTLSCertificates(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -94,7 +93,7 @@ func TestService_ListTLSCertificates(t *testing.T) {
 }
 
 func TestService_GetTLSCertificate(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	startDate := util.InfinityTime{}
 	endDate := util.InfinityTime{}
 	keyID := "key123"
@@ -134,7 +133,7 @@ func TestService_GetTLSCertificate(t *testing.T) {
 }
 
 func TestService_CreateTLSCertificate(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &TLSCertificateCreateRequest{
 		Certificate:          "-----BEGIN CERTIFICATE-----\nMIIB...",
@@ -160,7 +159,7 @@ func TestService_CreateTLSCertificate(t *testing.T) {
 }
 
 func TestService_UpdateTLSCertificate(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	updateRequest := &TLSCertificateUpdateRequest{
 		PrivateKeyPassphrase: "newsecret",
@@ -199,7 +198,7 @@ func TestService_UpdateTLSCertificate(t *testing.T) {
 }
 
 func TestService_DeleteTLSCertificate(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/tls_certificate/1/", mock.Anything).Return(nil)
 

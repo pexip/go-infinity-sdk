@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListMediaProcessingServers(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &MediaProcessingServerListResponse{
 					Objects: []MediaProcessingServer{
 						{ID: 1, FQDN: "media1.example.com", AppID: "media-app-01", PublicJWTKey: "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA...\n-----END PUBLIC KEY-----"},
@@ -48,7 +47,7 @@ func TestService_ListMediaProcessingServers(t *testing.T) {
 				},
 				Search: "media1",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &MediaProcessingServerListResponse{
 					Objects: []MediaProcessingServer{
 						{ID: 1, FQDN: "media1.example.com", AppID: "media-app-01", PublicJWTKey: "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA...\n-----END PUBLIC KEY-----"},
@@ -65,7 +64,7 @@ func TestService_ListMediaProcessingServers(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -85,7 +84,7 @@ func TestService_ListMediaProcessingServers(t *testing.T) {
 }
 
 func TestService_GetMediaProcessingServer(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	expectedMediaProcessingServer := &MediaProcessingServer{
 		ID:           1,
 		FQDN:         "test-media.example.com",
@@ -107,7 +106,7 @@ func TestService_GetMediaProcessingServer(t *testing.T) {
 }
 
 func TestService_CreateMediaProcessingServer(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &MediaProcessingServerCreateRequest{
 		FQDN: "new-media.example.com",
@@ -129,7 +128,7 @@ func TestService_CreateMediaProcessingServer(t *testing.T) {
 }
 
 func TestService_UpdateMediaProcessingServer(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	updateRequest := &MediaProcessingServerUpdateRequest{
 		FQDN: "updated-media.example.com",
@@ -156,7 +155,7 @@ func TestService_UpdateMediaProcessingServer(t *testing.T) {
 }
 
 func TestService_DeleteMediaProcessingServer(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/media_processing_server/1/", mock.Anything).Return(nil)
 

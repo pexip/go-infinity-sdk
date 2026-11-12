@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListSystemLocations(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &SystemLocationListResponse{
 					Objects: []SystemLocation{
 						{ID: 1, Name: "Location 1", Description: "First location"},
@@ -49,7 +48,7 @@ func TestService_ListSystemLocations(t *testing.T) {
 				},
 				Search: "location",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &SystemLocationListResponse{
 					Objects: []SystemLocation{
 						{ID: 1, Name: "Test Location", Description: "Test system location"},
@@ -66,7 +65,7 @@ func TestService_ListSystemLocations(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -86,7 +85,7 @@ func TestService_ListSystemLocations(t *testing.T) {
 }
 
 func TestService_GetSystemLocation(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	expectedLocation := &SystemLocation{
 		ID:          1,
 		Name:        "Primary Location",
@@ -108,7 +107,7 @@ func TestService_GetSystemLocation(t *testing.T) {
 }
 
 func TestService_CreateSystemLocation(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &SystemLocationCreateRequest{
 		Name:        "New Location",
@@ -132,7 +131,7 @@ func TestService_CreateSystemLocation(t *testing.T) {
 }
 
 func TestService_UpdateSystemLocation(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	updateRequest := &SystemLocationUpdateRequest{
 		Description: "Updated location",
@@ -160,7 +159,7 @@ func TestService_UpdateSystemLocation(t *testing.T) {
 }
 
 func TestService_DeleteSystemLocation(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/system_location/1/", mock.Anything).Return(nil)
 

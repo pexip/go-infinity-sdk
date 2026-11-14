@@ -62,8 +62,8 @@ func TestService_ListMJXMeetings(t *testing.T) {
 	assert.Equal(t, "/api/admin/status/v1/mjx_meeting/meeting-123/", result.Objects[0].ResourceURI)
 	assert.Equal(t, 123, result.Objects[0].ID)
 	assert.Equal(t, "endpoint-1", result.Objects[0].EndpointName)
-	assert.Equal(t, startTime.Unix(), result.Objects[0].StartTime.Time.Unix())
-	assert.Equal(t, endTime.Unix(), result.Objects[0].EndTime.Time.Unix())
+	assert.Equal(t, startTime.Unix(), result.Objects[0].StartTime.Unix())
+	assert.Equal(t, endTime.Unix(), result.Objects[0].EndTime.Unix())
 	client.AssertExpectations(t)
 }
 
@@ -114,8 +114,8 @@ func TestService_ListMJXMeetings_WithOptions(t *testing.T) {
 	assert.Equal(t, "test-options", result.Objects[0].Alias)
 	assert.Equal(t, "meeting-options-test", result.Objects[0].MeetingID)
 	assert.Equal(t, "endpoint-test", result.Objects[0].EndpointName)
-	assert.Equal(t, startTime.Unix(), result.Objects[0].StartTime.Time.Unix())
-	assert.Equal(t, endTime.Unix(), result.Objects[0].EndTime.Time.Unix())
+	assert.Equal(t, startTime.Unix(), result.Objects[0].StartTime.Unix())
+	assert.Equal(t, endTime.Unix(), result.Objects[0].EndTime.Unix())
 
 	client.AssertExpectations(t)
 }
@@ -161,7 +161,7 @@ func TestService_GetMJXMeeting(t *testing.T) {
 	assert.Equal(t, "/api/admin/status/v1/mjx_meeting/meeting-456/", result.ResourceURI)
 	assert.Equal(t, 789, result.ID)
 	assert.Equal(t, "endpoint-board", result.EndpointName)
-	assert.Equal(t, startTime.Unix(), result.StartTime.Time.Unix())
-	assert.Equal(t, endTime.Unix(), result.EndTime.Time.Unix())
+	assert.Equal(t, startTime.Unix(), result.StartTime.Unix())
+	assert.Equal(t, endTime.Unix(), result.EndTime.Unix())
 	client.AssertExpectations(t)
 }

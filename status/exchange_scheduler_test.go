@@ -52,7 +52,7 @@ func TestService_ListExchangeSchedulers(t *testing.T) {
 	assert.Equal(t, 1, result.Objects[0].ID)
 	assert.Equal(t, 10, result.Objects[0].ExchangeConnectorID)
 	assert.Equal(t, "/api/admin/status/v1/exchange_scheduler/1/", result.Objects[0].ResourceURI)
-	assert.Equal(t, lastModified.Unix(), result.Objects[0].LastModifiedTime.Time.Unix())
+	assert.Equal(t, lastModified.Unix(), result.Objects[0].LastModifiedTime.Unix())
 	client.AssertExpectations(t)
 }
 
@@ -123,6 +123,6 @@ func TestService_GetExchangeScheduler(t *testing.T) {
 	assert.Equal(t, 1, result.ID)
 	assert.Equal(t, 10, result.ExchangeConnectorID)
 	assert.Equal(t, "/api/admin/status/v1/exchange_scheduler/1/", result.ResourceURI)
-	assert.Equal(t, lastModified.Unix(), result.LastModifiedTime.Time.Unix())
+	assert.Equal(t, lastModified.Unix(), result.LastModifiedTime.Unix())
 	client.AssertExpectations(t)
 }

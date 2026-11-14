@@ -8,9 +8,10 @@ package infinity
 
 import (
 	"fmt"
-	"github.com/pexip/go-infinity-sdk/v42/auth"
 	"net/http"
 	"net/url"
+
+	"github.com/pexip/go-infinity-sdk/v42/auth"
 )
 
 // ClientOption is a function that configures a Client

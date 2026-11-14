@@ -1007,7 +1007,7 @@ func TestPerformMultipartFormRequestWithFieldsAndResponse(t *testing.T) {
 				// Validate file
 				file, header, err := r.FormFile("package")
 				require.NoError(t, err)
-				defer file.Close()
+				defer func() { _ = file.Close() }()
 
 				assert.Equal(t, "test.tar.gz", header.Filename)
 
@@ -1052,7 +1052,7 @@ func TestPerformMultipartFormRequestWithFieldsAndResponse(t *testing.T) {
 				// Validate file
 				file, header, err := r.FormFile("package")
 				require.NoError(t, err)
-				defer file.Close()
+				defer func() { _ = file.Close() }()
 				assert.Equal(t, "updated.tar.gz", header.Filename)
 			},
 		},

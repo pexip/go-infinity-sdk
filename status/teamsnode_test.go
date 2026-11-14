@@ -57,13 +57,13 @@ func TestService_ListTeamsNodes(t *testing.T) {
 	assert.Equal(t, 5, result.Objects[0].CallCount)
 	assert.Equal(t, "/api/admin/status/v1/teamsnode/1/", result.Objects[0].ResourceURI)
 	assert.NotNil(t, result.Objects[0].HeartbeatTime)
-	assert.Equal(t, lastContact.Unix(), result.Objects[0].HeartbeatTime.Time.Unix())
+	assert.Equal(t, lastContact.Unix(), result.Objects[0].HeartbeatTime.Unix())
 	assert.Equal(t, "teams-node-2", result.Objects[1].Name)
 	assert.Equal(t, "2", result.Objects[1].ID)
 	assert.Equal(t, 0, result.Objects[1].CallCount)
 	assert.Equal(t, "/api/admin/status/v1/teamsnode/2/", result.Objects[1].ResourceURI)
 	assert.NotNil(t, result.Objects[1].HeartbeatTime)
-	assert.Equal(t, lastContact.Unix(), result.Objects[1].HeartbeatTime.Time.Unix())
+	assert.Equal(t, lastContact.Unix(), result.Objects[1].HeartbeatTime.Unix())
 	client.AssertExpectations(t)
 }
 
@@ -96,7 +96,7 @@ func TestService_GetTeamsNode(t *testing.T) {
 	assert.Equal(t, 10, result.MediaLoad)
 	assert.Equal(t, "/api/admin/status/v1/teamsnode/1/", result.ResourceURI)
 	assert.NotNil(t, result.HeartbeatTime)
-	assert.Equal(t, lastContact.Unix(), result.HeartbeatTime.Time.Unix())
+	assert.Equal(t, lastContact.Unix(), result.HeartbeatTime.Unix())
 	client.AssertExpectations(t)
 }
 

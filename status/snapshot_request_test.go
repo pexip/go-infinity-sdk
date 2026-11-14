@@ -49,8 +49,8 @@ func TestService_ListSnapshotRequests(t *testing.T) {
 	assert.Equal(t, "Snapshot completed", result.Objects[0].Message)
 	assert.Equal(t, "/downloads/snapshot-1", result.Objects[0].DownloadURI)
 	assert.Equal(t, "/api/admin/status/v1/snapshot_request/1/", result.Objects[0].ResourceURI)
-	assert.Equal(t, created.Unix(), result.Objects[0].CreatedAt.Time.Unix())
-	assert.Equal(t, updated.Unix(), result.Objects[0].UpdatedAt.Time.Unix())
+	assert.Equal(t, created.Unix(), result.Objects[0].CreatedAt.Unix())
+	assert.Equal(t, updated.Unix(), result.Objects[0].UpdatedAt.Unix())
 	client.AssertExpectations(t)
 }
 
@@ -89,8 +89,8 @@ func TestService_ListSnapshotRequests_WithOptions(t *testing.T) {
 	assert.Equal(t, "Options Test Snapshot", result.Objects[0].Message)
 	assert.Equal(t, "completed", result.Objects[0].State)
 	assert.Equal(t, "/downloads/snapshot-2", result.Objects[0].DownloadURI)
-	assert.Equal(t, created.Unix(), result.Objects[0].CreatedAt.Time.Unix())
-	assert.Equal(t, updated.Unix(), result.Objects[0].UpdatedAt.Time.Unix())
+	assert.Equal(t, created.Unix(), result.Objects[0].CreatedAt.Unix())
+	assert.Equal(t, updated.Unix(), result.Objects[0].UpdatedAt.Unix())
 
 	client.AssertExpectations(t)
 }
@@ -123,7 +123,7 @@ func TestService_GetSnapshotRequest(t *testing.T) {
 	assert.Equal(t, "Manual snapshot running", result.Message)
 	assert.Equal(t, "/downloads/snapshot-3", result.DownloadURI)
 	assert.Equal(t, "/api/admin/status/v1/snapshot_request/1/", result.ResourceURI)
-	assert.Equal(t, created.Unix(), result.CreatedAt.Time.Unix())
-	assert.Equal(t, updated.Unix(), result.UpdatedAt.Time.Unix())
+	assert.Equal(t, created.Unix(), result.CreatedAt.Unix())
+	assert.Equal(t, updated.Unix(), result.UpdatedAt.Unix())
 	client.AssertExpectations(t)
 }

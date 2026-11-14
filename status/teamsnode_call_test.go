@@ -47,7 +47,7 @@ func TestService_ListTeamsNodeCalls(t *testing.T) {
 	assert.Equal(t, "call-123", result.Objects[0].ID)
 	assert.Equal(t, "1", result.Objects[0].TeamsNodeID)
 	assert.Equal(t, "/api/admin/status/v1/teamsnode_call/call-123/", result.Objects[0].ResourceURI)
-	assert.Equal(t, startTime.Unix(), result.Objects[0].StartTime.Time.Unix())
+	assert.Equal(t, startTime.Unix(), result.Objects[0].StartTime.Unix())
 	client.AssertExpectations(t)
 }
 
@@ -82,7 +82,7 @@ func TestService_ListTeamsNodeCalls_WithOptions(t *testing.T) {
 	assert.Equal(t, 1, len(result.Objects))
 	assert.Equal(t, "call-options-test", result.Objects[0].ID)
 	assert.Equal(t, "3", result.Objects[0].TeamsNodeID)
-	assert.Equal(t, startTime.Unix(), result.Objects[0].StartTime.Time.Unix())
+	assert.Equal(t, startTime.Unix(), result.Objects[0].StartTime.Unix())
 
 	client.AssertExpectations(t)
 }
@@ -112,6 +112,6 @@ func TestService_GetTeamsNodeCall(t *testing.T) {
 	assert.Equal(t, "call-456", result.ID)
 	assert.Equal(t, "2", result.TeamsNodeID)
 	assert.Equal(t, "/api/admin/status/v1/teamsnode_call/call-456/", result.ResourceURI)
-	assert.Equal(t, startTime.Unix(), result.StartTime.Time.Unix())
+	assert.Equal(t, startTime.Unix(), result.StartTime.Unix())
 	client.AssertExpectations(t)
 }

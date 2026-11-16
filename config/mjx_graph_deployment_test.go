@@ -116,15 +116,16 @@ func TestService_GetMjxGraphDeployment(t *testing.T) {
 	client := newMockHTTPClient()
 
 	expectedDeployment := &MjxGraphDeployment{
-		ID:             1,
-		Name:           "test-graph",
-		Description:    "Test Microsoft Graph deployment",
-		ClientID:       "12345678-1234-1234-1234-123456789012",
-		ClientSecret:   "client-secret-123",
-		OAuthTokenURL:  "https://login.microsoftonline.com/tenant/oauth2/v2.0/token",
-		GraphAPIDomain: "graph.microsoft.com",
-		RequestQuota:   1000,
-		DisableProxy:   false,
+		ID:                   1,
+		Name:                 "test-graph",
+		Description:          "Test Microsoft Graph deployment",
+		ClientID:             "12345678-1234-1234-1234-123456789012",
+		ClientSecret:         "client-secret-123",
+		AuthenticationMethod: "CLIENT_SECRET",
+		OAuthTokenURL:        "https://login.microsoftonline.com/tenant/oauth2/v2.0/token",
+		GraphAPIDomain:       "graph.microsoft.com",
+		RequestQuota:         1000,
+		DisableProxy:         false,
 		MjxIntegrations: &[]string{
 			"/api/admin/configuration/v1/mjx_integration/1/",
 			"/api/admin/configuration/v1/mjx_integration/2/",
@@ -146,16 +147,20 @@ func TestService_GetMjxGraphDeployment(t *testing.T) {
 
 func TestService_CreateMjxGraphDeployment(t *testing.T) {
 	client := newMockHTTPClient()
+	privateKey := "-----BEGIN PRIVATE KEY-----\ntest key\n-----END PRIVATE KEY-----"
 
 	createRequest := &MjxGraphDeploymentCreateRequest{
-		Name:           "new-graph",
-		Description:    "New Microsoft Graph deployment",
-		ClientID:       "87654321-4321-4321-4321-210987654321",
-		ClientSecret:   "new-client-secret",
-		OAuthTokenURL:  "https://login.microsoftonline.com/newtenant/oauth2/v2.0/token",
-		GraphAPIDomain: "graph.microsoft.com",
-		RequestQuota:   2000,
-		DisableProxy:   false,
+		Name:                 "new-graph",
+		Description:          "New Microsoft Graph deployment",
+		ClientID:             "87654321-4321-4321-4321-210987654321",
+		ClientSecret:         "new-client-secret",
+		AuthenticationMethod: "CERTIFICATE",
+		OAuthCertificate:     "-----BEGIN CERTIFICATE-----\ntest cert\n-----END CERTIFICATE-----",
+		OAuthPrivateKey:      &privateKey,
+		OAuthTokenURL:        "https://login.microsoftonline.com/newtenant/oauth2/v2.0/token",
+		GraphAPIDomain:       "graph.microsoft.com",
+		RequestQuota:         2000,
+		DisableProxy:         false,
 	}
 
 	expectedResponse := &types.PostResponse{
@@ -180,23 +185,26 @@ func TestService_UpdateMjxGraphDeployment(t *testing.T) {
 	disableProxy := true
 
 	updateRequest := &MjxGraphDeploymentUpdateRequest{
-		Description:   "Updated Microsoft Graph deployment",
-		RequestQuota:  &requestQuota,
-		DisableProxy:  &disableProxy,
-		OAuthTokenURL: "https://login.microsoftonline.com/updatedtenant/oauth2/v2.0/token",
+		Description:          "Updated Microsoft Graph deployment",
+		RequestQuota:         &requestQuota,
+		DisableProxy:         &disableProxy,
+		OAuthTokenURL:        "https://login.microsoftonline.com/updatedtenant/oauth2/v2.0/token",
+		AuthenticationMethod: "CLIENT_SECRET",
+		OAuthCertificate:     "",
 	}
 
 	expectedDeployment := &MjxGraphDeployment{
-		ID:              1,
-		Name:            "test-graph",
-		Description:     "Updated Microsoft Graph deployment",
-		ClientID:        "12345678-1234-1234-1234-123456789012",
-		ClientSecret:    "client-secret-123",
-		OAuthTokenURL:   "https://login.microsoftonline.com/updatedtenant/oauth2/v2.0/token",
-		GraphAPIDomain:  "graph.microsoft.com",
-		RequestQuota:    1500,
-		DisableProxy:    true,
-		MjxIntegrations: &[]string{"/api/admin/configuration/v1/mjx_integration/1/"},
+		ID:                   1,
+		Name:                 "test-graph",
+		Description:          "Updated Microsoft Graph deployment",
+		ClientID:             "12345678-1234-1234-1234-123456789012",
+		ClientSecret:         "client-secret-123",
+		AuthenticationMethod: "CLIENT_SECRET",
+		OAuthTokenURL:        "https://login.microsoftonline.com/updatedtenant/oauth2/v2.0/token",
+		GraphAPIDomain:       "graph.microsoft.com",
+		RequestQuota:         1500,
+		DisableProxy:         true,
+		MjxIntegrations:      &[]string{"/api/admin/configuration/v1/mjx_integration/1/"},
 	}
 
 	client.On("PutJSON", t.Context(), "configuration/v1/mjx_graph_deployment/1/", updateRequest, mock.AnythingOfType("*config.MjxGraphDeployment")).Return(nil).Run(func(args mock.Arguments) {

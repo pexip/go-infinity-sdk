@@ -9,8 +9,6 @@ package command
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
-
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )

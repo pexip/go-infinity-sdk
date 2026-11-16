@@ -18,6 +18,7 @@ type IVRTheme struct {
 	Conference     []string          `json:"conference,omitempty"`
 	CustomLayouts  string            `json:"custom_layouts,omitempty"`
 	PinningConfigs string            `json:"pinning_configs,omitempty"`
+	Version        int               `json:"version,omitempty"`
 	LastUpdated    util.InfinityTime `json:"last_updated,omitempty"`
 	ResourceURI    string            `json:"resource_uri,omitempty"`
 }
@@ -29,6 +30,7 @@ type IVRThemeCreateRequest struct {
 	Conference     []string `json:"conference,omitempty"`
 	CustomLayouts  string   `json:"custom_layouts,omitempty"`
 	PinningConfigs string   `json:"pinning_configs,omitempty"`
+	Version        int      `json:"version,omitempty"`
 }
 
 // IVRThemeUpdateRequest represents a request to update an IVR theme
@@ -38,6 +40,7 @@ type IVRThemeUpdateRequest struct {
 	Conference     []string `json:"conference,omitempty"`
 	CustomLayouts  string   `json:"custom_layouts,omitempty"`
 	PinningConfigs string   `json:"pinning_configs,omitempty"`
+	Version        int      `json:"version,omitempty"`
 }
 
 // IVRThemeListResponse represents the response from listing IVR themes

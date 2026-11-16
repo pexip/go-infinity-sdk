@@ -49,6 +49,9 @@ type IdentityProvider struct {
 	OidcRegistrationAliasClaimName      string                       `json:"oidc_registration_alias_claim_name,omitempty"`
 	OidcAdditionalScopes                string                       `json:"oidc_additional_scopes,omitempty"`
 	OidcFranceConnectRequiredEidasLevel string                       `json:"oidc_france_connect_required_eidas_level"`
+	OidcDeviceIdp                       bool                         `json:"oidc_device_idp"`
+	OidcDeviceIdpBaseURL                string                       `json:"oidc_device_idp_baseurl,omitempty"`
+	OidcDeviceIdpSessionDuration        int                          `json:"oidc_device_idp_session_duration"`
 	Attributes                          *[]IdentityProviderAttribute `json:"attributes,omitempty"`
 	ResourceURI                         string                       `json:"resource_uri,omitempty"`
 }
@@ -95,6 +98,9 @@ type IdentityProviderCreateRequest struct {
 	OidcRegistrationAliasClaimName      string    `json:"oidc_registration_alias_claim_name,omitempty"`
 	OidcAdditionalScopes                string    `json:"oidc_additional_scopes,omitempty"`
 	OidcFranceConnectRequiredEidasLevel string    `json:"oidc_france_connect_required_eidas_level"`
+	OidcDeviceIdp                       bool      `json:"oidc_device_idp"`
+	OidcDeviceIdpBaseURL                string    `json:"oidc_device_idp_baseurl,omitempty"`
+	OidcDeviceIdpSessionDuration        int       `json:"oidc_device_idp_session_duration,omitempty"`
 	Attributes                          *[]string `json:"attributes,omitempty"`
 }
 
@@ -139,6 +145,9 @@ type IdentityProviderUpdateRequest struct {
 	OidcRegistrationAliasClaimName      string    `json:"oidc_registration_alias_claim_name"`
 	OidcAdditionalScopes                string    `json:"oidc_additional_scopes"`
 	OidcFranceConnectRequiredEidasLevel string    `json:"oidc_france_connect_required_eidas_level"`
+	OidcDeviceIdp                       *bool     `json:"oidc_device_idp,omitempty"`
+	OidcDeviceIdpBaseURL                string    `json:"oidc_device_idp_baseurl"`
+	OidcDeviceIdpSessionDuration        *int      `json:"oidc_device_idp_session_duration,omitempty"`
 	Attributes                          *[]string `json:"attributes"`
 }
 

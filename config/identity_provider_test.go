@@ -146,6 +146,9 @@ func TestService_GetIdentityProvider(t *testing.T) {
 		OidcTokenEndpointAuthScheme:         "client_secret_post",
 		OidcTokenSignatureScheme:            "RS256",
 		OidcFranceConnectRequiredEidasLevel: "eidas1",
+		OidcDeviceIdp:                       true,
+		OidcDeviceIdpBaseURL:                "https://device-idp.example.com",
+		OidcDeviceIdpSessionDuration:        86400,
 		ResourceURI:                         "/api/admin/configuration/v1/identity_provider/1/",
 	}
 
@@ -184,6 +187,9 @@ func TestService_CreateIdentityProvider(t *testing.T) {
 		OidcTokenEndpointAuthScheme:         "client_secret_post",
 		OidcTokenSignatureScheme:            "RS256",
 		OidcFranceConnectRequiredEidasLevel: "eidas1",
+		OidcDeviceIdp:                       true,
+		OidcDeviceIdpBaseURL:                "https://device-idp.example.com",
+		OidcDeviceIdpSessionDuration:        7200,
 	}
 
 	expectedResponse := &types.PostResponse{
@@ -205,11 +211,16 @@ func TestService_UpdateIdentityProvider(t *testing.T) {
 	client := newMockHTTPClient()
 
 	disablePopupFlow := true
+	oidcDeviceIdp := true
+	oidcDeviceIdpSessionDuration := 3600
 	updateRequest := &IdentityProviderUpdateRequest{
-		Name:             "updated-saml-idp",
-		Description:      "Updated SAML Identity Provider",
-		SSOUrl:           "https://updated-idp.example.com/sso",
-		DisablePopupFlow: &disablePopupFlow,
+		Name:                         "updated-saml-idp",
+		Description:                  "Updated SAML Identity Provider",
+		SSOUrl:                       "https://updated-idp.example.com/sso",
+		DisablePopupFlow:             &disablePopupFlow,
+		OidcDeviceIdp:                &oidcDeviceIdp,
+		OidcDeviceIdpBaseURL:         "https://device-idp.example.com",
+		OidcDeviceIdpSessionDuration: &oidcDeviceIdpSessionDuration,
 	}
 
 	expectedProvider := &IdentityProvider{
@@ -231,6 +242,9 @@ func TestService_UpdateIdentityProvider(t *testing.T) {
 		OidcTokenEndpointAuthScheme:         "client_secret_post",
 		OidcTokenSignatureScheme:            "RS256",
 		OidcFranceConnectRequiredEidasLevel: "eidas1",
+		OidcDeviceIdp:                       true,
+		OidcDeviceIdpBaseURL:                "https://device-idp.example.com",
+		OidcDeviceIdpSessionDuration:        3600,
 		ResourceURI:                         "/api/admin/configuration/v1/identity_provider/1/",
 	}
 

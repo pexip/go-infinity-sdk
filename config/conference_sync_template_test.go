@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListConferenceSyncTemplates(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &ConferenceSyncTemplateListResponse{
 					Objects: []ConferenceSyncTemplate{
 						{ID: 1, Name: "primary-template", Description: "Primary sync template", LdapUserFilter: "(objectClass=user)", EnableAutomaticSync: true, SyncConferences: true, SyncDevices: false, SyncEndUsers: true, ServiceType: "conference", CallType: "video", AllowGuests: true},
@@ -48,7 +47,7 @@ func TestService_ListConferenceSyncTemplates(t *testing.T) {
 				},
 				Search: "primary",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &ConferenceSyncTemplateListResponse{
 					Objects: []ConferenceSyncTemplate{
 						{ID: 1, Name: "primary-template", Description: "Primary sync template", LdapUserFilter: "(objectClass=user)", EnableAutomaticSync: true, SyncConferences: true, SyncDevices: false, SyncEndUsers: true, ServiceType: "conference", CallType: "video", AllowGuests: true},
@@ -65,7 +64,7 @@ func TestService_ListConferenceSyncTemplates(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -85,7 +84,7 @@ func TestService_ListConferenceSyncTemplates(t *testing.T) {
 }
 
 func TestService_GetConferenceSyncTemplate(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	maxCallrateIn := 2048
 	maxCallrateOut := 1024
 	participantLimit := 50
@@ -179,7 +178,7 @@ func TestService_GetConferenceSyncTemplate(t *testing.T) {
 }
 
 func TestService_CreateConferenceSyncTemplate(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	maxCallrateIn := 1024
 	participantLimit := 25
@@ -234,7 +233,7 @@ func TestService_CreateConferenceSyncTemplate(t *testing.T) {
 }
 
 func TestService_UpdateConferenceSyncTemplate(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	enableAutoSync := false
 	allowGuests := false
@@ -282,7 +281,7 @@ func TestService_UpdateConferenceSyncTemplate(t *testing.T) {
 }
 
 func TestService_DeleteConferenceSyncTemplate(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/conference_sync_template/1/", mock.Anything).Return(nil)
 

@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListSTUNServers(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &STUNServerListResponse{
 					Objects: []STUNServer{
 						{ID: 1, Name: "primary-stun", Description: "Primary STUN server", Address: "stun.example.com", Port: 3478},
@@ -48,7 +47,7 @@ func TestService_ListSTUNServers(t *testing.T) {
 				},
 				Search: "primary",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &STUNServerListResponse{
 					Objects: []STUNServer{
 						{ID: 1, Name: "primary-stun", Description: "Primary STUN server", Address: "stun.example.com", Port: 3478},
@@ -65,7 +64,7 @@ func TestService_ListSTUNServers(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -85,7 +84,7 @@ func TestService_ListSTUNServers(t *testing.T) {
 }
 
 func TestService_GetSTUNServer(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	expectedSTUNServer := &STUNServer{
 		ID:          1,
 		Name:        "test-stun",
@@ -109,7 +108,7 @@ func TestService_GetSTUNServer(t *testing.T) {
 }
 
 func TestService_CreateSTUNServer(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &STUNServerCreateRequest{
 		Name:        "new-stun",
@@ -134,7 +133,7 @@ func TestService_CreateSTUNServer(t *testing.T) {
 }
 
 func TestService_UpdateSTUNServer(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	port := 3479
 	updateRequest := &STUNServerUpdateRequest{
@@ -165,7 +164,7 @@ func TestService_UpdateSTUNServer(t *testing.T) {
 }
 
 func TestService_DeleteSTUNServer(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/stun_server/1/", mock.Anything).Return(nil)
 

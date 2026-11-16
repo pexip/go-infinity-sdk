@@ -10,7 +10,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -21,13 +20,13 @@ func TestService_ListMediaLibraryEntries(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &MediaLibraryEntryListResponse{
 					Objects: []MediaLibraryEntry{
 						{ID: 1, Name: "welcome-video", Description: "Welcome video for conferences", UUID: "123e4567-e89b-12d3-a456-426614174000", FileName: "welcome.mp4", MediaType: "video", MediaFormat: "video/mp4", MediaSize: 1048576},
@@ -49,7 +48,7 @@ func TestService_ListMediaLibraryEntries(t *testing.T) {
 				},
 				Search: "welcome",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &MediaLibraryEntryListResponse{
 					Objects: []MediaLibraryEntry{
 						{ID: 1, Name: "welcome-video", Description: "Welcome video for conferences", UUID: "123e4567-e89b-12d3-a456-426614174000", FileName: "welcome.mp4", MediaType: "video", MediaFormat: "video/mp4", MediaSize: 1048576},
@@ -66,7 +65,7 @@ func TestService_ListMediaLibraryEntries(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -86,7 +85,7 @@ func TestService_ListMediaLibraryEntries(t *testing.T) {
 }
 
 func TestService_GetMediaLibraryEntry(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	expectedMediaLibraryEntry := &MediaLibraryEntry{
 		ID:          1,
 		Name:        "test-media",
@@ -112,7 +111,7 @@ func TestService_GetMediaLibraryEntry(t *testing.T) {
 }
 
 func TestService_CreateMediaLibraryEntry(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	mediaContent := strings.NewReader("mock media content")
 	createRequest := &MediaLibraryEntryCreateRequest{
@@ -141,7 +140,7 @@ func TestService_CreateMediaLibraryEntry(t *testing.T) {
 }
 
 func TestService_UpdateMediaLibraryEntry(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	updateRequest := &MediaLibraryEntryUpdateRequest{
 		Description: "Updated media file",
@@ -178,7 +177,7 @@ func TestService_UpdateMediaLibraryEntry(t *testing.T) {
 }
 
 func TestService_DeleteMediaLibraryEntry(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/media_library_entry/1/", mock.Anything).Return(nil)
 

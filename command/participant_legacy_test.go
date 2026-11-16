@@ -9,13 +9,12 @@ package command
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestService_DisconnectParticipant(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedRequest := &ParticipantDisconnectRequestLegacy{
 		ParticipantUUID: "test-uuid",
@@ -40,7 +39,7 @@ func TestService_DisconnectParticipant(t *testing.T) {
 }
 
 func TestService_MuteParticipant(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedRequest := &ParticipantMuteRequestLegacy{
 		ParticipantUUID: "test-uuid",
@@ -66,7 +65,7 @@ func TestService_MuteParticipant(t *testing.T) {
 }
 
 func TestService_UnmuteParticipant(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedRequest := &ParticipantMuteRequestLegacy{
 		ParticipantUUID: "test-uuid",
@@ -92,7 +91,7 @@ func TestService_UnmuteParticipant(t *testing.T) {
 }
 
 func TestService_ToggleMuteParticipant(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedRequest := &ParticipantMuteRequestLegacy{
 		ParticipantUUID: "test-uuid",
@@ -118,7 +117,7 @@ func TestService_ToggleMuteParticipant(t *testing.T) {
 }
 
 func TestService_SpotlightParticipant(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedRequest := &ParticipantSpotlightRequest{
 		ParticipantUUID: "test-uuid",
@@ -144,7 +143,7 @@ func TestService_SpotlightParticipant(t *testing.T) {
 }
 
 func TestService_UnspotlightParticipant(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedRequest := &ParticipantSpotlightRequest{
 		ParticipantUUID: "test-uuid",
@@ -170,7 +169,7 @@ func TestService_UnspotlightParticipant(t *testing.T) {
 }
 
 func TestService_ToggleSpotlightParticipant(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedRequest := &ParticipantSpotlightRequest{
 		ParticipantUUID: "test-uuid",
@@ -196,7 +195,7 @@ func TestService_ToggleSpotlightParticipant(t *testing.T) {
 }
 
 func TestService_SendMessageToParticipant(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedRequest := &ParticipantMessageRequest{
 		ParticipantUUID: "test-uuid",
@@ -261,7 +260,7 @@ func TestService_TransferParticipant(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 
 			expectedResponse := &CommandResponse{
 				Status:  "success",
@@ -292,7 +291,7 @@ func TestService_TransferParticipant(t *testing.T) {
 }
 
 func TestService_PromoteParticipant(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedRequest := &ParticipantRoleRequestLegacy{
 		ParticipantUUID: "test-uuid",
@@ -318,7 +317,7 @@ func TestService_PromoteParticipant(t *testing.T) {
 }
 
 func TestService_DemoteParticipant(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedRequest := &ParticipantRoleRequestLegacy{
 		ParticipantUUID: "test-uuid",

@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListCertificateSigningRequests(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				privateKey1 := "-----BEGIN RSA PRIVATE KEY-----\nMIIPrivateKey1\n-----END RSA PRIVATE KEY-----"
 				privateKey2 := "-----BEGIN RSA PRIVATE KEY-----\nMIIPrivateKey2\n-----END RSA PRIVATE KEY-----"
 				tlsCert1 := "/api/admin/configuration/v1/tls_certificate/1/"
@@ -52,7 +51,7 @@ func TestService_ListCertificateSigningRequests(t *testing.T) {
 				},
 				Search: "example.com",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				privateKey := "-----BEGIN RSA PRIVATE KEY-----\nMIIPrivateKey1\n-----END RSA PRIVATE KEY-----"
 				tlsCert := "/api/admin/configuration/v1/tls_certificate/1/"
 				expectedResponse := &CertificateSigningRequestListResponse{
@@ -71,7 +70,7 @@ func TestService_ListCertificateSigningRequests(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -91,7 +90,7 @@ func TestService_ListCertificateSigningRequests(t *testing.T) {
 }
 
 func TestService_GetCertificateSigningRequest(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	privateKey := "-----BEGIN RSA PRIVATE KEY-----\nMIITestPrivateKey\n-----END RSA PRIVATE KEY-----"
 	tlsCert := "/api/admin/configuration/v1/tls_certificate/1/"
 	expectedCertificateSigningRequest := &CertificateSigningRequest{
@@ -122,7 +121,7 @@ func TestService_GetCertificateSigningRequest(t *testing.T) {
 }
 
 func TestService_CreateCertificateSigningRequest(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	privateKey := "-----BEGIN RSA PRIVATE KEY-----\nMIINewPrivateKey\n-----END RSA PRIVATE KEY-----"
 	tlsCert := "/api/admin/configuration/v1/tls_certificate/1/"
@@ -153,7 +152,7 @@ func TestService_CreateCertificateSigningRequest(t *testing.T) {
 }
 
 func TestService_UpdateCertificateSigningRequest(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	adCompatible := true
 	updateRequest := &CertificateSigningRequestUpdateRequest{
@@ -193,7 +192,7 @@ func TestService_UpdateCertificateSigningRequest(t *testing.T) {
 }
 
 func TestService_DeleteCertificateSigningRequest(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/certificate_signing_request/1/", mock.Anything).Return(nil)
 

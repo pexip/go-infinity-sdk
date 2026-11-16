@@ -10,7 +10,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/pexip/go-infinity-sdk/v42/util"
@@ -22,13 +21,13 @@ func TestService_ListScheduledScalings(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				updated1 := util.InfinityTime{Time: time.Date(2023, 10, 1, 12, 0, 0, 0, time.UTC)}
 				updated2 := util.InfinityTime{Time: time.Date(2023, 10, 2, 15, 30, 0, 0, time.UTC)}
 
@@ -53,7 +52,7 @@ func TestService_ListScheduledScalings(t *testing.T) {
 				},
 				Search: "weekend",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				updated := util.InfinityTime{Time: time.Date(2023, 10, 1, 12, 0, 0, 0, time.UTC)}
 
 				expectedResponse := &ScheduledScalingListResponse{
@@ -72,7 +71,7 @@ func TestService_ListScheduledScalings(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -92,7 +91,7 @@ func TestService_ListScheduledScalings(t *testing.T) {
 }
 
 func TestService_GetScheduledScaling(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	updated := util.InfinityTime{Time: time.Date(2023, 11, 15, 10, 30, 0, 0, time.UTC)}
 
 	expectedScheduledScaling := &ScheduledScaling{
@@ -131,7 +130,7 @@ func TestService_GetScheduledScaling(t *testing.T) {
 }
 
 func TestService_CreateScheduledScaling(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &ScheduledScalingCreateRequest{
 		PolicyName:         "new-scaling-policy",
@@ -169,7 +168,7 @@ func TestService_CreateScheduledScaling(t *testing.T) {
 }
 
 func TestService_UpdateScheduledScaling(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	enabled := false
 	instancesToAdd := 15
@@ -225,7 +224,7 @@ func TestService_UpdateScheduledScaling(t *testing.T) {
 }
 
 func TestService_DeleteScheduledScaling(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/scheduled_scaling/1/", mock.Anything).Return(nil)
 

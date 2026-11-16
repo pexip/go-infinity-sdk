@@ -10,14 +10,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestService_ListTeamsNodes(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	lastContact := time.Now().Add(-10 * time.Minute)
 
@@ -68,7 +67,7 @@ func TestService_ListTeamsNodes(t *testing.T) {
 }
 
 func TestService_GetTeamsNode(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	lastContact := time.Now().Add(-5 * time.Minute)
 
 	expectedNode := &TeamsNode{
@@ -101,7 +100,7 @@ func TestService_GetTeamsNode(t *testing.T) {
 }
 
 func TestService_ListTeamsNodes_WithOptions(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	service := New(client)
 
 	opts := &ListOptions{

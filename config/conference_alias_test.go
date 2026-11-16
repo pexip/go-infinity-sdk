@@ -10,7 +10,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/pexip/go-infinity-sdk/v42/util"
@@ -22,13 +21,13 @@ func TestService_ListConferenceAliases(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &ConferenceAliasListResponse{
 					Objects: []ConferenceAlias{
 						{ID: 1, Alias: "test-alias", Conference: "/api/admin/configuration/v1/conference/1/"},
@@ -51,7 +50,7 @@ func TestService_ListConferenceAliases(t *testing.T) {
 				},
 				Search: "test",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &ConferenceAliasListResponse{
 					Objects: []ConferenceAlias{
 						{ID: 1, Alias: "test-alias", Conference: "/api/admin/configuration/v1/conference/1/"},
@@ -68,7 +67,7 @@ func TestService_ListConferenceAliases(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -88,7 +87,7 @@ func TestService_ListConferenceAliases(t *testing.T) {
 }
 
 func TestService_GetConferenceAlias(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	expectedAlias := &ConferenceAlias{
 		ID:           1,
 		Alias:        "test-alias",
@@ -111,7 +110,7 @@ func TestService_GetConferenceAlias(t *testing.T) {
 }
 
 func TestService_CreateConferenceAlias(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &ConferenceAliasCreateRequest{
 		Alias:       "new-alias",
@@ -134,7 +133,7 @@ func TestService_CreateConferenceAlias(t *testing.T) {
 }
 
 func TestService_UpdateConferenceAlias(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	updateRequest := &ConferenceAliasUpdateRequest{
 		Description: "Updated description",
@@ -160,7 +159,7 @@ func TestService_UpdateConferenceAlias(t *testing.T) {
 }
 
 func TestService_DeleteConferenceAlias(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/conference_alias/1/", mock.Anything).Return(nil)
 

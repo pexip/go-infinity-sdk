@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListUserGroups(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &UserGroupListResponse{
 					Objects: []UserGroup{
 						{ID: 1, Name: "administrators", Description: "System administrators", Users: []string{"/api/admin/configuration/v1/end_user/1/", "/api/admin/configuration/v1/end_user/2/"}, UserGroupEntityMappings: &[]UserGroupEntityMapping{{ResourceURI: "/api/admin/configuration/v1/user_group_entity_mapping/1/"}}},
@@ -48,7 +47,7 @@ func TestService_ListUserGroups(t *testing.T) {
 				},
 				Search: "admin",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &UserGroupListResponse{
 					Objects: []UserGroup{
 						{ID: 1, Name: "administrators", Description: "System administrators", Users: []string{"/api/admin/configuration/v1/end_user/1/", "/api/admin/configuration/v1/end_user/2/"}, UserGroupEntityMappings: &[]UserGroupEntityMapping{{ResourceURI: "/api/admin/configuration/v1/user_group_entity_mapping/1/"}}},
@@ -65,7 +64,7 @@ func TestService_ListUserGroups(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -85,7 +84,7 @@ func TestService_ListUserGroups(t *testing.T) {
 }
 
 func TestService_GetUserGroup(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	expectedUserGroup := &UserGroup{
 		ID:                      1,
 		Name:                    "test-group",
@@ -109,7 +108,7 @@ func TestService_GetUserGroup(t *testing.T) {
 }
 
 func TestService_CreateUserGroup(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &UserGroupCreateRequest{
 		Name:                    "new-group",
@@ -134,7 +133,7 @@ func TestService_CreateUserGroup(t *testing.T) {
 }
 
 func TestService_UpdateUserGroup(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	updateRequest := &UserGroupUpdateRequest{
 		Description: "Updated user group",
@@ -164,7 +163,7 @@ func TestService_UpdateUserGroup(t *testing.T) {
 }
 
 func TestService_DeleteUserGroup(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/user_group/1/", mock.Anything).Return(nil)
 

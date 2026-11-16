@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/pexip/go-infinity-sdk/v42/util"
@@ -21,13 +20,13 @@ func TestService_ListWebappBrandings(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				lastUpdated1 := util.InfinityTime{}
 				lastUpdated2 := util.InfinityTime{}
 
@@ -52,7 +51,7 @@ func TestService_ListWebappBrandings(t *testing.T) {
 				},
 				Search: "custom",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				lastUpdated := util.InfinityTime{}
 
 				expectedResponse := &WebappBrandingListResponse{
@@ -71,7 +70,7 @@ func TestService_ListWebappBrandings(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -91,7 +90,7 @@ func TestService_ListWebappBrandings(t *testing.T) {
 }
 
 func TestService_GetWebappBranding(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	lastUpdated := util.InfinityTime{}
 	name := "test-branding"
 
@@ -119,7 +118,7 @@ func TestService_GetWebappBranding(t *testing.T) {
 }
 
 func TestService_CreateWebappBranding(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &WebappBrandingCreateRequest{
 		Name:        "new-branding",
@@ -159,7 +158,7 @@ func TestService_CreateWebappBranding(t *testing.T) {
 }
 
 func TestService_UpdateWebappBranding(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	uuid := "123e4567-e89b-12d3-a456-426614174002"
 
@@ -192,7 +191,7 @@ func TestService_UpdateWebappBranding(t *testing.T) {
 }
 
 func TestService_DeleteWebappBranding(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	name := "test-branding"
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/webapp_branding/"+name+"/", mock.Anything).Return(nil)

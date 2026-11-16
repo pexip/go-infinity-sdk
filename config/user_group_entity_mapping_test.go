@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListUserGroupEntityMappings(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &UserGroupEntityMappingListResponse{
 					Objects: []UserGroupEntityMapping{
 						{ID: 1, Description: "Conference mapping for admin group", EntityResourceURI: "/api/admin/configuration/v1/conference/1/", UserGroup: "/api/admin/configuration/v1/user_group/1/"},
@@ -48,7 +47,7 @@ func TestService_ListUserGroupEntityMappings(t *testing.T) {
 				},
 				Search: "conference",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &UserGroupEntityMappingListResponse{
 					Objects: []UserGroupEntityMapping{
 						{ID: 1, Description: "Conference mapping for admin group", EntityResourceURI: "/api/admin/configuration/v1/conference/1/", UserGroup: "/api/admin/configuration/v1/user_group/1/"},
@@ -65,7 +64,7 @@ func TestService_ListUserGroupEntityMappings(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -85,7 +84,7 @@ func TestService_ListUserGroupEntityMappings(t *testing.T) {
 }
 
 func TestService_GetUserGroupEntityMapping(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	expectedUserGroupEntityMapping := &UserGroupEntityMapping{
 		ID:                1,
 		Description:       "Test entity mapping",
@@ -108,7 +107,7 @@ func TestService_GetUserGroupEntityMapping(t *testing.T) {
 }
 
 func TestService_CreateUserGroupEntityMapping(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &UserGroupEntityMappingCreateRequest{
 		Description:       "New entity mapping",
@@ -132,7 +131,7 @@ func TestService_CreateUserGroupEntityMapping(t *testing.T) {
 }
 
 func TestService_UpdateUserGroupEntityMapping(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	updateRequest := &UserGroupEntityMappingUpdateRequest{
 		Description: "Updated entity mapping",
@@ -161,7 +160,7 @@ func TestService_UpdateUserGroupEntityMapping(t *testing.T) {
 }
 
 func TestService_DeleteUserGroupEntityMapping(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/user_group_entity_mapping/1/", mock.Anything).Return(nil)
 

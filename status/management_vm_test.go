@@ -10,14 +10,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestService_ListManagementVMs(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedResponse := &ManagementVMListResponse{
 		Objects: []ManagementVM{
@@ -62,7 +61,7 @@ func TestService_ListManagementVMs(t *testing.T) {
 }
 
 func TestService_GetManagementVM(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	lastUpdated := time.Now()
 	lastAttemptedContact := time.Now().Add(-1 * time.Hour)
 
@@ -96,7 +95,7 @@ func TestService_GetManagementVM(t *testing.T) {
 }
 
 func TestService_ListManagementVMs_WithOptions(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	service := New(client)
 
 	opts := &ListOptions{

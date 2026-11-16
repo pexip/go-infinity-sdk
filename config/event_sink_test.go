@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListEventSinks(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				desc1 := "Primary event sink"
 				desc2 := "Secondary event sink"
 				expectedResponse := &EventSinkListResponse{
@@ -50,7 +49,7 @@ func TestService_ListEventSinks(t *testing.T) {
 				},
 				Search: "primary",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				desc := "Primary event sink"
 				expectedResponse := &EventSinkListResponse{
 					Objects: []EventSink{
@@ -68,7 +67,7 @@ func TestService_ListEventSinks(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -88,7 +87,7 @@ func TestService_ListEventSinks(t *testing.T) {
 }
 
 func TestService_GetEventSink(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	description := "Test event sink"
 	username := "testuser"
 	password := "testpass"
@@ -119,7 +118,7 @@ func TestService_GetEventSink(t *testing.T) {
 }
 
 func TestService_CreateEventSink(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	description := "New event sink"
 	username := "newuser"
@@ -152,7 +151,7 @@ func TestService_CreateEventSink(t *testing.T) {
 }
 
 func TestService_UpdateEventSink(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	newDescription := "Updated event sink"
 	bulkSupport := false
@@ -186,7 +185,7 @@ func TestService_UpdateEventSink(t *testing.T) {
 }
 
 func TestService_DeleteEventSink(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/event_sink/1/", mock.Anything).Return(nil)
 

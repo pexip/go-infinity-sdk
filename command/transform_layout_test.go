@@ -9,13 +9,12 @@ package command
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestService_TransformLayout(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	enableOverlay := true
 	expectedRequest := &ConferenceTransformLayoutRequest{
@@ -43,7 +42,7 @@ func TestService_TransformLayout(t *testing.T) {
 }
 
 func TestService_TransformLayoutSimple(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedResponse := &CommandResponse{
 		Status:  "success",
@@ -102,7 +101,7 @@ func TestService_TransformLayoutWithOptions(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 
 			expectedResponse := &CommandResponse{
 				Status:  "success",

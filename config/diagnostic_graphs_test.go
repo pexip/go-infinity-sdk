@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListDiagnosticGraphs(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &DiagnosticGraphListResponse{
 					Objects: []DiagnosticGraph{
 						{ID: 1, Title: "CPU Usage", Order: 1, Datasets: []string{"cpu_usage", "cpu_idle"}},
@@ -48,7 +47,7 @@ func TestService_ListDiagnosticGraphs(t *testing.T) {
 				},
 				Search: "CPU",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &DiagnosticGraphListResponse{
 					Objects: []DiagnosticGraph{
 						{ID: 1, Title: "CPU Usage", Order: 1, Datasets: []string{"cpu_usage", "cpu_idle"}},
@@ -65,7 +64,7 @@ func TestService_ListDiagnosticGraphs(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -85,7 +84,7 @@ func TestService_ListDiagnosticGraphs(t *testing.T) {
 }
 
 func TestService_GetDiagnosticGraph(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	expectedDiagnosticGraph := &DiagnosticGraph{
 		ID:       1,
 		Title:    "Network Traffic",
@@ -107,7 +106,7 @@ func TestService_GetDiagnosticGraph(t *testing.T) {
 }
 
 func TestService_CreateDiagnosticGraph(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &DiagnosticGraphCreateRequest{
 		Title:    "Disk Usage",
@@ -131,7 +130,7 @@ func TestService_CreateDiagnosticGraph(t *testing.T) {
 }
 
 func TestService_UpdateDiagnosticGraph(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	order := 5
 	updateRequest := &DiagnosticGraphUpdateRequest{
@@ -161,7 +160,7 @@ func TestService_UpdateDiagnosticGraph(t *testing.T) {
 }
 
 func TestService_DeleteDiagnosticGraph(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/diagnostic_graphs/1/", mock.Anything).Return(nil)
 

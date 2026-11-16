@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListSIPCredentials(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &SIPCredentialListResponse{
 					Objects: []SIPCredential{
 						{ID: 1, Realm: "example.com", Username: "user1", Password: "password1"},
@@ -48,7 +47,7 @@ func TestService_ListSIPCredentials(t *testing.T) {
 				},
 				Search: "user1",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &SIPCredentialListResponse{
 					Objects: []SIPCredential{
 						{ID: 1, Realm: "example.com", Username: "user1", Password: "password1"},
@@ -65,7 +64,7 @@ func TestService_ListSIPCredentials(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -85,7 +84,7 @@ func TestService_ListSIPCredentials(t *testing.T) {
 }
 
 func TestService_GetSIPCredential(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	expectedSIPCredential := &SIPCredential{
 		ID:       1,
 		Realm:    "test.example.com",
@@ -107,7 +106,7 @@ func TestService_GetSIPCredential(t *testing.T) {
 }
 
 func TestService_CreateSIPCredential(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &SIPCredentialCreateRequest{
 		Realm:    "new.example.com",
@@ -131,7 +130,7 @@ func TestService_CreateSIPCredential(t *testing.T) {
 }
 
 func TestService_UpdateSIPCredential(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	updateRequest := &SIPCredentialUpdateRequest{
 		Realm:    "updated.example.com",
@@ -160,7 +159,7 @@ func TestService_UpdateSIPCredential(t *testing.T) {
 }
 
 func TestService_DeleteSIPCredential(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/sip_credential/1/", mock.Anything).Return(nil)
 

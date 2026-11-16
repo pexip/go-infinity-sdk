@@ -10,14 +10,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestService_ListSnapshotRequests(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	created := time.Now().Add(-3 * time.Hour)
 	updated := time.Now().Add(-2 * time.Hour)
@@ -55,7 +54,7 @@ func TestService_ListSnapshotRequests(t *testing.T) {
 }
 
 func TestService_ListSnapshotRequests_WithOptions(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	service := New(client)
 
 	opts := &ListOptions{
@@ -96,7 +95,7 @@ func TestService_ListSnapshotRequests_WithOptions(t *testing.T) {
 }
 
 func TestService_GetSnapshotRequest(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	created := time.Now().Add(-1 * time.Hour)
 	updated := time.Now().Add(-30 * time.Minute)

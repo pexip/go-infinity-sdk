@@ -10,14 +10,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestService_ListParticipants(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedResponse := &ParticipantListResponse{
 		Objects: []Participant{
@@ -48,7 +47,7 @@ func TestService_ListParticipants(t *testing.T) {
 }
 
 func TestService_GetParticipant(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	expectedParticipant := &Participant{
 		ID:               1,
 		ConferenceID:     1,
@@ -73,7 +72,7 @@ func TestService_GetParticipant(t *testing.T) {
 }
 
 func TestService_ListParticipantsByConference(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedResponse := &ParticipantListResponse{
 		Objects: []Participant{
@@ -110,7 +109,7 @@ func TestService_ListParticipantsByConference(t *testing.T) {
 }
 
 func TestService_ListParticipants_WithOptions(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	service := New(client)
 
 	startTime := time.Now().Add(-3 * time.Hour)
@@ -153,7 +152,7 @@ func TestService_ListParticipants_WithOptions(t *testing.T) {
 }
 
 func TestService_ListParticipantsByConference_WithOptions(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	service := New(client)
 
 	startTime := time.Now().Add(-1 * time.Hour)

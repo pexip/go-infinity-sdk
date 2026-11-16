@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListExchangeDomains(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &ExchangeDomainListResponse{
 					Objects: []ExchangeDomain{
 						{ID: 1, Domain: "example.com", ExchangeConnector: "/api/admin/configuration/v1/exchange_connector/1/"},
@@ -48,7 +47,7 @@ func TestService_ListExchangeDomains(t *testing.T) {
 				},
 				Search: "example",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &ExchangeDomainListResponse{
 					Objects: []ExchangeDomain{
 						{ID: 1, Domain: "example.com", ExchangeConnector: "/api/admin/configuration/v1/exchange_connector/1/"},
@@ -65,7 +64,7 @@ func TestService_ListExchangeDomains(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -85,7 +84,7 @@ func TestService_ListExchangeDomains(t *testing.T) {
 }
 
 func TestService_GetExchangeDomain(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	expectedExchangeDomain := &ExchangeDomain{
 		ID:                1,
 		Domain:            "test.example.com",
@@ -106,7 +105,7 @@ func TestService_GetExchangeDomain(t *testing.T) {
 }
 
 func TestService_CreateExchangeDomain(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &ExchangeDomainCreateRequest{
 		Domain:            "new.example.com",
@@ -129,7 +128,7 @@ func TestService_CreateExchangeDomain(t *testing.T) {
 }
 
 func TestService_UpdateExchangeDomain(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	updateRequest := &ExchangeDomainUpdateRequest{
 		Domain:            "updated.example.com",
@@ -156,7 +155,7 @@ func TestService_UpdateExchangeDomain(t *testing.T) {
 }
 
 func TestService_DeleteExchangeDomain(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/exchange_domain/1/", mock.Anything).Return(nil)
 

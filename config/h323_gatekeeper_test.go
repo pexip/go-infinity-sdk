@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListH323Gatekeepers(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				port := 1719
 				expectedResponse := &H323GatekeeperListResponse{
 					Objects: []H323Gatekeeper{
@@ -49,7 +48,7 @@ func TestService_ListH323Gatekeepers(t *testing.T) {
 				},
 				Search: "primary",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				port := 1719
 				expectedResponse := &H323GatekeeperListResponse{
 					Objects: []H323Gatekeeper{
@@ -67,7 +66,7 @@ func TestService_ListH323Gatekeepers(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -87,7 +86,7 @@ func TestService_ListH323Gatekeepers(t *testing.T) {
 }
 
 func TestService_GetH323Gatekeeper(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	port := 1719
 	expectedGatekeeper := &H323Gatekeeper{
 		ID:          1,
@@ -111,7 +110,7 @@ func TestService_GetH323Gatekeeper(t *testing.T) {
 }
 
 func TestService_CreateH323Gatekeeper(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	port := 1719
 
 	createRequest := &H323GatekeeperCreateRequest{
@@ -137,7 +136,7 @@ func TestService_CreateH323Gatekeeper(t *testing.T) {
 }
 
 func TestService_UpdateH323Gatekeeper(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	port := 1720
 
 	updateRequest := &H323GatekeeperUpdateRequest{
@@ -167,7 +166,7 @@ func TestService_UpdateH323Gatekeeper(t *testing.T) {
 }
 
 func TestService_DeleteH323Gatekeeper(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/h323_gatekeeper/1/", mock.Anything).Return(nil)
 

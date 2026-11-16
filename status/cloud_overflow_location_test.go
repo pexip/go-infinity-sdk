@@ -9,13 +9,12 @@ package status
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestService_ListCloudOverflowLocations(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedResponse := &CloudOverflowLocationListResponse{
 		Meta: Meta{
@@ -59,7 +58,7 @@ func TestService_ListCloudOverflowLocations(t *testing.T) {
 }
 
 func TestService_ListCloudOverflowLocations_WithOptions(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	service := New(client)
 
 	opts := &ListOptions{
@@ -108,7 +107,7 @@ func TestService_ListCloudOverflowLocations_WithOptions(t *testing.T) {
 }
 
 func TestService_GetCloudOverflowLocation(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedLocation := &CloudOverflowLocation{
 		ID:               1,

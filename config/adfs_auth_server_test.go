@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListADFSAuthServers(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &ADFSAuthServerListResponse{
 					Objects: []ADFSAuthServer{
 						{ID: 1, Name: "primary-adfs", Description: "Primary ADFS server", ClientID: "client1", FederationServiceName: "fs.example.com", FederationServiceIdentifier: "http://fs.example.com/adfs/services/trust", RelyingPartyTrustIdentifierURL: "https://example.com/"},
@@ -48,7 +47,7 @@ func TestService_ListADFSAuthServers(t *testing.T) {
 				},
 				Search: "primary",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &ADFSAuthServerListResponse{
 					Objects: []ADFSAuthServer{
 						{ID: 1, Name: "primary-adfs", Description: "Primary ADFS server", ClientID: "client1", FederationServiceName: "fs.example.com", FederationServiceIdentifier: "http://fs.example.com/adfs/services/trust", RelyingPartyTrustIdentifierURL: "https://example.com/"},
@@ -65,7 +64,7 @@ func TestService_ListADFSAuthServers(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -85,7 +84,7 @@ func TestService_ListADFSAuthServers(t *testing.T) {
 }
 
 func TestService_GetADFSAuthServer(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	expectedADFSAuthServer := &ADFSAuthServer{
 		ID:                             1,
 		Name:                           "test-adfs",
@@ -110,7 +109,7 @@ func TestService_GetADFSAuthServer(t *testing.T) {
 }
 
 func TestService_CreateADFSAuthServer(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &ADFSAuthServerCreateRequest{
 		Name:                           "new-adfs",
@@ -137,7 +136,7 @@ func TestService_CreateADFSAuthServer(t *testing.T) {
 }
 
 func TestService_UpdateADFSAuthServer(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	updateRequest := &ADFSAuthServerUpdateRequest{
 		Description:           "Updated ADFS server",
@@ -168,7 +167,7 @@ func TestService_UpdateADFSAuthServer(t *testing.T) {
 }
 
 func TestService_DeleteADFSAuthServer(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/adfs_auth_server/1/", mock.Anything).Return(nil)
 

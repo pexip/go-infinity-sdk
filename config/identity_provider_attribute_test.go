@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListIdentityProviderAttributes(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &IdentityProviderAttributeListResponse{
 					Objects: []IdentityProviderAttribute{
 						{ID: 1, Name: "displayName", Description: "User display name attribute"},
@@ -48,7 +47,7 @@ func TestService_ListIdentityProviderAttributes(t *testing.T) {
 				},
 				Search: "email",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &IdentityProviderAttributeListResponse{
 					Objects: []IdentityProviderAttribute{
 						{ID: 2, Name: "email", Description: "User email address attribute"},
@@ -65,7 +64,7 @@ func TestService_ListIdentityProviderAttributes(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -85,7 +84,7 @@ func TestService_ListIdentityProviderAttributes(t *testing.T) {
 }
 
 func TestService_GetIdentityProviderAttribute(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	expectedAttribute := &IdentityProviderAttribute{
 		ID:          1,
 		Name:        "displayName",
@@ -107,7 +106,7 @@ func TestService_GetIdentityProviderAttribute(t *testing.T) {
 }
 
 func TestService_CreateIdentityProviderAttribute(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &IdentityProviderAttributeCreateRequest{
 		Name:        "department",
@@ -130,7 +129,7 @@ func TestService_CreateIdentityProviderAttribute(t *testing.T) {
 }
 
 func TestService_UpdateIdentityProviderAttribute(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	updateRequest := &IdentityProviderAttributeUpdateRequest{
 		Name:        "updatedDisplayName",
@@ -158,7 +157,7 @@ func TestService_UpdateIdentityProviderAttribute(t *testing.T) {
 }
 
 func TestService_DeleteIdentityProviderAttribute(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/identity_provider_attribute/1/", mock.Anything).Return(nil)
 

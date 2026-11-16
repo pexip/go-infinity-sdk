@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListSMTPServers(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &SMTPServerListResponse{
 					Objects: []SMTPServer{
 						{ID: 1, Name: "primary-smtp", Description: "Primary SMTP server", Address: "smtp.example.com", Port: 587, ConnectionSecurity: "STARTTLS", FromEmailAddress: "noreply@example.com"},
@@ -48,7 +47,7 @@ func TestService_ListSMTPServers(t *testing.T) {
 				},
 				Search: "primary",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &SMTPServerListResponse{
 					Objects: []SMTPServer{
 						{ID: 1, Name: "primary-smtp", Description: "Primary SMTP server", Address: "smtp.example.com", Port: 587, ConnectionSecurity: "STARTTLS", FromEmailAddress: "noreply@example.com"},
@@ -65,7 +64,7 @@ func TestService_ListSMTPServers(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -85,7 +84,7 @@ func TestService_ListSMTPServers(t *testing.T) {
 }
 
 func TestService_GetSMTPServer(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	expectedSMTPServer := &SMTPServer{
 		ID:                 1,
 		Name:               "test-smtp",
@@ -112,7 +111,7 @@ func TestService_GetSMTPServer(t *testing.T) {
 }
 
 func TestService_CreateSMTPServer(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &SMTPServerCreateRequest{
 		Name:               "new-smtp",
@@ -141,7 +140,7 @@ func TestService_CreateSMTPServer(t *testing.T) {
 }
 
 func TestService_UpdateSMTPServer(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	newPort := 465
 	updateRequest := &SMTPServerUpdateRequest{
@@ -176,7 +175,7 @@ func TestService_UpdateSMTPServer(t *testing.T) {
 }
 
 func TestService_DeleteSMTPServer(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/smtp_server/1/", mock.Anything).Return(nil)
 

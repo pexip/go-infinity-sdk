@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListGatewayRoutingRules(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				sipProxy := "/api/admin/configuration/v1/sip_proxy/1/"
 				location := "/api/admin/configuration/v1/system_location/1/"
 				expectedResponse := &GatewayRoutingRuleListResponse{
@@ -50,7 +49,7 @@ func TestService_ListGatewayRoutingRules(t *testing.T) {
 				},
 				Search: "primary",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				sipProxy := "/api/admin/configuration/v1/sip_proxy/1/"
 				location := "/api/admin/configuration/v1/system_location/1/"
 				expectedResponse := &GatewayRoutingRuleListResponse{
@@ -69,7 +68,7 @@ func TestService_ListGatewayRoutingRules(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -89,7 +88,7 @@ func TestService_ListGatewayRoutingRules(t *testing.T) {
 }
 
 func TestService_GetGatewayRoutingRule(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	sipProxy := "/api/admin/configuration/v1/sip_proxy/1/"
 	h323Gatekeeper := "/api/admin/configuration/v1/h323_gatekeeper/1/"
 	location := "/api/admin/configuration/v1/system_location/1/"
@@ -148,7 +147,7 @@ func TestService_GetGatewayRoutingRule(t *testing.T) {
 }
 
 func TestService_CreateGatewayRoutingRule(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	sipProxy := "/api/admin/configuration/v1/sip_proxy/1/"
 	location := "/api/admin/configuration/v1/system_location/1/"
@@ -202,7 +201,7 @@ func TestService_CreateGatewayRoutingRule(t *testing.T) {
 }
 
 func TestService_UpdateGatewayRoutingRule(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	updateRequest := &GatewayRoutingRuleUpdateRequest{
 		Description:         "Updated gateway routing rule",
@@ -255,7 +254,7 @@ func TestService_UpdateGatewayRoutingRule(t *testing.T) {
 }
 
 func TestService_DeleteGatewayRoutingRule(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/gateway_routing_rule/1/", mock.Anything).Return(nil)
 

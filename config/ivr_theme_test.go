@@ -11,7 +11,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/pexip/go-infinity-sdk/v42/util"
@@ -23,13 +22,13 @@ func TestService_ListIVRThemes(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				lastUpdated := util.InfinityTime{Time: time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC)}
 				expectedResponse := &IVRThemeListResponse{
 					Objects: []IVRTheme{
@@ -71,7 +70,7 @@ func TestService_ListIVRThemes(t *testing.T) {
 				},
 				Search: "default",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				lastUpdated := util.InfinityTime{Time: time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC)}
 				expectedResponse := &IVRThemeListResponse{
 					Objects: []IVRTheme{
@@ -100,7 +99,7 @@ func TestService_ListIVRThemes(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -120,7 +119,7 @@ func TestService_ListIVRThemes(t *testing.T) {
 }
 
 func TestService_GetIVRTheme(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	lastUpdated := util.InfinityTime{Time: time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC)}
 	expectedTheme := &IVRTheme{
 		ID:   1,
@@ -149,7 +148,7 @@ func TestService_GetIVRTheme(t *testing.T) {
 }
 
 func TestService_CreateIVRTheme(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	packageContent := strings.NewReader("mock package content")
 	createRequest := &IVRThemeCreateRequest{
@@ -187,7 +186,7 @@ func TestService_CreateIVRTheme(t *testing.T) {
 }
 
 func TestService_UpdateIVRTheme(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	packageContent := strings.NewReader("mock updated package content")
 	updateRequest := &IVRThemeUpdateRequest{
@@ -236,7 +235,7 @@ func TestService_UpdateIVRTheme(t *testing.T) {
 }
 
 func TestService_DeleteIVRTheme(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/ivr_theme/1/", mock.Anything).Return(nil)
 

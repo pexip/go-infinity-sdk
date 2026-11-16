@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/util"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListSystemBackups(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				date1 := &util.InfinityTime{}
 				date2 := &util.InfinityTime{}
 				expectedResponse := &SystemBackupListResponse{
@@ -50,7 +49,7 @@ func TestService_ListSystemBackups(t *testing.T) {
 				},
 				Search: "20231201",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				date := &util.InfinityTime{}
 				expectedResponse := &SystemBackupListResponse{
 					Objects: []SystemBackup{
@@ -68,7 +67,7 @@ func TestService_ListSystemBackups(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -88,7 +87,7 @@ func TestService_ListSystemBackups(t *testing.T) {
 }
 
 func TestService_GetSystemBackup(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	date := &util.InfinityTime{}
 	filename := "backup-20231201.tar.gz"
 
@@ -115,7 +114,7 @@ func TestService_GetSystemBackup(t *testing.T) {
 }
 
 func TestService_DeleteSystemBackup(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	filename := "backup-20231201.tar.gz"
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/system_backup/"+filename+"/", mock.Anything).Return(nil)

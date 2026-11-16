@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListSnmpNetworkManagementSystems(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &SnmpNetworkManagementSystemListResponse{
 					Objects: []SnmpNetworkManagementSystem{
 						{ID: 1, Name: "primary-nms", Description: "Primary network management system", Address: "nms1.example.com", Port: 162, SnmpTrapCommunity: "public"},
@@ -48,7 +47,7 @@ func TestService_ListSnmpNetworkManagementSystems(t *testing.T) {
 				},
 				Search: "primary",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &SnmpNetworkManagementSystemListResponse{
 					Objects: []SnmpNetworkManagementSystem{
 						{ID: 1, Name: "primary-nms", Description: "Primary network management system", Address: "nms1.example.com", Port: 162, SnmpTrapCommunity: "public"},
@@ -65,7 +64,7 @@ func TestService_ListSnmpNetworkManagementSystems(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -85,7 +84,7 @@ func TestService_ListSnmpNetworkManagementSystems(t *testing.T) {
 }
 
 func TestService_GetSnmpNetworkManagementSystem(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	expectedSnmpNMS := &SnmpNetworkManagementSystem{
 		ID:                1,
 		Name:              "test-nms",
@@ -109,7 +108,7 @@ func TestService_GetSnmpNetworkManagementSystem(t *testing.T) {
 }
 
 func TestService_CreateSnmpNetworkManagementSystem(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &SnmpNetworkManagementSystemCreateRequest{
 		Name:              "new-nms",
@@ -135,7 +134,7 @@ func TestService_CreateSnmpNetworkManagementSystem(t *testing.T) {
 }
 
 func TestService_UpdateSnmpNetworkManagementSystem(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	port := 2162
 	updateRequest := &SnmpNetworkManagementSystemUpdateRequest{
@@ -168,7 +167,7 @@ func TestService_UpdateSnmpNetworkManagementSystem(t *testing.T) {
 }
 
 func TestService_DeleteSnmpNetworkManagementSystem(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/snmp_network_management_system/1/", mock.Anything).Return(nil)
 

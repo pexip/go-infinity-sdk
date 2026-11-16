@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListSystemTuneables(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &SystemTuneableListResponse{
 					Objects: []SystemTuneable{
 						{ID: 1, Name: "max_connections", Setting: "1000"},
@@ -48,7 +47,7 @@ func TestService_ListSystemTuneables(t *testing.T) {
 				},
 				Search: "max",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &SystemTuneableListResponse{
 					Objects: []SystemTuneable{
 						{ID: 1, Name: "max_connections", Setting: "1000"},
@@ -65,7 +64,7 @@ func TestService_ListSystemTuneables(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -85,7 +84,7 @@ func TestService_ListSystemTuneables(t *testing.T) {
 }
 
 func TestService_GetSystemTuneable(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	expectedSystemTuneable := &SystemTuneable{
 		ID:          1,
 		Name:        "max_connections",
@@ -107,7 +106,7 @@ func TestService_GetSystemTuneable(t *testing.T) {
 }
 
 func TestService_CreateSystemTuneable(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &SystemTuneableCreateRequest{
 		Name:    "new_setting",
@@ -130,7 +129,7 @@ func TestService_CreateSystemTuneable(t *testing.T) {
 }
 
 func TestService_UpdateSystemTuneable(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	updateRequest := &SystemTuneableUpdateRequest{
 		Setting: "2000",
@@ -157,7 +156,7 @@ func TestService_UpdateSystemTuneable(t *testing.T) {
 }
 
 func TestService_DeleteSystemTuneable(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/system_tuneable/1/", mock.Anything).Return(nil)
 

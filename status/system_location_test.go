@@ -9,13 +9,12 @@ package status
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestService_ListSystemLocations(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedResponse := &SystemLocationListResponse{
 		Objects: []SystemLocation{
@@ -82,7 +81,7 @@ func TestService_ListSystemLocations(t *testing.T) {
 }
 
 func TestService_GetSystemLocation(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedLocation := &SystemLocation{
 		ID:              1,
@@ -122,7 +121,7 @@ func TestService_GetSystemLocation(t *testing.T) {
 }
 
 func TestService_ListSystemLocations_WithOptions(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	service := New(client)
 
 	opts := &ListOptions{

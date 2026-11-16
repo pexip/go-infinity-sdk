@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListRoleMappings(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &RoleMappingListResponse{
 					Objects: []RoleMapping{
 						{ID: 1, Name: "admin-mapping", Source: "ldap", Value: "CN=Administrators,OU=Groups,DC=example,DC=com", Roles: []string{"admin", "user"}},
@@ -48,7 +47,7 @@ func TestService_ListRoleMappings(t *testing.T) {
 				},
 				Search: "admin",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &RoleMappingListResponse{
 					Objects: []RoleMapping{
 						{ID: 1, Name: "admin-mapping", Source: "ldap", Value: "CN=Administrators,OU=Groups,DC=example,DC=com", Roles: []string{"admin", "user"}},
@@ -65,7 +64,7 @@ func TestService_ListRoleMappings(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -85,7 +84,7 @@ func TestService_ListRoleMappings(t *testing.T) {
 }
 
 func TestService_GetRoleMapping(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	expectedRoleMapping := &RoleMapping{
 		ID:     1,
 		Name:   "test-role-mapping",
@@ -108,7 +107,7 @@ func TestService_GetRoleMapping(t *testing.T) {
 }
 
 func TestService_CreateRoleMapping(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &RoleMappingCreateRequest{
 		Name:   "new-role-mapping",
@@ -133,7 +132,7 @@ func TestService_CreateRoleMapping(t *testing.T) {
 }
 
 func TestService_UpdateRoleMapping(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	updateRequest := &RoleMappingUpdateRequest{
 		Name:  "updated-role-mapping",
@@ -163,7 +162,7 @@ func TestService_UpdateRoleMapping(t *testing.T) {
 }
 
 func TestService_DeleteRoleMapping(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/role_mapping/1/", mock.Anything).Return(nil)
 

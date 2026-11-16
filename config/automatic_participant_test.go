@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListAutomaticParticipants(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &AutomaticParticipantListResponse{
 					Objects: []AutomaticParticipant{
 						{ID: 1, Alias: "auto-participant-1", Description: "Primary participant", Conference: []string{"/api/admin/configuration/v1/conference/1/"}, Protocol: "sip", CallType: "video", Role: "chair", KeepConferenceAlive: "keep_conference_alive_never", Routing: "routing_rule", Streaming: false},
@@ -48,7 +47,7 @@ func TestService_ListAutomaticParticipants(t *testing.T) {
 				},
 				Search: "primary",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &AutomaticParticipantListResponse{
 					Objects: []AutomaticParticipant{
 						{ID: 1, Alias: "auto-participant-1", Description: "Primary participant", Conference: []string{"/api/admin/configuration/v1/conference/1/"}, Protocol: "sip", CallType: "video", Role: "chair", KeepConferenceAlive: "keep_conference_alive_never", Routing: "routing_rule", Streaming: false},
@@ -65,7 +64,7 @@ func TestService_ListAutomaticParticipants(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -85,7 +84,7 @@ func TestService_ListAutomaticParticipants(t *testing.T) {
 }
 
 func TestService_GetAutomaticParticipant(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	systemLocation := "/api/admin/configuration/v1/system_location/1/"
 	expectedAutomaticParticipant := &AutomaticParticipant{
 		ID:                  1,
@@ -118,7 +117,7 @@ func TestService_GetAutomaticParticipant(t *testing.T) {
 }
 
 func TestService_CreateAutomaticParticipant(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	systemLocation := "/api/admin/configuration/v1/system_location/1/"
 	createRequest := &AutomaticParticipantCreateRequest{
@@ -153,7 +152,7 @@ func TestService_CreateAutomaticParticipant(t *testing.T) {
 }
 
 func TestService_UpdateAutomaticParticipant(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	streaming := true
 	updateRequest := &AutomaticParticipantUpdateRequest{
@@ -195,7 +194,7 @@ func TestService_UpdateAutomaticParticipant(t *testing.T) {
 }
 
 func TestService_DeleteAutomaticParticipant(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/automatic_participant/1/", mock.Anything).Return(nil)
 

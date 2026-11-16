@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListLdapRoles(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &LdapRoleListResponse{
 					Objects: []LdapRole{
 						{
@@ -63,7 +62,7 @@ func TestService_ListLdapRoles(t *testing.T) {
 				},
 				Search: "admin",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &LdapRoleListResponse{
 					Objects: []LdapRole{
 						{
@@ -88,7 +87,7 @@ func TestService_ListLdapRoles(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -108,7 +107,7 @@ func TestService_ListLdapRoles(t *testing.T) {
 }
 
 func TestService_GetLdapRole(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	expectedRole := &LdapRole{
 		ID:          1,
 		Name:        "test-ldap-role",
@@ -134,7 +133,7 @@ func TestService_GetLdapRole(t *testing.T) {
 }
 
 func TestService_CreateLdapRole(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &LdapRoleCreateRequest{
 		Name:        "new-ldap-role",
@@ -160,7 +159,7 @@ func TestService_CreateLdapRole(t *testing.T) {
 }
 
 func TestService_UpdateLdapRole(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	updateRequest := &LdapRoleUpdateRequest{
 		Name:        "updated-ldap-role",
@@ -196,7 +195,7 @@ func TestService_UpdateLdapRole(t *testing.T) {
 }
 
 func TestService_DeleteLdapRole(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/ldap_role/1/", mock.Anything).Return(nil)
 

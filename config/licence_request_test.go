@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListLicenceRequests(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				responseXML := "<?xml version=\"1.0\" encoding=\"UTF-8\"?><licence>test</licence>"
 				expectedResponse := &LicenceRequestListResponse{
 					Objects: []LicenceRequest{
@@ -49,7 +48,7 @@ func TestService_ListLicenceRequests(t *testing.T) {
 				},
 				Search: "Annual",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				responseXML := "<?xml version=\"1.0\" encoding=\"UTF-8\"?><licence>test</licence>"
 				expectedResponse := &LicenceRequestListResponse{
 					Objects: []LicenceRequest{
@@ -67,7 +66,7 @@ func TestService_ListLicenceRequests(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -87,7 +86,7 @@ func TestService_ListLicenceRequests(t *testing.T) {
 }
 
 func TestService_GetLicenceRequest(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	responseXML := "<?xml version=\"1.0\" encoding=\"UTF-8\"?><licence>test response</licence>"
 	expectedLicenceRequest := &LicenceRequest{
 		SequenceNumber: "REQ-123",
@@ -112,7 +111,7 @@ func TestService_GetLicenceRequest(t *testing.T) {
 }
 
 func TestService_CreateLicenceRequest(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &LicenceRequestCreateRequest{
 		Reference: "New License Request",

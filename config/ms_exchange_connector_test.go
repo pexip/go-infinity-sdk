@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListMsExchangeConnectors(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				roomEmailAddress := "conference.room@example.com"
 				scheduledAliasPrefix := "meet"
 				oauthClientID := "oauth-client-123"
@@ -124,7 +123,7 @@ func TestService_ListMsExchangeConnectors(t *testing.T) {
 				},
 				Search: "primary",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				roomEmailAddress := "conference.room@example.com"
 				oauthClientID := "oauth-client-123"
 
@@ -155,7 +154,7 @@ func TestService_ListMsExchangeConnectors(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -175,7 +174,7 @@ func TestService_ListMsExchangeConnectors(t *testing.T) {
 }
 
 func TestService_GetMsExchangeConnector(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	roomEmailAddress := "test.room@example.com"
 	scheduledAliasPrefix := "test"
 	oauthClientID := "test-oauth-client"
@@ -312,7 +311,7 @@ func TestService_GetMsExchangeConnector(t *testing.T) {
 }
 
 func TestService_CreateMsExchangeConnector(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	roomEmailAddress := "new.room@example.com"
 	scheduledAliasPrefix := "new"
@@ -387,7 +386,7 @@ func TestService_CreateMsExchangeConnector(t *testing.T) {
 }
 
 func TestService_UpdateMsExchangeConnector(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	meetingBufferBefore := 15
 	meetingBufferAfter := 15
@@ -441,7 +440,7 @@ func TestService_UpdateMsExchangeConnector(t *testing.T) {
 }
 
 func TestService_DeleteMsExchangeConnector(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/ms_exchange_connector/1/", mock.Anything).Return(nil)
 

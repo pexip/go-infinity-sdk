@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListDevices(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &DeviceListResponse{
 					Objects: []Device{
 						{ID: 1, Alias: "device1", Description: "Test device 1", EnableSIP: true},
@@ -48,7 +47,7 @@ func TestService_ListDevices(t *testing.T) {
 				},
 				Search: "device1",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &DeviceListResponse{
 					Objects: []Device{
 						{ID: 1, Alias: "device1", Description: "Test device 1", EnableSIP: true},
@@ -65,7 +64,7 @@ func TestService_ListDevices(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -85,7 +84,7 @@ func TestService_ListDevices(t *testing.T) {
 }
 
 func TestService_GetDevice(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	expectedDevice := &Device{
 		ID:                          1,
 		Alias:                       "test-device",
@@ -115,7 +114,7 @@ func TestService_GetDevice(t *testing.T) {
 }
 
 func TestService_CreateDevice(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &DeviceCreateRequest{
 		Alias:                       "new-device",
@@ -147,7 +146,7 @@ func TestService_CreateDevice(t *testing.T) {
 }
 
 func TestService_UpdateDevice(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	enableSIP := true
 	updateRequest := &DeviceUpdateRequest{
@@ -185,7 +184,7 @@ func TestService_UpdateDevice(t *testing.T) {
 }
 
 func TestService_DeleteDevice(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/device/1/", mock.Anything).Return(nil)
 

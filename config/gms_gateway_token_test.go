@@ -9,13 +9,12 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestService_GetGMSGatewayToken(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	intermediateCert := "-----BEGIN CERTIFICATE-----\nintermediate cert\n-----END CERTIFICATE-----"
 	leafCert := "-----BEGIN CERTIFICATE-----\nleaf cert\n-----END CERTIFICATE-----"
 	privateKey := "-----BEGIN PRIVATE KEY-----\nprivate key\n-----END PRIVATE KEY-----"
@@ -45,7 +44,7 @@ func TestService_GetGMSGatewayToken(t *testing.T) {
 }
 
 func TestService_UpdateGMSGatewayToken(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	newIntermediateCert := "-----BEGIN CERTIFICATE-----\nnew intermediate cert\n-----END CERTIFICATE-----"
 	supportsDirectGuestJoin := false

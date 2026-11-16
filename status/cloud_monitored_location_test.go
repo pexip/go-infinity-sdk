@@ -9,13 +9,12 @@ package status
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestService_ListCloudMonitoredLocations(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	name1 := "AWS US West"
 	name2 := "Azure EU West"
@@ -76,7 +75,7 @@ func TestService_ListCloudMonitoredLocations(t *testing.T) {
 }
 
 func TestService_GetCloudMonitoredLocation(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	name := "GCP Asia Pacific"
 	maxHD := 12
@@ -112,7 +111,7 @@ func TestService_GetCloudMonitoredLocation(t *testing.T) {
 }
 
 func TestService_ListCloudMonitoredLocations_WithOptions(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	service := New(client)
 
 	opts := &ListOptions{

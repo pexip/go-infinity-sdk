@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListMjxEndpoints(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				group1 := "/api/admin/configuration/v1/mjx_endpoint_group/1/"
 				apiAddress1 := "192.168.1.100"
 				apiPort1 := 443
@@ -60,7 +59,7 @@ func TestService_ListMjxEndpoints(t *testing.T) {
 				},
 				Search: "conf-room-01",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				group := "/api/admin/configuration/v1/mjx_endpoint_group/1/"
 				apiAddress := "192.168.1.100"
 				apiPort := 443
@@ -84,7 +83,7 @@ func TestService_ListMjxEndpoints(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -104,7 +103,7 @@ func TestService_ListMjxEndpoints(t *testing.T) {
 }
 
 func TestService_GetMjxEndpoint(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	group := "/api/admin/configuration/v1/mjx_endpoint_group/1/"
 	apiAddress := "192.168.1.100"
 	apiPort := 443
@@ -147,7 +146,7 @@ func TestService_GetMjxEndpoint(t *testing.T) {
 }
 
 func TestService_CreateMjxEndpoint(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	group := "/api/admin/configuration/v1/mjx_endpoint_group/1/"
 	apiAddress := "192.168.1.102"
@@ -188,7 +187,7 @@ func TestService_CreateMjxEndpoint(t *testing.T) {
 }
 
 func TestService_UpdateMjxEndpoint(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	raiseAlarms := false
 	updateRequest := &MjxEndpointUpdateRequest{
@@ -235,7 +234,7 @@ func TestService_UpdateMjxEndpoint(t *testing.T) {
 }
 
 func TestService_DeleteMjxEndpoint(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/mjx_endpoint/1/", mock.Anything).Return(nil)
 

@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListWebappAliases(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				bundle1 := &SoftwareBundleRevision{ID: 1, ResourceURI: "/api/admin/configuration/v1/software_bundle_revision/1/"}
 				branding1 := &WebappBranding{UUID: "custom", ResourceURI: "/api/admin/configuration/v1/webapp_branding/custom/"}
 
@@ -51,7 +50,7 @@ func TestService_ListWebappAliases(t *testing.T) {
 				},
 				Search: "meeting",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				bundle := &SoftwareBundleRevision{ID: 1, ResourceURI: "/api/admin/configuration/v1/software_bundle_revision/1/"}
 				branding := &WebappBranding{UUID: "custom", ResourceURI: "/api/admin/configuration/v1/webapp_branding/custom/"}
 
@@ -71,7 +70,7 @@ func TestService_ListWebappAliases(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -91,7 +90,7 @@ func TestService_ListWebappAliases(t *testing.T) {
 }
 
 func TestService_GetWebappAlias(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	bundle := &SoftwareBundleRevision{ID: 1, ResourceURI: "/api/admin/configuration/v1/software_bundle_revision/1/"}
 	branding := &WebappBranding{UUID: "custom", ResourceURI: "/api/admin/configuration/v1/webapp_branding/custom/"}
 
@@ -121,7 +120,7 @@ func TestService_GetWebappAlias(t *testing.T) {
 }
 
 func TestService_CreateWebappAlias(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	bundle := "/api/admin/configuration/v1/software_bundle/1/"
 	branding := "/api/admin/configuration/v1/webapp_branding/new/"
@@ -152,7 +151,7 @@ func TestService_CreateWebappAlias(t *testing.T) {
 }
 
 func TestService_UpdateWebappAlias(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	brandingURI := "/api/admin/configuration/v1/webapp_branding/updated/"
 
@@ -191,7 +190,7 @@ func TestService_UpdateWebappAlias(t *testing.T) {
 }
 
 func TestService_DeleteWebappAlias(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/webapp_alias/1/", mock.Anything).Return(nil)
 

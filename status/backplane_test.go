@@ -10,14 +10,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	util "github.com/pexip/go-infinity-sdk/v42/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestService_ListBackplanes(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	expectedResponse := &BackplaneListResponse{
 		Objects: []Backplane{
@@ -55,7 +54,7 @@ func TestService_ListBackplanes(t *testing.T) {
 }
 
 func TestService_GetBackplane(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	connectTime := time.Now()
 	expectedBackplane := &Backplane{
 		ID:                   "backplane-1",
@@ -87,7 +86,7 @@ func TestService_GetBackplane(t *testing.T) {
 }
 
 func TestService_ListBackplanes_WithOptions(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	service := New(client)
 
 	opts := &ListOptions{

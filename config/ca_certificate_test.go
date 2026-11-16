@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListCACertificates(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &CACertificateListResponse{
 					Objects: []CACertificate{
 						{ID: 1, Certificate: "-----BEGIN CERTIFICATE-----\nMIICertificate1\n-----END CERTIFICATE-----", TrustedIntermediate: true, SubjectName: "CN=Root CA 1", IssuerName: "CN=Root CA 1"},
@@ -48,7 +47,7 @@ func TestService_ListCACertificates(t *testing.T) {
 				},
 				Search: "RootCA",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				expectedResponse := &CACertificateListResponse{
 					Objects: []CACertificate{
 						{ID: 1, Certificate: "-----BEGIN CERTIFICATE-----\nMIICertificate1\n-----END CERTIFICATE-----", TrustedIntermediate: true, SubjectName: "CN=Root CA 1", IssuerName: "CN=Root CA 1"},
@@ -65,7 +64,7 @@ func TestService_ListCACertificates(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -85,7 +84,7 @@ func TestService_ListCACertificates(t *testing.T) {
 }
 
 func TestService_GetCACertificate(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	keyID := "12:34:56:78:9a:bc:de:f0"
 	issuerKeyID := "ab:cd:ef:12:34:56:78:9a"
 	expectedCACertificate := &CACertificate{
@@ -118,7 +117,7 @@ func TestService_GetCACertificate(t *testing.T) {
 }
 
 func TestService_CreateCACertificate(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &CACertificateCreateRequest{
 		Certificate:         "-----BEGIN CERTIFICATE-----\nMIINewCertificate\n-----END CERTIFICATE-----",
@@ -141,7 +140,7 @@ func TestService_CreateCACertificate(t *testing.T) {
 }
 
 func TestService_UpdateCACertificate(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	trustedIntermediate := false
 	updateRequest := &CACertificateUpdateRequest{
@@ -181,7 +180,7 @@ func TestService_UpdateCACertificate(t *testing.T) {
 }
 
 func TestService_DeleteCACertificate(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/ca_certificate/1/", mock.Anything).Return(nil)
 

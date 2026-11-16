@@ -9,13 +9,12 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestService_GetAuthentication(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	expectedAuthentication := &Authentication{
 		ID:                        1,
 		Source:                    "local",
@@ -59,7 +58,7 @@ func TestService_GetAuthentication(t *testing.T) {
 }
 
 func TestService_UpdateAuthentication(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	apiExpiration := 7200
 	updateRequest := &AuthenticationUpdateRequest{

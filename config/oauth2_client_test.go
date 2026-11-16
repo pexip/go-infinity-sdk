@@ -9,7 +9,6 @@ package config
 import (
 	"testing"
 
-	"github.com/pexip/go-infinity-sdk/v42/interfaces"
 	"github.com/pexip/go-infinity-sdk/v42/options"
 	"github.com/pexip/go-infinity-sdk/v42/types"
 	"github.com/stretchr/testify/assert"
@@ -20,13 +19,13 @@ func TestService_ListOAuth2Clients(t *testing.T) {
 	tests := []struct {
 		name    string
 		opts    *ListOptions
-		setup   func(m *interfaces.HTTPClientMock)
+		setup   func(m *mockHTTPClient)
 		wantErr bool
 	}{
 		{
 			name: "successful list without options",
 			opts: nil,
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				privateKeyJWT1 := "private-key-jwt-1"
 				privateKeyJWT2 := "private-key-jwt-2"
 				expectedResponse := &OAuth2ClientListResponse{
@@ -50,7 +49,7 @@ func TestService_ListOAuth2Clients(t *testing.T) {
 				},
 				Search: "Primary",
 			},
-			setup: func(m *interfaces.HTTPClientMock) {
+			setup: func(m *mockHTTPClient) {
 				privateKeyJWT := "private-key-jwt-1"
 				expectedResponse := &OAuth2ClientListResponse{
 					Objects: []OAuth2Client{
@@ -68,7 +67,7 @@ func TestService_ListOAuth2Clients(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client := interfaces.NewHTTPClientMock()
+			client := newMockHTTPClient()
 			tt.setup(client)
 
 			service := New(client)
@@ -88,7 +87,7 @@ func TestService_ListOAuth2Clients(t *testing.T) {
 }
 
 func TestService_GetOAuth2Client(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 	privateKeyJWT := "test-private-key-jwt"
 	expectedOAuth2Client := &OAuth2Client{
 		ClientID:      "test-client-id",
@@ -111,7 +110,7 @@ func TestService_GetOAuth2Client(t *testing.T) {
 }
 
 func TestService_CreateOAuth2Client(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	createRequest := &OAuth2ClientCreateRequest{
 		ClientName: "New OAuth2 Client",
@@ -134,7 +133,7 @@ func TestService_CreateOAuth2Client(t *testing.T) {
 }
 
 func TestService_UpdateOAuth2Client(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	updateRequest := &OAuth2ClientUpdateRequest{
 		ClientName: "Updated OAuth2 Client",
@@ -163,7 +162,7 @@ func TestService_UpdateOAuth2Client(t *testing.T) {
 }
 
 func TestService_DeleteOAuth2Client(t *testing.T) {
-	client := interfaces.NewHTTPClientMock()
+	client := newMockHTTPClient()
 
 	client.On("DeleteJSON", t.Context(), "configuration/v1/oauth2_client/test-client-id/", mock.Anything).Return(nil)
 

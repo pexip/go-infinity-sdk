@@ -12,6 +12,7 @@ import (
 	"fmt"
 	"io"
 	"net/url"
+	"strconv"
 
 	"github.com/pexip/go-infinity-sdk/v42/types"
 )
@@ -55,6 +56,10 @@ func (s *Service) CreateIVRTheme(ctx context.Context, req *IVRThemeCreateRequest
 		fields["uuid"] = req.UUID
 	}
 
+	if req.Version != 0 {
+		fields["version"] = strconv.Itoa(req.Version)
+	}
+
 	// Convert Conference slice to JSON string if not empty
 	if len(req.Conference) > 0 {
 		conferenceJSON, err := json.Marshal(req.Conference)
@@ -80,6 +85,10 @@ func (s *Service) UpdateIVRTheme(ctx context.Context, id int, req *IVRThemeUpdat
 
 	if req.UUID != "" {
 		fields["uuid"] = req.UUID
+	}
+
+	if req.Version != 0 {
+		fields["version"] = strconv.Itoa(req.Version)
 	}
 
 	// Convert Conference slice to JSON string if not empty

@@ -130,6 +130,7 @@ func TestService_GetIVRTheme(t *testing.T) {
 		},
 		CustomLayouts:  `{"layout": "test-config"}`,
 		PinningConfigs: `{"pin": "test-pin-config"}`,
+		Version:        2,
 		LastUpdated:    lastUpdated,
 		ResourceURI:    "/api/admin/configuration/v1/ivr_theme/1/",
 	}
@@ -159,6 +160,7 @@ func TestService_CreateIVRTheme(t *testing.T) {
 		},
 		CustomLayouts:  `{"newLayout": "newConfig"}`,
 		PinningConfigs: `{"newPin": "newPinConfig"}`,
+		Version:        2,
 	}
 
 	expectedFields := map[string]string{
@@ -167,6 +169,7 @@ func TestService_CreateIVRTheme(t *testing.T) {
 		"conference":      `["/api/admin/configuration/v1/conference/3/"]`,
 		"custom_layouts":  `{"newLayout": "newConfig"}`,
 		"pinning_configs": `{"newPin": "newPinConfig"}`,
+		"version":         "2",
 	}
 
 	expectedResponse := &types.PostResponse{
@@ -196,6 +199,7 @@ func TestService_UpdateIVRTheme(t *testing.T) {
 			"/api/admin/configuration/v1/conference/4/",
 		},
 		CustomLayouts: `{"updatedLayout": "updatedConfig"}`,
+		Version:       1,
 	}
 
 	expectedFields := map[string]string{
@@ -203,6 +207,7 @@ func TestService_UpdateIVRTheme(t *testing.T) {
 		"conference":      `["/api/admin/configuration/v1/conference/1/","/api/admin/configuration/v1/conference/4/"]`,
 		"custom_layouts":  `{"updatedLayout": "updatedConfig"}`,
 		"pinning_configs": "",
+		"version":         "1",
 	}
 
 	lastUpdated := util.InfinityTime{Time: time.Date(2024, 1, 2, 12, 0, 0, 0, time.UTC)}
@@ -216,6 +221,7 @@ func TestService_UpdateIVRTheme(t *testing.T) {
 		},
 		CustomLayouts:  `{"updatedLayout": "updatedConfig"}`,
 		PinningConfigs: `{"pin": "test-pin-config"}`,
+		Version:        1,
 		LastUpdated:    lastUpdated,
 		ResourceURI:    "/api/admin/configuration/v1/ivr_theme/1/",
 	}
